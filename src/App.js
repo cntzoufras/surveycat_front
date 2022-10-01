@@ -11,27 +11,30 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
-  const [comments, setComments] = useState([]);
+  const [posts, setPosts] = useState([]);
+
   useEffect(() => {
-    fetchComments();
+    fetchPosts();
   }, []);
   useEffect(() => {
-    console.log(comments);
-  }, [comments]);
-  const fetchComments = async () => {
-    const response = await Axios('http://localhost/api/posts');
-    console.log(response.data);
+    console.log(posts);
+  }, [posts]);
 
-    setComments(response.data);
+  const fetchPosts = async () => {
+    const response = await Axios('http://localhost/api/posts');
+
+    setPosts(response.data.data);
   };
   return (
     <div className='App'>
-      {{ comments } &&
-        { comments }.map(comment => {
+      {posts &&
+        posts.map(post => {
           return (
-            <div key={comment.id} style={{ alignItems: 'center', margin: '20px 60px' }}>
-              <h4>{comment.title}</h4>
-              <p>{comment.body}</p>
+            <div key={post.id} style={{ alignItems: 'center', margin: '20px 60px' }}>
+              <h4>{post.title}</h4>
+              <p>{post.body}</p>
+              <p>{post.created_at}</p>
+              <p>{post.updated_at}</p>
             </div>
           );
         })}
