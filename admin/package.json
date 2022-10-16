@@ -1,0 +1,25 @@
+{
+  "name": "easydev",
+  "version": "4.0.0",
+  "private": true,
+  "homepage": "http://previews.aspirity.com/easydev/",
+  "scripts": {
+    "proxy": "cd ./proxy && npm run start",
+    "docker": "cd ./template && docker-compose up",
+    "docker-build": "cd ./template && docker-compose build",
+    "docker:prod": "cd ./template && docker-compose -f docker-compose.production.yml up",
+    "docker-build:prod": "cd ./template && docker-compose -f docker-compose.production.yml build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import TopbarLanguage from '../components/topbar/TopbarLanguage';
+import TopbarMail from '../components/topbar/TopbarMail';
+import TopbarProfile from '../components/topbar/TopbarProfile';
+import TopbarNotification from '../components/topbar/TopbarNotification';
+import TopbarSearch from '../components/topbar/TopbarSearch';
+import TopbarSidebarButton from '../components/topbar/TopbarSidebarButton';
+import {
+  TopbarContainer,
+  TopbarLeft,
+  TopbarLogo,
+  TopbarRight,
+  TopbarRightOver,
+  TopbarSearchWrap,
+} from '../components/topbar/BasicTopbarComponents';
+import TopbarMetaMask from '../components/topbar/TopbarMetaMask';
+
+const Topbar = ({
+  changeMobileSidebarVisibility,
+  changeSidebarVisibility,
+}) => {
+  const wallet = useSelector(state => state.wallet);
+  
+  return (
+    <TopbarContainer>
+      <TopbarLeft>
+        <TopbarSidebarButton
+          onClickMobile={changeMobileSidebarVisibility}
+          onClickDesktop={changeSidebarVisibility}
+        />
+        <TopbarLogo to="/online_marketing_dashboard" />
+      </TopbarLeft>
+      <TopbarRight>
+        <TopbarSearchWrap>
+          <TopbarSearch />
+        </TopbarSearchWrap>
+        <TopbarRightOver>
+          <TopbarNotification />
+          <TopbarMail new />
+          <TopbarProfile />
+          <TopbarLanguage />
+          {wallet && <TopbarMetaMask />}
+        </TopbarRightOver>
+      </TopbarRight>
+    </TopbarContainer>
+  );
+};
+
+Topbar.propTypes = {
+  changeMobileSidebarVisibility: PropTypes.func.isRequired,
+  changeSidebarVisibility: PropTypes.func.isRequired,
+};
+
+export default Topbar;

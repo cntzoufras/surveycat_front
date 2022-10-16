@@ -1,0 +1,25 @@
+volumes:
+  react_node_modules:
+  proxy_node_modules:
+
+services:
+  react:
+    image: node:14
+    working_dir: /easydev
+    ports:
+      - "3000:3000"
+    volumes:
+      - react_node_modules:/easydev/node_modules
+      - ./template:/easydev
+      - ./local-docker-entry.sh:/local-docker-entry.sh
+    command: ["sh", "-e", "/local-docker-entry.sh"]
+  proxy:
+    image: node:14
+    working_dir: /easydev
+    ports:
+      - "5000:5000"
+    volumes:
+      - proxy_node_modules:/easydev/node_modules
+      - ./proxy:/easydev
+      - ./proxy/local-docker-entry.sh:/local-docker-entry.sh
+    command: ["sh", "-e", "./local-docker-entry.sh"]
