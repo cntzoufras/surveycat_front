@@ -355,7 +355,7 @@
     "email_confirmation": {
       "title": "Email Confirmation",
       "verified": "Your e-mail address has been successfully verified",
-      "thank_you": "Thank you for choosing the EasyDev",
+      "thank_you": "Thank you for choosing the Surveycat",
       "go_to_dashboard": "Go to dashboard",
       "got_to_profile": "Go to profile"
     },

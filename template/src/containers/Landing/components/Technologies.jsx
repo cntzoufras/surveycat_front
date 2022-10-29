@@ -17,7 +17,7 @@ const Technologies = () => (
       <LandingTitleWrap>
         <h1 className="animate-on-scroll">Best practices</h1>
         <h3 className="animate-on-scroll">
-          EasyDev is based on the popular and powerful technological stack that
+          Surveycat is based on the popular and powerful technological stack that
           allows you to create modern projects easily.
         </h3>
       </LandingTitleWrap>

@@ -15,7 +15,7 @@ const Feedback = () => (
         <Col md={12}>
           <LandingFeedbackTitle><b>Hey guys!</b></LandingFeedbackTitle>
           <LandingFeedbackSubhead>
-            We are glad to offer you the EasyDev customization from light modernization to a super-custom
+            We are glad to offer you the Surveycat customization from light modernization to a super-custom
             development according to your project. Please, contact us via <b>biz@aspirity.com</b> to discuss our
             work or just press the button below.
           </LandingFeedbackSubhead>

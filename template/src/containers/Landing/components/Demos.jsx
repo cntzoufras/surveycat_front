@@ -55,7 +55,7 @@ const Demos = ({ theme, changeToLight, changeToDark }) => (
           <LivePreviewDescription className="animate-on-scroll">
             Over <b>200</b> awesome UI elements.
             <br />
-            Make any idea for real <b>with EasyDev</b>
+            Make any idea for real <b>with Surveycat</b>
           </LivePreviewDescription>
           <LandingButton as={NavLink} to="/online_marketing_dashboard">Live preview</LandingButton>
         </div>
@@ -73,9 +73,9 @@ const Demos = ({ theme, changeToLight, changeToDark }) => (
           <MacImage src={mac} alt="" />
         </MacImageWrap>
         <MacContainerText>
-          <h2 className="animate-on-scroll">EasyDev looks great on any device!</h2>
+          <h2 className="animate-on-scroll">Surveycat looks great on any device!</h2>
           <p className="animate-on-scroll">
-            You can use the Easydev on all devices - it&aposll look great
+            You can use the Surveycat on all devices - it&aposll look great
             everywhere! Lazy loading allows your device to display the graphic
             content softly and correctly
           </p>
