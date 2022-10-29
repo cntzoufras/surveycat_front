@@ -396,7 +396,7 @@
     "version": "2.4.0",
     "date": "23-September-2019",
     "changes": [
-      { "name": "New feature for EasyDEV - the authorization! Now you can authorize with your Firebase, Auth0, Google and Facebook accounts and even create Firebase account." },
+      { "name": "New feature for Surveycat - the authorization! Now you can authorize with your Firebase, Auth0, Google and Facebook accounts and even create Firebase account." },
       {
         "name": "Account",
         "changes": [

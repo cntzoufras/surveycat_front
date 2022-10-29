@@ -12,11 +12,11 @@ app.use(cors());
 
 app.get('/coinmarket/*', (req, res) => {
   const cutUrl = req.originalUrl.replace('/coinmarket', '');
-  let url = `https://pro-api.coinmarketcap.com${cutUrl}`
-  
+  let url = `https://pro-api.coinmarketcap.com${cutUrl}`;
+
   axios
     .get(url, {
-      headers: { 'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY }, // add your api key to .env
+      headers: { 'X-CMC_PRO_API_KEY': '99ddab32-94ed-4949-8526-f6cc6992bad5' },
     })
     .then((response) => {
       res.send(response.data);
@@ -33,7 +33,7 @@ app.get('/coincap/*', (req, res) => {
 
   axios
     .get(url, {
-      headers: { },
+      headers: {},
     })
     .then((response) => {
       res.send(response.data);

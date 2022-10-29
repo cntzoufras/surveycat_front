@@ -1,8 +1,8 @@
 {
-  "name": "easydev",
+  "name": "surveycat",
   "version": "4.0.0",
   "private": true,
-  "homepage": "http://previews.aspirity.com/easydev/",
+  "homepage": "http://localhost/surveycat/",
   "scripts": {
     "start": "set CHOKIDAR_USEPOLLING=true && react-app-rewired start",
     "build": "react-app-rewired build",

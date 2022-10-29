@@ -21,7 +21,7 @@ const TopbarProfile = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('easydev');
+    localStorage.removeItem('surveycat');
     logoutAuth0();
   };
 
