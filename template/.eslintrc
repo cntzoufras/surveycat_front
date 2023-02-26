@@ -49,9 +49,13 @@
     "import/resolver": {
       "alias": {
         "map": [
-          [ "@", "./src" ]
+          ["@", "./src"]
         ],
-        "extensions": [".js", ".css", ".json", ".jsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
       }
     }
   }

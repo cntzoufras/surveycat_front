@@ -8,6 +8,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "lint:css": "stylelint './src/**/*.js'",
+    "lint": "eslint src",
     "eject": "react-app-rewired eject",
     "docker": "cd ../ && docker-compose up",
     "docker-build": "cd ../ && docker-compose build",
@@ -84,7 +85,10 @@
     "styled-components": "^5.3.3",
     "styled-theming": "^2.2.0",
     "text-mask-addons": "^3.8.0",
-    "web3": "^1.7.3"
+    "web3": "^1.7.3",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2"
   },
   "resolutions": {
     "styled-components": "^5",
@@ -92,14 +96,13 @@
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    
     "eslint-config-airbnb": "^18.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-import-resolver-node": "^0.3.4",
+    "npm r": "^0.3.7",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint": "^7.28.0",
     "react-app-rewired": "^2.1.8",
     "react-error-overlay": "6.0.9"
   },
