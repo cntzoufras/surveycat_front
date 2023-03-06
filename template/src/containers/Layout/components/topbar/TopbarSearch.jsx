@@ -68,13 +68,14 @@ const TopbarSearchInput = styled.input`
 
 const TopbarSearchButton = styled(TopbarButton)`
   position: absolute;
-  height: 26px;
-  width: 26px;
+  height: 24px;
+  width: 24px;
   border-radius: 13px;
   border: none;
   padding: 0;
   background: transparent;
-  ${right}: 0;
+  top: 1px;
+  ${right}: 2px;
 
   &:hover {
     background-color: ${colorBackgroundBody};

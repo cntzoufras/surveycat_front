@@ -30,12 +30,16 @@ import { CheckBoxField } from '@/shared/components/form/CheckBox';
 import Pagination from './Pagination';
 
 
-const EmailsControls = ({ emails, onChangePage, onChangeSelect }) => (
+const EmailsControls = ({
+ emails, onChangePage, onChangeSelectAll, isSelectedAll,
+}) => (
   <InboxEmailControlsWrap>
     <InboxEmailControls>
       <CheckBoxField
-        onChange={onChangeSelect}
+        onChange={event => onChangeSelectAll(event.target.checked)}
         styleType="colored-click"
+        checked={isSelectedAll}
+        name="all"
       />
       <InboxEmailControlFilter>
         <Button
@@ -74,7 +78,8 @@ const EmailsControls = ({ emails, onChangePage, onChangeSelect }) => (
 EmailsControls.propTypes = {
   emails: EmailsProps.isRequired,
   onChangePage: PropTypes.func.isRequired,
-  onChangeSelect: PropTypes.func.isRequired,
+  onChangeSelectAll: PropTypes.func.isRequired,
+  isSelectedAll: PropTypes.bool.isRequired,
 };
 
 export default EmailsControls;

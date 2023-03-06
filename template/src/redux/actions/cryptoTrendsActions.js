@@ -12,6 +12,6 @@ export const fetchCryptoTrends = (limit, sortBy) => async (dispatch) => {
     const { data } = await coinmarketcapApi.getListingsLatest(limit, sortBy);
     dispatch(fetchCryptoTrendsSuccess(data?.data));
   } catch (e) {
-    dispatch(fetchCryptoTrendsError(firstLetterToUpperCase(e.response?.data?.error || e.response.statusText)));
+    dispatch(fetchCryptoTrendsError(firstLetterToUpperCase(e.response?.data?.error || e.response?.statusText)));
   }
 };

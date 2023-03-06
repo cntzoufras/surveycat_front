@@ -1,21 +1,19 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Highlighter from 'react-highlight-words';
 import styled from 'styled-components';
 import { colorAccent } from '@/utils/palette';
 
 const ReactTableCell = ({ value: initialValue, state, column }) => (
-  <Fragment>
-    {column.disableGlobalFilter ? (
-      <Fragment>{initialValue}</Fragment>
+  column.disableGlobalFilter ? (
+    initialValue
     ) : (
       <StyledHighlighter
         searchWords={[state.globalFilter]}
         autoEscape
         textToHighlight={`${initialValue}`}
       />
-    )}
-  </Fragment>
+    )
 );
 
 ReactTableCell.propTypes = {

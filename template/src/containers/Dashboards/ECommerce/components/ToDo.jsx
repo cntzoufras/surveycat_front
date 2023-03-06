@@ -10,7 +10,7 @@ const ToDo = ({
   <TodoWrap>
     <CheckBoxField
       checked={checked}
-      name={id}
+      name={`${id}`}
       onChange={onChange}
       label={label}
       disabled={disabled}

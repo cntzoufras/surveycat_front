@@ -189,6 +189,8 @@ const ChatContactButton = styled.button`
 
 const ChatDialog = styled.div`
   width: calc(100% - 335px);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   position: relative;
 
@@ -198,7 +200,6 @@ const ChatDialog = styled.div`
 `;
 
 const ChatMessagesWrap = styled.div`
-  min-height: 100%;
   width: 100%;
   display: flex;
 `;
@@ -206,6 +207,7 @@ const ChatMessagesWrap = styled.div`
 const ChatMessages = styled.div`
   padding: 20px;
   width: 100%;
+  height: 100%;
 `;
 
 const ChatEmptyMessages = styled.div`
@@ -224,15 +226,7 @@ const ChatEmptyMessages = styled.div`
 `;
 
 const ChatScroll = styled(Scrollbar)`
-  height: calc(100% - 114px);
   text-align: ${left};
-
-  .scroll-content {
-
-    &, & > div {
-      height: 100%;
-    }
-  }
 
   .scrollbar-track {
 

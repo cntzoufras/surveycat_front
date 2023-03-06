@@ -129,7 +129,7 @@ const CalendarWrap = styled.div`
     text-align: ${left};
     ${paddingRight}: 0;
 
-    a {
+    button {
       display: block;
       width: 100%;
       ${paddingLeft}: 10px;
@@ -161,7 +161,7 @@ const CalendarWrap = styled.div`
       font-size: 12px;
     }
 
-    a {
+    button {
       display: block;
       margin: auto;
     }

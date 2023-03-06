@@ -8,11 +8,11 @@ import { marginRight } from '@/utils/directions';
 
 const data = [
   {
-    id: 0, title: 'Today', now: '$ 298,92', plan: '$ 250 planned', label: '100%', value: 100, pink: false,
+    id: 0, title: 'Today', now: '$ 298,92', plan: '$ 250 planned', label: '100%', value: 100, isRed: false,
   }, {
-    id: 1, title: 'This week', now: '$ 1423,01', plan: '$ 1500 planned', label: '98%', value: 98, pink: true,
+    id: 1, title: 'This week', now: '$ 1423,01', plan: '$ 1500 planned', label: '98%', value: 98, isRed: true,
   }, {
-    id: 2, title: 'This month', now: '$ 44321,74', plan: '$ 45000 planned', label: '87%', value: 87, pink: true,
+    id: 2, title: 'This month', now: '$ 44321,74', plan: '$ 45000 planned', label: '87%', value: 87, isRed: true,
   },
 ];
 
@@ -27,10 +27,10 @@ const SalesReport = () => {
             <DashboardSalesReportTitle>{item.title}</DashboardSalesReportTitle>
             <DashboardSalesReportNow>{item.now}</DashboardSalesReportNow>
             <DashboardSalesReportPlan>{item.plan}</DashboardSalesReportPlan>
-            <DashboardSalesReportValue color={item.pink}>
+            <DashboardSalesReportValue isRed={item.isRed}>
               {item.label}
             </DashboardSalesReportValue>
-            <ProgressBar now={item.value} size="small" color={item.pink ? 'pink' : ''} />
+            <ProgressBar now={item.value} size="small" color={item.isRed ? 'pink' : ''} />
           </div>
         ))}
       </DashboardSalesReportWrap>
@@ -82,11 +82,13 @@ const DashboardSalesReportPlan = styled.p`
   margin-bottom: 10px;  
 `;
 
-const DashboardSalesReportValue = styled.p`
+const DashboardSalesReportValue = styled('p').withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['isRed'].includes(prop) && defaultValidatorFn(prop),
+})`
   margin-bottom: 0;
   font-size: 10px;
   bottom: 16px;
-  color: ${props => (props.color ? colorRed : colorAccent)}
+  color: ${props => (props.isRed ? colorRed : colorAccent)}
 `;
 
 // endregion

@@ -40,6 +40,7 @@ const ColorSelect = ({ options, placeholder }) => {
 
   return (
     <SelectField
+      name="color"
       value={value}
       onChange={handleChange}
       options={options}

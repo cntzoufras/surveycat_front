@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SimpleLoader from '@/shared/components/SimpleLoader';
@@ -11,10 +11,8 @@ const TodoList = ({
   changeShowEditModal,
   editTodoElementAction,
   deleteTodoElementAction,
-  isCompleted,
 }) => (
-  <Fragment>
-    {todoElements && todoElements.length > 0 && (
+    todoElements && todoElements.length > 0 && (
       todoElements.map(todo => (
         <div key={todo.data.id}>
           <TodoItem
@@ -22,12 +20,11 @@ const TodoList = ({
             changeShowEditModal={changeShowEditModal}
             editTodoElement={editTodoElementAction}
             deleteTodoElement={deleteTodoElementAction}
-            isCompleted={isCompleted}
+            isCompleted={todo.data.isCompleted}
           />
         </div>
       ))
-    )}
-  </Fragment>
+    )
 );
 
 TodoList.propTypes = {
@@ -35,7 +32,6 @@ TodoList.propTypes = {
   changeShowEditModal: PropTypes.func.isRequired,
   editTodoElementAction: PropTypes.func.isRequired,
   deleteTodoElementAction: PropTypes.func.isRequired,
-  isCompleted: PropTypes.bool.isRequired,
 };
 
 TodoList.defaultProps = {
@@ -45,24 +41,21 @@ TodoList.defaultProps = {
 const TodoListWrapper = ({
   todoElements,
   changeShowEditModal, editTodoElementAction, deleteTodoElementAction,
-  isFetching, isCompleted, isArchived,
+  isFetching, isArchived,
 }) => (
-  <Fragment>
-    {isFetching ? (
-      <TodoPanelRefresh>
-        <SimpleLoader />
-      </TodoPanelRefresh>
+  isFetching ? (
+    <TodoPanelRefresh>
+      <SimpleLoader />
+    </TodoPanelRefresh>
     ) : (
       <TodoList
         todoElements={todoElements}
         changeShowEditModal={changeShowEditModal}
         editTodoElementAction={editTodoElementAction}
         deleteTodoElementAction={deleteTodoElementAction}
-        isCompleted={isCompleted}
         isArchived={isArchived}
       />
-    )}
-  </Fragment>
+    )
 );
 
 TodoListWrapper.propTypes = {
@@ -71,7 +64,6 @@ TodoListWrapper.propTypes = {
   editTodoElementAction: PropTypes.func,
   deleteTodoElementAction: PropTypes.func,
   isFetching: PropTypes.bool,
-  isCompleted: PropTypes.bool,
   isArchived: PropTypes.bool,
 };
 
@@ -81,7 +73,6 @@ TodoListWrapper.defaultProps = {
   changeShowEditModal: () => {},
   editTodoElementAction: () => {},
   isFetching: false,
-  isCompleted: false,
   isArchived: false,
 };
 

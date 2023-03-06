@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import TopbarLanguage from '../components/topbar/TopbarLanguage';
 import TopbarMail from '../components/topbar/TopbarMail';
 import TopbarProfile from '../components/topbar/TopbarProfile';
@@ -15,38 +14,34 @@ import {
   TopbarRightOver,
   TopbarSearchWrap,
 } from '../components/topbar/BasicTopbarComponents';
-import TopbarMetaMask from '../components/topbar/TopbarMetaMask';
+import TopbarWallet from '../components/topbar/TopbarWallet';
 
 const Topbar = ({
   changeMobileSidebarVisibility,
   changeSidebarVisibility,
-}) => {
-  const wallet = useSelector(state => state.wallet);
-  
-  return (
-    <TopbarContainer>
-      <TopbarLeft>
-        <TopbarSidebarButton
-          onClickMobile={changeMobileSidebarVisibility}
-          onClickDesktop={changeSidebarVisibility}
-        />
-        <TopbarLogo to="/online_marketing_dashboard" />
-      </TopbarLeft>
-      <TopbarRight>
-        <TopbarSearchWrap>
-          <TopbarSearch />
-        </TopbarSearchWrap>
-        <TopbarRightOver>
-          <TopbarNotification />
-          <TopbarMail new />
-          <TopbarProfile />
-          <TopbarLanguage />
-          {wallet && <TopbarMetaMask />}
-        </TopbarRightOver>
-      </TopbarRight>
-    </TopbarContainer>
+}) => (
+  <TopbarContainer>
+    <TopbarLeft>
+      <TopbarSidebarButton
+        onClickMobile={changeMobileSidebarVisibility}
+        onClickDesktop={changeSidebarVisibility}
+      />
+      <TopbarLogo to="/online_marketing_dashboard" />
+    </TopbarLeft>
+    <TopbarRight>
+      <TopbarSearchWrap>
+        <TopbarSearch />
+      </TopbarSearchWrap>
+      <TopbarRightOver>
+        <TopbarNotification />
+        <TopbarMail new />
+        <TopbarProfile />
+        <TopbarLanguage />
+        <TopbarWallet />
+      </TopbarRightOver>
+    </TopbarRight>
+  </TopbarContainer>
   );
-};
 
 Topbar.propTypes = {
   changeMobileSidebarVisibility: PropTypes.func.isRequired,

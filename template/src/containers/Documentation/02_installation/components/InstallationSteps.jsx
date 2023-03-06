@@ -15,7 +15,7 @@ const InstallationSteps = () => (
         <CardTitle>Installation</CardTitle>
       </CardTitleWrap>
       <p>
-        Surveycat is based on create-react-app and has its README.md which you can
+        EasyDEV is based on create-react-app and has its README.md which you can
         find very useful.
       </p>
       <p>To get started follow this steps:</p>

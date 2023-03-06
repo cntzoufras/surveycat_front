@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import Badge from '@/shared/components/Badge';
 import styled from 'styled-components';
+import Badge from '@/shared/components/Badge';
 import { colorFieldsBorder } from '@/utils/palette';
 
 const Img1 = `${process.env.PUBLIC_URL}/img/for_store/vase.png`;
@@ -18,8 +18,7 @@ const PhotoFormatter = value => (
 );
 
 const CreateDataProductListTable = () => {
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => [
       {
         Header: 'ID',
         accessor: 'id',
@@ -61,8 +60,7 @@ const CreateDataProductListTable = () => {
         width: 110,
         disableGlobalFilter: true,
       },
-    ], [],
-  );
+    ], []);
 
   const data = [];
   const rows = () => {

@@ -295,7 +295,9 @@ const InboxEmailTime = styled.p`
   }
 `;
 
-const InboxFavoriteIcon = styled(StarIcon)`
+const InboxFavoriteIcon = styled(StarIcon).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['active'].includes(prop) && defaultValidatorFn(prop),
+})`
   transition: all 0.3s;
 
   ${props => props.active && `

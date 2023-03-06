@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import ReactTableDnDBody from './ReactTableDnDBody';
@@ -10,7 +10,7 @@ const ReactTableDefaultBody = ({ page, getTableBodyProps, prepareRow }) => (
       return (
         <tr {...row.getRowProps()}>
           {row.cells.map(cell => (
-            <td {...cell.getCellProps()}>kurastika - {cell.render('Cell')}</td>
+            <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
           ))}
         </tr>
       );
@@ -25,32 +25,27 @@ ReactTableDefaultBody.propTypes = {
 };
 
 const ReactTableBody = ({
-  page,
-  getTableBodyProps,
-  prepareRow,
-  withDragAndDrop,
-  updateDraggableData,
+  page, getTableBodyProps, prepareRow, withDragAndDrop, updateDraggableData,
 }) => {
   const theme = useSelector(state => state.theme);
 
   return (
-    <Fragment>
-      {withDragAndDrop ? (
-        <ReactTableDnDBody
-          page={page}
-          getTableBodyProps={getTableBodyProps}
-          prepareRow={prepareRow}
-          updateDraggableData={updateDraggableData}
-          theme={theme}
-        />
-      ) : (
-        <ReactTableDefaultBody
-          page={page}
-          getTableBodyProps={getTableBodyProps}
-          prepareRow={prepareRow}
-        />
-      )}
-    </Fragment>
+      withDragAndDrop
+        ? (
+          <ReactTableDnDBody
+            page={page}
+            getTableBodyProps={getTableBodyProps}
+            prepareRow={prepareRow}
+            updateDraggableData={updateDraggableData}
+            theme={theme}
+          />
+        ) : (
+          <ReactTableDefaultBody
+            page={page}
+            getTableBodyProps={getTableBodyProps}
+            prepareRow={prepareRow}
+          />
+        )
   );
 };
 

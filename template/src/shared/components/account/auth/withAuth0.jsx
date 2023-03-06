@@ -18,7 +18,7 @@ const configureClient = async () => {
 
 const updateState = async () => {
   try {
-    const isAuthenticated = await auth0.isAuthenticated();
+    const isAuthenticated = await auth0?.isAuthenticated();
     if (isAuthenticated) {
       // In real project you will get the data below from backend api
       const user = await auth0.getUser();
@@ -36,7 +36,7 @@ const initAuth0 = async () => {
   try {
     await configureClient();
     updateState();
-    const isAuthenticated = await auth0.isAuthenticated();
+    const isAuthenticated = await auth0?.isAuthenticated();
     if (isAuthenticated) {
       return;
     }
@@ -65,7 +65,7 @@ export const login = async () => {
 
 export const logout = async () => {
   try {
-    const isAuthenticated = await auth0.isAuthenticated();
+    const isAuthenticated = await auth0?.isAuthenticated();
     if (isAuthenticated) {
       auth0.logout({
         returnTo: config.returnTo,

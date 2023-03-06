@@ -6,6 +6,7 @@ import NavigationBottom from '../navigation/NavigationBottom';
 import FireBase from './components/Firebase';
 import Auth0 from './components/Auth0';
 import AuthGoogleAndFb from './components/AuthGoogleAndFb';
+import WalletConnect from './components/WalletConnect';
 
 const NavigationItem = () => (
   <DocumentContainer>
@@ -22,6 +23,7 @@ const NavigationItem = () => (
         <Auth0 />
         <AuthGoogleAndFb />
         <FireBase />
+        <WalletConnect />
       </Col>
     </DocumentationMain>
     <NavigationBottom

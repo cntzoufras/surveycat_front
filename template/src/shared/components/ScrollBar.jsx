@@ -1,9 +1,9 @@
-import SmoothScrollbar from 'react-smooth-scrollbar';
+import { Scrollbar } from 'smooth-scrollbar-react';
 import styled from 'styled-components';
 import { colorScrollbar } from '@/utils/palette';
 import { marginRight } from '@/utils/directions';
 
-export default styled(SmoothScrollbar)`
+export default styled(Scrollbar)`
   .scrollbar-track {
     background: transparent;
 

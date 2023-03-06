@@ -41,9 +41,11 @@ const CoinCapAPI = () => (
         <b>
           <i>proxy.js</i>
         </b>
-        .
-        <CodeHighlither>
-          {`
+      </p>
+
+      .
+      <CodeHighlither>
+        {`
 // This is an original method in proxy.js
 app.get('/coincap/*', (req, res) => {
 const cutUrl = req.originalUrl.replace('/coincap', '');
@@ -61,16 +63,15 @@ axios
     res.status(err.response.status).send(err.response.data);
   });
 });`}
-        </CodeHighlither>
-        You need to make some changes in this file if you decide to use the API key.
-        <CodeHighlither>
-          {`// You need to replace this:
+      </CodeHighlither>
+      <p>You need to make some changes in this file if you decide to use the API key.</p>
+      <CodeHighlither>
+        {`// You need to replace this:
 headers: { }
 // with this:
 headers: { Authorization: "Bearer <YOUR_API_KEY>" }
           `}
-        </CodeHighlither>
-      </p>
+      </CodeHighlither>
     </CardBody>
   </Card>
 );

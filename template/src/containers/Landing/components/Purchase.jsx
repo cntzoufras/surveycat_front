@@ -12,7 +12,7 @@ const Purchase = () => (
     <LandingContainer>
       <LandingLogo />
       <PurchaseText className="animate-on-scroll">
-        Ready to start your project with Surveycat?
+        Ready to start your project with EasyDev?
       </PurchaseText>
       <LandingCenterButtonWrap>
         <LandingButtonGradient

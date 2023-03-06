@@ -1,10 +1,10 @@
 import {
-  shape, number, string, bool,
+  shape, string, bool,
 } from 'prop-types';
 
 const todoCard = shape({
   data: shape({
-    id: number.isRequired,
+    id: string.isRequired,
     title: string.isRequired,
     description: string,
     priority: string.isRequired,

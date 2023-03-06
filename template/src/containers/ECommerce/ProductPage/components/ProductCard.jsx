@@ -57,7 +57,7 @@ const ProductCard = () => {
                 <StarIcon />
                 <StarIcon />
                 <StarOutlineIcon />
-                <ProductCardLink href="/surveycat/e-commerce/product_page">
+                <ProductCardLink href="/easydev/e-commerce/product_page">
                   See all reviews
                 </ProductCardLink>
               </ProductCardRate>

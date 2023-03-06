@@ -9,10 +9,10 @@ export function connectWallet(id) {
   };
 }
 
-export function disconnectWallet(id) {
+export function disconnectWallet() {
   return {
     type: DISCONNECTED,
-    wallet: { id },
+    wallet: { id: null },
   };
 }
 

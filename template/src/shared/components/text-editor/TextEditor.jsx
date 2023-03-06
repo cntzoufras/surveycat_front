@@ -252,6 +252,12 @@ const TextEditorWrap = styled.div`
     direction: ${direction};
     text-align: ${left};
   }
+
+  .public-DraftStyleDefault-orderedListItem {
+    &::marker {
+      content: '';
+    }
+  }
 `;
 
 // endregion

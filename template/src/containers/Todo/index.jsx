@@ -1,4 +1,9 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  Fragment,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -14,9 +19,6 @@ import DividerLine from './components/DividerLine';
 
 const Todo = () => {
   const { t } = useTranslation('common');
-  const [incompleteTodoElements, setIncompleteTodoElements] = useState(null);
-  const [completedTodoElements, setCompletedTodoElements] = useState(null);
-  const [archivedTodoElements, setArchivedTodoElements] = useState(null);
   const [currentEditItem, setCurrentEditItem] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [filterByPriority, setFilterByPriority] = useState('');
@@ -34,16 +36,16 @@ const Todo = () => {
   
   const dispatch = useDispatch();
 
-  const editTodoElementAction = () => {
-    dispatch(editTodoElement());
+  const editTodoElementAction = (data) => {
+    dispatch(editTodoElement(data));
   };
   
-  const addTodoElementAction = () => {
-    dispatch(addTodoElement());
+  const addTodoElementAction = (data) => {
+    dispatch(addTodoElement(data));
   };
   
-  const deleteTodoElementAction = () => {
-    dispatch(deleteTodoElement());
+  const deleteTodoElementAction = (id) => {
+    dispatch(deleteTodoElement(id));
   };
 
   useEffect(() => {
@@ -51,15 +53,6 @@ const Todo = () => {
       if (todoElements.length === 0 && prevTodoElements === null) { // You can delete it if you need
         dispatch(fetchTodoListData());
       }
-      const filteredData = [...todoElements];
-      let activeTodoElements = filteredData.filter(item => !item.data.isArchived);
-
-      if (filterByPriority !== '') {
-        activeTodoElements = activeTodoElements.filter(item => item.data.priority === filterByPriority);
-      }
-      setIncompleteTodoElements(activeTodoElements.filter(item => !item.data.isCompleted));
-      setCompletedTodoElements(activeTodoElements.filter(item => item.data.isCompleted));
-      setArchivedTodoElements(filteredData.filter(item => item.data.isArchived));
       setPrevTodoElements([...todoElements]);
     }
   }, [prevTodoElements, todoElements, filterByPriority, dispatch]);
@@ -70,16 +63,26 @@ const Todo = () => {
   };
 
   const filteringByPriority = (priority) => {
-    let filteredByPriorityTodoElements = [];
-    if (priority === '') {
-      filteredByPriorityTodoElements = [...todoElements];
-    } else {
-      filteredByPriorityTodoElements = todoElements.filter(item => item.data.priority === priority);
-    }
     setFilterByPriority(priority);
-    setIncompleteTodoElements(filteredByPriorityTodoElements.filter(item => !item.data.isCompleted));
-    setCompletedTodoElements(filteredByPriorityTodoElements.filter(item => item.data.isCompleted));
   };
+
+  const incompleteTodoElements = useMemo(() => {
+    const todos = todoElements.filter(item => !item.data.isArchived && !item.data.isCompleted);
+    if (filterByPriority !== '') {
+      return todos.filter(item => item.data.priority === filterByPriority);
+    }
+    return todos;
+  }, [todoElements, filterByPriority]);
+
+  const completedTodoElements = useMemo(() => {
+    const todos = todoElements.filter(item => !item.data.isArchived && item.data.isCompleted);
+    if (filterByPriority !== '') {
+      return todos.filter(item => item.data.priority === filterByPriority);
+    }
+    return todos;
+  }, [todoElements, filterByPriority]);
+
+  const archivedTodoElements = useMemo(() => todoElements.filter(item => item.data.isArchived), [todoElements]);
 
   return (
     <Container>
@@ -100,7 +103,6 @@ const Todo = () => {
             />
             <DividerLine title="Done" />
             <TodoListWrapper
-              isCompleted
               todoElements={completedTodoElements}
               changeShowEditModal={changeShowEditModal}
               editTodoElementAction={editTodoElementAction}

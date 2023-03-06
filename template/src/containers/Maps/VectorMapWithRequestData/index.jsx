@@ -14,7 +14,7 @@ const VectorMapWithRequestData = () => {
   
   useEffect(() => {
     dispatch(fetchCovidData());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container>
@@ -28,7 +28,7 @@ const VectorMapWithRequestData = () => {
       </Row>
       <Row>
         <Map
-          mapData={covidData && covidData.mapData}
+          mapData={covidData}
         />
       </Row>
     </Container>

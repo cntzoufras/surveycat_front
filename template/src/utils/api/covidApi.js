@@ -4,6 +4,6 @@ import { get } from './base/index';
 export default {
   get: (data) => {
     const params = { ...data };
-    return get('https://corona.lmao.ninja/v2/countries', { params });
+    return get('https://disease.sh/v2/countries', { params });
   },
 };

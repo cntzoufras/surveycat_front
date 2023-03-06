@@ -33,10 +33,12 @@ const getBtcEthChartData = (cryptoHistory) => {
   if (!BTCHistory || !ETHHistory) return [];
 
   for (let i = 0; i < showDays; i += 1) {
+    const BTCHistoryPriceUsd = BTCHistory?.history[i]?.priceUsd || 0;
+    const ETCHistoryPriceUsd = ETHHistory?.history[i]?.priceUsd || 0;
     res.push({
       name: dates[showDays - 1 - i],
-      btc: (+BTCHistory?.history[i]?.priceUsd)?.toFixed(2) || 0,
-      eth: (+ETHHistory?.history[i]?.priceUsd)?.toFixed(2) || 0,
+      btc: (+BTCHistoryPriceUsd).toFixed(2),
+      eth: (+ETCHistoryPriceUsd).toFixed(2),
     });
   }
 

@@ -5,7 +5,7 @@ import {
 } from '../actions/walletActions';
 
 
-const walletReducer = (_, action) => {
+const walletReducer = (state = null, action) => {
   switch (action.type) {
     case CONNECTED:
       return { id: action.wallet.id };
@@ -14,7 +14,7 @@ const walletReducer = (_, action) => {
     case CONNECTED_ERROR_WALLET:
       return { error: action.error };
     default:
-      return null;
+      return state;
   }
 };
 

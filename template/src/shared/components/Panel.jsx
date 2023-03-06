@@ -286,7 +286,9 @@ const getColor = (color) => {
   }
 };
 
-const PanelCard = styled(Card)`
+const PanelCard = styled(Card).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['collapse', 'divider'].includes(prop) && defaultValidatorFn(prop),
+})`
   transition: 0.3s;
 
   ${props => props.collapse && `

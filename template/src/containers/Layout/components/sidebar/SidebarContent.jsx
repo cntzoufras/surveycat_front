@@ -135,6 +135,7 @@ const SidebarContent = ({
         <SidebarLink title="ChartsJS" route="/charts/charts_js" onClick={onClick} />
         <SidebarLink title="React-vis" route="/charts/react_vis" onClick={onClick} />
         <SidebarLink title="Recharts" route="/charts/recharts" onClick={onClick} />
+        <SidebarLink title="Amcharts" route="/charts/amcharts" onClick={onClick} />
       </SidebarCategory>
       <SidebarCategory title="Maps" icon="map" collapse={collapse}>
         <SidebarLink title="Google map" route="/maps/google_map" onClick={onClick} />

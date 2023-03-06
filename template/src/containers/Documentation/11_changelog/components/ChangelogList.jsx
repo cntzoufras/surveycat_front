@@ -12,7 +12,7 @@ const renderChangesList = (changes) => {
   return (
     <ul>
       {changes.map(change => (
-        <Fragment>
+        <Fragment key={change.name}>
           <li>{change.name}</li>
           {renderChangesList(change.changes)}
         </Fragment>
@@ -25,7 +25,7 @@ const ResourcesLinks = () => (
   <Card height="auto">
     <DocumentationChangelog>
       {data.map(version => (
-        <Fragment>
+        <Fragment key={version.version}>
           <CardTitleWrap>
             <CardTitle>v{version.version}</CardTitle>
             <CardSubhead>{version.date}</CardSubhead>

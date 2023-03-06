@@ -22,6 +22,8 @@ export const SliderWrap = styled.div`
 
     .rc-slider-handle {
       border: none;
+      box-shadow: none;
+      opacity: 1;
       background: ${colorAccent};
       width: 18px;
       height: 18px;

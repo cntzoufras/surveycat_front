@@ -46,7 +46,7 @@ const ECommerceDashboard = () => {
     if (todoElements.length === 0) { // You can delete it if you need
       dispatch(fetchTodoListData());
     }
-  }, [todoElements.length]);
+  }, [todoElements.length, dispatch]);
 
   return (
     <Container className="dashboard">

@@ -59,10 +59,7 @@ const SidebarWrapper = styled.div`
 
 const SidebarScroll = styled(Scrollbar)`
   width: 240px;
-
-  & > div {
-    height: calc(100vh - 60px);
-  }
+  height: calc(100vh - 60px);
 
   .scrollbar-track {
 

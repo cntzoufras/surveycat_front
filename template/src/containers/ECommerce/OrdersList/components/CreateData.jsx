@@ -22,8 +22,7 @@ StatusFormatter.propTypes = {
 };
 
 const CreateDataOrderListTable = () => {
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => [
       {
         accessor: 'id',
         Header: 'ID',
@@ -67,8 +66,7 @@ const CreateDataOrderListTable = () => {
         formatter: StatusFormatter,
         width: 110,
       },
-    ], [],
-  );
+    ], []);
 
   const getRandomDate = (start, end) => new Date(start.getTime() + (Math.random() * (end.getTime()
       - start.getTime()))).toLocaleDateString();

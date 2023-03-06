@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import styled from 'styled-components';
@@ -41,7 +41,7 @@ const PinWithInfoWindow = () => {
           <CardTitleWrap>
             <CardTitle>{t('maps.google_map.pin_with_info_window')}</CardTitle>
           </CardTitleWrap>
-          {isLoaded ? (
+          {isLoaded && (
             <GoogleMap
               id="infoWindowMap"
               mapContainerStyle={containerStyle}
@@ -61,7 +61,7 @@ const PinWithInfoWindow = () => {
                 )}
               </Marker>
             </GoogleMap>
-          ) : <Fragment />}
+          )}
         </CardBody>
       </Card>
     </Col>

@@ -92,6 +92,11 @@ const Inbox = ({ emails }) => {
     setEmail(false);
   };
 
+  const onBack = () => {
+    setIsComposed(false);
+    setEmail(false);
+  };
+
   const onLabel = (index) => {
     setLabel(index);
     setIsComposed(false);
@@ -157,14 +162,14 @@ const Inbox = ({ emails }) => {
                 email={emailExample[0]}
                 onReply={onCompose}
                 onSubmit
-                onBack={() => onMailBox(mailbox)}
+                onBack={onBack}
               />
             ) : (
               <InboxTable emails={emails} onLetter={onLetter} />
             )}
           </div>
         ) : (
-          <ComposeEmail onSubmit={showResults} />
+          <ComposeEmail onSubmit={showResults} onBack={onBack} />
         )}
       </InboxContainer>
     </InboxWrap>

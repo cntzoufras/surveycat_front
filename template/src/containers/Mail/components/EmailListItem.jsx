@@ -11,26 +11,21 @@ import { left } from '@/utils/directions';
 import { CheckBoxField } from '@/shared/components/form/CheckBox';
 
 const EmailListItem = ({
-  email, onLetter, itemId, isChecked,
+  email, onLetter, itemId, isSelected, onChangeSelect,
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isCheckedMail, setCheckedMail] = useState(isChecked);
 
   const onFavorite = () => {
     setIsFavorite(!isFavorite);
-  };
-
-  const onChangeSelect = () => {
-    setCheckedMail(!isCheckedMail);
   };
 
   return (
     <InboxEmailListItem unread={email.unread}>
       <CheckboxCell>
         <CheckBoxField
-          checked={isCheckedMail}
+          checked={isSelected}
           name={itemId}
-          onChange={onChangeSelect}
+          onChange={event => onChangeSelect(event.target.checked, itemId)}
           styleType="colored-click"
         />
       </CheckboxCell>
@@ -50,8 +45,9 @@ const EmailListItem = ({
 EmailListItem.propTypes = {
   email: EmailProps.isRequired,
   onLetter: PropTypes.func.isRequired,
-  itemId: PropTypes.number.isRequired,
-  isChecked: PropTypes.bool.isRequired,
+  onChangeSelect: PropTypes.func.isRequired,
+  itemId: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 export default EmailListItem;
@@ -115,7 +111,9 @@ const InboxEmailPreview = styled.td`
   text-align: ${left};
 `;
 
-const FavoriteIcon = styled(StarIcon)`
+const FavoriteIcon = styled(StarIcon).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['active'].includes(prop) && defaultValidatorFn(prop),
+})`
   transition: all 0.3s;
 
   ${props => props.active && `

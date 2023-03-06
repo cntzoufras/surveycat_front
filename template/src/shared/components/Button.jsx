@@ -112,7 +112,9 @@ const getBorderRadius = (rounded, squared) => {
   }
 };
 
-export const Button = styled(BootstrapButton)`
+export const Button = styled(BootstrapButton).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['rounded', 'squared'].includes(prop) && defaultValidatorFn(prop),
+})`
   border-radius: ${props => getBorderRadius(props.rounded, props.squared)};
   padding: ${props => getPaddings(props.size)};
   margin-bottom: 20px;
@@ -218,7 +220,9 @@ export const Button = styled(BootstrapButton)`
   }
 `;
 
-export const ButtonToolbar = styled(BootstrapButtonToolbar)`
+export const ButtonToolbar = styled(BootstrapButtonToolbar).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['centered'].includes(prop) && defaultValidatorFn(prop),
+})`
   margin-top: 15px;
   margin-bottom: 10px;
 
@@ -250,7 +254,9 @@ export const ButtonToolbar = styled(BootstrapButtonToolbar)`
   `}
 `;
 
-export const ButtonGroup = styled(BootstrapButtonGroup)`
+export const ButtonGroup = styled(BootstrapButtonGroup).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['justified', 'icons'].includes(prop) && defaultValidatorFn(prop),
+})`
   border-radius: 5px;
   margin-bottom: -10px;
 

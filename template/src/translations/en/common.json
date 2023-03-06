@@ -1,17 +1,17 @@
 {
   "online_marketing_dashboard": {
     "page_title": "Online Marketing Dashboard",
-    "visits":  "Visits",
-    "total_page_views":  "Total page views",
-    "new_users":  "New users",
-    "bounce_rate":  "Bounce rate",
-    "ab_testing":  "A/B testing analytics",
-    "visitors_sessions":  "Visitor sessions",
-    "sales_statistic":  "Sales statistic",
-    "budget_statistic":  "Budget statistic",
-    "audience_by_country":  "Audience by country",
-    "best_selling":  "Best selling regions",
-    "goals_completion":  "Goal completion"
+    "visits": "Visits",
+    "total_page_views": "Total page views",
+    "new_users": "New users",
+    "bounce_rate": "Bounce rate",
+    "ab_testing": "A/B testing analytics",
+    "visitors_sessions": "Visitor sessions",
+    "sales_statistic": "Sales statistic",
+    "budget_statistic": "Budget statistic",
+    "audience_by_country": "Audience by country",
+    "best_selling": "Best selling regions",
+    "goals_completion": "Goal completion"
   },
   "dashboard_commerce": {
     "page_title": "E-commerce Dashboard",
@@ -334,6 +334,10 @@
       "simple_radial_bar_chart": "Simple radial bar chart",
       "simple_radar_chart": "Simple radar chart",
       "two_level_pie_chart": "Two level pie chart"
+    },
+    "amcharts": {
+      "title": "Amcharts",
+      "multilevel_tree_map": "Multilevel tree map"
     }
   },
   "maps": {
@@ -355,7 +359,7 @@
     "email_confirmation": {
       "title": "Email Confirmation",
       "verified": "Your e-mail address has been successfully verified",
-      "thank_you": "Thank you for choosing the Surveycat",
+      "thank_you": "Thank you for choosing the EasyDev",
       "go_to_dashboard": "Go to dashboard",
       "got_to_profile": "Go to profile"
     },
@@ -717,7 +721,7 @@
       "yu": "Yugoslavia"
     }
   },
-  "connect_wallet":{
+  "connect_wallet": {
     "page_title": "Connect wallet",
     "metamask": {
       "title": "MetaMask",

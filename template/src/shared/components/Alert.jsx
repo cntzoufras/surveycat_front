@@ -175,7 +175,9 @@ const getLightColor = (color) => {
   }
 };
 
-const StyledAlert = styled(AlertBootstrap)`
+const StyledAlert = styled(AlertBootstrap).withConfig({
+  shouldForwardProp: prop => !['bordered', 'neutral', 'colored'].includes(prop),
+})`
   border-radius: 0;
   position: relative;
   margin-bottom: 10px;
@@ -183,7 +185,7 @@ const StyledAlert = styled(AlertBootstrap)`
   display: flex;
   background-color: ${props => (props.bordered || props.neutral
     ? 'transparent' : getMainColor(props.variant))};
-  border-color: ${props => (props.neutral 
+  border-color: ${props => (props.neutral
     ? colorFieldsBorder : getMainColor(props.variant))};
 
   &.fade {

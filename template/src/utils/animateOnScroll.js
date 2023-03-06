@@ -2,12 +2,9 @@ import SplitType from 'split-type';
 
 export const splitText = () => {
   const scrollElements = document.querySelectorAll('.animate-on-scroll');
-  scrollElements.forEach((el) => {
-    // eslint-disable-next-line no-unused-vars
-    const text = new SplitType(el, {
+  scrollElements.forEach(el => new SplitType(el, {
       split: 'words, lines',
-    });
-  });
+    }));
 };
 
 const elementInView = (el, dividend = 1) => {

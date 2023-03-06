@@ -10,24 +10,30 @@ export const fetchCovidData = () => async (dispatch, getState) => {
   try {
     dispatch(fetchCovidDataRequest());
     const response = await api.covid.get();
-    const covidMapData = {
-      mapData: response && response.data && response.data.map(item => ({
+    if (response && response.data) {
+      const covidMapData = response.data.map(item => ({
         id: item.countryInfo.iso2,
         value: item.cases,
         name: item.country,
         deaths: item.deaths,
         recovered: item.recovered,
-      })),
-    };
-    dispatch(fetchCovidDataSuccess(covidMapData));
+      }));
+
+      dispatch(fetchCovidDataSuccess(covidMapData));
+    }
   } catch (error) {
     // Your error notification
-    showNotification(
-      getState().theme,
-      getState().rtl,
-      `Error Code: ${error.response.status}`,
-      `Message: ${error.response.statusText}`,
-    );
+    const code = error.response?.status;
+    const message = error.response?.statusText;
+
+    if (code && message) {
+      showNotification(
+        getState().theme,
+        getState().rtl,
+        `Error Code: ${code}`,
+        `Message: ${message}`,
+      );
+    }
     dispatch(fetchCovidDataFailure({ error }));
     throw error;
   }

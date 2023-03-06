@@ -1,7 +1,7 @@
 export default {
   auth: {
-    clientId: '',
-    authority: '',
+    clientId: 'YOUR_CLIENT_ID',
+    authority: 'YOUR_AUTHORITY',
   },
-  redirectUri: '',
+  redirectUri: 'YOUR_REDIRECT_URI',
 };

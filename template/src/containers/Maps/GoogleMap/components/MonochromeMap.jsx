@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
@@ -42,7 +42,7 @@ const MonochromeMap = () => {
           <CardTitleWrap>
             <CardTitle>{t('maps.google_map.monochrome_map')}</CardTitle>
           </CardTitleWrap>
-          {isLoaded ? (
+          {isLoaded && (
             <GoogleMap
               id="monochromeMap"
               mapContainerStyle={containerStyle}
@@ -55,7 +55,7 @@ const MonochromeMap = () => {
               }}
               // optional
             />
-          ) : <Fragment />}
+          )}
         </CardBody>
       </Card>
     </Col>

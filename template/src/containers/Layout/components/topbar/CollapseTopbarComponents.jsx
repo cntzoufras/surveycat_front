@@ -79,7 +79,7 @@ export const TopbarCollapseImageWrap = styled.div`
   ${left}: 15px;
 `;
 
-export const TopbarCollapseMessage = styled.p`
+export const TopbarCollapseMessage = styled.div`
   margin: 0;
   font-size: 12px;
   line-height: 16px;

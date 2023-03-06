@@ -13,6 +13,6 @@ export const fetchTopTenCurrencies = () => async (dispatch) => {
 
     dispatch(fetchTopTenSuccess(data.data));
   } catch (e) {
-    dispatch(fetchTopTenError(firstLetterToUpperCase(e.response?.data?.error || e.response.statusText)));
+    dispatch(fetchTopTenError(firstLetterToUpperCase(e.response?.data?.error || e.response?.statusText)));
   }
 };

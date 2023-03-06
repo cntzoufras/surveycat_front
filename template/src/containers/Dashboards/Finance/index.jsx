@@ -27,11 +27,11 @@ const FinanceDashboard = () => {
 
   useEffect(() => {
     dispatch(fetchTopTenCurrencies());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchCryptoHistory({ currencies: getAllCurrencies(topTen) }));
-  }, [topTen]);
+  }, [topTen, dispatch]);
 
   return (
     <Container>

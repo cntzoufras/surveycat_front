@@ -6,7 +6,7 @@ export default {
       elements: [
         {
           data: {
-            id: 1,
+            id: '1',
             title: 'Create the main page design',
             description: 'Eldest father can design tastes did joy settle. Roused future he ye an marked. Arose mr'
               + 'rapid in so vexed words. Gay welcome led add lasting chiefly say looking. ',
@@ -21,7 +21,7 @@ export default {
         },
         {
           data: {
-            id: 2,
+            id: '2',
             title: 'Write to Sarah',
             description: 'Eldest father can design tastes did joy settle. Roused future he ye an marked. Arose mr'
               + 'rapid in so vexed words. Gay welcome led add lasting chiefly say looking. ',
@@ -36,7 +36,7 @@ export default {
         },
         {
           data: {
-            id: 3,
+            id: '3',
             title: 'Make a mind-map',
             description: 'Eldest father can design tastes did joy settle. Roused future he ye an marked. Arose mr'
               + 'rapid in so vexed words. Gay welcome led add lasting chiefly say looking. ',
@@ -51,7 +51,7 @@ export default {
         },
         {
           data: {
-            id: 4,
+            id: '4',
             title: 'Write a text',
             description: 'Eldest father can design tastes did joy settle. Roused future he ye an marked. Arose mr'
               + 'rapid in so vexed words. Gay welcome led add lasting chiefly say looking. ',
@@ -66,7 +66,7 @@ export default {
         },
         {
           data: {
-            id: 5,
+            id: '5',
             title: 'Make a blog post about marketing',
             description: 'Eldest father can design tastes did joy settle. Roused future he ye an marked. Arose mr'
               + 'rapid in so vexed words. Gay welcome led add lasting chiefly say looking. ',

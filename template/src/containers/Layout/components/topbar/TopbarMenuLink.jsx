@@ -43,7 +43,9 @@ export default TopbarMenuLink;
 
 // region STYLES
 
-export const TopbarLink = styled(Link)`
+export const TopbarLink = styled(Link).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['iconRight'].includes(prop) && defaultValidatorFn(prop),
+})`
   display: flex;
   justify-content: ${props => (props.iconRight ? 'space-between' : 'left') };
   padding: 9px 0px 9px 20px;

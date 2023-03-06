@@ -21,7 +21,7 @@ const getData = (sortedQuotes, globalQuotes) => {
   const res = [];
   let valueSum = 0;
   Object.values(sortedQuotes)?.forEach((item, index) => {
-    valueSum += item?.quote?.USD?.volume_24h;
+    valueSum += (item?.quote?.USD?.volume_24h || 0);
     res.push({
       id: item?.id,
       name: item?.name,
@@ -32,7 +32,7 @@ const getData = (sortedQuotes, globalQuotes) => {
   res.push({
     id: 'other',
     name: 'Other',
-    value: globalQuotes?.quote?.USD?.total_volume_24h_reported - valueSum,
+    value: (globalQuotes?.quote?.USD?.total_volume_24h_reported || 0) - valueSum,
     fill: 'grey',
   });
   return res;

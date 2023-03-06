@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colorWhite } from '@/utils/palette';
 import {
   LandingButton,
   LandingSection,

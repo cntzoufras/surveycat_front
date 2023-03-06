@@ -48,6 +48,7 @@ const TodoItem = ({
     <Card>
       <TodoItemContent>
         <CheckBoxField
+          disabled={todoItemData.data.isArchived}
           checked={todoItemData.data.isCompleted}
           name={todoItemData.data.title}
           onChange={(e) => {
@@ -253,12 +254,14 @@ const TodoDueDate = styled.p`
   background-color: ${colorHover};
   ${marginRight}: 15px;
   margin-top: 0;
+  padding: 0 5px;
 `;
 
 const TodoPriority = styled.div`
   display: flex;
   align-self: baseline;
   ${marginRight}: 0;
+  padding: 0 5px;
   color: ${colorText};
   background-color: ${colorHover};
   

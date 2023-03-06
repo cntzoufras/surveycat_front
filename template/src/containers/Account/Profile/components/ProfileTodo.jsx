@@ -24,7 +24,7 @@ const ProfileToDo = ({
 );
 
 ProfileToDo.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   label: PropTypes.string,
   onChange: PropTypes.func,
   checked: PropTypes.bool,
@@ -60,7 +60,9 @@ const ProfileTask = styled.div`
 
   ${props => props.disabled && `
     cursor: default;
-    opacity: 0.7;
+    label {
+      opacity: 0.7;
+    }
   `}
 
   label {

@@ -45,11 +45,9 @@ const MatTableHead = ({
         </TableCell>
         {rows.map(row => (
           <TableCell
-            sort
-            right
             key={row.id}
             align={rtl.direction === 'rtl' ? 'right' : 'left'}
-            padding={row.disablePadding ? 'none' : 'default'}
+            padding={row.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === row.id ? order : false}
           >
             <TableSortLabel

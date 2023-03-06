@@ -155,23 +155,22 @@ const MatTable = () => {
                           <TableCheckbox checked={select} />
                         </TableCell>
                         <TableCell
-                          right
                           component="th"
                           scope="row"
                           padding="none"
                         >
                           {d.name}
                         </TableCell>
-                        <TableCell right>
+                        <TableCell>
                           {d.calories}
                         </TableCell>
-                        <TableCell right>
+                        <TableCell>
                           {d.fat}
                         </TableCell>
-                        <TableCell right>
+                        <TableCell>
                           {d.carbs}
                         </TableCell>
-                        <TableCell right>
+                        <TableCell>
                           {d.protein}
                         </TableCell>
                       </TableRow>
@@ -192,8 +191,8 @@ const MatTable = () => {
             page={page}
             backIconButtonProps={{ 'aria-label': 'Previous Page' }}
             nextIconButtonProps={{ 'aria-label': 'Next Page' }}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             rowsPerPageOptions={[5, 10, 15]}
             dir="ltr"
             SelectProps={{

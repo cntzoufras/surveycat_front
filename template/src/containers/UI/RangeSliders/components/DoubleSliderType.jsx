@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
-import Range from '@/shared/components/range_slider/Range';
+import Slider from '@/shared/components/range_slider/Slider';
 import {
   Card, CardBody, CardTitleWrap, CardTitle, CardSubhead,
 } from '@/shared/components/Card';
@@ -18,7 +18,7 @@ const DoubleSliderType = () => {
             <CardSubhead>Use default range</CardSubhead>
           </CardTitleWrap>
           <div dir="ltr">
-            <Range min={0} max={1000} value={[350, 635]} tipFormatter={value => `$${value}`} />
+            <Slider range min={0} max={1000} value={[350, 635]} tipFormatter={value => `$${value}`} />
           </div>
         </CardBody>
       </Card>

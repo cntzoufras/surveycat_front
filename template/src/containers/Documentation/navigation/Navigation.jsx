@@ -61,7 +61,9 @@ const DocumentationNavWrap = styled(Card)`
   }
 `;
 
-const DocumentationNavLink = styled(Link)`
+const DocumentationNavLink = styled(Link).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['active'].includes(prop) && defaultValidatorFn(prop),
+})`
   display: block;
   padding: 5px 0;
   font-weight: 400;

@@ -158,7 +158,9 @@ const getColor = (color) => {
   }
 };
 
-const StyledModal = styled(BootstrapModal)`
+const StyledModal = styled(BootstrapModal).withConfig({
+  shouldForwardProp: prop => !['colored', 'header'].includes(prop),
+})`
   
   .modal-dialog {
     max-width: 385px;

@@ -18,12 +18,12 @@ const Updates = () => (
       </h1>
       <UpdatesWrap>
         {data.slice(0, 3).map(version => (
-          <UpdateWrap>
+          <UpdateWrap key={version.version}>
             <h2 className="animate-on-scroll">v{version.version}</h2>
             <UpdateDate className="animate-on-scroll">{version.date}</UpdateDate>
             <p className="animate-on-scroll">
               {version.changes.map(change => (
-                <Fragment>
+                <Fragment key={`${version.version} ${change.name}`}>
                   {change.name}<br />
                 </Fragment>
               ))}

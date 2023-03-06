@@ -22,11 +22,11 @@ const Expand = ({ title, ...other }) => {
 
   return (
     <ExpandButton
-      load={load}
       onClick={onLoad}
+      load={load}
       {...other}
     >
-      <SimpleLoader widthOrHeight={load ? '14px' : 0} /><span>{title}</span>
+      <SimpleLoader widthOrHeight={load ? 14 : 0} /><span>{title}</span>
     </ExpandButton>
   );
 };
@@ -45,11 +45,31 @@ export default Expand;
 
 // region STYLES
 
-const ExpandButton = styled(Button)`
+const ExpandButton = styled(Button).withConfig({
+  shouldForwardProp: (prop, defaultValidatorFn) => !['load'].includes(prop) && defaultValidatorFn(prop),
+})`
   svg {
     transition: all 0.3s;
     animation: rotating 2s linear infinite;
   }
+
+  span {
+    transition: all 0.3s;
+
+    ${props => props.load && `
+      margin-left: 10px;
+    `}
+  }
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
 `;
 
 // endregion

@@ -26,9 +26,7 @@ const Notifications = () => {
     theme: state.theme,
   }));
 
-  const showNotification = (
-    { notification, position }, direction,
-  ) => {
+  const showNotification = ({ notification, position }, direction) => {
     let type;
     let style;
     const notificationDefaultProps = {

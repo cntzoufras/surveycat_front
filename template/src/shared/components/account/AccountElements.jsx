@@ -284,6 +284,19 @@ export const AccountSocialButtonFirebase = styled(AccountSocialButton)`
 export const AccountSocialButtonMetaMask = styled(AccountSocialButton)`
   background: #ECECEC;
   padding: 5px;
+
+  &:hover {
+    background: ${darken(0.1, '#ECECEC')};
+  }
 `;
 export const AccountSocialButtonAuth0 = styled(AccountSocialButton)`
+`;
+
+export const AccountSocialButtonWalletConnect = styled(AccountSocialButton)`
+  background: #3396ff;
+  padding: 5px;
+
+  &:hover {
+    background: ${darken(0.1, '#3396ff')};
+  }
 `;

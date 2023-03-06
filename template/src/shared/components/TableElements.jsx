@@ -13,7 +13,9 @@ import {
 import { right, left } from '@/utils/directions';
 
 // eslint-disable-next-line import/prefer-default-export
-export const Table = styled(BootstrapTable)`
+export const Table = styled(BootstrapTable).withConfig({
+  shouldForwardProp: prop => !['headAccent'].includes(prop),
+})`
   text-align: ${left};
 
   &:last-child {
@@ -51,6 +53,11 @@ export const Table = styled(BootstrapTable)`
   th {
     border: none;
     padding: 10px 5px;
+  }
+
+  &.table tbody td,
+  &.table tfoot td,
+  th {
     color: ${colorTextAdditional};
   }
 

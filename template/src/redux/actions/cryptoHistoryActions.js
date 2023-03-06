@@ -30,6 +30,6 @@ export const fetchCryptoHistory = ({
     const data = res.map((item, index) => ({ currency: currFlipped[slugs[index]], history: item.data.data }));
     dispatch(fetchCryptoHistorySuccess({ cryptoHistory: data }));
   } catch (e) {
-    dispatch(fetchCryptoHistoryError(firstLetterToUpperCase(e.response.data?.error || e.response.statusText)));
+    dispatch(fetchCryptoHistoryError(firstLetterToUpperCase(e.response.data?.error || e.response?.statusText)));
   }
 };

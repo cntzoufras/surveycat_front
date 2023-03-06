@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -180,13 +180,11 @@ const Occupancy = ({ dir }) => {
                 <DashboardOccupancyCellHead>
                   {items.head}
                 </DashboardOccupancyCellHead>
-                <Fragment>
-                  {items.data.map(item => (
-                    <DashboardOccupancyCell key={item.id} color={items.color}>
-                      {item.value}
-                    </DashboardOccupancyCell>
+                {items.data.map(item => (
+                  <DashboardOccupancyCell key={item.id} color={items.color}>
+                    {item.value}
+                  </DashboardOccupancyCell>
                   ))}
-                </Fragment>
               </tr>
             ))}
           </tbody>

@@ -6,27 +6,40 @@ import { SliderMax, SliderMin, SliderWrap } from '@/shared/components/range_slid
 
 import 'rc-slider/assets/index.css';
 
-const { Handle } = RCSlider;
+const HandleTooltip = ({
+  value, children, visible, tipFormatter, ...restProps
+ }) => (
+   <Tooltip
+     prefixCls="rc-slider-tooltip"
+     placement="top"
+     overlay={tipFormatter(value)}
+     overlayInnerStyle={{ minHeight: 'auto' }}
+     visible={visible}
+     {...restProps}
+   >
+     {children}
+   </Tooltip>
+  );
 
-const handle = ({ value, index, ...restProps }) => (
-  <Tooltip
-    prefixCls="rc-slider-tooltip"
-    overlay={value}
-    visible
-    placement="top"
-    key={index}
-  >
-    <Handle value={value} {...restProps} dragging={undefined} />
-  </Tooltip>
-);
-
-handle.propTypes = {
-  value: PropTypes.number.isRequired,
-  index: PropTypes.number.isRequired,
+HandleTooltip.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]).isRequired,
+  visible: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  tipFormatter: PropTypes.func,
 };
 
+HandleTooltip.defaultProps = {
+  tipFormatter: value => value,
+};
+
+const handleRender = ({ tipFormatter }) => (node, { value, dragging }) => (
+  <HandleTooltip value={value} visible={dragging} tipFormatter={tipFormatter}>
+    {node}
+  </HandleTooltip>
+);
+
 const Slider = ({
-  marks, value, min, max, tipFormatter,
+  marks, value, min, max, tipFormatter, range,
 }) => (
   <SliderWrap>
     <SliderMin>
@@ -36,10 +49,11 @@ const Slider = ({
       <p>{tipFormatter ? tipFormatter(max) : max}</p>
     </SliderMax>
     <RCSlider
+      range={range}
       min={min}
       max={max}
       defaultValue={value}
-      handle={handle}
+      handleRender={handleRender({ tipFormatter })}
       marks={marks}
       tipFormatter={tipFormatter}
     />
@@ -47,14 +61,16 @@ const Slider = ({
 );
 
 Slider.propTypes = {
+  range: PropTypes.bool,
   marks: PropTypes.shape(),
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   tipFormatter: PropTypes.func,
 };
 
 Slider.defaultProps = {
+  range: false,
   marks: {},
   value: 0,
   tipFormatter: value => value,

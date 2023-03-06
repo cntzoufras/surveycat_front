@@ -17,9 +17,9 @@ renderTextEditor.propTypes = {
   input: PropTypes.shape().isRequired,
 };
 
-const ComposeEmail = ({ onSubmit }) => (
+const ComposeEmail = ({ onSubmit, onBack }) => (
   <Form onSubmit={onSubmit}>
-    {({ handleSubmit, form }) => (
+    {({ handleSubmit }) => (
       <FormContainer onSubmit={handleSubmit}>
         <InboxComposeTitle>
           Compose new message
@@ -63,7 +63,7 @@ const ComposeEmail = ({ onSubmit }) => (
         </FormGroup>
         <FormButtonToolbar>
           <Button variant="primary" type="submit">Send</Button>
-          <Button variant="secondary" type="button" onClick={form.reset}>Cancel</Button>
+          <Button variant="secondary" type="button" onClick={onBack}>Cancel</Button>
         </FormButtonToolbar>
       </FormContainer>
     )}
@@ -72,6 +72,7 @@ const ComposeEmail = ({ onSubmit }) => (
 
 ComposeEmail.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  onBack: PropTypes.func.isRequired,
 };
 
 export default ComposeEmail;

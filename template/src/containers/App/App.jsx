@@ -6,11 +6,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import { LoadScript } from '@react-google-maps/api';
 import initAuth0 from '@/shared/components/account/auth/withAuth0';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
+import WalletConnectProvider from '@/shared/components/account/auth/WalletConnect';
 import Router from './Router';
 import store from './store';
 import ScrollToTop from './ScrollToTop';
@@ -34,7 +35,7 @@ const ThemeComponent = ({
     border: state.border.className,
   }));
   
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       type: mode,
     },
@@ -68,25 +69,26 @@ ThemeComponent.propTypes = {
 const ConnectedThemeComponent = ThemeComponent;
 
 const App = () => {
-  console.log('help');
   useEffect(() => {
     window.addEventListener('load', initAuth0);
   }, []);
 
   return (
     <Provider store={store}>
-      <BrowserRouter basename="/surveycat">
+      <BrowserRouter basename="/easydev">
         <I18nextProvider i18n={i18n}>
-          <ConnectedThemeComponent>
-            <LoadScript
-              loadingElement={<Loading loading />}
-              googleMapsApiKey=""
-            >
-              <ScrollToTop>
-                <Router />
-              </ScrollToTop>
-            </LoadScript>
-          </ConnectedThemeComponent>
+          <WalletConnectProvider>
+            <ConnectedThemeComponent>
+              <LoadScript
+                loadingElement={<Loading loading />}
+                googleMapsApiKey=""
+              >
+                <ScrollToTop>
+                  <Router />
+                </ScrollToTop>
+              </LoadScript>
+            </ConnectedThemeComponent>
+          </WalletConnectProvider>
         </I18nextProvider>
       </BrowserRouter>
     </Provider>

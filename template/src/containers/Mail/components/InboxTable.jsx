@@ -8,39 +8,46 @@ import EmailListItem from './EmailListItem';
 import EmailsControls from './EmailsControls';
 
 const InboxTable = ({ emails, onLetter }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [selected, setSelected] = useState([]);
   const [pageOfItems, setPageOfItems] = useState(null);
   const [emailsWithID, setEmailsWithID] = useState([]);
 
   useEffect(() => {
-    setEmailsWithID(emails.map((item, index) => ({ ...item, id: index })));
+    setEmailsWithID(emails.map((item, index) => ({ ...item, id: `${index}` })));
   }, [emails]);
 
   const onChangePage = (page) => {
     setPageOfItems(page);
   };
 
-  const onChangeSelect = () => {
-    setIsChecked(!isChecked);
+  const onChangeSelect = (isChecked, value) => {
+    setSelected(prevChecked => (isChecked ? [...prevChecked, value]
+      : prevChecked.filter(prevValue => prevValue !== value)));
   };
+
+  const onChangeSelectAll = isChecked => setSelected(isChecked ? emailsWithID.map(({ id }) => id) : []);
+
+  const isSelectedAll = selected.length === emailsWithID.length;
 
   return (
     <div>
       <EmailsControls
         emails={emails}
         onChangePage={onChangePage}
-        onChangeSelect={onChangeSelect}
+        onChangeSelectAll={onChangeSelectAll}
+        isSelectedAll={isSelectedAll}
         pageOfItems={pageOfItems}
       />
       <InboxEmailsTable bordered responsive>
         <tbody>
-          {emailsWithID.slice(1, 15).map((item, index) => (
+          {emailsWithID.slice(1, 15).map(item => (
             <EmailListItem
               key={item.id}
               email={item}
-              itemId={index}
+              itemId={item.id}
               onLetter={onLetter}
-              isChecked={isChecked}
+              isSelected={selected.includes(item.id)}
+              onChangeSelect={onChangeSelect}
             />
           ))}
         </tbody>

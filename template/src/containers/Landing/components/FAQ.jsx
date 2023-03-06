@@ -17,7 +17,7 @@ const FAQ = () => (
       <FaqTable>
         <tbody>
           {data.map((item, index) => (
-            <FaqRow>
+            <FaqRow key={item.question}>
               <td>{`${index + 1 < 10 ? 0 : ''}${index + 1}`}</td>
               <td><span className="animate-on-scroll">{item.question}</span></td>
               <td><span className="animate-on-scroll">{item.answer}</span></td>

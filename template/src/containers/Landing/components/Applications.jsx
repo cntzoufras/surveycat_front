@@ -37,7 +37,7 @@ const sliderData = {
 };
 
 const Slider = ({ item, selectItem }) => {
-  const { img, caption } = sliderData[item];
+  const { img } = sliderData[item];
 
   const handleNextClick = () => {
     const currentIndex = AppsArr.indexOf(item);

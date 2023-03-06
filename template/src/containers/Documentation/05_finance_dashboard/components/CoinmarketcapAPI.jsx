@@ -36,8 +36,10 @@ const CoinmarketcapAPI = () => (
         <b>
           <i> proxy.js  </i>
         </b> and change it a bit:
-        <CodeHighlither>
-          {`
+      </p>
+
+      <CodeHighlither>
+        {`
 // This is an original method in proxy.js
 app.get('/coinmarket/*', (req, res) => {
   const cutUrl = req.originalUrl.replace('/coinmarket', '');
@@ -55,8 +57,7 @@ app.get('/coinmarket/*', (req, res) => {
       res.status(err.response.status).send(err.response.data);
     });
 });`}
-        </CodeHighlither>
-      </p>
+      </CodeHighlither>
     </CardBody>
   </Card>
 );

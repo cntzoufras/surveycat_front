@@ -36,6 +36,14 @@ export const SelectField = React.forwardRef(({
   );
 });
 
+const valuePropType = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.shape({
+    value: PropTypes.string,
+    label: PropTypes.string,
+  }),
+]);
+
 SelectField.propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
@@ -45,11 +53,8 @@ SelectField.propTypes = {
     label: PropTypes.string,
   })),
   value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    }),
+    valuePropType,
+    PropTypes.arrayOf(valuePropType),
   ]).isRequired,
 };
 

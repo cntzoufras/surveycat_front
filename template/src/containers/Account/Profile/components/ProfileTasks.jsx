@@ -12,7 +12,7 @@ import { ProfileCard } from '../ProfileBasicComponents';
 
 const editTodoElementData = ({ todoElements, editTodoElementAction }) => (e) => {
   const todoId = e.target.id;
-  const elementData = todoElements.find(item => Number(item.data.id) === Number(todoId)).data;
+  const elementData = todoElements.find(item => item.data.id === todoId).data;
   elementData.isCompleted = !elementData.isCompleted;
   editTodoElementAction(elementData);
 };
@@ -27,25 +27,21 @@ const ProfileTasks = () => {
   
   const dispatch = useDispatch();
 
-  const fetchTodoListDataAction = () => {
-    dispatch(fetchTodoListData());
-  };
-
-  const editTodoElementAction = () => {
-    dispatch(editTodoElement());
+  const editTodoElementAction = (elementData) => {
+    dispatch(editTodoElement(elementData));
   };
 
   useEffect(() => {
     if (JSON.stringify(todoElements) !== JSON.stringify(prevTodoElements)) {
       if (todoElements.length === 0 && prevTodoElements === null) { // You can delete it if you need
-        fetchTodoListDataAction();
+        dispatch(fetchTodoListData());
       }
       const filteredData = [...todoElements];
       setNoArchivedTodoElements(filteredData.filter(item => !item.data.isArchived));
       setArchivedTodoElements(filteredData.filter(item => item.data.isArchived));
       setPrevTodoElements([...todoElements]);
     }
-  }, [todoElements, prevTodoElements]);
+  }, [todoElements, prevTodoElements, dispatch]);
 
   return (
     <Col md={12} lg={12} xl={12}>

@@ -35,7 +35,7 @@ const getTooltipStyles = (themeName, type) => {
 };
 
 export const firstLetterToUpperCase = (str) => {
-  if (!str) return '';
+  if (!str) return 'Something went wrong';
 
   const firstLetterUpperCase = str[0].toUpperCase();
   return `${firstLetterUpperCase}${str.slice(1)}`;

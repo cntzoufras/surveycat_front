@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
@@ -28,14 +28,14 @@ const BasicMap = () => {
           <CardTitleWrap>
             <CardTitle>{t('maps.google_map.basic_map')}</CardTitle>
           </CardTitleWrap>
-          {isLoaded ? (
+          {isLoaded && (
             <GoogleMap
               id="basicMap"
               mapContainerStyle={containerStyle}
               center={center}
               zoom={13}
             />
-          ) : <Fragment />}
+          )}
         </CardBody>
       </Card>
     </Col>

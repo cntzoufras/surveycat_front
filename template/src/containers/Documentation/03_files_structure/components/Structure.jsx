@@ -10,13 +10,13 @@ const Structure = () => (
       <CardTitleWrap>
         <CardTitle>Project Structure</CardTitle>
       </CardTitleWrap>
-      <p>Surveycat has two projects:</p>
+      <p>EasyDEV has two projects:</p>
       <p><b>/template/...</b> - contains all components and pages which you can to find
         <a href="http://previews.aspirity.com/easydev/" target="_blank" rel="noopener noreferrer"> here</a>:
       </p>
       <StructureBlock>
         <code>
-          {`surveycat/
+          {`easydev/
 |——template
 |  |——config/
 |  |——public/
@@ -55,7 +55,7 @@ const Structure = () => (
       <p><b>/seed/...</b> - contains main components and examples of pages:</p>
       <StructureBlock>
         <code>
-          {`surveycat/
+          {`easydev/
 |——seed
 |  |——config/
 |  |——public/

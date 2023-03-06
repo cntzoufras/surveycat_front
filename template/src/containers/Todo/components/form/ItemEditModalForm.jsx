@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Field, Form } from 'react-final-form';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
+import styled from 'styled-components';
 import FormField from '@/shared/components/form/FormField';
 import {
   FormButtonToolbar,
@@ -32,65 +33,66 @@ const ItemEditModalForm = ({
   onSubmit, dueDate, handlePriorityChange, priority,
   handleDateChange, currentEditItem, changeShowEditModal, priorityOptions,
 }) => (
-  <Form onSubmit={onSubmit} validate={validate} initialValues={currentEditItem}>
-    {({ handleSubmit }) => (
-      <FormContainer onSubmit={handleSubmit}>
-        <FormGroup>
-          <FormGroupLabel className="typography-message">Title</FormGroupLabel>
-          <FormGroupField>
-            <Field
-              name="title"
-              type="text"
-              component={FormField}
-              placeholder="Title.."
-            />
-          </FormGroupField>
-        </FormGroup>
-        <FormGroup>
-          <FormGroupLabel>Description</FormGroupLabel>
-          <FormGroupField>
-            <Field
-              component="textarea"
-              name="description"
-              placeholder="What to do.."
-            />
-          </FormGroupField>
-        </FormGroup>
-        <FormGroup>
-          <FormGroupLabel>Due Date</FormGroupLabel>
-          <FormGroupField className="priority">
-            <Field
-              name="dueDate"
-              type="text"
-              dueDate={dueDate}
-              handleDateChange={handleDateChange}
-              component={renderDatePicker}
-              required
-            />
-          </FormGroupField>
-        </FormGroup>
-        <FormGroup>
-          <FormGroupLabel>Priority</FormGroupLabel>
-          <FormGroupField>
+  <FormWrapper>
+    <Form onSubmit={onSubmit} validate={validate} initialValues={currentEditItem}>
+      {({ handleSubmit }) => (
+        <FormContainer onSubmit={handleSubmit}>
+          <FormGroup>
+            <FormGroupLabel className="typography-message">Title</FormGroupLabel>
+            <FormGroupField>
+              <Field
+                name="title"
+                type="text"
+                component={FormField}
+                placeholder="Title.."
+              />
+            </FormGroupField>
+          </FormGroup>
+          <FormGroup>
+            <FormGroupLabel>Description</FormGroupLabel>
+            <FormGroupField>
+              <Field
+                component="textarea"
+                name="description"
+                placeholder="What to do.."
+              />
+            </FormGroupField>
+          </FormGroup>
+          <FormGroup>
+            <FormGroupLabel>Due Date</FormGroupLabel>
+            <FormGroupField className="priority">
+              <Field
+                name="dueDate"
+                type="text"
+                dueDate={dueDate}
+                handleDateChange={handleDateChange}
+                component={renderDatePicker}
+                required
+              />
+            </FormGroupField>
+          </FormGroup>
+          <FormGroup>
+            <FormGroupLabel>Priority</FormGroupLabel>
             <Select
               className="react-select"
               classNamePrefix="react-select"
               onChange={handlePriorityChange}
               options={priorityOptions}
+              value={priority}
               defaultValue={priority}
               clearable={false}
             />
-          </FormGroupField>
-        </FormGroup>
-        <FormButtonToolbar>
-          <Button variant="primary" type="submit">
-            {!currentEditItem ? 'Add' : 'Edit'}
-          </Button>
-          <Button variant="secondary" type="button" onClick={changeShowEditModal}>Cancel</Button>
-        </FormButtonToolbar>
-      </FormContainer>
-    )}
-  </Form>
+          </FormGroup>
+          <FormButtonToolbar>
+            <Button variant="primary" type="submit">
+              {!currentEditItem ? 'Add' : 'Edit'}
+            </Button>
+            <Button variant="secondary" type="button" onClick={changeShowEditModal}>Cancel</Button>
+          </FormButtonToolbar>
+        </FormContainer>
+      )}
+    </Form>
+  </FormWrapper>
 );
 
 ItemEditModalForm.propTypes = {
@@ -109,3 +111,7 @@ ItemEditModalForm.defaultProps = {
 };
 
 export default ItemEditModalForm;
+
+const FormWrapper = styled.div`
+  padding: 20px;
+`;

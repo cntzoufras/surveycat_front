@@ -13,6 +13,6 @@ export const fetchGlobalQuotes = () => async (dispatch) => {
 
     dispatch(fetchGlobalQuotesSuccess(data.data));
   } catch (e) {
-    dispatch(fetchGlobalQuotesError(firstLetterToUpperCase(e.response?.data?.error || e.response.statusText)));
+    dispatch(fetchGlobalQuotesError(firstLetterToUpperCase(e.response?.data?.error || e.response?.statusText)));
   }
 };

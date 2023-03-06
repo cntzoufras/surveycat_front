@@ -20,7 +20,6 @@ const ApiTable = () => {
   const dispatch = useDispatch();
   const [pokemonCount, setPokemonCount] = useState(10);
   const pokemon = useSelector(state => state.pokemon.pokemon);
-  console.log(`pokemon : ${pokemon}`);
   const isFetching = useSelector(state => state.pokemon.isFetching);
 
   const pokemonCountHandler = (e) => {
@@ -40,7 +39,7 @@ const ApiTable = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">Aaaagpi table</h3>
+          <h3 className="page-title">Api table</h3>
           <h3 className="page-subhead subhead">Example of fetch data and pass it in table</h3>
         </Col>
       </Row>
@@ -49,7 +48,7 @@ const ApiTable = () => {
           <Card>
             <CardBody>
               <CardTitleWrap>
-                <CardTitle>Pokemon</CardTitle>
+                <CardTitle>thelo mono kolo</CardTitle>
               </CardTitleWrap>
               <SearchWrap>
                 <input
@@ -58,9 +57,7 @@ const ApiTable = () => {
                   type="number"
                   onChange={pokemonCountHandler}
                 />
-                <Button variant="secondary" onClick={onFetch}>
-                  Fetch
-                </Button>
+                <Button variant="secondary" onClick={onFetch}>Fetch</Button>
               </SearchWrap>
               {isFetching && (
                 <div className="text-center">
@@ -79,7 +76,6 @@ const ApiTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                  
                     {pokemon.map(elem => (
                       <tr key={elem.id}>
                         <td className="first-letter-uppercase">{elem.name}</td>
@@ -117,11 +113,11 @@ const SearchWrap = styled(FormContainer)`
   align-items: center;
   flex-wrap: nowrap;
   margin-bottom: 10px;
-
+  
   input {
     margin-right: 10px;
   }
-
+  
   button {
     margin: 0;
     height: 32px;

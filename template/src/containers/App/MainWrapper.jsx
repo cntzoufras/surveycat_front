@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,12 +17,10 @@ const MainWrapper = ({ children, location }) => {
   
   useEffect(() => {
     dispatch(fetchAppConfig());
-  }, []);
+  }, [dispatch]);
 
-  return (
-    <Fragment>
-      {isFetching ? (
-        <Loading loading={isFetching} />
+  return isFetching ? (
+    <Loading loading={isFetching} />
       ) : (
         <div
           className={`${direction(location, rtl)}-support`}
@@ -32,9 +30,7 @@ const MainWrapper = ({ children, location }) => {
             {children}
           </div>
         </div>
-      )}
-    </Fragment>
-  );
+      );
 };
 
 MainWrapper.propTypes = {

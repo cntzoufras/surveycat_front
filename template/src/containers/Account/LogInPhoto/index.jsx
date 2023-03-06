@@ -21,6 +21,8 @@ import {
 import GoogleAuthBtn from '../AuthBtn/googleAuthBtn';
 import FacebookAuthBtn from '../AuthBtn/fbAuthBtn';
 import MicrosoftAuthBtn from '../AuthBtn/microsoftAuthBtn';
+import MetaMaskAuthBtn from '../AuthBtn/metaMaskAuthBtn';
+import WalletConnectAuthBtn from '../AuthBtn/walletConnectAuthBtn';
 
 const auth0Icon = `${process.env.PUBLIC_URL}/img/auth0.svg`;
 
@@ -59,6 +61,8 @@ const LogInPhoto = ({ changeIsOpenModalFireBase }) => (
           >
             <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
           </AccountSocialButtonAuth0>
+          <MetaMaskAuthBtn />
+          <WalletConnectAuthBtn />
         </AccountSocial>
       </AccountCard>
     </AccountContent>
