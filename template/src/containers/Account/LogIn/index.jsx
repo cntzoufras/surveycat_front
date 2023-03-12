@@ -36,7 +36,7 @@ const LogIn = ({ changeIsOpenModalFireBase }) => (
               <AccountLogoAccent>Cat</AccountLogoAccent>
             </AccountLogo>
           </AccountTitle>
-          <h4 className="subhead">Start your business easily</h4>
+          <h4 className="subhead">Access and review surveys</h4>
         </AccountHead>
         <LogInForm
           onSubmit={showResults}
@@ -61,8 +61,7 @@ const LogIn = ({ changeIsOpenModalFireBase }) => (
           >
             <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
           </AccountSocialButtonAuth0>
-          <MetaMaskAuthBtn />
-          <WalletConnectAuthBtn />
+          
         </AccountSocial>
       </AccountCard>
     </AccountContent>
