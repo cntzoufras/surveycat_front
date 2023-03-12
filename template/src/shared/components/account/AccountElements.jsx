@@ -11,6 +11,7 @@ import {
   colorLightText,
   colorVeryLightRed,
   colorWhite,
+  colorLightAccent,
 } from '@/utils/palette';
 import {
  borderLeft, borderRight, marginLeft, marginRight, right, left, paddingLeft,
@@ -54,16 +55,19 @@ export const AccountHead = styled.div`
   ${borderLeft}: 4px solid ${colorBlue};
 `;
 
-export const AccountTitle = styled.h3`
-
+export const AccountTitle = styled.h1`
+  white-space: nowrap;
+  font-weight: 200;
+  color: ${colorLightAccent};
+  
 `;
 
 export const AccountLogo = styled.span`
-  font-weight: 700;
+  font-weight: 200;
 `;
 
 export const AccountLogoAccent = styled.span`
-  color: ${colorBlue};
+  color: ${colorAccent};
 `;
 
 export const AccountOr = styled.div`
