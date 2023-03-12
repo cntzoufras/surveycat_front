@@ -1,5 +1,5 @@
 FROM node:14 as build-stage
-WORKDIR /easydev
+WORKDIR /surveycat
 COPY /proxy .
 RUN yarn cache clean
 RUN yarn install

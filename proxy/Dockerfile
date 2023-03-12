@@ -1,5 +1,5 @@
 FROM node:14
-WORKDIR /easydev/proxy
+WORKDIR /surveycat/proxy
 COPY /proxy .
 RUN yarn cache clean
 RUN yarn install
