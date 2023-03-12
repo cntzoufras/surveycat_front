@@ -48,7 +48,7 @@ const ApiTable = () => {
           <Card>
             <CardBody>
               <CardTitleWrap>
-                <CardTitle>thelo mono kolo</CardTitle>
+                <CardTitle>Pokemon</CardTitle>
               </CardTitleWrap>
               <SearchWrap>
                 <input
