@@ -16,7 +16,7 @@ app.get('/coinmarket/*', (req, res) => {
   
   axios
     .get(url, {
-      headers: { 'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY },
+      headers: { 'X-CMC_PRO_API_KEY': '99ddab32-94ed-4949-8526-f6cc6992bad5' },
     })
     .then((response) => {
       res.send(response.data);
