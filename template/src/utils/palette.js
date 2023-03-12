@@ -107,8 +107,8 @@ export const sidebarColor = theme('mode', {
 });
 
 
-export const colorAccent = '#F7C07B';
-export const colorLightAccent = '#eeeee4';
+export const colorAccent = '#D58D44';
+export const colorLightAccent = '#F3AD61';
 export const colorAccentHover = darken(0.1, colorAccent);
 export const colorAdditional = '#e28743';
 export const colorAdditionalHover = darken(0.1, colorAdditional);
