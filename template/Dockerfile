@@ -1,5 +1,5 @@
 FROM node:14
-WORKDIR /easydev
+WORKDIR /surveycat
 COPY /template .
 RUN yarn cache clean
 RUN yarn install

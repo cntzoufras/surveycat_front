@@ -34,7 +34,7 @@ const Menu = () => {
             target="_blank"
             rel="noopener noreferrer"
             // eslint-disable-next-line max-len
-            href="https://aspirity.com/easydev?utm_source=easydev_landing&utm_medium=referral&utm_campaign=templates#hireus"
+            href="https://surveycat.test:3000"
           >
             Hire Us
           </LandingHireUsButton>

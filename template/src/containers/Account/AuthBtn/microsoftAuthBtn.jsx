@@ -18,7 +18,7 @@ const MicrosoftAuthBtn = ({ history }) => {
           redirectUri: microsoftAuthSettings.redirectUri,
       });
       dispatch(auth({ name: username }));
-      localStorage.setItem('easydev', accessToken);
+      localStorage.setItem('surveycat', accessToken);
       history.push('/online_marketing_dashboard');
     } catch (e) {
       dispatch(authError(e.message));

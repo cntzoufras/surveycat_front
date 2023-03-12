@@ -97,7 +97,7 @@ const Customizer = ({
           </CustomizerCloseButton>
         </CustomizerTitleWrap>
         <CustomizerCaption>
-          This customizer allows you to see the different variations of the EasyDev.
+          This customizer allows you to see the different variations of the Surveycat.
           Create your own visual style for every project you do!
         </CustomizerCaption>
         <CustomizerToggle

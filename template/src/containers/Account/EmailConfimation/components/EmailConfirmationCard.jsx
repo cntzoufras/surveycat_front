@@ -22,7 +22,7 @@ const EmailConfirmationCard = () => (
             Your e-mail address has been successfully verified
           </EmailConfirmationTitle>
           <EmailConfirmationSubtitle>
-            Thank you for choosing the EasyDev
+            Thank you for choosing the Surveycat
           </EmailConfirmationSubtitle>
           <EmailConfirmationButtonToolbar>
             <Button as={Link} variant="primary" to="/online_marketing_dashboard">Go to dashboard</Button>

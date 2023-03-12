@@ -9,7 +9,7 @@ const IntroductionFeatures = () => (
       <CardTitleWrap>
         <CardTitle>Introduction</CardTitle>
       </CardTitleWrap>
-      <p>EasyDEV is a modern dashboard template based on React Components and Bootstrap 5 Framework. We’ve used
+      <p>Surveycat is a modern dashboard template based on React Components and Bootstrap 5 Framework. We’ve used
         modern technologies and best practices to make our product easy to work with. It’s the most
         convenient template for developers, because of React Components, clean code and detailed documentation,
         which allows you to build any projects easily! Use it for e-commerce, analytics, sports and other types of
@@ -25,7 +25,7 @@ const IntroductionFeatures = () => (
           Click here to join now.
         </a>
       </p>
-      <p>If you want to get the HTML EasyDev template for free you&rsquo;ll need to:</p>
+      <p>If you want to get the HTML Surveycat template for free you&rsquo;ll need to:</p>
       <p>1. join our&nbsp;
         <a
           target="_blank"

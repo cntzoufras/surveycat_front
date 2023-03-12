@@ -346,7 +346,7 @@
     "email_confirmation": {
       "title": "Confirmation par courrier électronique",
       "verified": "Votre adresse e-mail a été vérifiée avec succès",
-      "thank_you": "Merci d'avoir choisi EasyDev",
+      "thank_you": "Merci d'avoir choisi Surveycat",
       "go_to_dashboard": "Aller au tableau de bord",
       "got_to_profile": "aller au profil"
     },
