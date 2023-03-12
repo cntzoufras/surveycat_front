@@ -13,18 +13,14 @@ import {
   AccountLogoAccent,
   AccountOr,
   AccountSocial,
-  AccountSocialButtonAuth0,
   AccountSocialButtonFirebase,
   AccountTitle,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
 import GoogleAuthBtn from '../AuthBtn/googleAuthBtn';
 import FacebookAuthBtn from '../AuthBtn/fbAuthBtn';
-import MetaMaskAuthBtn from '../AuthBtn/metaMaskAuthBtn';
 import MicrosoftAuthBtn from '../AuthBtn/microsoftAuthBtn';
-import WalletConnectAuthBtn from '../AuthBtn/walletConnectAuthBtn';
 
-const auth0Icon = `${process.env.PUBLIC_URL}/img/auth0.svg`;
 
 const LogIn = ({ changeIsOpenModalFireBase }) => (
   <AccountWrap>
@@ -55,13 +51,6 @@ const LogIn = ({ changeIsOpenModalFireBase }) => (
           >
             <FirebaseIcon />
           </AccountSocialButtonFirebase>
-          <AccountSocialButtonAuth0
-            variant="secondary"
-            onClick={loginAuth0}
-          >
-            <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
-          </AccountSocialButtonAuth0>
-          
         </AccountSocial>
       </AccountCard>
     </AccountContent>
