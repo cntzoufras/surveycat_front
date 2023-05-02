@@ -31,7 +31,7 @@ const InvoiceTemplate = () => (
             <p>44 Shirley Ave.</p>
             <p>West Chicago,</p>
             <p>IL 60185 </p>
-            <p dir="ltr">+8 (224) 243-4543</p>
+            <p>+8 (224) 243-4543</p>
           </div>
           <InvoiceHeadRight>
             <h4>Invoice #2308</h4>

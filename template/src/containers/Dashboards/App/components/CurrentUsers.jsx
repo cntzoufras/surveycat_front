@@ -37,7 +37,7 @@ const CurrentUsers = () => {
           </PieChart>
           <DashboardUsersChartLabel>345</DashboardUsersChartLabel>
         </DashboardUsersChartWrap>
-        <DashboardUsersInfoWrap dir="ltr">
+        <DashboardUsersInfoWrap>
           <DashboardUsersDay>
             <span>7d min</span>
             <span>0</span>

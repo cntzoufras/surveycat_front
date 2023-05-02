@@ -43,7 +43,6 @@ const CryptoRow = () => {
           <CryptoCell
             key={cryptoKey}
             quote={Object.keys(quotes).length ? quotes?.[cryptoKey][0]?.quote?.USD : null}
-            dir={rtl.direction}
             symbol={cryptoKey}
             name={CRYPTOCURRENCIES_NAMES[cryptoKey]}
             data={getWeekChartData(cryptoHistory)?.[cryptoKey]}

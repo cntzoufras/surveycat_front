@@ -39,7 +39,7 @@ const SimpleRadarChart = () => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.simple_radar_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <ResponsiveContainer height={320}>
               <RadarChart data={data} outerRadius={80}>
                 <PolarGrid strokeDasharray="3 3" />

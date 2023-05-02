@@ -53,7 +53,7 @@ const TopTen = () => {
               <th>Circulating Supply</th>
               <th>Change 24h</th>
               <th>Change 7d</th>
-              <th dir="ltr">Graph (7 days)</th>
+              <th>Graph (7 days)</th>
             </tr>
           </thead>
           <tbody>

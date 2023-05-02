@@ -30,7 +30,7 @@ const LineSeriesWithManyColors = () => {
           <CardTitleWrap>
             <CardTitle>{t('charts.react_vis.line_series_with_many_colors')}</CardTitle>
           </CardTitleWrap>
-          <div className="react-vis" dir="ltr">
+          <div className="react-vis">
             <FlexibleWidthXYPlot
               height={250}
               colorType="linear"

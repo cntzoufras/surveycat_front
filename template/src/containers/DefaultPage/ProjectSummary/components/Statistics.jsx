@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   PieChart, Pie, Tooltip, Legend,
 } from 'recharts';
@@ -29,7 +28,7 @@ const tooltipColor = {
   color: '#70bbfd',
 };
 
-const Statistics = ({ dir }) => {
+const Statistics = () => {
   const [update, setUpdate] = useState(false);
   const [data1, setData1] = useState(data01);
   const [data2, setData2] = useState(data02);
@@ -60,7 +59,7 @@ const Statistics = ({ dir }) => {
       </ProjectStatisticButton>
       <ProjectStatistic>
         <ProjectStatisticTitle>Task Statistic</ProjectStatisticTitle>
-        <ProjectStatisticChartWrap dir={dir}>
+        <ProjectStatisticChartWrap>
           <PieChart width={300} height={270}>
             <Tooltip itemStyle={tooltipColor} />
             <Pie data={data1} dataKey="value" cx="50%" cy={110} innerRadius={60} outerRadius={80} label />
@@ -70,7 +69,7 @@ const Statistics = ({ dir }) => {
       </ProjectStatistic>
       <ProjectStatistic>
         <ProjectStatisticTitle>Bug Statistic</ProjectStatisticTitle>
-        <ProjectStatisticChartWrap dir={dir}>
+        <ProjectStatisticChartWrap>
           <PieChart width={300} height={270}>
             <Tooltip itemStyle={tooltipColor} />
             <Pie data={data2} dataKey="value" cx="50%" cy={110} innerRadius={60} outerRadius={80} label />
@@ -82,9 +81,6 @@ const Statistics = ({ dir }) => {
   );
 };
 
-Statistics.propTypes = {
-  dir: PropTypes.string.isRequired,
-};
 
 export default Statistics;
 
@@ -103,7 +99,6 @@ const ProjectStatistic = styled.div`
   ${marginRight}: 5px;
 
   .recharts-wrapper {
-    direction: ltr;
     
     .recharts-legend-wrapper ul.recharts-default-legend {
       text-align: center;

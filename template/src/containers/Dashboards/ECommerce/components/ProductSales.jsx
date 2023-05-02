@@ -38,7 +38,7 @@ const ProductSales = ({ rtl }) => {
 
   return (
     <Panel lg={12} title={t('dashboard_commerce.product_sales')}>
-      <div dir="ltr">
+      <div>
         <DashboardAreaChartContainer height={250}>
           <AreaChart data={data} margin={{ top: 20, left: -15, bottom: 20 }}>
             <XAxis dataKey="name" tickLine={false} reversed={rtl === 'rtl'} />

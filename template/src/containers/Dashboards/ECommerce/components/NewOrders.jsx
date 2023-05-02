@@ -90,7 +90,7 @@ const NewOrders = ({ newOrder, onDeleteRow }) => {
                 <NewOrderAmount quantity={order.quantity} />
               </td>
               <td>{order.sold}</td>
-              <DashboardOrdersTotalCell dir="ltr">{order.total}</DashboardOrdersTotalCell>
+              <DashboardOrdersTotalCell>{order.total}</DashboardOrdersTotalCell>
               <td>
                 <DropDownMore index={index} handleDeleteRow={e => onDeleteRow(index, e)} />
               </td>

@@ -1,0 +1,77 @@
+// @import '';
+@import  '@/utils/palette.scss';
+
+// $colorBorder: $colorBorder;
+// $colorBackground: $colorBackground;
+// $colorHover: $colorHover;
+
+SidebarContentWrap {
+  height: 100%;
+  overflow: auto;
+  padding-top: 0;
+
+  & > div:last-child {
+    width: 4px !important;
+
+    div {
+      transition: height 0.3s;
+      opacity: 0.52;
+    }
+  }
+
+@media screen and (min-width: 576px) {
+    padding-top: 15px;
+
+    &[collapse] {
+      width: 55px;
+      overflow: visible !important;
+      transition: width 0.3s;
+    }
+  }
+
+}
+
+SidebarBlock { 
+  padding: 15px 0;
+  border-bottom: 1px solid ;
+  list-style-type: none;
+
+  &:last-child {
+    border: none;
+  }
+
+  @media screen and (min-width: 576px) {
+    &[collapse] {
+      > li > a,
+      > li > button {
+        overflow: hidden;
+        width: 55px;
+        background: #fff;
+
+        span:last-of-type {
+          opacity: 0;
+          transition: 0.3s;
+        }
+
+        #{SidebarLinkTitle} {
+          position: absolute;
+          width: 160px;
+          #{left}: 70px;
+        }
+
+        &:hover {
+          background: #efefef;
+        }
+      }
+
+      > li:hover > a,
+      > li:hover > button {
+        width: 275px;
+
+        span {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

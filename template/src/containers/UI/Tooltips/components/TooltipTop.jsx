@@ -20,7 +20,7 @@ const TooltipTop = ({ dir }) => {
             <CardSubhead>Use default tooltip with placement <span className="red-text">top</span></CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar centered>
-            <Tooltip text="Do you like dragons?" dir={dir} placement="top">
+            <Tooltip text="Do you like dragons?" placement="top">
               <Button id="TooltipTop" variant="outline-secondary">
                 Tooltip on Top
               </Button>

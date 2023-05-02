@@ -44,7 +44,7 @@ const ComposeEmail = ({ onSubmit, onBack }) => (
             />
           </FormGroupField>
         </FormGroup>
-        <FormGroup dir="ltr">
+        <FormGroup>
           <Field
             name="text"
             component={renderTextEditor}

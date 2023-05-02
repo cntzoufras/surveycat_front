@@ -28,7 +28,6 @@ const PopoverTop = ({ dir }) => {
               header="Popover on Top"
               body="Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem
                 lacinia quam venenatis vestibulum."
-              dir={dir}
             >
               <Button id="PopoverTop" variant="outline-secondary">
                 Popover on Top

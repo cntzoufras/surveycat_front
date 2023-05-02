@@ -76,20 +76,18 @@ const App = () => {
   return (
     <Provider store={store}>
       <BrowserRouter basename="/surveycat">
-        <I18nextProvider i18n={i18n}>
-          <WalletConnectProvider>
-            <ConnectedThemeComponent>
-              <LoadScript
-                loadingElement={<Loading loading />}
-                googleMapsApiKey=""
-              >
-                <ScrollToTop>
-                  <Router />
-                </ScrollToTop>
-              </LoadScript>
-            </ConnectedThemeComponent>
-          </WalletConnectProvider>
-        </I18nextProvider>
+        <WalletConnectProvider>
+          <ConnectedThemeComponent>
+            <LoadScript
+              loadingElement={<Loading loading />}
+              googleMapsApiKey=""
+            >
+              <ScrollToTop>
+                <Router />
+              </ScrollToTop>
+            </LoadScript>
+          </ConnectedThemeComponent>
+        </WalletConnectProvider>  
       </BrowserRouter>
     </Provider>
   );

@@ -60,7 +60,7 @@ const ActivityRating = ({ dir }) => {
 
   return (
     <Panel lg={12} xl={6} md={12} title={t('fitness_dashboard.activity_rating')}>
-      <div dir="ltr">
+      <div>
         <DashboardFitnessPieChartContainer width="100%" height={360}>
           <DashboardPieChart>
             <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />

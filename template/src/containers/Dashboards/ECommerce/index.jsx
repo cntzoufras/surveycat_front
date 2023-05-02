@@ -73,7 +73,7 @@ const ECommerceDashboard = () => {
         <SalesReport />
         <Emails />
         <ShortReminders />
-        <TopSellingProducts dir={rtl.direction} />
+        <TopSellingProducts />
         <NewOrders newOrder={newOrder} onDeleteRow={onDeleteRow(editTodoElementAction, newOrder)} />
         <RecentOrders />
       </Row>

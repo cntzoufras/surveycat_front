@@ -31,11 +31,11 @@ const FitnessDashboard = () => {
         <Distance />
       </Row>
       <Row>
-        <ActivityChart dir={rtl.direction} />
+        <ActivityChart />
         <TodayRunningMap />
         <MyCompetitors />
-        <FatBurning dir={rtl.direction} />
-        <ActivityRating dir={rtl.direction} />
+        <FatBurning />
+        <ActivityRating />
       </Row>
     </Container>
   );

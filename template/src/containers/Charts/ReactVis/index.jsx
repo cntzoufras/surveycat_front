@@ -27,7 +27,7 @@ const ReactVis = () => {
         </Col>
       </Row>
       <Row>
-        <Plots dir={rtl.direction} />
+        <Plots />
         <LineSeriesCanvas />
         <MarkSeriesCanvas />
         <LineSeries />

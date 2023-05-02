@@ -23,7 +23,7 @@ const ButtonGroups = () => {
             </CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar>
-            <ButtonGroup icons dir="ltr">
+            <ButtonGroup icons>
               <Button variant="outline-secondary"><span className="lnr lnr-pushpin" /></Button>
               <Button variant="outline-secondary"><span className="lnr lnr-heart-pulse" /></Button>
               <Button variant="outline-secondary"><span className="lnr lnr-cog" /></Button>
@@ -35,7 +35,7 @@ const ButtonGroups = () => {
             <CardSubhead>Use default button group</CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar>
-            <ButtonGroup dir="ltr">
+            <ButtonGroup>
               <Button variant="outline-secondary">Left</Button>
               <Button variant="outline-secondary">Middle</Button>
               <Button variant="outline-secondary">Right</Button>
@@ -49,7 +49,7 @@ const ButtonGroups = () => {
             </CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar>
-            <ButtonGroup justified dir="ltr">
+            <ButtonGroup justified>
               <Button variant="primary">Left</Button>
               <Button variant="primary">Middle</Button>
               <Button variant="primary">Right</Button>

@@ -26,7 +26,7 @@ const MarkSeriesCanvas = () => {
           <CardTitleWrap>
             <CardTitle>{t('charts.react_vis.mark_series_canvas')}</CardTitle>
           </CardTitleWrap>
-          <div className="react-vis" dir="ltr">
+          <div className="react-vis">
             <FlexibleWidthXYPlot
               height={300}
             >

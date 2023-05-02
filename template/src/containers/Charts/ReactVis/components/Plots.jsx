@@ -47,7 +47,7 @@ const Plots = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.react_vis.plots')}</CardTitle>
           </CardTitleWrap>
-          <div className="react-vis" dir="ltr">
+          <div className="react-vis">
             <FlexibleWidthXYPlot
               animation
               getX={d => d.left}
@@ -59,7 +59,7 @@ const Plots = ({ dir }) => {
               <YAxis
                 className="cool-custom-name"
                 tickSizeInner={0}
-                tickSizeOuter={8}
+                tickSizeOuter={12}
                 orientation={dir === 'rtl' ? 'right' : 'left'}
               />
               <XAxis

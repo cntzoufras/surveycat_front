@@ -42,9 +42,9 @@ const FinanceDashboard = () => {
       </Row>
       <CryptoRow />
       <Row>        
-        <BtcEth dir={rtl.direction} />
+        <BtcEth />
         <TradeHistory />
-        <CryptotrendsToday dir={rtl.direction} />
+        <CryptotrendsToday />
         <TopTen />
       </Row>
     </Container>

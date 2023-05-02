@@ -27,14 +27,14 @@ const Recharts = () => {
         </Col>
       </Row>
       <Row>
-        <SimpleLineChart dir={rtl.direction} />
-        <DashedLineChart dir={rtl.direction} />
-        <SimpleAreaChart dir={rtl.direction} />
-        <StackedAreaChart dir={rtl.direction} />
-        <MultipleYAxesScatterChart dir={rtl.direction} />
-        <SimpleRadialBarChart dir={rtl.direction} />
+        <SimpleLineChart />
+        <DashedLineChart />
+        <SimpleAreaChart />
+        <StackedAreaChart />
+        <MultipleYAxesScatterChart />
+        <SimpleRadialBarChart />
         <SimpleRadarChart />
-        <TwoLevelPieChart dir={rtl.direction} />
+        <TwoLevelPieChart />
       </Row>
     </Container>
   );

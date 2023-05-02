@@ -24,7 +24,6 @@ const MainWrapper = ({ children, location }) => {
       ) : (
         <div
           className={`${direction(location, rtl)}-support`}
-          dir={direction(location, rtl)}
         >
           <div className="wrapper">
             {children}

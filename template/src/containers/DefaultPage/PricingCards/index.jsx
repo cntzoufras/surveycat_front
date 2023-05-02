@@ -15,7 +15,7 @@ const PricingCards = () => (
         </h3>
       </Col>
     </Row>
-    <Row dir="ltr">
+    <Row>
       <CardBasic />
       <CardSpecial />
       <CardPro />

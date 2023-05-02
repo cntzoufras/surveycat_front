@@ -11,7 +11,7 @@ const BigCalendar = ({ dir }) => (
   <Col md={12} lg={12} xl={9}>
     <Card>
       <CardBody>
-        <Calendar dir={dir} events={events} />
+        <Calendar events={events} />
       </CardBody>
     </Card>
   </Col>

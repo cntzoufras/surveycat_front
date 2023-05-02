@@ -59,7 +59,7 @@ const TopSellingProducts = ({ dir }) => {
 
   return (
     <Panel lg={12} xl={6} md={12} xs={12} title={t('dashboard_commerce.top_selling_products')}>
-      <div dir={dir}>
+      <div>
         <DashboardCommercePieChartContainer height={360}>
           <DashboardPieChart>
             <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />

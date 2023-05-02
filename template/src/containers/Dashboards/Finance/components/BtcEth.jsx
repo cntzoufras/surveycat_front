@@ -68,7 +68,7 @@ const BtcEth = ({ dir }) => {
       subhead="Ratings by Market Capitalization"
       refreshRequest={refreshData}
     >
-      <div style={{ height: '100%' }} dir="ltr">
+      <div style={{ height: '100%' }}>
         <DashboardAreaChartContainer height={280}>
           {error ? (
             <ErrorAlert error={error} />

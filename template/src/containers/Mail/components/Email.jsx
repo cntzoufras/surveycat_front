@@ -92,12 +92,12 @@ const Email = ({ email, onReply, onBack }) => {
       </InboxEmailBody>
       {email.attachment ? (
         <InboxEmailAttachment>
-          <InboxEmailAttachmentTitle dir="ltr">
+          <InboxEmailAttachmentTitle>
             Attachment (2 file 12Mb):
           </InboxEmailAttachmentTitle>
           {email.attachment.map(item => (
             <InboxEmailAttachmentLink key={`index_${item.name}_${item.time}`}>
-              <PaperclipIcon /><a href={item.link} download dir="ltr">{item.name} ({item.size})</a>
+              <PaperclipIcon /><a href={item.link} download>{item.name} ({item.size})</a>
             </InboxEmailAttachmentLink>
           ))}
         </InboxEmailAttachment>

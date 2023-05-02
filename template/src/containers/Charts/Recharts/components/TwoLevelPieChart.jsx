@@ -50,7 +50,7 @@ const TwoLevelPieChart = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.two_level_pie_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir={dir}>
+          <div>
             <ResponsiveContainer height={320}>
               <PieChart>
                 <Tooltip itemStyle={tooltipColor} position={coordinates} />

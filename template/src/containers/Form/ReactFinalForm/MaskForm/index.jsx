@@ -21,7 +21,7 @@ const MaskForm = () => {
         </Col>
       </Row>
       <Row>
-        <MaskExamples onSubmit={showResults} dir={rtl.direction} />
+        <MaskExamples onSubmit={showResults} />
       </Row>
     </Container>
   );

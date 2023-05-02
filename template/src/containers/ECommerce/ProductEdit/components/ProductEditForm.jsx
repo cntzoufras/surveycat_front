@@ -63,7 +63,7 @@ const ProductEditForm = ({ onSubmit }) => (
           </FormGroupIdCategory>
           <FormGroup>
             <FormGroupLabel>
-              Short description <span dir="ltr">(300 characters max)</span>
+              Short description <span>(300 characters max)</span>
             </FormGroupLabel>
             <FormGroupField>
               <Field

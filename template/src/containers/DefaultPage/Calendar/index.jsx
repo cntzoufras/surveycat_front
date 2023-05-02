@@ -18,7 +18,7 @@ const Calendar = () => {
         </Col>
       </Row>
       <Row>
-        <BigCalendar dir={rtl.direction} />
+        <BigCalendar />
         <EventLabels />
       </Row>
     </Container>

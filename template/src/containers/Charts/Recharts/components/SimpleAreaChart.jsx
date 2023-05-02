@@ -43,7 +43,7 @@ const SimpleAreaChart = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.simple_area_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <ResponsiveContainer height={300}>
               <AreaChart
                 data={data}

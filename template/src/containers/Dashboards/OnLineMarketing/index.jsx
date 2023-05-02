@@ -34,9 +34,9 @@ const OnLineMarketingDashboard = () => {
         <BounceRate />
       </Row>
       <Row>
-        <ABTestingAnalytics dir={rtl.direction} />
-        <BounceRateArea dir={rtl.direction} />
-        <VisitorsSessions dir={rtl.direction} />
+        <ABTestingAnalytics />
+        <BounceRateArea />
+        <VisitorsSessions />
         <SalesStatistic />
         <BudgetStatistic />
         <AudienceByCountry />

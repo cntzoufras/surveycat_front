@@ -24,7 +24,7 @@ const ABTestingAnalytics = ({ dir }) => {
 
   return (
     <Panel md={12} lg={12} xl={12} title={t('online_marketing_dashboard.ab_testing')}>
-      <div dir="ltr">
+      <div>
         <DashboardAreaChartContainer height={250}>
           <AreaChart data={data} margin={{ top: 20, left: -15, bottom: 20 }}>
             <XAxis dataKey="name" tickLine={false} reversed={dir === 'rtl'} />

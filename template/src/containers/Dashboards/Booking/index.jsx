@@ -29,9 +29,9 @@ const BookingDashboard = () => {
         <BookingCancels />
       </Row>
       <Row>
-        <Reservations dir={rtl.direction} />
+        <Reservations />
         <WeeklyStat />
-        <Occupancy dir={rtl.direction} />
+        <Occupancy />
       </Row>
     </Container>
   );

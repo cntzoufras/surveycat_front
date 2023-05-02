@@ -18,7 +18,7 @@ const ProjectSummary = () => {
         </Col>
       </Row>
       <Row>
-        <Summary dir={rtl.direction} />
+        <Summary />
         <ProjectTeam />
       </Row>
     </Container>

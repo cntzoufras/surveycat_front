@@ -40,7 +40,7 @@ const AppTileClicks = ({ dir }) => {
       title={t('app_dashboard.app_tile_clicks')}
       subhead="How effective your business is in comparison with the previous month"
     >
-      <ClicksChartWrap dir="ltr">
+      <ClicksChartWrap>
         <ResponsiveContainer height={300}>
           <BarChart
             width={600}

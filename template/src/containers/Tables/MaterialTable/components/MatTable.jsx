@@ -194,7 +194,6 @@ const MatTable = () => {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
             rowsPerPageOptions={[5, 10, 15]}
-            dir="ltr"
             SelectProps={{
               inputProps: { 'aria-label': 'rows per page' },
               native: true,

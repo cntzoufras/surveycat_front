@@ -14,13 +14,13 @@ const TooltipBottom = ({ dir }) => {
   return (
     <TooltipCardWrap sm={12} md={6} lg={6} xl={3}>
       <Card>
-        <CardBody dir={dir}>
+        <CardBody>
           <CardTitleWrap>
             <CardTitle>{t('ui_elements.tooltips_popovers.tooltip_on_bottom')}</CardTitle>
             <CardSubhead>Use default tooltip with placement <span className="red-text">bottom</span></CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar centered>
-            <Tooltip text="Do you like dragons?" dir={dir} placement="bottom">
+            <Tooltip text="Do you like dragons?" placement="bottom">
               <Button id="TooltipBottom" variant="outline-secondary">
                 Tooltip on Bottom
               </Button>

@@ -55,7 +55,6 @@ const MatTableHead = ({
               direction={order}
               onClick={createSortHandler(row.id, onRequestSort)}
               className="material-table__sort-label"
-              dir="ltr"
             >
               {row.label}
             </TableSortLabel>

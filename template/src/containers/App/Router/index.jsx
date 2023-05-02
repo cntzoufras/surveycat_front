@@ -16,10 +16,10 @@ const Router = () => (
   <MainWrapper>
     <main>
       <Switch>
-        <Route exact path="/" component={Landing} />
+        <Route exact path="/" component={LogIn} />
         <Route path="/404" component={NotFound404} />
         <Route path="/lock_screen" component={LockScreen} />
-        <Route path="/log_in" component={LogIn} />
+        <Route path="/login" component={LogIn} />
         <Route path="/log_in_photo" component={LogInPhoto} />
         <Route path="/register" component={Register} />
         <Route path="/register_photo" component={RegisterPhoto} />

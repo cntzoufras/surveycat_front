@@ -22,7 +22,7 @@ const TooltipRight = ({ dir }) => {
             </CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar centered>
-            <Tooltip text="Do you like dragons?" dir={dir} placement="right">
+            <Tooltip text="Do you like dragons?" placement="right">
               <Button id="TooltipRight" variant="outline-secondary">
                 Tooltip on Right
               </Button>

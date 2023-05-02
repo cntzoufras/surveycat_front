@@ -118,7 +118,7 @@ const CryptotrendsToday = ({ dir }) => {
       isLoading={isGlobalQuotesLoading || isCryptoTrendsLoading}
       refreshRequest={refresh}
     >
-      <div dir={dir}>
+      <div>
         <DashboardCryptoPieChartContainer height={375}>
           <DashboardPieChart>
             {errorGlobalQuotesQuotes || errorCryptoTrends ? (

@@ -27,7 +27,7 @@ const BestSellingRegions = () => {
 
   return (
     <Panel xs={12} md={12} lg={12} xl={8} title={t('online_marketing_dashboard.best_selling')}>
-      <div dir="ltr">
+      <div>
         <GoogleMap
           id="bestSellingRegionsMap"
           mapContainerStyle={containerStyle}

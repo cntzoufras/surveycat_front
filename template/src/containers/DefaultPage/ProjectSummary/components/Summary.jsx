@@ -62,7 +62,7 @@ const Summary = ({ dir }) => (
             </ProjectBarWrap>
           </ProjectSummaryStats>
           <hr />
-          <Statistics dir={dir} />
+          <Statistics />
         </ProjectSummaryWrap>
       </CardBody>
     </Card>

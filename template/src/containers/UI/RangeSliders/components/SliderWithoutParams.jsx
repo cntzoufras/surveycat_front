@@ -17,7 +17,7 @@ const SliderWithoutParams = () => {
             <CardTitle>{t('ui_elements.range_sliders.slider_without_params')}</CardTitle>
             <CardSubhead>Use default slider</CardSubhead>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <Slider min={0} max={100} />
           </div>
         </CardBody>

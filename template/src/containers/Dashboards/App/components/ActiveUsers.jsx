@@ -41,7 +41,7 @@ const ActiveUsers = ({ dir }) => {
       title={t('app_dashboard.active_users')}
       subhead="See how users involve into app"
     >
-      <div dir="ltr">
+      <div>
         <ResponsiveContainer height={195} className="dashboard__active-users-chart">
           <LineChart
             height={195}

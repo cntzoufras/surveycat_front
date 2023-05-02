@@ -22,7 +22,7 @@ const ProfileMain = () => (
             <ProfileName>Larry Boom</ProfileName>
             <ProfileWork>Senior Account Manager</ProfileWork>
             <ProfileContact>mailmethisletter@gmail.com</ProfileContact>
-            <ProfileContact dir="ltr">+23-123-743-23-21</ProfileContact>
+            <ProfileContact>+23-123-743-23-21</ProfileContact>
             <ProfileButton variant="primary">
               <MessageTextOutlineIcon /> <span>Message</span>
             </ProfileButton>

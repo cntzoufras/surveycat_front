@@ -23,7 +23,7 @@ const Bar = () => {
           <CardTitleWrap>
             <CardTitle>{t('charts.react_vis.bars')}</CardTitle>
           </CardTitleWrap>
-          <div className="react-vis" dir="ltr">
+          <div className="react-vis">
             <FlexibleWidthXYPlot
               xType="ordinal"
               height={250}
@@ -35,19 +35,28 @@ const Bar = () => {
               <YAxis />
               <VerticalBarSeries
                 data={[
-                  { x: 'A', y: 10 },
-                  { x: 'B', y: 5 },
-                  { x: 'C', y: 15 },
+                  { x: 'A', y: 110 },
+                  { x: 'B', y: 15 },
+                  { x: 'C', y: 55 },
+                  { x: 'D', y: 25 },
+                  { x: 'E', y: 35 },
+                  { x: 'F', y: 45 },
+                  { x: 'G', y: 115 },
                 ]}
                 color="#70bbfd"
               />
+             
               <VerticalBarSeries
                 data={[
-                  { x: 'A', y: 12 },
-                  { x: 'B', y: 2 },
-                  { x: 'C', y: 11 },
+                  { x: 'A', y: 210 },
+                  { x: 'B', y: 205 },
+                  { x: 'C', y: 215 },
+                  { x: 'D', y: 225 },
+                  { x: 'E', y: 235 },
+                  { x: 'F', y: 245 },
+                  { x: 'G', y: 200 },
                 ]}
-                color="#c88ffa"
+                color="#AFDE1E"
               />
             </FlexibleWidthXYPlot>
           </div>

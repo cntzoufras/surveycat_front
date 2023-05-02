@@ -58,7 +58,7 @@ const SimpleRadialBarChart = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.simple_radial_bar_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir={dir}>
+          <div>
             <ResponsiveContainer height={320}>
               <RadialBarChart
                 cy={130}

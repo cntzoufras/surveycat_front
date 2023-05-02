@@ -64,7 +64,7 @@ const ButtonDropdown = () => {
             <CardSubhead>Use default dropdown toggle with <span className="red-text">button</span></CardSubhead>
           </CardTitleWrap>
           <ButtonToolbar>
-            <Dropdown className="btn-group" dir="ltr">
+            <Dropdown className="btn-group">
               <Button variant="outline-secondary">Dropdown</Button>
               <DropdownToggle split variant="outline-secondary">
                 <ChevronDownIcon />
@@ -76,7 +76,7 @@ const ButtonDropdown = () => {
                 <DropdownItem>Another Action</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <Dropdown className="btn-group" dir="ltr">
+            <Dropdown className="btn-group">
               <Button variant="outline-primary">Dropdown</Button>
               <DropdownToggle variant="outline-primary">
                 <ChevronDownIcon />
@@ -88,7 +88,7 @@ const ButtonDropdown = () => {
                 <DropdownItem>Another Action</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <Dropdown className="btn-group" dir="ltr">
+            <Dropdown className="btn-group">
               <Button variant="outline-primary">Dropdown</Button>
               <DropdownToggle variant="primary">
                 <ChevronDownIcon />
@@ -100,7 +100,7 @@ const ButtonDropdown = () => {
                 <DropdownItem>Another Action</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <Dropdown className="btn-group" dir="ltr">
+            <Dropdown className="btn-group">
               <Button variant="primary">Dropdown</Button>
               <DropdownToggle variant="primary">
                 <ChevronDownIcon />
@@ -112,7 +112,7 @@ const ButtonDropdown = () => {
                 <DropdownItem>Another Action</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            <Dropdown className="btn-group" dir="ltr">
+            <Dropdown className="btn-group">
               <Button variant="primary" disabled>Dropdown</Button>
               <DropdownToggle disabled variant="primary">
                 <ChevronDownIcon />

@@ -45,7 +45,7 @@ const Collapse = ({ className, title, children }) => {
   };
 
   return (
-    <CollapseWrapper className={`${view.styleClass} ${className}`} dir="ltr">
+    <CollapseWrapper className={`${view.styleClass} ${className}`}>
       <CollapseToggle onClick={toggle} type="button">
         {view.icon}
         <span>{title}<ChevronDownIcon /></span>

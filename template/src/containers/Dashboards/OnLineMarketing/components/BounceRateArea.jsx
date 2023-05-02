@@ -33,7 +33,7 @@ const BounceRateArea = ({ dir }) => {
   return (
     <Panel xl={5} lg={6} md={12} title={t('online_marketing_dashboard.bounce_rate')}>
       <DashboardBouncePercent>32%</DashboardBouncePercent>
-      <div dir="ltr">
+      <div>
         <DashboardAreaChartContainer height={220}>
           <AreaChart
             data={data}

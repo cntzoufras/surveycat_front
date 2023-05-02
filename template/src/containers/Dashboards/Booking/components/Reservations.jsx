@@ -60,7 +60,7 @@ const Reservations = ({ dir }) => {
   const onMouseMove = (e) => {
     if (e.tooltipPosition) {
       setCoordinates({
-        x: dir === 'ltr' ? e.tooltipPosition.x - 130 : e.tooltipPosition.x / 10, y: e.tooltipPosition.y - 40,
+        x: e.tooltipPosition.x - 130, y: e.tooltipPosition.y - 40,
       });
     }
   };
@@ -77,7 +77,7 @@ const Reservations = ({ dir }) => {
       <DashboardReservationsWrap>
         <DashboardReservationsTitle>Total visitors on 23.08.2018</DashboardReservationsTitle>
         <DashboardReservationsNumber>345</DashboardReservationsNumber>
-        <DashboardReservationsChartWrap dir={dir}>
+        <DashboardReservationsChartWrap>
           <ResponsiveContainer>
             <DashboardReservationsChartContainer>
               <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />

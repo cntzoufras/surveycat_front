@@ -17,7 +17,7 @@ const SliderWithScale = () => {
             <CardTitle>{t('ui_elements.range_sliders.slider_with_scale')}</CardTitle>
             <CardSubhead>Use default slider with property <span className="red-text">marks</span></CardSubhead>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <Slider
               min={0}
               max={100}

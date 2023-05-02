@@ -39,7 +39,7 @@ const FatBurning = ({ dir }) => {
           <DashboardWeightStatValue color={colorRed}>58 kg</DashboardWeightStatValue>
         </DashboardWeightStat>
       </DashboardWeightStats>
-      <div dir="ltr">
+      <div>
         <ResponsiveContainer height={250}>
           <AreaChart
             data={data}

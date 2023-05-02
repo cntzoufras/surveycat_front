@@ -28,7 +28,6 @@ const PopoverLeft = ({ dir }) => {
               header="Popover on Left"
               body="Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem
                 lacinia quam venenatis vestibulum."
-              dir={dir}
             >
               <Button id="PopoverLeft" variant="outline-secondary">
                 Popover on Left

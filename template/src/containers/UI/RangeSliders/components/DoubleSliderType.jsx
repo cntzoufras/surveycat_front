@@ -17,7 +17,7 @@ const DoubleSliderType = () => {
             <CardTitle>{t('ui_elements.range_sliders.double_slider_type')}</CardTitle>
             <CardSubhead>Use default range</CardSubhead>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <Slider range min={0} max={1000} value={[350, 635]} tipFormatter={value => `$${value}`} />
           </div>
         </CardBody>

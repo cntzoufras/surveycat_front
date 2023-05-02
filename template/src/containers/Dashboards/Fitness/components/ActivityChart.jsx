@@ -40,7 +40,7 @@ const ActivityChart = ({ dir }) => {
 
   return (
     <Panel xs={12} lg={12} title={t('fitness_dashboard.activity_chart')}>
-      <div dir="ltr">
+      <div>
         <DashboardAreaChartContainer height={250}>
           <AreaChart data={data} margin={{ top: 20, left: -15, bottom: 20 }}>
             <XAxis dataKey="name" tickLine={false} reversed={dir === 'rtl'} />

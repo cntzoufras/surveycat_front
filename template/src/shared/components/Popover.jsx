@@ -13,7 +13,7 @@ const Popover = ({
  dir, header, body, children, ...other
 }) => {
   const popover = (
-    <StyledPopover dir={dir}>
+    <StyledPopover>
       <PopoverHeader>{header}</PopoverHeader>
       <PopoverBody>{body}</PopoverBody>
     </StyledPopover>

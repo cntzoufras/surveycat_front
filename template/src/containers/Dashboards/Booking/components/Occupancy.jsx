@@ -158,7 +158,7 @@ const Occupancy = ({ dir }) => {
       title={t('booking_dashboard.occupancy')}
       subhead="See how effective your business is"
     >
-      <div dir="ltr">
+      <div>
         <ResponsiveContainer height={260}>
           <ComposedChart data={data} margin={{ top: 20, left: -15 }}>
             <XAxis dataKey="name" tickLine={false} padding={{ left: 20 }} reversed={dir === 'rtl'} />

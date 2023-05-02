@@ -18,45 +18,26 @@ const LineSeriesChart = () => {
           <CardTitleWrap>
             <CardTitle>{t('charts.react_vis.line_series')}</CardTitle>
           </CardTitleWrap>
-          <div className="react-vis" dir="ltr">
+          <div className="react-vis">
             <FlexibleWidthXYPlot height={250}>
               <HorizontalGridLines />
               <VerticalGridLines />
               <XAxis />
               <YAxis />
+              
               <LineSeries
                 className="react-vis__svg-line"
                 curve="curveMonotoneX"
                 data={[
-                  { x: 1, y: 3 },
-                  { x: 2, y: 5 },
-                  { x: 3, y: 15 },
-                  { x: 4, y: 12 },
-                ]}
-                color="#70bbfd"
-              />
-              <LineSeries
-                className="react-vis__svg-line"
-                curve="curveMonotoneX"
-                data={[
-                  { x: 1, y: 10 },
+                  { x: 0, y: 10 },
                   { x: 2, y: 4 },
-                  { x: 3, y: 2 },
-                  { x: 4, y: 15 },
+                  { x: 2, y: 21 },
+                  { x: 4, y: 14 },
+                  { x: 14, y: 14 },
                 ]}
                 color="#c88ffa"
               />
-              <LineSeries
-                className="react-vis__svg-line"
-                curve="curveMonotoneX"
-                data={[
-                  { x: 1, y: 7 },
-                  { x: 2, y: 11 },
-                  { x: 3, y: 9 },
-                  { x: 4, y: 2 },
-                ]}
-                color="#f6da6e"
-              />
+              
             </FlexibleWidthXYPlot>
           </div>
         </CardBody>

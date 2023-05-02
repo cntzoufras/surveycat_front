@@ -10,7 +10,7 @@ import { colorGray } from '@/utils/palette';
 const Tooltip = ({
  dir, text, children, ...other
 }) => {
-  const tooltip = <StyledTooltip dir={dir}>{text}</StyledTooltip>;
+  const tooltip = <StyledTooltip>{text}</StyledTooltip>;
 
   return (
     <OverlayTrigger overlay={tooltip} {...other}>

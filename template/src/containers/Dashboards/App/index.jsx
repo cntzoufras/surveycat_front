@@ -26,7 +26,7 @@ const AppDashboard = () => {
       </Row>
       <Row>
         <CurrentUsers />
-        <ActiveUsers dir={rtl.direction} />
+        <ActiveUsers />
       </Row>
       <Row>
         <SessionShort />
@@ -35,7 +35,7 @@ const AppDashboard = () => {
         <PageViewsShort />
       </Row>
       <Row>
-        <AppTileClicks dir={rtl.direction} />
+        <AppTileClicks />
         <WeeklyStatMobile />
         <SocialMarketing />
       </Row>

@@ -20,7 +20,7 @@ const SliderStartPoint = () => {
               <span className="red-text">value</span>
             </CardSubhead>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <Slider min={0} max={129} value={34} />
           </div>
         </CardBody>

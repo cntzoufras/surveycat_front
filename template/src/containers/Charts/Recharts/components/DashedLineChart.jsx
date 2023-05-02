@@ -43,7 +43,7 @@ const DashedLineChart = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.dashed_line_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <ResponsiveContainer height={300}>
               <LineChart
                 data={data}

@@ -27,14 +27,14 @@ const TooltipsPopovers = () => {
         </Col>
       </Row>
       <Row>
-        <TooltipTop dir={rtl.direction} />
-        <TooltipRight dir={rtl.direction} />
-        <TooltipLeft dir={rtl.direction} />
-        <TooltipBottom dir={rtl.direction} />
-        <PopoverTop dir={rtl.direction} />
-        <PopoverRight dir={rtl.direction} />
-        <PopoverLeft dir={rtl.direction} />
-        <PopoverBottom dir={rtl.direction} />
+        <TooltipTop />
+        <TooltipRight />
+        <TooltipLeft />
+        <TooltipBottom />
+        <PopoverTop />
+        <PopoverRight />
+        <PopoverLeft />
+        <PopoverBottom />
       </Row>
     </Container>
   );

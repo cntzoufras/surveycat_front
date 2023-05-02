@@ -47,7 +47,7 @@ const MultipleYAxesScatterChart = ({ dir }) => {
           <CardTitleWrap>
             <CardTitle>{t('charts.recharts.multiple_scatter_chart')}</CardTitle>
           </CardTitleWrap>
-          <div dir="ltr">
+          <div>
             <ResponsiveContainer height={300}>
               <ScatterChart
                 margin={{

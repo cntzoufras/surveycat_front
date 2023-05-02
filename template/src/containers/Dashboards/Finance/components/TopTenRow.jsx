@@ -45,10 +45,10 @@ const TopTenRow = ({
     <tr key={crypto.id}>
       <td>{index + 1}</td>
       <td>{crypto.name}</td>
-      <td dir="ltr">$ {crypto.quote.USD.market_cap.toFixed(2)}</td>
-      <td dir="ltr">$ {crypto.quote.USD.price.toFixed(2)}</td>
-      <td dir="ltr">$ {crypto.quote.USD.volume_24h.toFixed(2)}</td>
-      <td dir="ltr">$ {crypto.total_supply.toFixed(2)} {crypto.symbol}</td>
+      <td>$ {crypto.quote.USD.market_cap.toFixed(2)}</td>
+      <td>$ {crypto.quote.USD.price.toFixed(2)}</td>
+      <td>$ {crypto.quote.USD.volume_24h.toFixed(2)}</td>
+      <td>$ {crypto.total_supply.toFixed(2)} {crypto.symbol}</td>
       <td>{crypto.quote.USD.percent_change_24h.toFixed(2)} %</td>
       <td>{crypto.quote.USD.percent_change_7d.toFixed(2)} %</td>
       <DashboardTableCryptoChartCell>

@@ -75,7 +75,7 @@ const SalesStatisticBar = () => {
       title={t('dashboard_commerce.sales_statistic')}
       subhead="See how effective your business is"
     >
-      <div dir="ltr">
+      <div>
         <ResponsiveContainer height={260}>
           {isYearly ? (
             <BarChart data={dataYearly} margin={{ top: 20, left: -15 }}>

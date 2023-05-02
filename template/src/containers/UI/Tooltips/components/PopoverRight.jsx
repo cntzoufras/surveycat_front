@@ -28,7 +28,6 @@ const PopoverRight = ({ dir }) => {
               header="Popover on Right"
               body="Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem
                 lacinia quam venenatis vestibulum."
-              dir={dir}
             >
               <Button id="PopoverRight" variant="outline-secondary">
                 Popover on Right
