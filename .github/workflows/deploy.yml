@@ -18,11 +18,11 @@ jobs:
     - name: Set up SSH Key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.FRONT_SECRET }}" > ~/.ssh/deploy_key
+        echo "${{ secrets.GH_FRONT_SECRET }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         # tail -n +2 ~/.ssh/deploy_key | head -n -1 | wc -c
-        eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/deploy_key
+        # eval "$(ssh-agent -s)"
+        # ssh-add ~/.ssh/deploy_key
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
         
     - name: Build and Deploy
