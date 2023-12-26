@@ -20,6 +20,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.FRONT_SECRET }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
+        ls -l ~/.ssh
+        file ~/.ssh/deploy_key
+        tail -n +2 ~/.ssh/deploy_key | head -n -1 | wc -c
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
 
     - name: Build and Deploy
