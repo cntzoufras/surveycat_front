@@ -1,5 +1,5 @@
 {
-  "extends": ["airbnb", "plugin:react-hooks/recommended"],
+  "extends": ["react-app", "airbnb", "plugin:react-hooks/recommended"],
   "parser": "@babel/eslint-parser",
 
   "plugins": ["react"],
@@ -62,7 +62,7 @@
     "import/resolver": {
       "alias": {
         "map": [["@", "./src"]],
-        "extensions": [".js", ".css", ".json", ".jsx"]
+        "extensions": [".js", ".css", ".sass", ".json", ".jsx"]
       }
     }
   }

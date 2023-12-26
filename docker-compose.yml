@@ -1,0 +1,25 @@
+volumes:
+  react_node_modules:
+  proxy_node_modules:
+
+services:
+  react:
+    image: node:20
+    working_dir: /surveycat
+    ports:
+      - "3000:3000"
+    volumes:
+      - react_node_modules:/surveycat/node_modules
+      - ./template:/surveycat
+      - ./local-docker-entry.sh:/local-docker-entry.sh
+    command: ["sh", "-e", "/local-docker-entry.sh"]
+  proxy:
+    image: node:20
+    working_dir: /surveycat
+    ports:
+      - "5000:5000"
+    volumes:
+      - proxy_node_modules:/surveycat/node_modules
+      - ./proxy:/surveycat
+      - ./proxy/local-docker-entry.sh:/local-docker-entry.sh
+    command: ["sh", "-e", "./local-docker-entry.sh"]

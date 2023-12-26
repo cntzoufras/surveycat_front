@@ -1,30 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import { Provider, useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import { LoadScript } from '@react-google-maps/api';
-import initAuth0 from '@/shared/components/account/auth/withAuth0';
+import { createTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
-import WalletConnectProvider from '@/shared/components/account/auth/WalletConnect';
 import Router from './Router';
 import store from './store';
 import ScrollToTop from './ScrollToTop';
-import { config as i18nextConfig } from '../../translations';
 import GlobalStyles from './globalStyles';
 import RechartStyles from './rechartStyles';
 import NotificationStyles from './notificationStyles';
 import CalendarStyles from './calendarStyles';
 
-i18n.init(i18nextConfig);
+// Remove completely remove i18n & auth0 from initialization app.jsx file
 
 const ThemeComponent = ({
-  children, 
+  children,
 }) => {
   const {
     mode, direction, shadow, border,
@@ -34,7 +30,7 @@ const ThemeComponent = ({
     shadow: state.shadow.className,
     border: state.border.className,
   }));
-  
+
   const theme = createTheme({
     palette: {
       type: mode,
@@ -68,30 +64,22 @@ ThemeComponent.propTypes = {
 
 const ConnectedThemeComponent = ThemeComponent;
 
-const App = () => {
-  useEffect(() => {
-    window.addEventListener('load', initAuth0);
-  }, []);
-
-  return (
-    <Provider store={store}>
-      <BrowserRouter basename="/surveycat">
-        <WalletConnectProvider>
-          <ConnectedThemeComponent>
-            <LoadScript
-              loadingElement={<Loading loading />}
-              googleMapsApiKey=""
-            >
-              <ScrollToTop>
-                <Router />
-              </ScrollToTop>
-            </LoadScript>
-          </ConnectedThemeComponent>
-        </WalletConnectProvider>  
-      </BrowserRouter>
-    </Provider>
-  );
-};
+const App = () => (
+  <Provider store={store}>
+    <BrowserRouter basename="/surveycat">
+      <ConnectedThemeComponent>
+        <LoadScript
+          loadingElement={<Loading loading />}
+          googleMapsApiKey=""
+        >
+          <ScrollToTop>
+            <Router />
+          </ScrollToTop>
+        </LoadScript>
+      </ConnectedThemeComponent>
+    </BrowserRouter>
+  </Provider>
+);
 
 export default App;
 
