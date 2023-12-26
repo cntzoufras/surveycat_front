@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Deploy Surveycat Front
 
 on:
   push:
