@@ -4,7 +4,7 @@ WORKDIR /surveycat
 COPY ./package.json ./yarn.lock ./
 RUN yarn cache clean
 RUN yarn install --frozen-lockfile
-RUN yarn prod:build
+RUN yarn docker-build:prod
 
 FROM nginx as production-stage
 RUN mkdir -p /app/surveycat
