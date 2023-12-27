@@ -25,4 +25,4 @@ jobs:
 
         
     - name: Build and Deploy
-      run: ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/html/surveycat-front && git pull && docker-compose up -d --build'
+      run: ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/html/surveycat_front && git pull && docker-compose up -d --build'
