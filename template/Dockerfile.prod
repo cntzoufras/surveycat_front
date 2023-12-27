@@ -1,7 +1,7 @@
 FROM node:20 as build-stage
 
 WORKDIR /surveycat
-COPY /template/package.json /template/yarn.lock ./
+COPY template/package.json /template/yarn.lock ./
 RUN yarn cache clean
 RUN yarn install --frozen-lockfile
 
@@ -11,7 +11,7 @@ RUN yarn prod:build
 FROM nginx as production-stage
 RUN mkdir -p /app/surveycat
 COPY --from=build-stage /surveycat/build /app/surveycat
-COPY /template/nginx.conf /etc/nginx/nginx.conf
+COPY template/nginx.conf /etc/nginx/nginx.conf
 
 
 # # Stage 2: Serve the app with NGINX
