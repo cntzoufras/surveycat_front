@@ -6,4 +6,3 @@ services:
       dockerfile: /template/Dockerfile.prod
     ports:
       - "80:80"
-  # proxy service configuration if needed for production
