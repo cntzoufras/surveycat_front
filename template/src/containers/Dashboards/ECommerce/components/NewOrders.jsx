@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -5,27 +6,33 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import DotsHorizontalIcon from 'mdi-react/DotsHorizontalIcon';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
+// eslint-disable-next-line import/extensions
 import { NewOrderTableProps } from '@/shared/prop-types/TablesProps';
+// eslint-disable-next-line import/extensions
 import Panel from '@/shared/components/Panel';
+// eslint-disable-next-line import/extensions
 import { Table } from '@/shared/components/TableElements';
 import {
  marginLeft, marginRight,
+// eslint-disable-next-line import/no-unresolved, import/extensions
 } from '@/utils/directions';
 import {
  colorYellow, colorRed, colorAccent, colorAdditional, 
+// eslint-disable-next-line import/extensions
 } from '@/utils/palette';
 import {
  DropdownMenu, Dropdown, DropdownItem, DropdownToggle, 
+// eslint-disable-next-line import/extensions
 } from '@/shared/components/Dropdown';
 
 const DropDownMore = ({ index, handleDeleteRow }) => (
-  <MoreDropdown>
-    <MoreDropdownToggle>
+  <MoreDropdown aria-label="Show more...">
+    <MoreDropdownToggle aria-label="More options">
       <DotsHorizontalIcon />
     </MoreDropdownToggle>
     <DropdownMenu>
-      <DropdownItem as={Link} to={`/e_commerce_dashboard/edit/${index}`}>Edit</DropdownItem>
-      <DropdownItem onClick={handleDeleteRow}>Delete</DropdownItem>
+      <DropdownItem as={Link} to={`/e_commerce_dashboard/edit/${index}`} aria-label="Show more...">Edit</DropdownItem>
+      <DropdownItem onClick={handleDeleteRow} aria-label="Show more...">Delete</DropdownItem>
     </DropdownMenu>
   </MoreDropdown>
 );
@@ -78,7 +85,7 @@ const NewOrders = ({ newOrder, onDeleteRow }) => {
         <tbody>
           {newOrder.map((order, index) => (
             <tr key={order.id}>
-              <td>
+              <td aria-label="Orders all">
                 <DashboardOrdersTitle>
                   <DashboardOrdersImageWrap>
                     <DashboardOrdersImage img={order.img} />
@@ -86,12 +93,12 @@ const NewOrders = ({ newOrder, onDeleteRow }) => {
                   {order.title}
                 </DashboardOrdersTitle>
               </td>
-              <td>
+              <td aria-label="Describe action here">
                 <NewOrderAmount quantity={order.quantity} />
               </td>
-              <td>{order.sold}</td>
+              <td aria-label="Describe action here">{order.sold}</td>
               <DashboardOrdersTotalCell>{order.total}</DashboardOrdersTotalCell>
-              <td>
+              <td aria-label="Describe action here">
                 <DropDownMore index={index} handleDeleteRow={e => onDeleteRow(index, e)} />
               </td>
             </tr>
