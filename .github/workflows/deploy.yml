@@ -26,7 +26,7 @@ jobs:
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
         if ! command -v docker-compose &> /dev/null; then
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+          curl -L "https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
         fi
         cd /var/www/surveycat_front && git pull && docker-compose up -d --build'
