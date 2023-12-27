@@ -3,6 +3,6 @@ services:
   react:
     build:
       context: .
-      dockerfile: /template/Dockerfile.prod
+      dockerfile: template/Dockerfile.prod
     ports:
       - "80:80"
