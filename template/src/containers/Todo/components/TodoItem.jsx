@@ -1,13 +1,15 @@
+/* eslint-disable import/extensions */
 import React from 'react';
 import PropTypes from 'prop-types';
 import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
 import PencilOutlineIcon from 'mdi-react/PencilOutlineIcon';
 import PackageVariant from 'mdi-react/PackageVariantIcon';
 import PackageVariantClosed from 'mdi-react/PackageVariantClosedIcon';
+import styled from 'styled-components';
 import {
   Card, CardBody,
+// eslint-disable-next-line import/extensions, import/no-unresolved
 } from '@/shared/components/Card';
-import styled from 'styled-components';
 import {
   colorAccent, colorAdditional, colorHover, colorRed, colorRedHover, colorText, colorYellow,
 } from '@/utils/palette';
@@ -60,6 +62,7 @@ const TodoItem = ({
         <TodoInfo>
           <TodoContent isCompleted={isCompleted}>
             <h3>{todoItemData.data.title}</h3>
+            <h3>{todoItemData.data.country}</h3>
             <TodoDescription>{todoItemData.data.description}</TodoDescription>
           </TodoContent>
           <TodoAdditionalWrapper>
