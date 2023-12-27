@@ -10,7 +10,7 @@ import { paddingLeft, paddingRight } from '@/utils/directions';
 
 
 const Popover = ({
- dir, header, body, children, ...other
+  header, body, children, ...other
 }) => {
   const popover = (
     <StyledPopover>

@@ -39,7 +39,7 @@ export default Example;`}
           <tr>
             <td>title</td>
             <td>string</td>
-            <td />
+            
           </tr>
           <tr>
             <td>className</td>

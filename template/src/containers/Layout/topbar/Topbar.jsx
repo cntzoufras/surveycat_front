@@ -14,7 +14,6 @@ import {
   TopbarRightOver,
   TopbarSearchWrap,
 } from '../components/topbar/BasicTopbarComponents';
-import TopbarWallet from '../components/topbar/TopbarWallet';
 
 const Topbar = ({
   changeMobileSidebarVisibility,
@@ -37,7 +36,6 @@ const Topbar = ({
         <TopbarMail new />
         <TopbarProfile />
         <TopbarLanguage />
-        <TopbarWallet />
       </TopbarRightOver>
     </TopbarRight>
   </TopbarContainer>

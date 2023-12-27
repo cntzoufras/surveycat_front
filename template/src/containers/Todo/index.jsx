@@ -25,13 +25,13 @@ const Todo = () => {
   const [prevTodoElements, setPrevTodoElements] = useState(null);
 
   const {
-    theme, rtl, todoElements, isFetching,
+    theme, todoElements, isFetching,
   } = useSelector(state => ({
     todoElements: state.todo && state.todo.data && state.todo.data.elements
       && state.todo.data.elements.length > 0 ? [...state.todo.data.elements] : [],
     isFetching: state.todo && state.todo.isFetching,
     theme: state.theme,
-    rtl: state.rtl && state.rtl.direction,
+    
   }));
   
   const dispatch = useDispatch();
@@ -128,7 +128,6 @@ const Todo = () => {
         </Col>
         <ItemEditModal
           theme={theme}
-          rtl={rtl}
           showEditModal={showEditModal}
           currentEditItem={currentEditItem && currentEditItem.data}
           changeShowEditModal={changeShowEditModal}

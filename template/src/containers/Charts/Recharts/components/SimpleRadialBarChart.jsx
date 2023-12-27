@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import {
@@ -41,13 +40,13 @@ const tooltipColor = {
   color: '#70bbfd',
 };
 
-const SimpleRadialBarChart = ({ dir }) => {
+const SimpleRadialBarChart = () => {
   const { t } = useTranslation('common');
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
 
   const onMouseMove = (e) => {
     if (e.activeCoordinate) {
-      setCoordinates({ x: dir === 'ltr' ? e.activeCoordinate.x : e.activeCoordinate.x / 10, y: e.activeCoordinate.y });
+      setCoordinates({ x: e.activeCoordinate.x, y: e.activeCoordinate.y });
     }
   };
 
@@ -78,10 +77,6 @@ const SimpleRadialBarChart = ({ dir }) => {
       </Card>
     </Col>
   );
-};
-
-SimpleRadialBarChart.propTypes = {
-  dir: PropTypes.string.isRequired,
 };
 
 export default SimpleRadialBarChart;

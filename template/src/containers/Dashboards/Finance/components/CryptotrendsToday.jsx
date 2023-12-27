@@ -98,7 +98,7 @@ const CryptotrendsToday = ({ dir }) => {
   const onMouseMove = (e) => {
     if (e.tooltipPosition) {
       setCoordinates({
-        x: dir === 'ltr' ? e.tooltipPosition.x : e.tooltipPosition.x / 10,
+        x: e.tooltipPosition.x,
         y: e.tooltipPosition.y,
       });
     }

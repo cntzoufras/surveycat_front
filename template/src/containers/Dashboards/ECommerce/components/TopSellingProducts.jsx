@@ -20,8 +20,8 @@ const data01 = [{
   id: 3, name: 'Apple iPhone 6 Plus', value: 15432, fill: '#ff4861',
 }];
 
-const style = (dir) => {
-  const left = dir === 'ltr' ? { left: 0 } : { right: 0 };
+const style = () => {
+  const left = { left: 0 };
   return ({
     ...left,
     width: 150,
@@ -53,7 +53,7 @@ const TopSellingProducts = ({ dir }) => {
 
   const onMouseMove = (e) => {
     if (e.tooltipPosition) {
-      setCoordinate({ x: dir === 'ltr' ? e.tooltipPosition.x : e.tooltipPosition.x / 10, y: e.tooltipPosition.y });
+      setCoordinate({ x: e.tooltipPosition.x, y: e.tooltipPosition.y });
     }
   };
 
