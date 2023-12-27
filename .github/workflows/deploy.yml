@@ -20,11 +20,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.GH_FRONT_SECRET }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
-        echo ~/.ssh/deploy_key
-       
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
-        
-        echo ~/.ssh/known_hosts
         
     - name: Build and Deploy
       run: ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/html/surveycat-front && git pull && docker-compose up -d --build'
