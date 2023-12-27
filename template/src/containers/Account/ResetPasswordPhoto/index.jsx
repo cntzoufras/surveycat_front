@@ -19,8 +19,8 @@ const ResetPasswordPhoto = props => (
       <AccountCard>
         <AccountHead>
           <AccountTitle>Welcome to
-            <AccountLogo> Easy
-              <AccountLogoAccent>DEV</AccountLogoAccent>
+            <AccountLogo> Survey
+              <AccountLogoAccent>CAT</AccountLogoAccent>
             </AccountLogo>
           </AccountTitle>
           <h4 className="subhead">Password reset</h4>

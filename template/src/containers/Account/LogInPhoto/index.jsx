@@ -28,8 +28,8 @@ const LogInPhoto = ({ changeIsOpenModalFireBase }) => (
       <AccountCard>
         <AccountHead>
           <AccountTitle>Welcome to
-            <AccountLogo> Easy
-              <AccountLogoAccent>DEV</AccountLogoAccent>
+            <AccountLogo> Survey
+              <AccountLogoAccent>CAT</AccountLogoAccent>
             </AccountLogo>
           </AccountTitle>
           <h4 className="subhead">Start your business easily</h4>
