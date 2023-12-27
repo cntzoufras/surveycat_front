@@ -1,7 +1,7 @@
 FROM node:20 as build-stage
 
 WORKDIR /surveycat/template
-COPY ./template/package.json ./template/yarn.lock ./template/
+COPY ./template/package.json ./template/yarn.lock ./
 RUN yarn cache clean
 RUN yarn install --frozen-lockfile
 RUN yarn docker-build:prod
