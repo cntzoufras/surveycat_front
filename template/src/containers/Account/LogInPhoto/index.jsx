@@ -18,10 +18,6 @@ import {
   AccountSocialButtonFirebase,
   AccountTitle,
 } from '@/shared/components/account/AccountElements';
-import GoogleAuthBtn from '../AuthBtn/googleAuthBtn';
-import FacebookAuthBtn from '../AuthBtn/fbAuthBtn';
-import MicrosoftAuthBtn from '../AuthBtn/microsoftAuthBtn';
-import MetaMaskAuthBtn from '../AuthBtn/metaMaskAuthBtn';
 
 
 const auth0Icon = `${process.env.PUBLIC_URL}/img/auth0.svg`;
@@ -46,9 +42,6 @@ const LogInPhoto = ({ changeIsOpenModalFireBase }) => (
           <p>Or Easily Using</p>
         </AccountOr>
         <AccountSocial>
-          <FacebookAuthBtn />
-          <GoogleAuthBtn />
-          <MicrosoftAuthBtn />
           <AccountSocialButtonFirebase
             variant="secondary"
             onClick={changeIsOpenModalFireBase}
@@ -61,7 +54,6 @@ const LogInPhoto = ({ changeIsOpenModalFireBase }) => (
           >
             <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
           </AccountSocialButtonAuth0>
-          <MetaMaskAuthBtn />
         </AccountSocial>
       </AccountCard>
     </AccountContent>

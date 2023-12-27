@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
-import MetaMaskConnectButton from '@/shared/components/wallet/components/MetaMaskConnectButton';
-import WalletConnectButton from '@/shared/components/wallet/components/WalletConnectButton';
 import WalletCard from './components/WalletCard';
 
 const Metamask = `${process.env.PUBLIC_URL}/img/connect_wallet/metamask.png`;
@@ -28,14 +26,6 @@ const ConnectWallet = () => {
         </Col>
       </Row>
       <WalletContainer>
-        <MetaMaskConnectButton>
-          <WalletCard
-            walletTitle={t('connect_wallet.metamask.title')}
-            description={t('connect_wallet.metamask.description')}
-            src={Metamask}
-            alt="wallet-logo"
-          />
-        </MetaMaskConnectButton>
         <WalletCard
           walletTitle={t('connect_wallet.bitski.title')}
           description={t('connect_wallet.bitski.description')}
@@ -48,14 +38,6 @@ const ConnectWallet = () => {
           src={CoinbaseWallet}
           alt="wallet-logo"
         />
-        <WalletConnectButton>
-          <WalletCard
-            walletTitle={t('connect_wallet.wallet_connect.title')}
-            description={t('connect_wallet.wallet_connect.description')}
-            src={WalletConnect}
-            alt="wallet-logo"
-          />
-        </WalletConnectButton>
         <WalletCard
           walletTitle={t('connect_wallet.authereum.title')}
           description={t('connect_wallet.authereum.description')}
