@@ -29,7 +29,7 @@ const EmailListItem = ({
           styleType="colored-click"
         />
       </CheckboxCell>
-      <td onClick={onFavorite} aria-label="mark as favorite" >
+      <td onClick={onFavorite} aria-label="mark as favorite">
         <FavoriteIcon active={isFavorite} aria-label="mark as favorite" />
       </td>
       <InboxEmailName onClick={onLetter}>{email.name}</InboxEmailName>
