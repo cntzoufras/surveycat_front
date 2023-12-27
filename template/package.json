@@ -11,8 +11,8 @@
     "eject": "react-app-rewired eject",
     "docker": "cd ../ && docker-compose up",
     "docker-build": "cd ../ && docker-compose build",
-    "docker:prod": "cd ../ && docker-compose -f docker-compose.production.yml up",
-    "docker-build:prod": "cd ../ && docker-compose -f docker-compose.production.yml build"
+    "docker:prod": "cd ../ && docker-compose -f docker-compose.prod.yml up",
+    "docker-build:prod": "cd ../ && docker-compose -f docker-compose.prod.yml build"
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.3.4",
