@@ -8,6 +8,13 @@ RUN yarn cache clean
 RUN yarn install --frozen-lockfile
 RUN yarn build
 
+# Health check script
+COPY ./template/healthcheck.sh /surveycat/template/healthcheck.sh
+RUN chmod +x /surveycat/template/healthcheck.sh
+
+# Wait for the React application to be ready
+CMD /surveycat/template/healthcheck.sh
+
 FROM nginx as production-stage
 RUN mkdir -p /app/surveycat 
 COPY --from=build-stage /surveycat/template/build /app/surveycat
