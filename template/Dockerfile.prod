@@ -9,7 +9,7 @@ RUN yarn install --frozen-lockfile
 RUN yarn build
 
 FROM nginx as production-stage
-RUN mkdir -p /app/surveycat
+RUN mkdir -p /app/surveycat 
 COPY --from=build-stage /surveycat/template/build /app/surveycat
 COPY ./template/nginx.conf /etc/nginx/nginx.conf
 
