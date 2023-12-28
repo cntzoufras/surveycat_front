@@ -1,14 +1,23 @@
 {
   "cSpell.words": [
+    "amcharts",
+    "brainhubeu",
+    "chartjs",
     "customizer",
+    "datepicker",
     "Dotdotdot",
+    "draftjs",
     "endregion",
+    "geodata",
     "Laravel",
     "linebreak",
     "msal",
     "parens",
+    "popperjs",
+    "stylelint",
     "Surveycat",
     "todos",
-    "USEPOLLING"
+    "USEPOLLING",
+    "wagmi"
   ]
 }
