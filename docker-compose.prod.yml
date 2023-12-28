@@ -4,11 +4,28 @@ services:
     build:
       context: .
       dockerfile: template/Dockerfile.prod
-    ports:
-      - "80:80"
+    networks:
+      - webnet
   proxy:
     build:
       context: .
       dockerfile: proxy/Dockerfile
     ports:
       - "5000:5000"
+    networks:
+      - webnet
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf
+      - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
+      - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
+    depends_on:
+      - react
+      - proxy
+    networks:
+      - webnet
+networks:
+  webnet:
