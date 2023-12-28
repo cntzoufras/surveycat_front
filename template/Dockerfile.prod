@@ -13,5 +13,5 @@ RUN mkdir -p /app/surveycat
 COPY --from=build-stage /surveycat/template/build /app/surveycat
 COPY ./template/nginx.prod.conf /etc/nginx/nginx.conf
 
-EXPOSE 80
+EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
