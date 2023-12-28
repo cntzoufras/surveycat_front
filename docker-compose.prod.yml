@@ -1,15 +1,11 @@
 version: '3.8'
 services:
   react:
-    build:
-      context: .
-      dockerfile: template/Dockerfile.prod
+    image: cntzoufras/admin-react:latest
     networks:
       - webnet
   proxy:
-    build:
-      context: .
-      dockerfile: proxy/Dockerfile
+    image: cntzoufras/admin-proxy:latest
     ports:
       - "5000:5000"
     networks:
