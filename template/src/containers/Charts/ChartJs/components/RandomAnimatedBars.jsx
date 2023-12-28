@@ -1,12 +1,16 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
+import { Tooltip } from 'react-tooltip';
 import {
   Card, CardBody, CardTitleWrap, CardTitle,
 } from '@/shared/components/Card';
-
-const getRandomData = () => new Array(7).fill(0).map(() => Math.floor(Math.random() * 100));
+  
+// const getRandomData = () => new Array(7).fill(0).map(() => Math.floor(Math.random() * 100));
+const getRandomData = ['1600', '4200', '12', '51000', '610', '12300', '18023'];
 
 const getState = () => ({
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -18,7 +22,7 @@ const getState = () => ({
       borderWidth: 1,
       hoverBackgroundColor: '#FF6384',
       hoverBorderColor: '#FF6384',
-      data: getRandomData(),
+      data: getRandomData,
     },
   ],
 });
@@ -32,7 +36,7 @@ const options = {
       {
         gridLines: {
           color: 'rgb(204, 204, 204)',
-          borderDash: [3, 3],
+          borderDash: [0, 0],
         },
         ticks: {
           fontColor: 'rgb(204, 204, 204)',
@@ -43,7 +47,7 @@ const options = {
       {
         gridLines: {
           color: 'rgb(204, 204, 204)',
-          borderDash: [3, 3],
+          borderDash: [0, 0],
         },
         ticks: {
           fontColor: 'rgb(204, 204, 204)',
