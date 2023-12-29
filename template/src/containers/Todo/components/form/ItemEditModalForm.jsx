@@ -13,6 +13,10 @@ import {
   FormGroupLabel,
 } from '@/shared/components/form/FormElements';
 import { Button } from '@/shared/components/Button';
+import {
+  DropdownMenu, Dropdown, DropdownItem, DropdownDivider, DropdownToggle,
+} from '@/shared/components/Dropdown';
+import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 import validate from './validate';
 
 const renderDatePicker = ({ dueDate, handleDateChange }) => (
@@ -47,6 +51,40 @@ const ItemEditModalForm = ({
                 placeholder="Title.."
               />
             </FormGroupField>
+          </FormGroup>
+          <FormGroup>
+            <FormGroupLabel className="typography-message">Country</FormGroupLabel>
+            <FormGroupField>
+              <Field
+                name="country"
+                type="text"
+                component={FormField}
+                placeholder="Country..."
+              />
+            </FormGroupField>
+            <Dropdown className="btn-group">
+              <Button variant="outline-primary">Country</Button>
+              <DropdownToggle variant="primary">
+                <ChevronDownIcon />
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>Greece</DropdownItem>
+                <DropdownItem>Austria</DropdownItem>
+                <DropdownDivider />
+                <DropdownItem>Italy</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown>
+              <DropdownToggle variant="outline-secondary">
+                <span>Dropdown <ChevronDownIcon /></span>
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>Action</DropdownItem>
+                <DropdownItem>Another Action</DropdownItem>
+                <DropdownDivider />
+                <DropdownItem>Another Action</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </FormGroup>
           <FormGroup>
             <FormGroupLabel>Description</FormGroupLabel>
@@ -84,7 +122,7 @@ const ItemEditModalForm = ({
             />
           </FormGroup>
           <FormButtonToolbar>
-            <Button variant="primary" type="submit">
+            <Button variant="header" type="submit">
               {!currentEditItem ? 'Add' : 'Edit'}
             </Button>
             <Button variant="secondary" type="button" onClick={changeShowEditModal}>Cancel</Button>

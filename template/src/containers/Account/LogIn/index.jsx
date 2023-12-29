@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import FirebaseIcon from 'mdi-react/FirebaseIcon';
-import withAuthFirebase from '@/shared/components/account/auth/withAuthFirebase';
 import LogInForm from '@/shared/components/account/loginForm/LogInForm';
 // import { handleLogin, handleAuthError } from '@/redux/actions/authActions';
 
@@ -13,9 +11,7 @@ import {
   AccountLogo,
   AccountLogoAccent,
   AccountOr,
-  AccountSocial,
   AccountTitle,
-  AccountSocialButtonAuth0,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
 
@@ -64,11 +60,7 @@ const LogIn = ({
           <AccountOr>
             <p>Or Easily Using</p>
           </AccountOr>
-          <AccountSocial>
-            <AccountSocialButtonAuth0 variant="secondary" onClick={loginAuth0} >
-              <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
-            </AccountSocialButtonAuth0>
-          </AccountSocial>
+          
         </AccountCard>
       </AccountContent>
     </AccountWrap>
@@ -82,4 +74,4 @@ LogIn.propTypes = {
   error: PropTypes.string.isRequired,
 };
 
-export default withAuthFirebase(LogIn);
+export default LogIn;
