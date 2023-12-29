@@ -57,10 +57,6 @@ const LogIn = ({
             setEmail={setEmail} 
             setPassword={setPassword} 
           />
-          <AccountOr>
-            <p>Or Easily Using</p>
-          </AccountOr>
-          
         </AccountCard>
       </AccountContent>
     </AccountWrap>
