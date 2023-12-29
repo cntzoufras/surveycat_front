@@ -42,12 +42,6 @@ const LogInPhoto = ({ changeIsOpenModalFireBase }) => (
           <p>Or Easily Using</p>
         </AccountOr>
         <AccountSocial>
-          <AccountSocialButtonFirebase
-            variant="secondary"
-            onClick={changeIsOpenModalFireBase}
-          >
-            <FirebaseIcon />
-          </AccountSocialButtonFirebase>
           <AccountSocialButtonAuth0
             variant="secondary"
             onClick={loginAuth0}

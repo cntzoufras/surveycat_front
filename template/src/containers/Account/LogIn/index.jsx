@@ -14,8 +14,8 @@ import {
   AccountLogoAccent,
   AccountOr,
   AccountSocial,
-  AccountSocialButtonFirebase,
   AccountTitle,
+  AccountSocialButtonAuth0,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
 
@@ -65,12 +65,9 @@ const LogIn = ({
             <p>Or Easily Using</p>
           </AccountOr>
           <AccountSocial>
-            <AccountSocialButtonFirebase
-              variant="secondary"
-              onClick={changeIsOpenModalFireBase}
-            >
-              <FirebaseIcon />
-            </AccountSocialButtonFirebase>
+            <AccountSocialButtonAuth0 variant="secondary" onClick={loginAuth0} >
+              <img className="customizer__btn-icon" src={auth0Icon} alt="icon" />
+            </AccountSocialButtonAuth0>
           </AccountSocial>
         </AccountCard>
       </AccountContent>
