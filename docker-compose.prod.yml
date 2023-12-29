@@ -1,29 +1,27 @@
 version: '3.8'
 services:
-  react:
-    image: cntzoufras/admin-react:latest
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"   # Redirect HTTP to HTTPS
+      - "443:443" # SSL port
+    volumes:
+      - ./template/nginx.prod.conf:/etc/nginx/nginx.conf
+      - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
+      - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
+    depends_on:
+      - proxy
     networks:
       - webnet
-    ports:
-      - "80:80"
+
   proxy:
     image: cntzoufras/admin-proxy:latest
     ports:
       - "5000:5000"
     networks:
       - webnet
-  nginx:
-    image: nginx:latest
-    ports:
-      - "443:443"
-    volumes:
-      - ./template/nginx.prod.conf:/etc/nginx/nginx.conf
-      - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
-      - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
-    depends_on:
-      - react
-      - proxy
-    networks:
-      - webnet
+
 networks:
   webnet:
