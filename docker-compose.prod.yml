@@ -1,7 +1,10 @@
 version: '3.8'
 services:
   nginx:
-    image: cntzoufras/admin-nginx:latest
+    # image: cntzoufras/admin-nginx:latest
+    build:
+      context: .
+      dockerfile: template/Dockerfile.prod
     ports:
       - "80:80"   # Redirect HTTP to HTTPS
       - "443:443" # SSL port
@@ -15,7 +18,10 @@ services:
       - webnet
 
   proxy:
-    image: cntzoufras/admin-proxy:latest
+    # image: cntzoufras/admin-proxy:latest
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     networks:
