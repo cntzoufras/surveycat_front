@@ -3,7 +3,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: Dockerfile.prod
+      dockerfile: template/Dockerfile.prod
     ports:
       - "80:80"   # Redirect HTTP to HTTPS
       - "443:443" # SSL port
@@ -17,7 +17,10 @@ services:
       - webnet
 
   proxy:
-    image: cntzoufras/admin-proxy:latest
+    # image: cntzoufras/admin-proxy:latest
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     networks:
