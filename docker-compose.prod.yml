@@ -5,7 +5,7 @@ services:
     networks:
       - webnet
     ports:
-      - "8080:80"
+      - "80:80"
   proxy:
     image: cntzoufras/admin-proxy:latest
     ports:
