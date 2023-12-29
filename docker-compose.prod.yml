@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   nginx:
-    image: cntzoufras/admin-nginx:latest
+    image: cntzoufras/admin-nginx:1.2
     # build:
     #   context: .
     #   dockerfile: template/Dockerfile.prod
@@ -18,7 +18,7 @@ services:
       - webnet
 
   proxy:
-    image: cntzoufras/admin-proxy:latest
+    image: cntzoufras/admin-proxy:1.2
     # build:
     #   context: ./proxy
     #   dockerfile: Dockerfile
