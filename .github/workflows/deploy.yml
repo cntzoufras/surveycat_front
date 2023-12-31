@@ -24,11 +24,12 @@ jobs:
     
     - name: Stop and remove existing Nginx container
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'docker-compose -f docker-compose.prod.yml down'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && docker-compose -f docker-compose.prod.yml down'
     
     - name: Build and push Docker images
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        cd /var/www/surveycat_front
         docker-compose -f docker-compose.prod.yml build
         docker-compose -f docker-compose.prod.yml push
     
