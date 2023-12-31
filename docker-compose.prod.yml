@@ -18,7 +18,7 @@ services:
       - webnet
 
   proxy:
-    image: cntzoufras/admin-proxy:1.2
+    image: cntzoufras/admin-proxy:latest
     build:
       context: ./proxy
       dockerfile: Dockerfile
