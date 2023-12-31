@@ -22,10 +22,9 @@ jobs:
         chmod 600 ~/.ssh/deploy_key
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
     
-        # Stop and remove the existing Nginx container
     - name: Stop and remove existing Nginx container
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'docker-compose -f docker-compose.prod.yml down'    
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'docker-compose -f docker-compose.prod.yml down'
     
     - name: Build and push Docker images
       run: |
@@ -35,5 +34,5 @@ jobs:
     
     - name: Deploy to Production Server
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && docker-compose -f docker-compose.prod.yml up -d --pull'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && docker-compose -f docker-compose.prod.yml up -d'
   
