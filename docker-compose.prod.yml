@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
   nginx:
     image: cntzoufras/admin-nginx:latest
@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: template/Dockerfile.prod
     ports:
-      - "80:80"   # Redirect HTTP to HTTPS
-      - "443:443" # SSL port
+      - "80:80"
+      - "443:443"
     volumes:
       - ./template/nginx.prod.conf:/etc/nginx/nginx.conf
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
