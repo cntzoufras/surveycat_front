@@ -31,6 +31,7 @@ jobs:
     - name: Deploy to Production Server
       run: |
         scp -P 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr:/var/www/surveycat_front
+        
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && docker-compose -f docker-compose.prod.yml up -d'
     
     # - name: Build and Deploy
