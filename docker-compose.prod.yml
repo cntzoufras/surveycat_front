@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   nginx:
-    # image: cntzoufras/admin-nginx:1.2
+    image: cntzoufras/admin-nginx:latest
     build:
       context: .
       dockerfile: template/Dockerfile.prod
