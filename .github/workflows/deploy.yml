@@ -21,7 +21,12 @@ jobs:
         echo "${{ secrets.GH_FRONT_SECRET }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
-        
+    
+        # Stop and remove the existing Nginx container
+    - name: Stop and remove existing Nginx container
+      run: |
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'docker-compose -f docker-compose.prod.yml down'    
+    
     - name: Build and push Docker images
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
