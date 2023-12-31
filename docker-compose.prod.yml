@@ -29,3 +29,5 @@ services:
 
 networks:
   webnet:
+    external: true
+
