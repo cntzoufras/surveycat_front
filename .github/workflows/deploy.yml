@@ -24,7 +24,7 @@ jobs:
     
     - name: Fetch latest code changes
       run: |
-          git pull origin master
+          git pull origin main
     
     - name: Stop existing containers
       run: |
