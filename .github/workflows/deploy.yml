@@ -24,10 +24,6 @@ jobs:
         chmod 600 ~/.ssh/deploy_key
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
     
-    - name: Fetch latest code changes
-      run: |
-          git pull origin main
-    
     - name: Stop running & remove volumes
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && docker-compose -f docker-compose.prod.yml down --volumes'   
