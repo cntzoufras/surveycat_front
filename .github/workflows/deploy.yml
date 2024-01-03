@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: "1.4"
+      IMAGE_VERSION: "1.5"
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -40,6 +40,8 @@ jobs:
 
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push
+      env:
+          IMAGE_VERSION: ${{ env.IMAGE_VERSION }}
     
     - name: Deploy to Production Server
       run: |
