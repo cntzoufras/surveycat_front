@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: template/Dockerfile.prod
+      args:
+        - IMAGE_VERSION=${IMAGE_VERSION}
     ports:
       - "80:80"
       - "443:443"
