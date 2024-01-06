@@ -39,7 +39,7 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
 
         # Push to Dockerhub
-        docker-compose -f docker-compose.prod.yml push
+        docker-compose -f docker-compose.prod.yml push nginx
       env:
           IMAGE_VERSION: ${{ env.IMAGE_VERSION }}
     
