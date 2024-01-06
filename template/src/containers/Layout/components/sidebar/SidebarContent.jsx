@@ -17,7 +17,16 @@ const SidebarContent = ({
         route="/design/create"
         onClick={onClick}
       />
+      <SidebarLink
+        title="Finance Dashboard"
+        icon="rocket"
+        route="/finance_dashboard"
+        onClick={onClick}
+        newLink
+      />
     </div>
+
+    
     <SidebarCategory title="Survey" icon="map" collapse={collapse}>
       <SidebarLink title="Create" route="/survey/create" icon="pencil" />
       <SidebarLink title="List" route="/surveys" icon="database" />

@@ -16,13 +16,14 @@ app.get('/coinmarket/*', (req, res) => {
   
   axios
     .get(url, {
-      headers: { 'X-CMC_PRO_API_KEY': '99ddab32-94ed-4949-8526-f6cc6992bad5' },
+      headers: { 'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY },
     })
     .then((response) => {
       res.send(response.data);
     })
     .catch((err) => {
       console.log(err.response.data);
+      console.log('PROCESS API KEY : ' ,process.env.COINMARKETCAP_API_KEY);
       res.status(err.response.status).send(err.response.data);
     });
 });

@@ -18,9 +18,8 @@ services:
       - proxy
     networks:
       - webnet
-
   proxy:
-    image: cntzoufras/admin-proxy:latest
+    image: node:20
     build:
       context: ./proxy
       dockerfile: Dockerfile
