@@ -23,7 +23,6 @@ app.get('/coinmarket/*', (req, res) => {
     })
     .catch((err) => {
       console.log(err.response.data);
-      console.log('PROCESS API KEY : ' ,process.env.COINMARKETCAP_API_KEY);
       res.status(err.response.status).send(err.response.data);
     });
 });
