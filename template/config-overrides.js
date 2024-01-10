@@ -41,6 +41,8 @@ module.exports = override(
                 buffer: require.resolve('buffer'),
                 crypto: require.resolve('crypto-browserify'),
                 stream: require.resolve('stream-browserify'),
+                path: require.resolve('path-browserify'),
+                os: require.resolve('os-browserify/browser'),
             },
         },
         ignoreWarnings: [/Failed to parse source map/],
