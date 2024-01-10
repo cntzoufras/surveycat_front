@@ -1,7 +1,5 @@
 volumes:
   react_node_modules:
-  proxy_node_modules:
-
 services:
   react:
     image: node:20
