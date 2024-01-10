@@ -10,8 +10,6 @@ To get started follow below steps:
 
 You can also use docker
 
-Project has 2 images, 1 serves as proxy for axios requests to backend API.
-
 ## Available Scripts
 
 In the project directory, after having cloned the project, you can navigate to the /template folder and run:
