@@ -16,6 +16,8 @@ import {
 } from '@/shared/components/account/AccountElements';
 import Modal from '@/shared/components/Modal';
 import { handleRegister as reduxHandleRegister, handleAuthError } from '@/redux/actions/authActions';
+import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
+
 
 
 const Register = ({ history, handleError, error }) => {
@@ -30,32 +32,23 @@ const Register = ({ history, handleError, error }) => {
     console.log('Showing notification:', message, color); // Add this line
     setNotification({ show: true, message, color });
   };
-  
-  const handleShowNotification = (color) => showNotification({
-  notification(theme) {
-    return (
-      <FullWideNotification
-        color={color}
-        message="Learning day desirous informed expenses material returned six the.
-              She enabled invited exposed him another."
-        theme={theme}
-      />
-    );
-  },
-  position: 'full',
-});
     
   const onSubmit = async (event) => {
     try {
-      await dispatch(reduxHandleRegister(event));
-      handleShowNotification('Registration successful.', 'success');
-      history.push('/');
+      const response = await dispatch(reduxHandleRegister(event));
+      console.log('event: ', event);
+      console.log('API Response:', response);
+
+      if (response && response.status === 201) {
+        handleShowNotification('Registration successful.', 'success');
+        history.push('/');
+      } else {
+        handleShowNotification('Registration failed. Please try again.', 'error');
+      }
     } catch (err) {   
       handleShowNotification(err.message || 'Registration failed. Please try again.', 'error');
     }
   };
-  
-
 
   return (
     <AccountWrap>
@@ -70,7 +63,7 @@ const Register = ({ history, handleError, error }) => {
             <h4 className="subhead">Create an account</h4>
           </AccountHead>
           {notification.show && (
-            <Modal
+            <FullWideNotification
               message={notification.message}
               color={notification.color}
               onClose={() => setNotification({ 
@@ -80,7 +73,7 @@ const Register = ({ history, handleError, error }) => {
               })}
             />
           )}
-          <RegisterForm onSubmit={onSubmit} errorMessage={error} showNotification={handleShowNotification} />
+          <RegisterForm onSubmit={onSubmit} errorMessage={error} />
           <AccountHaveAccount>
             <p>Already have an account? <NavLink to="/log_in">Login</NavLink></p>
           </AccountHaveAccount>

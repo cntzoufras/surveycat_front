@@ -5,7 +5,6 @@ import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';
 import AlternateEmailIcon from 'mdi-react/AlternateEmailIcon';
 import { Alert } from 'react-bootstrap';
 import styled from 'styled-components';
-import { FullWideNotification } from '@/shared/components/Notification';
 import PasswordField from '@/shared/components/form/Password';
 import {
   FormContainer,
