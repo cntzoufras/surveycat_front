@@ -14,17 +14,6 @@ services:
       - ./template/nginx.prod.conf:/etc/nginx/nginx.conf
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
       - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
-    depends_on:
-      - proxy
-    networks:
-      - webnet
-  proxy:
-    image: node:20
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
     networks:
       - webnet
 
