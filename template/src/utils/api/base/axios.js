@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { getToken } from '../../helpers';
 
-// export const apiUrl = 'https://c-proxy.int.aspirity.com';
-export const apiUrl = 'http://localhost/api/';
+require('dotenv');
+
+export const apiUrl = process.env.REACT_APP_API_URL;
+export const coinmarketcapApiUrl = process.env.REACT_APP_COINMARTCAP_API_URL || 'https://sandbox-api.coinmarketcap.com';
 
 export const defaultParams = () => ({
-  headers: { Authorization: `Bearer ${getToken()}` },
+  headers: { 
+  Accept: 'application/json',
+  'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
+  },
 });
 
 export default axios;
