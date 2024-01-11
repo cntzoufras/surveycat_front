@@ -39,12 +39,12 @@ const Register = ({ history, handleError, error }) => {
       console.log('event: ', event);
       console.log('API Response:', response);
 
-      if (response && response.status === 201) {
+      // if (response && response.status === 201) {
         handleShowNotification('Registration successful.', 'success');
         history.push('/');
-      } else {
-        handleShowNotification('Registration failed. Please try again.', 'error');
-      }
+      // } else {
+        // handleShowNotification('Registration failed. Please try again.', 'error');
+      // }
     } catch (err) {   
       handleShowNotification(err.message || 'Registration failed. Please try again.', 'error');
     }

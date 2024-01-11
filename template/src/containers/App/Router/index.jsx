@@ -21,7 +21,7 @@ const Router = () => (
         <Route path="/lock_screen" component={LockScreen} />
         <Route path="/login" component={LogIn} />
         <Route path="/log_in_photo" component={LogInPhoto} />
-        <Route path="/register" component={Register} />
+        <Route exact path="/auth/register" component={Register} />
         <Route path="/register_photo" component={RegisterPhoto} />
         <Route path="/reset_password" component={ResetPassword} />
         <Route path="/reset_password_photo" component={ResetPasswordPhoto} />
