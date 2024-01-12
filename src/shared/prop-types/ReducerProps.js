@@ -34,6 +34,3 @@ export const UserProps = shape({
   avatar: string,
 });
 
-export const WalletProps = shape({
-  id: string,
-});

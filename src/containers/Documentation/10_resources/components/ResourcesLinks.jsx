@@ -149,47 +149,12 @@ const ResourcesLinks = () => (
             </a>
           </p>
         </li>
-        <li>
-          <p>Login Facebook: <span />
-            <a href="https://www.npmjs.com/package/react-facebook-login#facebook-button-without-styling">
-              https://www.npmjs.com/package/react-facebook-login#facebook-button-without-styling
-            </a>
-          </p>
-        </li>
-        <li>
-          <p>Login Google: <span />
-            <a href="https://www.npmjs.com/package/react-google-login">
-              https://www.npmjs.com/package/react-google-login
-            </a>
-          </p>
-        </li>
-        <li>
-          <p>Login Microsoft: <span />
-            <a href="https://www.npmjs.com/package/@azure/msal-browser">
-              https://www.npmjs.com/package/@azure/msal-browser
-            </a>
-          </p>
-        </li>
-        <li>
-          <p>Login Firebase: <span />
-            <a href="https://www.npmjs.com/package/firebase">
-              https://www.npmjs.com/package/firebase
-            </a>
-          </p>
-        </li>
-        <li>
-          <p>Login Auth0: <span />
-            <a href="https://www.npmjs.com/package/@auth0/auth0-spa-js">
-              https://www.npmjs.com/package/@auth0/auth0-spa-js
-            </a>
-          </p>
-        </li>
       </ul>
       <CardTitleWrap>
-        <CardTitle>Authentication</CardTitle>
+        <CardTitle>Laravel Sanctum Authentication</CardTitle>
       </CardTitleWrap>
       <ul>
-        <li><p>Firebase: <a href="https://firebase.google.com/docs"> https://firebase.google.com/docs</a></p></li>
+        <li><p>Laravel: <a href="https://laravel.com/docs/10.x/sanctum"> https://laravel.com/docs/10.x/sanctum</a></p></li>
         <li>
           <p>
             Auth0: <span />

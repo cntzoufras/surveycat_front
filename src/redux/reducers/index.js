@@ -13,7 +13,6 @@ import globalQuotesReducer from './globalQuotesReducer';
 import quotesBySymbolReducer from './quotesBySymbolReducer';
 import topTenReducer from './topTenReducer';
 import cryptoHistoryReducer from './cryptoHistoryReducer';
-import walletReducer from './walletReducer';
 
 export {
   themeReducer,
@@ -31,5 +30,4 @@ export {
   quotesBySymbolReducer,
   topTenReducer,
   cryptoHistoryReducer,
-  walletReducer,
 };

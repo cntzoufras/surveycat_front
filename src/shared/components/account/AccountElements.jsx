@@ -272,19 +272,6 @@ export const AccountSocialButtonOffice = styled(AccountSocialButton)`
   }
 `;
 
-export const AccountSocialButtonFirebase = styled(AccountSocialButton)`
-  background: #4287f5;
-  padding: 0 0 0 5px;
-
-  &:before {
-    background-color: ${darken(0.1, '#4287f5')};
-  }
-
-  &:hover {
-    background: ${darken(0.1, '#4287f5')};
-  }
-`;
-
 export const AccountSocialButtonMetaMask = styled(AccountSocialButton)`
   background: #ECECEC;
   padding: 5px;
@@ -296,11 +283,3 @@ export const AccountSocialButtonMetaMask = styled(AccountSocialButton)`
 export const AccountSocialButtonAuth0 = styled(AccountSocialButton)`
 `;
 
-export const AccountSocialButtonWalletConnect = styled(AccountSocialButton)`
-  background: #3396ff;
-  padding: 5px;
-
-  &:hover {
-    background: ${darken(0.1, '#3396ff')};
-  }
-`;

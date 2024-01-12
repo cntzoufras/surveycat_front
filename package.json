@@ -36,7 +36,6 @@
     "draftjs-to-html": "^0.9.1",
     "ethers": "^5.7.2",
     "final-form": "^4.20.2",
-    "firebase": "^9.1.0",
     "i18next": "^19.8.4",
     "immutable": "^4.2.4",
     "jquery": ">=1.8.0",

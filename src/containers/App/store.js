@@ -15,7 +15,6 @@ import {
   quotesBySymbolReducer,
   topTenReducer,
   cryptoHistoryReducer,
-  walletReducer,
 } from '@/redux/reducers/index';
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
@@ -39,7 +38,6 @@ const reducer = combineReducers({
   quotesBySymbol: quotesBySymbolReducer,
   topTen: topTenReducer,
   cryptoHistory: cryptoHistoryReducer,
-  wallet: walletReducer,
 });
 const store = createStore(reducer, applyMiddleware(thunk));
 

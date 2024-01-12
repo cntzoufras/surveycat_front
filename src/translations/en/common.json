@@ -720,40 +720,5 @@
       "yt": "Mayotte",
       "yu": "Yugoslavia"
     }
-  },
-  "connect_wallet": {
-    "page_title": "Connect wallet",
-    "metamask": {
-      "title": "MetaMask",
-      "description": "Start exploring blockchain applications in seconds.  Trusted by over 1 million users worldwide."
-    },
-    "bitski": {
-      "title": "Bitski",
-      "description": "Bitski connects communities, creators and brands through unique, ownable digital content."
-    },
-    "coinbase_wallet": {
-      "title": "Coinbase Wallet",
-      "description": "The easiest and most secure crypto wallet. No Coinbase account required."
-    },
-    "wallet_connect": {
-      "title": "Wallet Connect",
-      "description": "Open source protocol for connecting decentralised applications to mobile wallets."
-    },
-    "authereum": {
-      "title": "Authereum",
-      "description": "Your wallet where you want it. Log into your favorite dapps with Authereum."
-    },
-    "arkane": {
-      "title": "Arkane",
-      "description": "Make it easy to create blockchain applications with secure wallets solutions."
-    },
-    "formatic": {
-      "title": "Formatic",
-      "description": "Let users access your Ethereum app from anywhere. No more browser extensions."
-    },
-    "torus": {
-      "title": "Torus",
-      "description": "Open source protocol for connecting decentralised applications to mobile wallets."
-    }
   }
 }

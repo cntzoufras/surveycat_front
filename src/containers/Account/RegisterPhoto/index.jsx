@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import RegisterForm from '@/shared/components/account/login_register/LoginRegisterForm';
 import {
   AccountCard,
@@ -18,15 +17,15 @@ import {
 const RegisterPhoto = ({ history }) => {
   const [error, setError] = useState('');
 
-  const registerFireBase = (user) => {
-    createUserWithEmailAndPassword(getAuth(), user.email, user.password)
-      .then(() => {
-        history.push('/log_in');
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  };
+  // const registerFireBase = (user) => {
+  //   createUserWithEmailAndPassword(getAuth(), user.email, user.password)
+  //     .then(() => {
+  //       history.push('/log_in');
+  //     })
+  //     .catch((err) => {
+  //       setError(err.message);
+  //     });
+  // };
 
   return (
     <AccountPhoto>
