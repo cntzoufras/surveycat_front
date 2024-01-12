@@ -25,7 +25,6 @@
     "@metamask/onboarding": "^1.0.1",
     "@popperjs/core": "^2.11.6",
     "@react-google-maps/api": "^2.18.1",
-    "@web3modal/ethereum": "^2.1.1",
     "@web3modal/react": "^2.1.1",
     "axios": "^1.6.0",
     "bootstrap": "^5.2.3",
@@ -92,8 +91,7 @@
     "split-type": "^0.3.1",
     "styled-components": "^5.3.5",
     "styled-theming": "^2.2.0",
-    "text-mask-addons": "^3.8.0",
-    "wagmi": "^0.11.6"
+    "text-mask-addons": "^3.8.0"
   },
   "resolutions": {
     "styled-components": "^5",
