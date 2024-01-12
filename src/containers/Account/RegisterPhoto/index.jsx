@@ -40,7 +40,7 @@ const RegisterPhoto = ({ history }) => {
             </AccountTitle>
             <h4 className="subhead">Create an account</h4>
           </AccountHead>
-          <RegisterForm onSubmit={registerFireBase} errorMessage={error} />
+          {/* <RegisterForm onSubmit={registerFireBase} errorMessage={error} /> */}
           <AccountHaveAccount>
             <p>Already have an account? <NavLink to="/log_in_photo">Login</NavLink></p>
           </AccountHaveAccount>
