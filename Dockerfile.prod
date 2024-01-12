@@ -3,17 +3,14 @@ FROM node:20 as build-stage
 ARG IMAGE_VERSION
 LABEL version=$IMAGE_VERSION
 
-WORKDIR /surveycat
-
-WORKDIR /surveycat
 RUN yarn cache clean
 RUN yarn install --frozen-lockfile
 RUN yarn build
 
 FROM nginx:alpine as production-stage
 RUN mkdir -p /app/surveycat
-COPY --from=build-stage /surveycat/build /app/surveycat
-COPY ./nginx.prod.conf /etc/nginx/nginx.conf
+COPY --from=build-stage /surveycat/template/build /app/surveycat
+COPY ./template/nginx.prod.conf /etc/nginx/nginx.conf
 
 ## this that
 
