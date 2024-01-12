@@ -10,7 +10,7 @@ RUN yarn build
 FROM nginx:alpine as production-stage
 RUN mkdir -p /app/surveycat
 COPY --from=build-stage /surveycat/template/build /app/surveycat
-COPY ./template/nginx.prod.conf /etc/nginx/nginx.conf
+COPY ./nginx.prod.conf /etc/nginx/nginx.conf
 
 ## this that
 
