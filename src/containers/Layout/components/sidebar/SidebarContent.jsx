@@ -10,46 +10,14 @@ const SidebarContent = ({
   onClick, changeToLight, changeToDark, collapse,
 }) => (
   <div className="SidebarContentWrap">
-    <div className="SidebarBlock">
-      <SidebarLink
-        title="Design"
-        icon="pencil"
-        route="/design/create"
-        onClick={onClick}
-      />
-      <SidebarLink
-        title="Finance Dashboard"
-        icon="rocket"
-        route="/finance_dashboard"
-        onClick={onClick}
-        newLink
-      />
-    </div>
-
-    
     <SidebarCategory title="Survey" icon="map" collapse={collapse}>
       <SidebarLink title="Create" route="/survey/create" icon="pencil" />
       <SidebarLink title="List" route="/surveys" icon="database" />
       <SidebarLink title="Themes" route="/themes" icon="picture" />
-      <SidebarLink title="Email Confirmation" route="/account/email_confirmation" />
-      <SidebarLink title="Lock Screen" route="/lock_screen" />
-      <SidebarLink title="Log In Photo" route="/log_in_photo" />
-      <SidebarLink title="Profile" route="/account/profile" onClick={onClick} />
-      <SidebarLink title="Register" route="/register" />
-      <SidebarLink title="Register Photo" route="/register_photo" />
-      <SidebarLink title="Reset Password" route="/reset_password" newLink />
-      <SidebarLink title="Reset Password Photo" route="/reset_password_photo" newLink />
     </SidebarCategory>
     <SidebarCategory title="Analytics" icon="database" collapse={collapse}>
       <SidebarLink title="Users" route="/users" icon="users" onClick={onClick} />
     </SidebarCategory>
-    <SidebarLink
-      title="Log In"
-      route="/log_in"
-      icon="user"
-      onClick={onClick}
-    />
-    
     <div className="SidebarBlock">
       <SidebarLink
         title="App Dashboard"
