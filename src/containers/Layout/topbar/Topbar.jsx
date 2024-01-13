@@ -25,7 +25,7 @@ const Topbar = ({
         onClickMobile={changeMobileSidebarVisibility}
         onClickDesktop={changeSidebarVisibility}
       />
-      <TopbarLogo to="/online_marketing_dashboard" />
+      <TopbarLogo to="/" />
     </TopbarLeft>
     <TopbarRight>
       <TopbarSearchWrap>
