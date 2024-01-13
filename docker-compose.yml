@@ -7,6 +7,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      - .:/surveycat
       - react_node_modules:/surveycat/node_modules
       - ./local-docker-entry.sh:/local-docker-entry.sh
     command: ["sh", "-e"]
+    entrypoint: /local-docker-entry.sh
