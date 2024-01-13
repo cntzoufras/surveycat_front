@@ -21,7 +21,6 @@ import Account from './Account';
 import ECommerce from './ECommerce';
 import DefaultPages from './DefaultPages';
 import Documentation from './Documentation';
-import FinanceDashboard from '../../../Dashboards/Finance';
 
 export default () => (
   <div>
@@ -31,7 +30,6 @@ export default () => (
       <Route path="/online_marketing_dashboard" component={OnLineMarketingDashboard} />
       <Route exact path="/app_dashboard" component={AppDashboard} />
       <Route path="/booking_dashboard" component={BookingDashboard} />
-      <Route exact path="/finance_dashboard" component={FinanceDashboard} />
       <Route path="/fitness_dashboard" component={FitnessDashboard} />
       <Route path="/ui" component={UI} />
       <Route path="/mail" component={Mail} />
