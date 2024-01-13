@@ -56,8 +56,8 @@ export const TopbarRightOver = styled.div`
 `;
 
 export const TopbarLogo = styled(Link)`
-  width: 150px;
-  height: 32px;
+  width: 80px;
+  height: 50px;
   margin: auto 0;
   background-repeat: no-repeat;
   background-position-y: center;
