@@ -69,7 +69,7 @@ const LogInForm = ({
         <AccountButton variant="primary" type="submit">
           Sign In
         </AccountButton>
-        <AccountButton as={NavLink} variant="outline-primary" to="/register">
+        <AccountButton as={NavLink} variant="outline-primary" to="/auth/register">
           Create Account
         </AccountButton>
       </LoginForm>
