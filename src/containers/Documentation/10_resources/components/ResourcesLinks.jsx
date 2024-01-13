@@ -154,7 +154,11 @@ const ResourcesLinks = () => (
         <CardTitle>Laravel Sanctum Authentication</CardTitle>
       </CardTitleWrap>
       <ul>
-        <li><p>Laravel: <a href="https://laravel.com/docs/10.x/sanctum"> https://laravel.com/docs/10.x/sanctum</a></p></li>
+        <li>
+          <p>
+            Laravel: <a href="https://laravel.com/docs/10.x/sanctum"> https://laravel.com/docs/10.x/sanctum</a>
+          </p>
+        </li>
         <li>
           <p>
             Auth0: <span />
