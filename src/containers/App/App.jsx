@@ -66,7 +66,7 @@ const ConnectedThemeComponent = ThemeComponent;
 
 const App = () => (
   <Provider store={store}>
-    <BrowserRouter basename="/surveycat">
+    <BrowserRouter basename="/">
       <ConnectedThemeComponent>
         <LoadScript
           loadingElement={<Loading loading />}
