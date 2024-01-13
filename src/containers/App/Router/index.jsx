@@ -5,7 +5,6 @@ import Landing from '../../Landing/index';
 import NotFound404 from '../../DefaultPage/404/index';
 import LockScreen from '../../Account/LockScreen/index';
 import LogIn from '../../Account/LogIn/index';
-import LogInPhoto from '../../Account/LogInPhoto/index';
 import Register from '../../Account/Register/index';
 import RegisterPhoto from '../../Account/RegisterPhoto/index';
 import ResetPassword from '../../Account/ResetPassword/index';
@@ -20,7 +19,6 @@ const Router = () => (
         <Route path="/404" component={NotFound404} />
         <Route path="/lock_screen" component={LockScreen} />
         <Route path="/login" component={LogIn} />
-        <Route path="/log_in_photo" component={LogInPhoto} />
         <Route exact path="/auth/register" component={Register} />
         <Route path="/register_photo" component={RegisterPhoto} />
         <Route path="/reset_password" component={ResetPassword} />
