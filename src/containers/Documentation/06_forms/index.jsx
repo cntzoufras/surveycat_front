@@ -38,7 +38,6 @@ const FormDoc = () => (
     </DocumentationMain>
     <NavigationBottom
       prevLink="/documentation/finance_dashboard"
-      prevTitle="Finance dashboard"
       nextLink="/documentation/color_themes"
       nextTitle="Color Themes"
     />

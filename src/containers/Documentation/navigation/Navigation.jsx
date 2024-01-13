@@ -10,7 +10,6 @@ const navigationLinksData = [
   { link: 'installation', title: 'Installation' },
   { link: 'file_structure', title: 'File Structure' },
   { link: 'components', title: 'Components' },
-  { link: 'finance_dashboard', title: 'Finance dashboard' },
   { link: 'form', title: 'Form' },
   { link: 'color_themes', title: 'Color Themes' },
   { link: 'navigation_item', title: 'Navigation Item' },

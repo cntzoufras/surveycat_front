@@ -4,7 +4,6 @@ import Introduction from '../../../Documentation/01_introduction/index';
 import Installation from '../../../Documentation/02_installation/index';
 import FileStructure from '../../../Documentation/03_files_structure/index';
 import Components from '../../../Documentation/04_components/index';
-import FinanceDashboardDoc from '../../../Documentation/05_finance_dashboard/index';
 import Form from '../../../Documentation/06_forms/index';
 import ColorThemes from '../../../Documentation/07_change_and_add_color_themes/index';
 import NavigationItem from '../../../Documentation/08_new_navigation_item/index';
@@ -18,7 +17,6 @@ export default () => (
     <Route path="/documentation/installation" component={Installation} />
     <Route path="/documentation/file_structure" component={FileStructure} />
     <Route path="/documentation/components" component={Components} />
-    <Route path="/documentation/finance_dashboard" component={FinanceDashboardDoc} />
     <Route path="/documentation/form" component={Form} />
     <Route path="/documentation/color_themes" component={ColorThemes} />
     <Route path="/documentation/navigation_item" component={NavigationItem} />

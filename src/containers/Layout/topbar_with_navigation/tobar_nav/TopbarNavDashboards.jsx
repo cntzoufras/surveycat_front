@@ -43,13 +43,6 @@ const TopbarNavDashboards = () => (
       </DropdownItem>
       <DropdownItem>
         <TopbarNavLink
-          title="Finance Dashboard"
-          icon="rocket"
-          route="/finance_dashboard"
-        />
-      </DropdownItem>
-      <DropdownItem>
-        <TopbarNavLink
           title="Fitness Dashboard"
           icon="heart-pulse"
           route="/fitness_dashboard"

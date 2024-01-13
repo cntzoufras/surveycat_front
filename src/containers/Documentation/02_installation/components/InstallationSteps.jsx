@@ -36,18 +36,12 @@ const InstallationSteps = () => (
               <b>npm start</b> or <b>yarn start</b> (running on port 3000). But
               the proxy server won&apos;t be started and CoinCap and CoinMarketCap
               API&apos;s won&apos;t work. So{' '}
-              <Link to="/documentation/finance_dashboard">
-                Finance dashboard
-              </Link>{' '}
               won&apos;t display any data.
             </li>
             <li>
               <b>docker-compose up</b> (running on port 3000). In this case,
               the proxy server will be started and CoinCap and CoinMarketCap API&apos;s
               will work. So{' '}
-              <Link to="/documentation/finance_dashboard">
-                Finance dashboard
-              </Link>{' '}
               will display the data. Here you
               can read about{' '}
               <a href="https://docs.docker.com/get-started/08_using_compose/">
