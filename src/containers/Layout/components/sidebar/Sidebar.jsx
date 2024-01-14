@@ -14,12 +14,12 @@ const Sidebar = ({
   changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar, topNavigation,
 }) => (
   <SidebarWrap
-    show={sidebar}
+    show={sidebar.show}
     topNavigation={topNavigation}
     collapse={sidebar.collapse}
   >
     <SidebarBack
-      type="button"
+      type="button" 
       aria-label="change mobile sidebar visibility button"
       onClick={changeMobileSidebarVisibility}
       show={sidebar.show}
@@ -39,14 +39,13 @@ const Sidebar = ({
 
 Sidebar.propTypes = {
   sidebar: SidebarProps.isRequired,
-  collapse: PropTypes.bool.isRequired,
   changeToDark: PropTypes.func.isRequired,
   changeToLight: PropTypes.func.isRequired,
   changeMobileSidebarVisibility: PropTypes.func.isRequired,
   topNavigation: PropTypes.bool.isRequired,
 };
 
-export default Sidebar;
+export default Sidebar; 
 
 // region STYLES
 

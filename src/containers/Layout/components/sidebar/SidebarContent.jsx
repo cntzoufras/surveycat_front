@@ -33,7 +33,7 @@ const SidebarContent = ({
       <SidebarLink title="Surveys Dashboard" icon="apartment" route="/booking_dashboard" onClick={onClick} />
     </SidebarBlock>
     <SidebarBlock collapse={collapse}>
-      <SidebarCategory icon="layers" title="Theme">
+      <SidebarCategory icon="layers" title="Theme" collapse={collapse}>
         <SidebarNavLink title="Light Theme" as="button" type="button" onClick={changeToLight}>
           <SidebarLinkTitle>Light Theme</SidebarLinkTitle>
         </SidebarNavLink>
@@ -109,8 +109,7 @@ const SidebarContentWrap = styled.div`
       opacity: 0.52;
     }
   }
-  
-  @media screen and (min-width: 576px) {
+  7  @media screen and (min-width: 576px) 
     padding-top: 15px;
     
     ${props => props.collapse && `
