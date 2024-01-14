@@ -75,7 +75,7 @@ const Register = ({ history, handleError, error }) => {
           )}
           <RegisterForm onSubmit={onSubmit} errorMessage={error} />
           <AccountHaveAccount>
-            <p>Already have an account? <NavLink to="/log_in">Login</NavLink></p>
+            <p>Already have an account? <NavLink to="/app_dashboard">Login</NavLink></p>
           </AccountHaveAccount>
         </AccountCard>
       </AccountContent>
