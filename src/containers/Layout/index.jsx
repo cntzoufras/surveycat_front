@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { paddingLeft } from '@/utils/directions';
 import { changeMobileSidebarVisibility, changeSidebarVisibility } from '@/redux/actions/sidebarActions';
-import {
-  changeThemeToDark, changeThemeToLight,
-} from '@/redux/actions/themeActions';
+import { changeThemeToDark, changeThemeToLight } from '@/redux/actions/themeActions';
 import Topbar from './topbar/Topbar';
 import TopbarWithNavigation from './topbar_with_navigation/TopbarWithNavigation';
 import Sidebar from './components/sidebar/Sidebar';
@@ -48,7 +46,7 @@ const Layout = () => {
   const changeToLight = () => {
     dispatch(changeThemeToLight());
   };
-
+  
   return (
     <LayoutContainer
       collapse={sidebar.collapse}
