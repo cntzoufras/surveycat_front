@@ -54,21 +54,9 @@ const TopbarProfile = () => {
               onClick={toggleProfile}
             />
             <TopbarMenuLink
-              title="Calendar"
-              icon="calendar-full"
-              path="/default_pages/calendar"
-              onClick={toggleProfile}
-            />
-            <TopbarMenuLink
               title="Tasks"
               icon="list"
               path="/todo"
-              onClick={toggleProfile}
-            />
-            <TopbarMenuLink
-              title="Inbox"
-              icon="inbox"
-              path="/mail"
               onClick={toggleProfile}
             />
             <TopbarMenuDivider />
@@ -76,12 +64,6 @@ const TopbarProfile = () => {
               title="Account Settings"
               icon="cog"
               path="/account/profile"
-              onClick={toggleProfile}
-            />
-            <TopbarMenuLink
-              title="Lock Screen"
-              icon="lock"
-              path="/lock_screen"
               onClick={toggleProfile}
             />
             <TopbarMenuLink

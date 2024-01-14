@@ -70,9 +70,6 @@ const SidebarContent = ({
       <SidebarLink title="Todo Application" icon="book" route="/todo" onClick={onClick} />
     </SidebarBlock>
     <SidebarBlock collapse={collapse}>
-      <SidebarLink title="Log Out" icon="exit" route="/" />
-    </SidebarBlock>
-    <SidebarBlock collapse={collapse}>
       <SidebarLink 
         title="Documentation"
         icon="text-align-justify" 

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TopbarLanguage from '../components/topbar/TopbarLanguage';
 import TopbarMail from '../components/topbar/TopbarMail';
 import TopbarProfile from '../components/topbar/TopbarProfile';
 import TopbarNotification from '../components/topbar/TopbarNotification';
@@ -32,10 +31,7 @@ const Topbar = ({
         <TopbarSearch />
       </TopbarSearchWrap>
       <TopbarRightOver>
-        <TopbarNotification />
-        <TopbarMail new />
         <TopbarProfile />
-        <TopbarLanguage />
       </TopbarRightOver>
     </TopbarRight>
   </TopbarContainer>
