@@ -1,9 +1,9 @@
 import React from 'react';
+import { Scrollbar } from 'smooth-scrollbar-react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Scrollbar from '@/shared/components/ScrollBar';
-import { SidebarProps } from '@/shared/prop-types/ReducerProps';
-import { colorBackground } from '@/utils/palette';
+import { colorBackground, colorScrollbar } from '@/utils/palette';
+
 import { 
   sidebarClose,
   marginRight,
@@ -11,26 +11,25 @@ import {
 import SidebarContent from './SidebarContent';
 
 const Sidebar = ({
-  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar, topNavigation,
+  changeMobileSidebarVisibility, sidebarShow, collapse, changeToLight, changeToDark, 
 }) => (
   <SidebarWrap
-    show={sidebar}
-    topNavigation={topNavigation}
-    collapse={sidebar.collapse}
+    show={sidebarShow}
+    collapse={collapse}
   >
     <SidebarBack
       type="button"
-      aria-label="change mobile sidebar visibility button"
+      aria-label="sidebar visibility"
       onClick={changeMobileSidebarVisibility}
-      show={sidebar.show}
+      show={sidebarShow}
     />
     <SidebarScroll>
-      <SidebarWrapper topNavigation={topNavigation}>
+      <SidebarWrapper>
         <SidebarContent
           onClick={changeMobileSidebarVisibility}
           changeToDark={changeToDark}
           changeToLight={changeToLight}
-          collapse={sidebar.collapse}
+          collapse={collapse}
         />
       </SidebarWrapper>
     </SidebarScroll>
@@ -38,12 +37,11 @@ const Sidebar = ({
 );
 
 Sidebar.propTypes = {
-  sidebar: SidebarProps.isRequired,
+  sidebarShow: PropTypes.bool.isRequired,
   collapse: PropTypes.bool.isRequired,
   changeToDark: PropTypes.func.isRequired,
   changeToLight: PropTypes.func.isRequired,
   changeMobileSidebarVisibility: PropTypes.func.isRequired,
-  topNavigation: PropTypes.bool.isRequired,
 };
 
 export default Sidebar;
@@ -63,10 +61,10 @@ const SidebarScroll = styled(Scrollbar)`
   height: calc(100vh - 60px);
 
   .scrollbar-track {
+    background: transparent;
 
     &.scrollbar-track-y {
-      width: 2px;
-      ${marginRight}: 3px;
+      width: 5px;
     }
 
     &.scrollbar-track-x {
@@ -75,8 +73,11 @@ const SidebarScroll = styled(Scrollbar)`
   }
 
   .scrollbar-thumb {
-    opacity: 0.3;
     width: 5px;
+    opacity: 0.3;
+    transition: height 0.3s;
+    cursor: pointer;
+    background: ${colorScrollbar};
   }
 `;
 
