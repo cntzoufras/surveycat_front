@@ -42,7 +42,7 @@ export const colorTextAdditional = theme('mode', {
 });
 
 export const logoImg = theme('mode', {
-  light: `url(${process.env.PUBLIC_URL}/img/logo/logo_light.png)`,
+  light: `url(${process.env.PUBLIC_URL}/img/logo/logo_light.svg)`,
   dark: `url(${process.env.PUBLIC_URL}/img/logo/logo_dark.svg)`,
 });
 
