@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   nginx:
-    image: cntzoufras/admin-nginx:1.12
+    image: cntzoufras/admin-nginx:1.13
     build:
       context: .
       dockerfile: Dockerfile.prod
