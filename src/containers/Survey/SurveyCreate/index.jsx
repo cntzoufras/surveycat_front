@@ -33,9 +33,7 @@ const SurveyCreate = () => {
     theme: state.theme,
     
   }));
-  
-  console.log('entos');
-  
+    
   const dispatch = useDispatch();
 
   const editTodoElementAction = (data) => {
