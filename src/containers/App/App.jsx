@@ -73,7 +73,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <BrowserRouter basename="/easydev">
+      <BrowserRouter basename="/">
         <I18nextProvider i18n={i18n}>
           <ConnectedThemeComponent>
             <LoadScript loadingElement={<Loading loading />} googleMapsApiKey="">
