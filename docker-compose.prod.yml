@@ -1,12 +1,12 @@
 version: '3.2'
 services:
   nginx:
-    image: cntzoufras/admin-nginx:${IMAGE_VERSION}
+    image: cntzoufras/admin-nginx:${env.IMAGE_VERSION}
     build:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        - IMAGE_VERSION=${IMAGE_VERSION}
+        - IMAGE_VERSION=${env.IMAGE_VERSION}
     ports:
       - "80:80"
       - "443:443"
