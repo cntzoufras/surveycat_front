@@ -39,7 +39,7 @@ jobs:
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: $IMAGE_VERSION
+          IMAGE_VERSION: ${IMAGE_VERSION}
     
     - name: Deploy to Production Server
       run: |
