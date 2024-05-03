@@ -10,14 +10,10 @@ import DividerLine from './components/DividerLine';
 
 const Survey = () => {
     const {t} = useTranslation('common');
-    const [currentEditItem,
-        setCurrentEditItem] = useState(null);
-    const [showEditModal,
-        setShowEditModal] = useState(false);
-    const [filterByPriority,
-        setFilterByPriority] = useState('');
-    const [prevSurveyElements,
-        setPrevSurveyElements] = useState(null);
+    const [currentEditItem, setCurrentEditItem] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [filterByPriority, setFilterByPriority] = useState('');
+    const [prevSurveyElements, setPrevSurveyElements] = useState(null);
 
     const {theme, surveyElements, isFetching} = useSelector(state => ({
         surveyElements: state.survey && state.survey.data && state.survey.data.elements && state.survey.data.elements.length > 0
