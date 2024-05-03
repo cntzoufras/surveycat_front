@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        - IMAGE_VERSION=${env.IMAGE_VERSION}
+        - IMAGE_VERSION=${IMAGE_VERSION}
     ports:
       - "80:80"
       - "443:443"
