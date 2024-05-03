@@ -1,9 +1,9 @@
 import { handleActions } from 'redux-actions';
 import {
-  fetchTodoListDataFailure,
-  fetchTodoListDataRequest,
-  fetchTodoListDataSuccess,
-  updateTodoListData,
+  fetchSurveyListDataFailure,
+  fetchSurveyListDataRequest,
+  fetchSurveyListDataSuccess,
+  updateSurveyListData,
 } from './actions';
 
 const defaultState = {
@@ -14,14 +14,14 @@ const defaultState = {
 
 export default handleActions(
   {
-    [fetchTodoListDataRequest](state) {
+    [fetchSurveyListDataRequest](state) {
       return {
         ...state,
         isFetching: true,
         error: null,
       };
     },
-    [fetchTodoListDataSuccess](state, { payload }) {
+    [fetchSurveyListDataSuccess](state, { payload }) {
       return {
         ...state,
         data: payload,
@@ -29,14 +29,14 @@ export default handleActions(
         error: null,
       };
     },
-    [fetchTodoListDataFailure](state, { payload }) {
+    [fetchSurveyListDataFailure](state, { payload }) {
       return {
         ...state,
         isFetching: false,
         error: payload,
       };
     },
-    [updateTodoListData](state, { payload }) {
+    [updateSurveyListData](state, { payload }) {
       const dataCopy = { ...state.data };
       dataCopy.elements = payload;
       return {

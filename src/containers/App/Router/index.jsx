@@ -10,7 +10,7 @@ import ResetPassword from '../../Account/ResetPassword/index';
 import ResetPasswordPhoto from '../../Account/ResetPasswordPhoto';
 import WrappedRoutes from './WrappedRoutes';
 import Todo from '../../Todo';
-import SurveyCreate from '../../Survey/SurveyCreate';
+import Survey from '../../Survey';
 
 const Router = () => (
   <MainWrapper>
@@ -26,7 +26,9 @@ const Router = () => (
         <Route path="/reset_password_photo" component={ResetPasswordPhoto} />
         <Route path="/" component={WrappedRoutes} />
         <Route exact path="/todo" component={Todo} />
-        <Route exact path="/survey/create" component={SurveyCreate} />
+        <Route exact path="/survey" component={Survey} />
+        
+        <Route exact path="/survey/create" component={Survey} />
       </Switch>
     </main>
   </MainWrapper>

@@ -10,6 +10,7 @@ import AppDashboard from '../../../Dashboards/App/index';
 import BookingDashboard from '../../../Dashboards/Booking/index';
 import FitnessDashboard from '../../../Dashboards/Fitness/index';
 import Todo from '../../../Todo/index';
+import Survey from '../../../Survey/index';
 import Tables from './Tables';
 import Charts from './Charts';
 import Account from './Account';
@@ -26,6 +27,7 @@ export default () => (
       <Route path="/booking_dashboard" component={BookingDashboard} />
       <Route path="/fitness_dashboard" component={FitnessDashboard} />
       <Route path="/todo" component={Todo} />
+      <Route path="/survey" component={Survey} />
       <Route path="/tables" component={Tables} />
       <Route path="/charts" component={Charts} />
       <Route path="/account" component={Account} />

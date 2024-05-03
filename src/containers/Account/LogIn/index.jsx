@@ -28,13 +28,13 @@ const LogIn = ({
 
   const onSubmit = async (event) => {
     try {
-      await dispatch(reduxHandleLogin(event));
-      setShowModal(true);
-      setTimeout(() => {
-        history.push('/');
-      }, 2000); 
+      // await dispatch(reduxHandleLogin(event));
+      // setShowModal(true);
+      // setTimeout(() => {
+      //   history.push('/');
+      // }, 2000); 
     } catch (err) {   
-      handleError(err.message || 'Login failed. Please try again.');
+      // handleError(err.message || 'Login failed. Please try again.');
     }
   };
 

@@ -2,7 +2,7 @@ import {
   shape, string, bool,
 } from 'prop-types';
 
-const todoCard = shape({
+const surveyCard = shape({
   data: shape({
     id: string.isRequired,
     title: string.isRequired,
@@ -15,4 +15,4 @@ const todoCard = shape({
   error: shape(),
 });
 
-export default todoCard;
+export default surveyCard;

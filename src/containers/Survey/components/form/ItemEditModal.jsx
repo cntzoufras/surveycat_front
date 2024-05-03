@@ -10,11 +10,11 @@ const priorityOptions = [
 ];
 
 const ItemEditModal = ({
-  todoElements,
+  surveyElements,
   currentEditItem,
   changeShowEditModal,
-  editTodoElementAction,
-  addTodoElementAction,
+  editSurveyElementAction,
+  addSurveyElementAction,
   showEditModal,
 }) => {
   const [priority, setPriority] = useState({ value: 'low', label: 'low' });
@@ -28,7 +28,7 @@ const ItemEditModal = ({
       setPriority({ value: 'low', label: 'low' });
       setDueDate(new Date());
     }
-  }, [currentEditItem, todoElements]);
+  }, [currentEditItem, surveyElements]);
 
   const handleDateChange = (date) => {
     setDueDate(date);
@@ -43,7 +43,7 @@ const ItemEditModal = ({
     if (dueDate) {
       tempDueData = dueDate;
     }
-    const updatedTodoData = {
+    const updatedSurveyData = {
       ...currentEditItem,
       title: formData.title,
       description: formData.description,
@@ -51,15 +51,15 @@ const ItemEditModal = ({
       date: new Intl.DateTimeFormat('en-US').format(tempDueData),
     };
     if (!currentEditItem) {
-      updatedTodoData.id = -(Date.now()); // new elements will have id < 0
-      updatedTodoData.isCompleted = false;
-      updatedTodoData.isArchived = false;
+      updatedSurveyData.id = -(Date.now()); // new elements will have id < 0
+      updatedSurveyData.isCompleted = false;
+      updatedSurveyData.isArchived = false;
     }
-    if (updatedTodoData.title !== '') {
+    if (updatedSurveyData.title !== '') {
       if (!currentEditItem) {
-        addTodoElementAction(updatedTodoData);
+        addSurveyElementAction(updatedSurveyData);
       } else {
-        editTodoElementAction(updatedTodoData);
+        editSurveyElementAction(updatedSurveyData);
       }
       changeShowEditModal();
     }
@@ -86,11 +86,11 @@ const ItemEditModal = ({
 };
 
 ItemEditModal.propTypes = {
-  todoElements: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  surveyElements: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   currentEditItem: PropTypes.shape(),
   changeShowEditModal: PropTypes.func.isRequired,
-  editTodoElementAction: PropTypes.func.isRequired,
-  addTodoElementAction: PropTypes.func.isRequired,
+  editSurveyElementAction: PropTypes.func.isRequired,
+  addSurveyElementAction: PropTypes.func.isRequired,
   showEditModal: PropTypes.bool.isRequired,
 };
 

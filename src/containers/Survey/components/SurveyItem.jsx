@@ -17,132 +17,132 @@ import {
   marginLeft, marginRight,
 } from '@/utils/directions';
 import { CheckBoxField } from '@/shared/components/form/CheckBox';
-import todoCard from '../types';
+import surveyCard from '../types';
 
-const TodoItem = ({
-  todoItemData, changeShowEditModal, editTodoElement, deleteTodoElement, isCompleted,
+const SurveyItem = ({
+  surveyItemData, changeShowEditModal, editSurveyElement, deleteSurveyElement, isCompleted,
 }) => {
   const editItem = (items) => {
     changeShowEditModal(items);
   };
 
-  const editTodoElementData = (items) => {
-    if (!todoItemData.isArchived) {
-      const todoItemDataCopy = { ...items };
-      todoItemDataCopy.isCompleted = !todoItemData.data.isCompleted;
-      editTodoElement(todoItemDataCopy);
+  const editSurveyElementData = (items) => {
+    if (!surveyItemData.isArchived) {
+      const surveyItemDataCopy = { ...items };
+      surveyItemDataCopy.isCompleted = !surveyItemData.data.isCompleted;
+      editSurveyElement(surveyItemDataCopy);
     }
   };
 
   const archivedItem = (items) => {
-    const todoItemDataCopy = { ...items };
-    todoItemDataCopy.isArchived = !todoItemDataCopy.isArchived;
-    editTodoElement(todoItemDataCopy);
+    const surveyItemDataCopy = { ...items };
+    surveyItemDataCopy.isArchived = !surveyItemDataCopy.isArchived;
+    editSurveyElement(surveyItemDataCopy);
   };
 
   const deleteItem = () => {
-    if (todoItemData.data.isArchived) {
-      deleteTodoElement(todoItemData.data.id);
+    if (surveyItemData.data.isArchived) {
+      deleteSurveyElement(surveyItemData.data.id);
     }
   };
 
   return (
     <Card>
-      <TodoItemContent>
+      <SurveyItemContent>
         <CheckBoxField
-          disabled={todoItemData.data.isArchived}
-          checked={todoItemData.data.isCompleted}
-          name={todoItemData.data.title}
+          disabled={surveyItemData.data.isArchived}
+          checked={surveyItemData.data.isCompleted}
+          name={surveyItemData.data.title}
           onChange={(e) => {
             e.preventDefault();
-            editTodoElementData(todoItemData.data);
+            editSurveyElementData(surveyItemData.data);
           }}
           styleType="colored-click"
         />
-        <TodoInfo>
-          <TodoContent isCompleted={isCompleted}>
-            <h3>{todoItemData.data.title}</h3>
-            <h3>{todoItemData.data.country}</h3>
-            <TodoDescription>{todoItemData.data.description}</TodoDescription>
-          </TodoContent>
-          <TodoAdditionalWrapper>
-            <TodoAdditional>
-              <TodoDueDate>Due date: {todoItemData.data.date}</TodoDueDate>
-              <TodoPriority>
+        <SurveyInfo>
+          <SurveyContent isCompleted={isCompleted}>
+            <h3>{surveyItemData.data.title}</h3>
+            <h3>{surveyItemData.data.country}</h3>
+            <SurveyDescription>{surveyItemData.data.description}</SurveyDescription>
+          </SurveyContent>
+          <SurveyAdditionalWrapper>
+            <SurveyAdditional>
+              <SurveyDueDate>Due date: {surveyItemData.data.date}</SurveyDueDate>
+              <SurveyPriority>
                 <span>Priority:</span>
-                <TodoPriorityIndicator priority={todoItemData.data.priority} />
-              </TodoPriority>
-            </TodoAdditional>
-            <TodoBtnWrapper>
-              {!todoItemData.data.isArchived ? (
+                <SurveyPriorityIndicator priority={surveyItemData.data.priority} />
+              </SurveyPriority>
+            </SurveyAdditional>
+            <SurveyBtnWrapper>
+              {!surveyItemData.data.isArchived ? (
                 <div>
-                  <TodoDeleteButton
+                  <SurveyDeleteButton
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      editItem(todoItemData);
+                      editItem(surveyItemData);
                     }}
                   >
                     <PencilOutlineIcon />
-                  </TodoDeleteButton>
-                  <TodoDeleteButton
+                  </SurveyDeleteButton>
+                  <SurveyDeleteButton
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      archivedItem(todoItemData.data);
+                      archivedItem(surveyItemData.data);
                     }}
                   >
                     <PackageVariantClosed />
-                  </TodoDeleteButton>
+                  </SurveyDeleteButton>
                 </div>
               ) : (
                 <div>
-                  <TodoDeleteButton
+                  <SurveyDeleteButton
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      archivedItem(todoItemData.data);
+                      archivedItem(surveyItemData.data);
                     }}
                   >
                     <PackageVariant />
-                  </TodoDeleteButton>
-                  <TodoDeleteButtonDelete
+                  </SurveyDeleteButton>
+                  <SurveyDeleteButton
                     type="button"
                     onClick={(e) => {
                       e.preventDefault();
-                      deleteItem(todoItemData);
+                      deleteItem(surveyItemData);
                     }}
                   >
                     <DeleteForeverIcon />
-                  </TodoDeleteButtonDelete>
+                  </SurveyDeleteButton>
                 </div>
               )}
-            </TodoBtnWrapper>
-          </TodoAdditionalWrapper>
-        </TodoInfo>
-      </TodoItemContent>
+            </SurveyBtnWrapper>
+          </SurveyAdditionalWrapper>
+        </SurveyInfo>
+      </SurveyItemContent>
     </Card>
   );
 };
 
-TodoItem.propTypes = {
-  todoItemData: todoCard.isRequired,
+SurveyItem.propTypes = {
+  surveyItemData: surveyCard.isRequired,
   changeShowEditModal: PropTypes.func.isRequired,
-  editTodoElement: PropTypes.func.isRequired,
-  deleteTodoElement: PropTypes.func.isRequired,
+  editSurveyElement: PropTypes.func.isRequired,
+  deleteSurveyElement: PropTypes.func.isRequired,
   isCompleted: PropTypes.bool.isRequired,
 };
 
-export default TodoItem;
+export default SurveyItem;
 
 // region STYLES
 
-const TodoItemContent = styled(CardBody)`
+const SurveyItemContent = styled(CardBody)`
   display: flex;
 `;
 
 
-const TodoInfo = styled.div`
+const SurveyInfo = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -153,7 +153,7 @@ const TodoInfo = styled.div`
   }
 `;
 
-const TodoContent = styled.div`
+const SurveyContent = styled.div`
   margin-right: 10px;
   margin-bottom: 10px;
   width: 100%;
@@ -188,7 +188,7 @@ const TodoContent = styled.div`
   `}
 `;
 
-const TodoAdditionalWrapper = styled.div`
+const SurveyAdditionalWrapper = styled.div`
   display: flex;
   flex-flow: column;
   justify-content: space-between;
@@ -215,14 +215,14 @@ const TodoAdditionalWrapper = styled.div`
   }
 `;
 
-const TodoAdditional = styled.div`
+const SurveyAdditional = styled.div`
   display: flex;
   margin: 0 0 10px 0;
   white-space: nowrap;
   ${marginLeft}: 0;
 `;
 
-const TodoDescription = styled.p`
+const SurveyDescription = styled.p`
   width: 100%;
   word-break: break-all;
   color: ${colorText};
@@ -242,7 +242,7 @@ const getPriorityColor = (priority) => {
   }
 };
 
-const TodoPriorityIndicator = styled.span`
+const SurveyPriorityIndicator = styled.span`
   background-color: ${props => getPriorityColor(props.priority)};
   height: 10px;
   width: 10px;
@@ -253,14 +253,14 @@ const TodoPriorityIndicator = styled.span`
   flex-shrink: 0;
 `;
 
-const TodoDueDate = styled.p`
+const SurveyDueDate = styled.p`
   background-color: ${colorHover};
   ${marginRight}: 15px;
   margin-top: 0;
   padding: 0 5px;
 `;
 
-const TodoPriority = styled.div`
+const SurveyPriority = styled.div`
   display: flex;
   align-self: baseline;
   ${marginRight}: 0;
@@ -273,7 +273,7 @@ const TodoPriority = styled.div`
   }
 `;
 
-const TodoBtnWrapper = styled.div`
+const SurveyBtnWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -284,7 +284,7 @@ const TodoBtnWrapper = styled.div`
   }
 `;
 
-const TodoDeleteButton = styled.button`
+const SurveyDeleteButton = styled.button`
   border: none;
   position: relative;
   color: ${colorAdditional};
@@ -307,7 +307,7 @@ const TodoDeleteButton = styled.button`
   }
 `;
 
-const TodoDeleteButtonDelete = styled(TodoDeleteButton)`
+const SurveyButtonDelete = styled(SurveyDeleteButton)`
 
   &:hover {
     color: ${colorRedHover};

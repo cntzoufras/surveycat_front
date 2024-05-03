@@ -7,9 +7,9 @@ import { paddingLeft, paddingRight, left } from '@/utils/directions';
 import { lighten } from 'polished';
 import { Button } from '@/shared/components/Button';
 
-const todoSidebarImg = `${process.env.PUBLIC_URL}/img/sidebar_img.svg`;
+const surveySidebarImg = `${process.env.PUBLIC_URL}/img/sidebar_img.svg`;
 
-const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
+const SurveySidebar = ({ changeShowEditModal, filterByPriority }) => {
   const addNewTask = () => {
     changeShowEditModal();
   };
@@ -20,19 +20,19 @@ const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
 
   return (
     <div>
-      <TodoSidebarWrap>
-        <TodoSidebarImage src={todoSidebarImg} alt="sidebar-img" />
-        <TodoAddNewButton 
+      <SurveySidebarWrap>
+        <SurveySidebarImage src={surveySidebarImg} alt="sidebar-img" />
+        <SurveyAddNewButton 
           variant="secondary"
           onClick={addNewTask}
         >
           <PlusIcon /> New task
-        </TodoAddNewButton>
-        <TodoPriorityFilter>
+        </SurveyAddNewButton>
+        <SurveyPriorityFilter>
           <p className="title">Priority</p>
-          <TodoPriorityFilterList>
+          <SurveyPriorityFilterList>
             <li>
-              <TodoFilterRadio
+              <SurveyFilterRadio
                 type="radio"
                 id="priority-all"
                 name="priority-filter"
@@ -43,7 +43,7 @@ const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
               <label htmlFor="priority-all">All</label>
             </li>
             <li>
-              <TodoFilterRadio
+              <SurveyFilterRadio
                 type="radio"
                 id="priority-low"
                 name="priority-filter"
@@ -53,7 +53,7 @@ const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
               <label htmlFor="priority-low">Low</label>
             </li>
             <li>
-              <TodoFilterRadio
+              <SurveyFilterRadio
                 type="radio"
                 id="priority-medium"
                 name="priority-filter"
@@ -63,7 +63,7 @@ const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
               <label htmlFor="priority-medium">Medium</label>
             </li>
             <li>
-              <TodoFilterRadio
+              <SurveyFilterRadio
                 type="radio"
                 id="priority-high"
                 name="priority-filter"
@@ -72,23 +72,23 @@ const TodoSidebar = ({ changeShowEditModal, filterByPriority }) => {
               />
               <label htmlFor="priority-high">High</label>
             </li>
-          </TodoPriorityFilterList>
-        </TodoPriorityFilter>
-      </TodoSidebarWrap>
+          </SurveyPriorityFilterList>
+        </SurveyPriorityFilter>
+      </SurveySidebarWrap>
     </div>
   );
 };
 
-TodoSidebar.propTypes = {
+SurveySidebar.propTypes = {
   changeShowEditModal: PropTypes.func.isRequired,
   filterByPriority: PropTypes.func.isRequired,
 };
 
-export default TodoSidebar;
+export default SurveySidebar;
 
 // region STYLES
 
-const TodoSidebarWrap = styled.div`
+const SurveySidebarWrap = styled.div`
   background-color: ${colorBlue};
   min-height: 710px;
   padding: 30px 20px;
@@ -99,12 +99,12 @@ const TodoSidebarWrap = styled.div`
   text-align: center;
 `;
 
-const TodoSidebarImage = styled.img`
+const SurveySidebarImage = styled.img`
   width: 130px;
   margin-bottom: 20px;
 `;
 
-const TodoPriorityFilter = styled.div`
+const SurveyPriorityFilter = styled.div`
   align-self: flex-start;
   margin-bottom: 20px;
   text-align: ${left};
@@ -117,7 +117,7 @@ const TodoPriorityFilter = styled.div`
   }
 `;
 
-const TodoPriorityFilterList = styled.ul`
+const SurveyPriorityFilterList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
@@ -133,7 +133,7 @@ const TodoPriorityFilterList = styled.ul`
   }
 `;
 
-const TodoAddNewButton = styled(Button)`
+const SurveyAddNewButton = styled(Button)`
   color: white;
   cursor: pointer;
   padding: 5px 10px;
@@ -163,7 +163,7 @@ const TodoAddNewButton = styled(Button)`
   }
 `;
 
-const TodoFilterRadio = styled.input`
+const SurveyFilterRadio = styled.input`
   display: none;
 
    & + label {

@@ -4,11 +4,18 @@ const {
   override,
   addWebpackAlias,
 } = require('customize-cra');
+const addDevTools = config => {
+  if (process.env.NODE_ENV === 'development') {
+    config.devtool = 'eval-source-map';
+  }
+  return config;
+};
 
 module.exports = override(
   addWebpackAlias({
     '@': path.resolve(__dirname, 'src'),
   }),
+  addDevTools,
   config => ({
     ...config,
         module: {

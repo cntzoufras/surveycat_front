@@ -9,8 +9,8 @@
     "test": "react-app-rewired test",
     "lint:css": "stylelint './src/**/*.js'",
     "eject": "react-app-rewired eject",
-    "docker": "cd ../ && docker-compose up",
-    "docker-build": "cd ../ && docker-compose build",
+    "docker": "docker-compose up",
+    "docker-build": "docker-compose build",
     "docker:prod": "cd ../ && docker-compose -f docker-compose.prod.yml up",
     "docker-build:prod": "cd ../ && docker-compose -f docker-compose.prod.yml build"
   },
@@ -113,7 +113,9 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "process": "^0.11.10",
     "react-app-rewired": "^2.1.8",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "source-map-loader": "^5.0.0",
+    "webpack": "^5.90.3"
   },
   "overrides": {
     "react-vis": {

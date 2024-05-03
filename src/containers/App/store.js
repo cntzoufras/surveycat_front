@@ -14,6 +14,7 @@ import {
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
 import todoReducer from '../Todo/redux/reducer';
+import surveyReducer from '../Survey/redux/reducer';
 
 const reducer = combineReducers({
   theme: themeReducer,
@@ -27,6 +28,7 @@ const reducer = combineReducers({
   user: authReducer,
   covid: covidReducer,
   todo: todoReducer,
+  survey: surveyReducer,
   pokemon: pokemonReducer,
 });
 const store = createStore(reducer, applyMiddleware(thunk));
