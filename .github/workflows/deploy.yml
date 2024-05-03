@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 1.13
+      IMAGE_VERSION: 1.14
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
