@@ -1,7 +1,7 @@
 FROM node:20 as build-stage
 
-ARG IMAGE_VERSION
-LABEL version=$IMAGE_VERSION
+# ARG IMAGE_VERSION
+# LABEL version=$IMAGE_VERSION
 
 WORKDIR /surveycat
 COPY package.json yarn.lock ./
