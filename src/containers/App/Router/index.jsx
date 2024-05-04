@@ -26,7 +26,6 @@ const Router = () => (
         <Route path="/reset_password_photo" component={ResetPasswordPhoto} />
         <Route path="/" component={WrappedRoutes} />
         <Route exact path="/todo" component={Todo} />
-        <Route exact path="/survey" component={Survey} />
         
         <Route exact path="/survey/create" component={Survey} />
       </Switch>
