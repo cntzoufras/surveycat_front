@@ -6,59 +6,60 @@ import { left } from '@/utils/directions';
 import SurveyItem from './SurveyItem';
 import surveyCard from '../types';
 
-const SurveyList = ({
+const SurveyDesign = ({
   surveyElements,
   changeShowEditModal,
   editSurveyElementAction,
   deleteSurveyElementAction,
-}) => (
-    surveyElements && surveyElements.length > 0 && (
-      surveyElements.map(survey => (
-        <div key={survey.data.id}>
-          <SurveyItem
-            surveyItemData={survey}
-            changeShowEditModal={changeShowEditModal}
-            editSurveyElement={editSurveyElementAction}
-            deleteSurveyElement={deleteSurveyElementAction}
-            isCompleted={survey.data.isCompleted}
-          />
-        </div>
-      ))
-    )
-);
+}) =>
+  surveyElements &&
+  surveyElements.length > 0 &&
+  surveyElements.map(survey => (
+    <div key={survey.data.id}>
+      <SurveyItem
+        surveyItemData={survey}
+        changeShowEditModal={changeShowEditModal}
+        editSurveyElement={editSurveyElementAction}
+        deleteSurveyElement={deleteSurveyElementAction}
+        isCompleted={survey.data.isCompleted}
+      />
+    </div>
+  ));
 
-SurveyList.propTypes = {
+SurveyDesign.propTypes = {
   surveyElements: PropTypes.arrayOf(surveyCard),
   changeShowEditModal: PropTypes.func.isRequired,
   editSurveyElementAction: PropTypes.func.isRequired,
   deleteSurveyElementAction: PropTypes.func.isRequired,
 };
 
-SurveyList.defaultProps = {
+SurveyDesign.defaultProps = {
   surveyElements: null,
 };
 
-const SurveyListWrapper = ({
+const SurveyDesignWrapper = ({
   surveyElements,
-  changeShowEditModal, editSurveyElementAction, deleteSurveyElementAction,
-  isFetching, isArchived,
-}) => (
+  changeShowEditModal,
+  editSurveyElementAction,
+  deleteSurveyElementAction,
+  isFetching,
+  isArchived,
+}) =>
   isFetching ? (
     <SurveyPanelRefresh>
       <SimpleLoader />
     </SurveyPanelRefresh>
-    ) : (
-      <SurveyList
-        surveyElements={surveyElements}
-        changeShowEditModal={changeShowEditModal}
-        editSurveyElementAction={editSurveyElementAction}
-        deleteSurveyElementAction={deleteSurveyElementAction}
-        isArchived={isArchived}
-      />
-    )
-);
+  ) : (
+    <SurveyDesign
+      surveyElements={surveyElements}
+      changeShowEditModal={changeShowEditModal}
+      editSurveyElementAction={editSurveyElementAction}
+      deleteSurveyElementAction={deleteSurveyElementAction}
+      isArchived={isArchived}
+    />
+  );
 
-SurveyListWrapper.propTypes = {
+SurveyDesignWrapper.propTypes = {
   surveyElements: PropTypes.arrayOf(surveyCard),
   changeShowEditModal: PropTypes.func,
   editSurveyElementAction: PropTypes.func,
@@ -67,7 +68,7 @@ SurveyListWrapper.propTypes = {
   isArchived: PropTypes.bool,
 };
 
-SurveyListWrapper.defaultProps = {
+SurveyDesignWrapper.defaultProps = {
   surveyElements: [],
   deleteSurveyElementAction: () => {},
   changeShowEditModal: () => {},
@@ -76,7 +77,7 @@ SurveyListWrapper.defaultProps = {
   isArchived: false,
 };
 
-export default SurveyListWrapper;
+export default SurveyDesignWrapper;
 
 // region STYLES
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-function SurveyList({ surveys }) {
+function SurveyDesign({ surveys }) {
   return (
     <div>
       <h2>Surveys</h2>
-      {surveys.map((survey, index) => (  
+      {surveys.map((survey, index) => (
         <div key={index}>
           <h3>{survey.title}</h3>
           <p>Style: {survey.style}</p>
@@ -22,4 +22,4 @@ function SurveyList({ surveys }) {
   );
 }
 
-export default SurveyList;
+export default SurveyDesign;

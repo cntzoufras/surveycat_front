@@ -1,6 +1,7 @@
 import moment from 'moment';
+import axios from 'axios';
 
-export default {
+const api = {
   getSurveyData: () => new Promise((resolve) => {
     const surveyData = {
       elements: [
@@ -85,4 +86,19 @@ export default {
       resolve({ data: surveyData });
     }, 1000);
   }),
+  
+  emptyData: () => new Promise((resolve) => {
+    const surveyData = {
+      elements: [],
+    };
+    setTimeout(() => {
+      resolve({ data: surveyData });
+    }, 1000);
+  }),
+  
+  baseURL: process.env.NODE_ENV === 'production'
+    ? 'https://snf-893955.vm.okeanos.grnet.gr'
+    : 'http://localhost:44000',
 };
+
+export default api;

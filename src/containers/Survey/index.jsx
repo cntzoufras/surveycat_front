@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
 import {
-  fetchSurveyListData,
+  fetchSurveyDesignData,
   editSurveyElement,
-  deleteSurveyElement, addSurveyElement,
+  deleteSurveyElement,
+  addSurveyElement,
 } from './redux/actions';
 import ItemEditModal from './components/form/ItemEditModal';
-import SurveyListWrapper from './components/SurveyList';
+import SurveyDesignWrapper from './components/SurveyDesign';
 import SurveySidebar from './components/SurveySidebar';
 import DividerLine from './components/DividerLine';
 
@@ -24,45 +25,49 @@ const Survey = () => {
   const [filterByPriority, setFilterByPriority] = useState('');
   const [prevSurveyElements, setPrevSurveyElements] = useState(null);
 
-  const {
-    theme, surveyElements, isFetching,
-  } = useSelector(state => ({
-    surveyElements: state.survey && state.survey.data && state.survey.data.elements
-      && state.survey.data.elements.length > 0 ? [...state.survey.data.elements] : [],
+  const { theme, surveyElements, isFetching } = useSelector(state => ({
+    surveyElements:
+      state.survey &&
+      state.survey.data &&
+      state.survey.data.elements &&
+      state.survey.data.elements.length > 0
+        ? [...state.survey.data.elements]
+        : [],
     isFetching: state.survey && state.survey.isFetching,
     theme: state.theme,
-    
   }));
-  
+
   const dispatch = useDispatch();
 
-  const editSurveyElementAction = (data) => {
+  const editSurveyElementAction = data => {
+    console.log('data einai: ', data);
     dispatch(editSurveyElement(data));
   };
-  
-  const addSurveyElementAction = (data) => {
+
+  const addSurveyElementAction = data => {
     dispatch(addSurveyElement(data));
   };
-  
-  const deleteSurveyElementAction = (id) => {
+
+  const deleteSurveyElementAction = id => {
     dispatch(deleteSurveyElement(id));
   };
 
   useEffect(() => {
     if (JSON.stringify(surveyElements) !== JSON.stringify(prevSurveyElements)) {
-      if (surveyElements.length === 0 && prevSurveyElements === null) { // You can delete it if you need
-        dispatch(fetchSurveyListData());
+      if (surveyElements.length === 0 && prevSurveyElements === null) {
+        // You can delete it if you need
+        dispatch(fetchSurveyDesignData());
       }
       setPrevSurveyElements([...surveyElements]);
     }
   }, [prevSurveyElements, surveyElements, filterByPriority, dispatch]);
 
-  const changeShowEditModal = (data) => {
+  const changeShowEditModal = data => {
     setShowEditModal(!showEditModal);
     setCurrentEditItem(data);
   };
 
-  const filteringByPriority = (priority) => {
+  const filteringByPriority = priority => {
     setFilterByPriority(priority);
   };
 
@@ -82,7 +87,10 @@ const Survey = () => {
     return surveys;
   }, [surveyElements, filterByPriority]);
 
-  const archivedSurveyElements = useMemo(() => surveyElements.filter(item => item.data.isArchived), [surveyElements]);
+  const archivedSurveyElements = useMemo(
+    () => surveyElements.filter(item => item.data.isArchived),
+    [surveyElements],
+  );
 
   return (
     <Container>
@@ -95,14 +103,14 @@ const Survey = () => {
         <Col md={9} xl={10}>
           <Fragment>
             <DividerLine title="Active" />
-            <SurveyListWrapper
+            <SurveyDesignWrapper
               surveyElements={incompleteSurveyElements}
               changeShowEditModal={changeShowEditModal}
               editSurveyElementAction={editSurveyElementAction}
               isFetching={isFetching}
             />
             <DividerLine title="Done" />
-            <SurveyListWrapper
+            <SurveyDesignWrapper
               surveyElements={completedSurveyElements}
               changeShowEditModal={changeShowEditModal}
               editSurveyElementAction={editSurveyElementAction}
@@ -110,7 +118,7 @@ const Survey = () => {
             />
             <div>
               <DividerLine title="Archived" />
-              <SurveyListWrapper
+              <SurveyDesignWrapper
                 isArchived
                 surveyElements={archivedSurveyElements}
                 editSurveyElementAction={editSurveyElementAction}
