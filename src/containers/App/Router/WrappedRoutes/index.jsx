@@ -27,7 +27,7 @@ export default () => (
       <Route path="/booking_dashboard" component={BookingDashboard} />
       <Route path="/fitness_dashboard" component={FitnessDashboard} />
       <Route path="/todo" component={Todo} />
-      <Route path="/survey" component={Survey} />
+      <Route path="/survey-design" component={Survey} />
       <Route path="/tables" component={Tables} />
       <Route path="/charts" component={Charts} />
       <Route path="/account" component={Account} />
