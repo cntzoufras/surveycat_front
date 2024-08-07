@@ -24,7 +24,8 @@ const Register = ({ history, handleError, error }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [notification, setNotification] = useState({ show: false, message: '', color: '' });
+
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
 
@@ -39,14 +40,19 @@ const Register = ({ history, handleError, error }) => {
       console.log('event: ', event);
       console.log('API Response:', response);
 
-      // if (response && response.status === 201) {
-        handleShowNotification('Registration successful.', 'success');
-        history.push('/');
-      // } else {
-        // handleShowNotification('Registration failed. Please try again.', 'error');
-      // }
-    } catch (err) {   
-      handleShowNotification(err.message || 'Registration failed. Please try again.', 'error');
+      if (response && response.status === 201) {
+        handleShowNotification('Registration successful. Please check your email to verify before login.', 'success');
+        setTimeout(() => {
+          history.push('/login');
+        }, 10000);
+      } else {
+        handleShowNotification('Registration failed. Please try again.', 'danger');
+      }
+    } catch (err) {
+      console.error('Registration error:', err)
+      setErrors(err.errors || { form: err.message });
+      const errorMessages = err.errors ? Object.values(err.errors).flat().join(' ') : err.message;
+      handleShowNotification(errorMessages || 'Registration failed. Please try again.', 'danger');
     }
   };
 
@@ -66,16 +72,13 @@ const Register = ({ history, handleError, error }) => {
             <FullWideNotification
               message={notification.message}
               color={notification.color}
-              onClose={() => setNotification({ 
-              show: false, 
-              message: '', 
-              color: '',
+              onClose={() => setNotification({show: false, message: '', color: '',
               })}
             />
           )}
           <RegisterForm onSubmit={onSubmit} errorMessage={error} />
           <AccountHaveAccount>
-            <p>Already have an account? <NavLink to="/app_dashboard">Login</NavLink></p>
+            <p>Already have an account? <NavLink to="/login">Login</NavLink></p>
           </AccountHaveAccount>
         </AccountCard>
       </AccountContent>

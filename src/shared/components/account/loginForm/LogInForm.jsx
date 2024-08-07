@@ -18,15 +18,21 @@ import {
 
 const LogInForm = ({ 
     onSubmit, 
-    error, 
+    errorMessage, 
 }) => (
   <Form onSubmit={onSubmit}>
     {({ handleSubmit }) => (
       <LoginForm onSubmit={handleSubmit}>
-        <Alert className="w-100" variant="danger" show={!!error}>
-          {error}
-        </Alert>
-
+        {errorMessage && (
+          <Alert variant="danger" show={!!errorMessage}>
+            {errorMessage}
+          </Alert>
+        )}
+        {errorMessage && errorMessage.form && (
+          <Alert className="w-100" variant="danger">
+            {errorMessage.form}
+          </Alert>
+        )}
         <FormGroup>
           <FormGroupLabel>Email</FormGroupLabel>
           <FormGroupField>
@@ -78,12 +84,12 @@ const LogInForm = ({
 );
 
 LogInForm.propTypes = {
-error: PropTypes.string,
-onSubmit: PropTypes.func.isRequired,  
+  errorMessage: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,  
 };
 
 LogInForm.defaultProps = {
-  error: '',
+  errorMessage: '',
 };
 
 export default LogInForm;

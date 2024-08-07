@@ -56,9 +56,6 @@ const validateConfirmPassword = (value, allValues) => {
   return undefined;
 };
 
-
-
-
 const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
   <Form onSubmit={onSubmit}>
     {({ handleSubmit }) => (
@@ -69,6 +66,11 @@ const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
         >
           {errorMessage}
         </Alert>
+        {errorMessage.form && (
+          <Alert className="w-100" variant="danger">
+            {errorMessage.form}
+          </Alert>
+        )}
         <FormGroup>
           <FormGroupLabel>Username</FormGroupLabel>
           <FormGroupField>
@@ -118,7 +120,7 @@ const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
           <FormGroupLabel>Repeat password</FormGroupLabel>
           <FormGroupField>
             <Field
-              name="cPassword"
+              name="password_confirmation"
               component={PasswordField}
               placeholder="Repeat password"
               className="input-without-border-radius"
@@ -132,7 +134,6 @@ const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
           <AccountButton 
             type="submit" 
             variant="success" 
-            onClick={(event) => { onSubmit(event); }}
           >
             Sign Up
           </AccountButton>
@@ -144,7 +145,11 @@ const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string,
+  // errorMessage: PropTypes.string,
+  errorMessage: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   showNotification: PropTypes.func.isRequired,
 };
 
