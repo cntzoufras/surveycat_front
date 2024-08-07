@@ -3,7 +3,7 @@ volumes:
   react_node_modules:
 services:
   react:
-    image: node:20
+    image: node:14
     working_dir: /surveycat
     ports:
       - "3000:3000"
