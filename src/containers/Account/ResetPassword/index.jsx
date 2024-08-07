@@ -30,7 +30,7 @@ const ResetPassword = props => (
           onSubmit={showResults}
         />
         <AccountHaveAccount>
-          <p>Remember your password?  <NavLink to="/log_in">Login</NavLink></p>
+          <p>Remember your password?  <NavLink to="/login">Login</NavLink></p>
         </AccountHaveAccount>
       </AccountCard>
     </AccountContent>
