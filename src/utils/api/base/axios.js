@@ -1,16 +1,20 @@
 import axios from 'axios';
-import { getToken } from '../../helpers';
 
 require('dotenv');
 
 export const apiUrl = process.env.REACT_APP_API_URL;
-export const coinmarketcapApiUrl = process.env.REACT_APP_COINMARTCAP_API_URL || 'https://sandbox-api.coinmarketcap.com';
 
 export const defaultParams = () => ({
   headers: { 
+  'Content-Type': 'application/json',
   Accept: 'application/json',
-  'X-CMC_PRO_API_KEY': process.env.COINMARKETCAP_API_KEY,
+  
   },
 });
 
-export default axios;
+const axiosInstance = axios.create({
+  baseURL: apiUrl,
+  headers: defaultParams().headers,
+});
+
+export default axiosInstance;
