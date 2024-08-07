@@ -153,8 +153,8 @@ const NotificationMessageWrap = styled.div`
 `;
 
 const NotificationContent = styled.div`
-  max-width: 400px;
-  width: calc(100% - 50px);
+  max-width: 200px;
+  width: calc(100% - 160px);
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
   background: ${props => getColor(props.color || props.theme)};
   position: relative;
@@ -162,7 +162,7 @@ const NotificationContent = styled.div`
   display: flex;
 
   ${props => props.fullWidth && `
-    max-width: 100vw;
+    max-width: 15vw;
     width: 100vw;
     margin: 0;
     padding: 20px 40px 20px 25px;
