@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LogInForm from '@/shared/components/account/loginForm/LogInForm';
 import { handleLogin as reduxHandleLogin, handleAuthError } from '@/redux/actions/authActions';
 import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
@@ -22,7 +22,7 @@ const LogIn = ({ error }) => {
   const [showModal, setShowModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const authError = useSelector((state) => state.user.error);
   
   const handleShowNotification = (message, color) => {
@@ -37,12 +37,15 @@ const LogIn = ({ error }) => {
     try {
       const response = await dispatch(reduxHandleLogin(credentials));
 
-      if (response.payload && response.payload.token) {
+      // Check if loggedIn is true in localStorage
+      const authData = JSON.parse(localStorage.getItem('auth'));
+      
+      if (authData && authData.loggedIn) {
         setShowModal(true);
         handleShowNotification('Logged in', 'success')
         setTimeout(() => {
-          history.push('/online_dashboard');
-        }, 2000);
+          navigate('/app_dashboard');
+        }, 1200);
       } else {
         throw new Error('Login failed. Check credentials and try again');
       }
