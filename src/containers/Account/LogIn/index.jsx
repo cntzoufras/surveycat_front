@@ -23,7 +23,7 @@ const LogIn = ({ error }) => {
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authError = useSelector((state) => state.user.error);
+  const authError = useSelector((state) => state.auth.error);
   
   const handleShowNotification = (message, color) => {
     setNotification({ show: true, message, color });
@@ -31,16 +31,18 @@ const LogIn = ({ error }) => {
 
   const onSubmit = async (values) => {
     console.log('onSubmit called with values:', values);
-    event.preventDefault(); // Prevent default form submission
+    // event.preventDefault(); // Prevent default form submission
     
     const credentials = { email: values.email, password: values.password };
     try {
       const response = await dispatch(reduxHandleLogin(credentials));
 
-      // Check if loggedIn is true in localStorage
-      const authData = JSON.parse(localStorage.getItem('auth'));
+      // Check if loggedIn is true in sessionStorage
+      const authData = JSON.parse(sessionStorage.getItem('auth'));
       
       if (authData && authData.loggedIn) {
+        console.log(`authData: ${authData}`);
+
         setShowModal(true);
         handleShowNotification('Logged in', 'success')
         setTimeout(() => {
