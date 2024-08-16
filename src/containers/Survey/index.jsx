@@ -1,143 +1,49 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  Fragment,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { Col, Container, Row } from 'react-bootstrap';
-import {
-  fetchSurveyListData,
-  editSurveyElement,
-  deleteSurveyElement, addSurveyElement,
-} from './redux/actions';
-import ItemEditModal from './components/form/ItemEditModal';
-import SurveyListWrapper from './components/SurveyList';
-import SurveySidebar from './components/SurveySidebar';
-import DividerLine from './components/DividerLine';
+// SurveyApp.js
+import React from 'react';
+import styled from '@emotion/styled';
+import { Box as MuiBox, Typography as MuiTypography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';  // Import useSelector hook
 
-const Survey = () => {
-  const { t } = useTranslation('common');
-  const [currentEditItem, setCurrentEditItem] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [filterByPriority, setFilterByPriority] = useState('');
-  const [prevSurveyElements, setPrevSurveyElements] = useState(null);
+import SurveyForm from './components/SurveyForm';
+import SurveyPageLoader from './components/SurveyPageLoader';
 
-  const {
-    theme, surveyElements, isFetching,
-  } = useSelector(state => ({
-    surveyElements: state.survey && state.survey.data && state.survey.data.elements
-      && state.survey.data.elements.length > 0 ? [...state.survey.data.elements] : [],
-    isFetching: state.survey && state.survey.isFetching,
-    theme: state.theme,
-    
-  }));
-  
-  const dispatch = useDispatch();
+const StyledBox = styled(MuiBox)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+`;
 
-  const editSurveyElementAction = (data) => {
-    dispatch(editSurveyElement(data));
-  };
-  
-  const addSurveyElementAction = (data) => {
-    dispatch(addSurveyElement(data));
-  };
-  
-  const deleteSurveyElementAction = (id) => {
-    dispatch(deleteSurveyElement(id));
-  };
+const StyledTypography = styled(MuiTypography)`
+  margin-bottom: 1rem;
+`;
 
-  useEffect(() => {
-    if (JSON.stringify(surveyElements) !== JSON.stringify(prevSurveyElements)) {
-      if (surveyElements.length === 0 && prevSurveyElements === null) { // You can delete it if you need
-        dispatch(fetchSurveyListData());
-      }
-      setPrevSurveyElements([...surveyElements]);
-    }
-  }, [prevSurveyElements, surveyElements, filterByPriority, dispatch]);
+const SurveyPageWrapper = () => {
+  const { surveyId, surveyPageId } = useParams();
 
-  const changeShowEditModal = (data) => {
-    setShowEditModal(!showEditModal);
-    setCurrentEditItem(data);
-  };
-
-  const filteringByPriority = (priority) => {
-    setFilterByPriority(priority);
-  };
-
-  const incompleteSurveyElements = useMemo(() => {
-    const surveys = surveyElements.filter(item => !item.data.isArchived && !item.data.isCompleted);
-    if (filterByPriority !== '') {
-      return surveys.filter(item => item.data.priority === filterByPriority);
-    }
-    return surveys;
-  }, [surveyElements, filterByPriority]);
-
-  const completedSurveyElements = useMemo(() => {
-    const surveys = surveyElements.filter(item => !item.data.isArchived && item.data.isCompleted);
-    if (filterByPriority !== '') {
-      return surveys.filter(item => item.data.priority === filterByPriority);
-    }
-    return surveys;
-  }, [surveyElements, filterByPriority]);
-
-  const archivedSurveyElements = useMemo(() => surveyElements.filter(item => item.data.isArchived), [surveyElements]);
+  const { user, error, loggedIn } = useSelector((state) => state.auth);
+  const user_id = user?.id;
 
   return (
-    <Container>
-      <Row>
-        <Col md={12}>
-          <h3 className="page-title">{t('todo_application.page_title')}</h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={9} xl={10}>
-          <Fragment>
-            <DividerLine title="Active" />
-            <SurveyListWrapper
-              surveyElements={incompleteSurveyElements}
-              changeShowEditModal={changeShowEditModal}
-              editSurveyElementAction={editSurveyElementAction}
-              isFetching={isFetching}
-            />
-            <DividerLine title="Done" />
-            <SurveyListWrapper
-              surveyElements={completedSurveyElements}
-              changeShowEditModal={changeShowEditModal}
-              editSurveyElementAction={editSurveyElementAction}
-              isFetching={isFetching}
-            />
-            <div>
-              <DividerLine title="Archived" />
-              <SurveyListWrapper
-                isArchived
-                surveyElements={archivedSurveyElements}
-                editSurveyElementAction={editSurveyElementAction}
-                deleteSurveyElementAction={deleteSurveyElementAction}
-                isFetching={isFetching}
-              />
-            </div>
-          </Fragment>
-        </Col>
-        <Col md={3} xl={2}>
-          <SurveySidebar
-            changeShowEditModal={changeShowEditModal}
-            filterByPriority={filteringByPriority}
-          />
-        </Col>
-        <ItemEditModal
-          theme={theme}
-          showEditModal={showEditModal}
-          currentEditItem={currentEditItem && currentEditItem.data}
-          changeShowEditModal={changeShowEditModal}
-          surveyElements={surveyElements}
-          addSurveyElementAction={addSurveyElementAction}
-          editSurveyElementAction={editSurveyElementAction}
-        />
-      </Row>
-    </Container>
+    <StyledBox>
+      <StyledTypography variant="h3" component="h1" gutterBottom>
+        Survey Design
+      </StyledTypography>
+      {!surveyId && !surveyPageId && <SurveyForm user_id={user_id}/>}
+      {surveyId && surveyPageId && (
+        <SurveyPageLoader surveyId={surveyId} surveyPageId={surveyPageId} />
+      )}
+    </StyledBox>
   );
 };
 
-export default Survey;
+const SurveyDesign = () => {
+  return (
+    <div>
+      <SurveyPageWrapper/>
+    </div>
+  );
+};
+
+export default SurveyDesign;
