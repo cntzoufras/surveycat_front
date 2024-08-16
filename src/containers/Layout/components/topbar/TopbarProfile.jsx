@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { logout as logoutAuth0 } from '@/shared/components/account/auth/withAuth0';
+// import { logout as logoutAuth0 } from '@/shared/components/account/auth/withAuth0';
+import { handleLogout } from '@/redux/actions/authActions.js';
 import {
  colorBackground, colorHover, colorText, colorBorder, 
 } from '@/utils/palette';
@@ -14,15 +15,20 @@ const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
 const TopbarProfile = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const user = useSelector(state => state.user);
+  // const user = useSelector(state => state.user);
+  const { user } = useSelector((state) => state.auth);
+  
+  const username = user?.username;
+  
+  const dispatch = useDispatch(); // Use the useDispatch hook
 
   const toggleProfile = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const logout = () => {
-    localStorage.removeItem('surveycat');
-    logoutAuth0();
+  const logout = async () => {
+    console.log('clicked logout');
+    await dispatch(handleLogout());
   };
 
   return (
@@ -33,7 +39,7 @@ const TopbarProfile = () => {
           alt="avatar"
         />
         <TopbarAvatarName>
-          {user && user.fullName}
+          {user && username}
         </TopbarAvatarName>
         <TopbarDownIcon />
       </TopbarAvatarButton>
@@ -69,7 +75,7 @@ const TopbarProfile = () => {
             <TopbarMenuLink
               title="Log Out"
               icon="exit"
-              path="/log_in"
+              path="/logout"
               onClick={logout}
             />
           </TopbarMenu>
