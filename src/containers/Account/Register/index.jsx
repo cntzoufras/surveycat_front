@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router';
 import RegisterForm from '@/shared/components/account/login_register/LoginRegisterForm';
 import {
   AccountCard,
@@ -14,23 +13,19 @@ import {
   AccountTitle,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
-import Modal from '@/shared/components/Modal';
 import { handleRegister as reduxHandleRegister, handleAuthError } from '@/redux/actions/authActions';
 import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
 
-
-
 const Register = ({ history, handleError, error }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
+  const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const [errors, setErrors] = useState({});
-
+  
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleShowNotification = (message, color) => {
-    console.log('Showing notification:', message, color); // Add this line
+    console.log('Showing notification:', message, color);
     setNotification({ show: true, message, color });
   };
     
@@ -43,8 +38,8 @@ const Register = ({ history, handleError, error }) => {
       if (response && response.status === 201) {
         handleShowNotification('Registration successful. Please check your email to verify before login.', 'success');
         setTimeout(() => {
-          history.push('/login');
-        }, 10000);
+          navigate('/login');
+        }, 5000);
       } else {
         handleShowNotification('Registration failed. Please try again.', 'danger');
       }
@@ -94,4 +89,4 @@ Register.propTypes = {
   error: PropTypes.string.isRequired,
 };
 
-export default withRouter(Register);
+export default Register;
