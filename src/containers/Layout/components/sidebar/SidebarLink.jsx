@@ -25,7 +25,7 @@ const SidebarLink = ({
     <SidebarNavLink
       to={route}
       onClick={onClick}
-      activeClassName="active"
+      className={({ isActive }) => (isActive ? 'active' : '')}
     >
       {icon ? <SidebarLinkIcon className={`lnr lnr-${icon}`} /> : ''}
       <SidebarLinkTitle>
