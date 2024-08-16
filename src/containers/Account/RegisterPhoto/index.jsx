@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import { withRouter } from 'react-router';
+import { NavLink, useNavigate } from 'react-router-dom';
 import RegisterForm from '@/shared/components/account/login_register/LoginRegisterForm';
 import {
   AccountCard,
@@ -16,16 +15,6 @@ import {
 
 const RegisterPhoto = ({ history }) => {
   const [error, setError] = useState('');
-
-  // const registerFireBase = (user) => {
-  //   createUserWithEmailAndPassword(getAuth(), user.email, user.password)
-  //     .then(() => {
-  //       history.push('/log_in');
-  //     })
-  //     .catch((err) => {
-  //       setError(err.message);
-  //     });
-  // };
 
   return (
     <AccountPhoto>
@@ -56,4 +45,4 @@ RegisterPhoto.propTypes = {
   }).isRequired,
 };
 
-export default withRouter(RegisterPhoto);
+export default RegisterPhoto;
