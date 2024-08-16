@@ -14,7 +14,15 @@ import {
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
 import todoReducer from '../Todo/redux/reducer';
-import surveyReducer from '../Survey/redux/reducer';
+
+const authFromSession = JSON.parse(sessionStorage.getItem('auth')) || { loggedIn: false, user: null };
+
+const initialAuthState = {
+  error: null,
+  loggedIn: authFromSession.loggedIn,
+  user: authFromSession.user
+}
+
 
 const reducer = combineReducers({
   theme: themeReducer,
@@ -25,10 +33,9 @@ const reducer = combineReducers({
   customizer: customizerReducer,
   newOrder: newOrderTableReducer,
   sidebar: sidebarReducer,
-  user: authReducer,
+  auth: (state = initialAuthState, action) => authReducer(state, action),
   covid: covidReducer,
   todo: todoReducer,
-  survey: surveyReducer,
   pokemon: pokemonReducer,
 });
 const store = createStore(reducer, applyMiddleware(thunk));
