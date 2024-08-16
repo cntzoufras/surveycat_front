@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { Provider, useSelector } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider, CssBaseline } from '@mui/material/styles';
+import { createTheme as createMaterialTheme, ThemeProvider as MaterialV4ThemeProvider } from '@material-ui/core/styles';
 import { LoadScript } from '@react-google-maps/api';
-import initAuth0 from '@/shared/components/account/auth/withAuth0';
 import initAuthSanctum from '@/shared/components/account/auth/withAuthSanctum';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
@@ -33,31 +33,39 @@ const ThemeComponent = ({ children }) => {
     shadow: state.shadow.className,
     border: state.border.className,
   }));
+  
+  const muiV5Theme = createMuiTheme({
+    palette: {
+      mode,
+    },
+  });
 
-  const theme = createTheme({
+  const materialV4Theme = createMaterialTheme({
     palette: {
       type: mode,
     },
   });
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <ThemeProvider
-        theme={{
-          mode,
-          direction,
-          shadow,
-          border,
-        }}
-      >
+    <MuiV5ThemeProvider theme={muiV5Theme}>
+      <MaterialV4ThemeProvider theme={materialV4Theme}>
+        <StyledThemeProvider
+          theme={{
+            mode,
+            direction,
+            shadow,
+            border,
+          }}
+        >
         <GlobalStyles />
         <NotificationStyles />
         <RechartStyles />
         <TimepickerStyles />
         <CalendarStyles />
         {children}
-      </ThemeProvider>
-    </MuiThemeProvider>
+        </StyledThemeProvider>
+      </MaterialV4ThemeProvider>
+    </MuiV5ThemeProvider>
   );
 };
 
