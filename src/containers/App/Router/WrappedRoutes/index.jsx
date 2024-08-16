@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import { colorBackgroundBody } from '@/utils/palette';
 import { paddingLeft } from '@/utils/directions';
@@ -10,32 +10,61 @@ import AppDashboard from '../../../Dashboards/App/index';
 import BookingDashboard from '../../../Dashboards/Booking/index';
 import FitnessDashboard from '../../../Dashboards/Fitness/index';
 import Todo from '../../../Todo/index';
-import Survey from '../../../Survey/index';
+import SurveyDesign from '../../../Survey/index';
 import Tables from './Tables';
 import Charts from './Charts';
 import Account from './Account';
 import DefaultPages from './DefaultPages';
 import Documentation from './Documentation';
+import ChartsJS from '@/containers/Charts/ChartJs';
+import ReactVis from '@/containers/Charts/ReactVis';
+import Recharts from '@/containers/Charts/Recharts';
+import Amcharts from '@/containers/Charts/Amcharts';
+import BasicTables from '../../../Tables/BasicTables/index';
+import DataTable from '../../../Tables/DataTable/index';
+import DragAndDropTable from '../../../Tables/DnDTable/index';
+import EditableTable from '../../../Tables/EditableTable/index';
+import ResizableTable from '../../../Tables/ResizableTable';
+import MaterialTable from '../../../Tables/MaterialTable/index';
+import ApiTable from '../../../Tables/ApiTable';
 
-export default () => (
+const WrappedRoutes = () => (
   <div>
     <Layout />
     <ContainerWrap>
-      <Route path="/e_commerce_dashboard" component={Commerce} />
-      <Route path="/online_marketing_dashboard" component={OnLineMarketingDashboard} />
-      <Route exact path="/app_dashboard" component={AppDashboard} />
-      <Route path="/booking_dashboard" component={BookingDashboard} />
-      <Route path="/fitness_dashboard" component={FitnessDashboard} />
-      <Route path="/todo" component={Todo} />
-      <Route path="/survey-design" component={Survey} />
-      <Route path="/tables" component={Tables} />
-      <Route path="/charts" component={Charts} />
-      <Route path="/account" component={Account} />
-      <Route path="/default_pages" component={DefaultPages} />
-      <Route path="/documentation" component={Documentation} />
+      <Routes>
+        <Route path="/e_commerce_dashboard" element={<Commerce/>} />
+        <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard/>} />
+        <Route exact path="/app_dashboard" element={<AppDashboard/>} />
+        <Route path="/booking_dashboard" element={<BookingDashboard/>} />
+        <Route path="/fitness_dashboard" element={<FitnessDashboard/>} />
+        <Route path="/todo" element={<Todo/>} />
+        <Route path="/survey-design" element={<SurveyDesign/>} />
+        <Route path="/survey/:surveyId/survey-pages/:surveyPageId" element={<SurveyDesign />} />  
+        <Route path="/charts/*" element={<Charts />}>
+          <Route path="charts_js" element={<ChartsJS />} />
+          <Route path="react_vis" element={<ReactVis />} />
+          <Route path="recharts" element={<Recharts />} />
+          <Route path="amcharts" element={<Amcharts />} />
+        </Route>
+        <Route path="/account" element={<Account/>} />
+        <Route path="/default_pages" element={<DefaultPages/>} />
+        <Route path="/tables/*" element={<Tables/>}>
+          <Route path="basic_tables" element={<BasicTables />} />
+          <Route path="data_table" element={<DataTable />} />
+          <Route path="dnd_table" element={<DragAndDropTable />} />
+          <Route path="editable_table" element={<EditableTable />} />
+          <Route path="resizable_table" element={<ResizableTable />} />
+          <Route path="material_table" element={<MaterialTable />} />
+          <Route path="api_table" element={<ApiTable />} />
+        </Route>
+        <Route path="/documentation" element={<Documentation/>} />
+      </Routes>
     </ContainerWrap>
   </div>
 );
+
+export default WrappedRoutes;
 
 // region STYLES
 

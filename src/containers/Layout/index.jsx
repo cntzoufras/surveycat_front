@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { paddingLeft } from '@/utils/directions';
@@ -46,7 +45,7 @@ const Layout = () => {
   const changeToLight = () => {
     dispatch(changeThemeToLight());
   };
-  
+
   return (
     <LayoutContainer
       collapse={sidebar.collapse}
@@ -78,8 +77,7 @@ const Layout = () => {
   );
 };
 
-
-export default withRouter(Layout);
+export default Layout;
 
 // region STYLES
 

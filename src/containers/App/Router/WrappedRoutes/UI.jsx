@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Alerts from '../../../UI/Alerts/index';
 import Buttons from '../../../UI/Buttons/index';
 import Carousel from '../../../UI/Carousel/index';
@@ -17,21 +17,21 @@ import Typography from '../../../UI/Typography/index';
 import Datepicker from '../../../UI/Datepickers';
 
 export default () => (
-  <Switch>
-    <Route path="/ui/alerts" component={Alerts} />
-    <Route path="/ui/buttons" component={Buttons} />
-    <Route path="/ui/carousel" component={Carousel} />
-    <Route path="/ui/collapse" component={Collapse} />
-    <Route path="/ui/datepicker" component={Datepicker} />
-    <Route path="/ui/grids" component={Grids} />
-    <Route path="/ui/modals" component={Modals} />
-    <Route path="/ui/notifications" component={Notifications} />
-    <Route path="/ui/panels" component={Panels} />
-    <Route path="/ui/progress_bars" component={ProgressBars} />
-    <Route path="/ui/range_sliders" component={RangeSliders} />
-    <Route path="/ui/tabs" component={Tabs} />
-    <Route path="/ui/timeline" component={Timeline} />
-    <Route path="/ui/tooltips" component={Tooltips} />
-    <Route path="/ui/typography" component={Typography} />
-  </Switch>
+  <Routes>
+    <Route path="/ui/alerts" element={<Alerts/>} />
+    <Route path="/ui/buttons" element={<Buttons/>} />
+    <Route path="/ui/carousel" element={<Carousel/>} />
+    <Route path="/ui/collapse" element={<Collapse/>} />
+    <Route path="/ui/datepicker" element={<Datepicker/>} />
+    <Route path="/ui/grids" element={<Grids/>} />
+    <Route path="/ui/modals" element={<Modals/>} />
+    <Route path="/ui/notifications" element={<Notifications/>} />
+    <Route path="/ui/panels" element={<Panels/>} />
+    <Route path="/ui/progress_bars" element={<ProgressBars/>} />
+    <Route path="/ui/range_sliders" element={<RangeSliders/>} />
+    <Route path="/ui/tabs" element={<Tabs/>} />
+    <Route path="/ui/timeline" element={<Timeline/>} />
+    <Route path="/ui/tooltips" element={<Tooltips/>} />
+    <Route path="/ui/typography" element={<Typography/>} />
+  </Routes>
 );

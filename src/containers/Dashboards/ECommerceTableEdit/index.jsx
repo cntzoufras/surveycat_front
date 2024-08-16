@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { useNavigate, useParams, Navigate } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import { changeNewOrderTableData, loadNewOrderTableData } from '@/redux/actions/newOrderTableActions';
 import NewOrderEditForm from './components/NewOrderEditForm';
 
-const ECommerceDashboardEdit = ({ match }) => {
+const ECommerceDashboardEdit = () => {
   const [isRedirect, setIsRedirect] = useState(false);
-
+  const { index } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadNewOrderTableData(match.params.index));
-  }, [dispatch, match.params.index]);
+    dispatch(loadNewOrderTableData(index));
+  }, [dispatch, index]);
 
   const handleSubmit = (formValues) => {
-    dispatch(changeNewOrderTableData(formValues, match.params.index));
+    dispatch(changeNewOrderTableData(formValues, index));
     setIsRedirect(true);
   };
 
   if (isRedirect) {
-    return <Redirect to="/e_commerce_dashboard" />;
+    return <Navigate to="/e_commerce_dashboard" />;
   }
 
   return (

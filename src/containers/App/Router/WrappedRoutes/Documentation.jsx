@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Introduction from '../../../Documentation/01_introduction/index';
 import Installation from '../../../Documentation/02_installation/index';
 import FileStructure from '../../../Documentation/03_files_structure/index';
@@ -12,16 +12,16 @@ import Changelog from '../../../Documentation/11_changelog/index';
 import FAQ from '../../../Documentation/12_faq/index';
 
 export default () => (
-  <Switch>
-    <Route path="/documentation/introduction" component={Introduction} />
-    <Route path="/documentation/installation" component={Installation} />
-    <Route path="/documentation/file_structure" component={FileStructure} />
-    <Route path="/documentation/components" component={Components} />
-    <Route path="/documentation/form" component={Form} />
-    <Route path="/documentation/color_themes" component={ColorThemes} />
-    <Route path="/documentation/navigation_item" component={NavigationItem} />
-    <Route path="/documentation/resources" component={Resources} />
-    <Route path="/documentation/changelog" component={Changelog} />
-    <Route path="/documentation/faq" component={FAQ} />
-  </Switch>
+  <Routes>
+    <Route path="/documentation/introduction" element={<Introduction />} />
+    <Route path="/documentation/installation" element={<Installation />} />
+    <Route path="/documentation/file_structure" element={<FileStructure />} />
+    <Route path="/documentation/components" element={<Components />} />
+    <Route path="/documentation/form" element={<Form />} />
+    <Route path="/documentation/color_themes" element={<ColorThemes />} />
+    <Route path="/documentation/navigation_item" element={<NavigationItem />} />
+    <Route path="/documentation/resources" element={<Resources />} />
+    <Route path="/documentation/changelog" element={<Changelog />} />
+    <Route path="/documentation/faq" element={<FAQ />} />
+  </Routes>
 );

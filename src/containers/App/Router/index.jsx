@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import MainWrapper from '../MainWrapper';
 import NotFound404 from '../../DefaultPage/404/index';
 import LockScreen from '../../Account/LockScreen/index';
@@ -8,26 +8,27 @@ import Register from '../../Account/Register/index';
 import RegisterPhoto from '../../Account/RegisterPhoto/index';
 import ResetPassword from '../../Account/ResetPassword/index';
 import ResetPasswordPhoto from '../../Account/ResetPasswordPhoto';
-import WrappedRoutes from './WrappedRoutes';
 import Todo from '../../Todo';
 import Survey from '../../Survey';
+import WrappedRoutes from './WrappedRoutes';
 
 const Router = () => (
   <MainWrapper>
     <main>
-      <Switch>
-        <Route exact path="/" component={LogIn} />
-        <Route path="/404" component={NotFound404} />
-        <Route path="/lock_screen" component={LockScreen} />
-        <Route path="/login" component={LogIn} />
-        <Route exact path="/auth/register" component={Register} />
-        <Route path="/register_photo" component={RegisterPhoto} />
-        <Route path="/reset_password" component={ResetPassword} />
-        <Route path="/reset_password_photo" component={ResetPasswordPhoto} />
-        <Route path="/" component={WrappedRoutes} />
-        <Route exact path="/todo" component={Todo} />
-        <Route exact path="/survey" component={Survey} />
-      </Switch>
+      <Routes>
+        <Route path="/" element={<LogIn />} />
+        <Route path="/404" element={<NotFound404 />} />
+        <Route path="/lock_screen" element={<LockScreen />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route exact path="/auth/register" element={<Register />} />
+        <Route path="/register_photo" element={<RegisterPhoto />} />
+        <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/reset_password_photo" element={<ResetPasswordPhoto />} />
+        <Route path="/" element={<WrappedRoutes />} />
+        <Route exact path="/todo" element={<Todo />} />
+        <Route exact path="/survey" element={<Survey />} />
+        <Route path="/*" element={<WrappedRoutes />} />
+      </Routes>
     </main>
   </MainWrapper>
 );
