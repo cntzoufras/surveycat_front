@@ -12,7 +12,7 @@ const SidebarContent = ({
   <SidebarContentWrap collapse={collapse}>
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Survey" icon="map" collapse={collapse}>
-        <SidebarLink title="Create" route="/survey" icon="pencil" onClick={onClick} />
+        <SidebarLink title="Create" route="/survey-design" icon="pencil" onClick={onClick} />
         <SidebarLink title="List" route="/surveys" icon="database" />
         <SidebarLink title="Survey Themes" route="/themes" icon="picture" />
       </SidebarCategory>
