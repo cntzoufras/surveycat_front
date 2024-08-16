@@ -4,54 +4,39 @@ import {
   AUTHENTICATE_LOGIN, 
   AUTHENTICATE_LOGOUT, 
   AUTHENTICATE_REGISTER, 
-  AUTHENTICATE_REGISTER_ERROR, handleLogin
+  AUTHENTICATE_REGISTER_ERROR
 } from '../actions/authActions';
 
 const initialState = {
-  fullName: '',
-  avatar: '',
-};
+  loggedIn: false,
+  user: null,   // To store the user object including user_id, fullName, etc.
+  error: null,
 
-// const authReducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case AUTHENTICATE:
-//       return { fullName: action.user.name, avatar: action.user.avatar };
-//     case AUTHENTICATE_ERROR_AUTH:
-//       return { error: action.error };
-//     default:
-//       return state;
-//   }
-// };
+};
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
-      return {
+      return { 
         ...state,
         loggedIn: true,
-        firstname: action.payload.firstname,
-        avatar: action.payload.avatar,
-        token: action.payload.token,
+        user: action.payload.user,  // Store the entire user object in the state
         error: null,
+      };
+    case AUTHENTICATE_LOGOUT:
+      return {
+        ...initialState,  // Reset to the initial state
       };
     case AUTHENTICATE_ERROR_AUTH:
       return {
         ...state,
         error: action.error,
+        loggedIn: false,
+        user: null,
       };
-    case AUTHENTICATE_LOGOUT:
-      // return {
-      //   ...state,
-      //   loggedIn: false,
-      //   fullName: '',
-      //   avatar: '',
-      //   token: null,
-      // };
-      return { ...initialState };
     default:
       return state;
   }
 };
-
 
 export default authReducer;

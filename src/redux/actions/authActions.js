@@ -10,14 +10,14 @@ export const AUTHENTICATE_REGISTER_ERROR = 'AUTHENTICATE_REGISTER_ERROR';
 export function auth({ name, avatar, token }) {
   return {
     type: AUTHENTICATE,
-    payload: { token },
+    payload: { user },
   };
 }
 
-export function login({  token }) {
+export function login({  user }) {
   return {
     type: AUTHENTICATE_LOGIN,
-    payload: { token },
+    payload: { user },
   };
 }
 
@@ -34,7 +34,7 @@ export function logout() {
 
 export const handleLogout = () => async (dispatch) => {
   try {
-    const auth = JSON.parse(localStorage.getItem('auth'));
+    const auth = JSON.parse(sessionStorage.getItem('auth'));
     console.log('auth:', auth);
     const token = auth ? auth.token : null;
 
@@ -46,14 +46,13 @@ export const handleLogout = () => async (dispatch) => {
       headers: {
         'Content-Type': 'application/json',
         'Accept':'application/json',
-        'Authorization': `Bearer ${token}`,
       },
       withCredentials: true,
       withXSRFToken:true
     });
 
     dispatch(logout());
-    localStorage.removeItem('auth');
+    sessionStorage.removeItem('auth');
   } catch (error) {
     console.error('Logout failed:', error);
   }
@@ -72,22 +71,22 @@ export const handleLogin = credentials => async (dispatch) => {
       withXSRFToken:true
     });
     
-    const { token } = response.data;
-    console.log('Login token: ', token);
-    dispatch(login({ token }));
-    
-    localStorage.setItem('auth', JSON.stringify({
-      loggedIn: true,
-      token,
-    }));
-    
-    // Return the response to handle in the component
-    return { payload: { token } };
+    const user = response.data.user;
+    console.log('Dispatching AUTHENTICATE_LOGIN with user:', user);
+
+    dispatch({
+      type: 'AUTHENTICATE_LOGIN',
+      payload: { user },
+    });
+
+    sessionStorage.setItem('auth', JSON.stringify({ loggedIn: true, user }));
+    console.log('Login successful: ', user)
   } catch (error) {
-    console.error('Login failed:', error);
-    dispatch(handleAuthError('Login failed. Check your credentials &  please try again.'));
-    throw error;
-  }
+    dispatch({
+      type: AUTHENTICATE_ERROR_AUTH,
+      error: 'Login failed. Please check your credentials.',
+    });
+  };
 };
 
 export const handleAuthError = error => (dispatch) => {
@@ -97,23 +96,28 @@ export const handleAuthError = error => (dispatch) => {
 export const handleRegister = ({
  username, email, password, password_confirmation,
  }) => async (dispatch) => {
+ 
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`);
+    
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
       username,
       email,
       password,
       password_confirmation,
     }, {
-
         headers: {
             Accept: 'application/json',
+            'Content-Type': 'application/json',
+            
         },
+        // withCredentials: true, // Ensure cookies are sent,
+        withXSRFToken:true
     });
 
-    const { token } = response.data;
-    console.log(token)
-    dispatch(registerSuccess(token));
+    // const { token } = response.data;
+    // console.log(token)
+    // dispatch(registerSuccess(token));
     return response;
   } catch (error) {
     console.error('Registration failed:', error);
