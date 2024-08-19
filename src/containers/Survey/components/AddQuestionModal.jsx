@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Modal, Button, Form } from 'react-bootstrap';
 import OptionInputList from './OptionInputList';
 
-function AddQuestionModal({ isOpen, onClose, onSubmit, validationErrors = {} }) {
+const  AddQuestionModal = ({ isOpen, onClose, onSubmit, validationErrors = {} }) => {
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
   const [questionType, setQuestionType] = useState('textarea');
@@ -10,39 +12,28 @@ function AddQuestionModal({ isOpen, onClose, onSubmit, validationErrors = {} }) 
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestionTags, setSelectedQuestionTags] = useState([]);
 
-  const handleQuestionInputChange = (e) => {
-    setNewQuestion(e.target.value);
-  };
-
-  const handleSurveyPageInputChange = (e) => {
-    setSurveyPage(e.target.value);
-  };
-
+  const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
+  const handleSurveyPageInputChange = (e) => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
     setQuestionType(e.target.value);
-
-    // Reset options if question type changes
     if (e.target.value !== 'radio' && e.target.value !== 'checkbox') {
       setNumOptions(0);
       setOptionInputs([]);
       setSelectedOptions([]);
-    } else if (e.target.value === 'radio' || e.target.value === 'checkbox') {
-      setNumOptions(2); // Reset to 2 options for radio/checkbox
-      setOptionInputs(['', '']); // Reset option inputs
+    } else {
+      setNumOptions(2);
+      setOptionInputs(['', '']);
     }
   };
 
   const handleNumOptionsChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    const newNumOptions = value > 0 ? value : 1;
-    setNumOptions(newNumOptions);
-
-    // Update optionInputs based on numOptions change
+    setNumOptions(value > 0 ? value : 1);
     const updatedOptionInputs = [...optionInputs];
-    while (updatedOptionInputs.length < newNumOptions) {
+    while (updatedOptionInputs.length < value) {
       updatedOptionInputs.push('');
     }
-    setOptionInputs(updatedOptionInputs.slice(0, newNumOptions));
+    setOptionInputs(updatedOptionInputs.slice(0, value));
   };
 
   const handleOptionInputChange = (e, index) => {
@@ -51,7 +42,7 @@ function AddQuestionModal({ isOpen, onClose, onSubmit, validationErrors = {} }) 
     setOptionInputs(updatedInputs);
   };
 
-  const handleNewQuestionOptionSelection  = (e, option) => {
+  const handleNewQuestionOptionSelection = (e, option) => {
     const selectedOptionsSet = new Set(selectedOptions);
     if (selectedOptionsSet.has(option)) {
       selectedOptionsSet.delete(option);
@@ -63,93 +54,116 @@ function AddQuestionModal({ isOpen, onClose, onSubmit, validationErrors = {} }) 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const questionData = {
       title: newQuestion,
+      is_required: isRequired,
       surveyPage,
-      type: questionType,
+      question_type_id: questionType,
       options: (questionType === 'radio' || questionType === 'checkbox')
-        ? optionInputs.slice(0, numOptions).filter(Boolean) // Filter out empty options
+        ? optionInputs.slice(0, numOptions).filter(Boolean)
         : [],
       selectedOptions,
       question_tags: selectedQuestionTags,
-      is_required: false, // FIX
-      question_type_id: 2, // FIX
+      is_required: false,
+      question_type_id: 2,
       survey_page_id: 1,
-      additional_settings: { color: 'blue',  align: "center",
-        font_style: "bold",
-        font_family:"Calibri",
-        font_size:"4"}
+      additional_settings: {
+        color: 'blue',
+        align: 'center',
+        font_style: 'bold',
+        font_family: 'Calibri',
+        font_size: '4',
+      },
     };
-
     onSubmit(questionData);
   };
-  
-return (
-    <div className={`modal ${isOpen ? 'open' : ''}`}>
-      <div className="modal-content">
-        <h3>Add Question</h3>
-        <form onSubmit={handleSubmit}> {/* Wrap the content in a form */}
-          <select value={questionType} onChange={handleQuestionTypeChange}>
-            <option value="text">Text</option>
-            <option value="radio">Radio Button</option>
-            <option value="checkbox">Checkbox</option>
-          </select>
-          <input
-            type="text"
-            value={newQuestion}
-            onChange={handleQuestionInputChange}
-            placeholder="Question"
-          />
-          <input
-            type="text"
-            value={surveyPage}
-            onChange={handleSurveyPageInputChange}
-            placeholder="Survey Page"
-          />
 
-          {/* Conditional rendering of options input based on question type */}
-          {(questionType === 'radio' || questionType === 'checkbox') && (
+  return (
+    <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Add Question</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formQuestionType">
+            <Form.Label>Question Type</Form.Label>
+            <Form.Control as="select" value={questionType} onChange={handleQuestionTypeChange}>
+              <option value="text">Text</option>
+              <option value="radio">Radio Button</option>
+              <option value="checkbox">Checkbox</option>
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="formQuestionText">
+            <Form.Label>Question</Form.Label>
+            <Form.Control
+              type="text"
+              value={newQuestion}
+              onChange={handleQuestionInputChange}
+              placeholder="Enter your question"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formSurveyPage">
+            <Form.Label>Survey Page</Form.Label>
+            <Form.Control
+              type="text"
+              value={surveyPage}
+              onChange={handleSurveyPageInputChange}
+              placeholder="Survey Page"
+            />
+          </Form.Group>
+
+          {questionType === 'radio' || questionType === 'checkbox' ? (
             <div>
-              {questionType === 'radio' && (
-                <div>
-                  <label htmlFor="numOptions">Number of Options:</label>
-                  <input
-                    type="number"
-                    id="numOptions"
-                    value={numOptions}
-                    onChange={handleNumOptionsChange}
-                  />
-                </div>
-              )}
+              <Form.Group controlId="formNumOptions">
+                <Form.Label>Number of Options</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={numOptions}
+                  onChange={handleNumOptionsChange}
+                />
+              </Form.Group>
               <OptionInputList
                 questionType={questionType}
                 numOptions={numOptions}
                 optionInputs={optionInputs}
-                selectedOptions={selectedOptions}
                 handleOptionInputChange={handleOptionInputChange}
-                handleOptionSelection={handleNewQuestionOptionSelection }
               />
             </div>
-          )}
+          ) : null}
 
-          {/* Display validation errors if any */}
           {Object.keys(validationErrors).length > 0 && (
             <div className="validation-errors">
               {Object.keys(validationErrors).map((key) => (
-                <p key={key}>{validationErrors[key]}</p>
+                <p key={key} style={{ color: 'red' }}>{validationErrors[key]}</p>
               ))}
             </div>
           )}
 
-          <div>
-            <button type="submit">Submit</button> 
-            <button onClick={onClose}>Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              Add Question
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 }
+
+AddQuestionModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  validationErrors: PropTypes.object,
+};
+
+AddQuestionModal.defaultProps = {
+  validationErrors: {},
+};
 
 export default AddQuestionModal;
