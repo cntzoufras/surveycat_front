@@ -17,7 +17,6 @@ import { handleRegister as reduxHandleRegister, handleAuthError } from '@/redux/
 import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
 
 const Register = ({ history, handleError, error }) => {
-
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const [errors, setErrors] = useState({});
   
@@ -44,7 +43,7 @@ const Register = ({ history, handleError, error }) => {
         handleShowNotification('Registration failed. Please try again.', 'danger');
       }
     } catch (err) {
-      console.error('Registration error:', err)
+      console.error('Registration error:', err);
       setErrors(err.errors || { form: err.message });
       const errorMessages = err.errors ? Object.values(err.errors).flat().join(' ') : err.message;
       handleShowNotification(errorMessages || 'Registration failed. Please try again.', 'danger');
@@ -67,8 +66,7 @@ const Register = ({ history, handleError, error }) => {
             <FullWideNotification
               message={notification.message}
               color={notification.color}
-              onClose={() => setNotification({show: false, message: '', color: '',
-              })}
+              onClose={() => setNotification({ show: false, message: '', color: '' })}
             />
           )}
           <RegisterForm onSubmit={onSubmit} errorMessage={error} />

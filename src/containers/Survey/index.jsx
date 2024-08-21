@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Box as MuiBox, Typography as MuiTypography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';  // Import useSelector hook
+import { useSelector } from 'react-redux'; // Import useSelector hook
 
 import SurveyForm from './components/SurveyForm';
 import SurveyPageLoader from './components/SurveyPageLoader';
@@ -21,11 +21,11 @@ const StyledTypography = styled(MuiTypography)`
 
 const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
-  const { user, error, loggedIn } = useSelector((state) => state.auth);
+  const { user, error, loggedIn } = useSelector(state => state.auth);
   const user_id = user?.id;
   
   if (!user_id) {
-    return <div>Loading...</div>;  // Or some other fallback
+    return <div>Loading...</div>; // Or some other fallback
   }
 
   return (
@@ -33,7 +33,7 @@ const SurveyPageWrapper = () => {
       <StyledTypography variant="h3" component="h1" gutterBottom>
         Survey Design
       </StyledTypography>
-      {!surveyId && !surveyPageId && <SurveyForm user_id={user_id}/>}
+      {!surveyId && !surveyPageId && <SurveyForm user_id={user_id} />}
       {surveyId && surveyPageId && (
         <SurveyPageLoader surveyId={surveyId} surveyPageId={surveyPageId} />
       )}
@@ -41,12 +41,10 @@ const SurveyPageWrapper = () => {
   );
 };
 
-const SurveyDesign = () => {
-  return (
-    <div>
-      <SurveyPageWrapper/>
-    </div>
+const SurveyDesign = () => (
+  <div>
+    <SurveyPageWrapper />
+  </div>
   );
-};
 
 export default SurveyDesign;

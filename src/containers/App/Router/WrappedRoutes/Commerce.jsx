@@ -5,7 +5,7 @@ import ECommerceDashboardEdit from '../../../Dashboards/ECommerceTableEdit/index
 
 export default () => (
   <Routes>
-    <Route exact path="/e_commerce_dashboard" element={<ECommerceDashboard/>} />
-    <Route path="/e_commerce_dashboard/edit/:index" element={<ECommerceDashboardEdit/>} />
+    <Route exact path="/e_commerce_dashboard" element={<ECommerceDashboard />} />
+    <Route path="/e_commerce_dashboard/edit/:index" element={<ECommerceDashboardEdit />} />
   </Routes>
 );

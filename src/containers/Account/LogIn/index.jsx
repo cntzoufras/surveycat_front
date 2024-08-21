@@ -23,7 +23,7 @@ const LogIn = ({ error }) => {
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authError = useSelector((state) => state.auth.error);
+  const authError = useSelector(state => state.auth.error);
   
   const handleShowNotification = (message, color) => {
     setNotification({ show: true, message, color });
@@ -44,7 +44,7 @@ const LogIn = ({ error }) => {
         console.log(`authData: ${authData}`);
 
         setShowModal(true);
-        handleShowNotification('Logged in', 'success')
+        handleShowNotification('Logged in', 'success');
         setTimeout(() => {
           navigate('/app_dashboard');
         }, 1200);

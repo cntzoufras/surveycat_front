@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider, CssBaseline } from '@mui/material/styles';
 import { createTheme as createMaterialTheme, ThemeProvider as MaterialV4ThemeProvider } from '@material-ui/core/styles';
 import { LoadScript } from '@react-google-maps/api';
-import initAuthSanctum from '@/shared/components/account/auth/withAuthSanctum';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
 
@@ -57,12 +56,12 @@ const ThemeComponent = ({ children }) => {
             border,
           }}
         >
-        <GlobalStyles />
-        <NotificationStyles />
-        <RechartStyles />
-        <TimepickerStyles />
-        <CalendarStyles />
-        {children}
+          <GlobalStyles />
+          <NotificationStyles />
+          <RechartStyles />
+          <TimepickerStyles />
+          <CalendarStyles />
+          {children}
         </StyledThemeProvider>
       </MaterialV4ThemeProvider>
     </MuiV5ThemeProvider>
@@ -76,9 +75,9 @@ ThemeComponent.propTypes = {
 const ConnectedThemeComponent = ThemeComponent;
 
 const App = () => {
-  useEffect(() => {
-    window.addEventListener('load', initAuthSanctum);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('load', initAuthSanctum);
+  // }, []);
 
   return (
     <Provider store={store}>

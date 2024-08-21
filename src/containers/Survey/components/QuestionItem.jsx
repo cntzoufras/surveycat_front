@@ -1,6 +1,6 @@
 import React from 'react';
 
-function QuestionItem({ question, index, onDelete, onOptionSelection }) {
+const QuestionItem = ({ question, index, onDelete, onOptionSelection }) => {
   return (
     <div key={question.id}> 
       <p>{`${index + 1}. ${question.text} (${question.type}) (${question.surveyPage})`}</p>

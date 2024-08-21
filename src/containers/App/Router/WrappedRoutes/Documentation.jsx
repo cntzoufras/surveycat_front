@@ -3,9 +3,9 @@ import { Route, Routes, Outlet } from 'react-router-dom';
 
 
 const Documentation = () => (
-    <div>
-      <Outlet />
-    </div>
+  <div>
+    <Outlet />
+  </div>
 );
 
 export default Documentation;

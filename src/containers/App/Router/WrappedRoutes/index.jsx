@@ -3,6 +3,10 @@ import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import { colorBackgroundBody } from '@/utils/palette';
 import { paddingLeft } from '@/utils/directions';
+import ChartsJS from '@/containers/Charts/ChartJs';
+import ReactVis from '@/containers/Charts/ReactVis';
+import Recharts from '@/containers/Charts/Recharts';
+import Amcharts from '@/containers/Charts/Amcharts';
 import Layout from '../../../Layout/index';
 import Commerce from './Commerce';
 import OnLineMarketingDashboard from '../../../Dashboards/OnLineMarketing/index';
@@ -16,10 +20,6 @@ import Charts from './Charts';
 import Account from './Account';
 import DefaultPages from './DefaultPages';
 import Documentation from './Documentation';
-import ChartsJS from '@/containers/Charts/ChartJs';
-import ReactVis from '@/containers/Charts/ReactVis';
-import Recharts from '@/containers/Charts/Recharts';
-import Amcharts from '@/containers/Charts/Amcharts';
 import BasicTables from '../../../Tables/BasicTables/index';
 import DataTable from '../../../Tables/DataTable/index';
 import DragAndDropTable from '../../../Tables/DnDTable/index';
@@ -43,13 +43,13 @@ const WrappedRoutes = () => (
     <Layout />
     <ContainerWrap>
       <Routes>
-        <Route path="/e_commerce_dashboard" element={<Commerce/>} />
-        <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard/>} />
-        <Route exact path="/app_dashboard" element={<AppDashboard/>} />
-        <Route path="/booking_dashboard" element={<BookingDashboard/>} />
-        <Route path="/fitness_dashboard" element={<FitnessDashboard/>} />
-        <Route path="/todo" element={<Todo/>} />
-        <Route path="/survey-design" element={<SurveyDesign/>} />
+        <Route path="/e_commerce_dashboard" element={<Commerce />} />
+        <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard />} />
+        <Route exact path="/app_dashboard" element={<AppDashboard />} />
+        <Route path="/booking_dashboard" element={<BookingDashboard />} />
+        <Route path="/fitness_dashboard" element={<FitnessDashboard />} />
+        <Route path="/todo" element={<Todo />} />
+        <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys/:surveyId/survey-pages/:surveyPageId" element={<SurveyDesign />} />  
         <Route path="/charts/*" element={<Charts />}>
           <Route path="charts_js" element={<ChartsJS />} />
@@ -57,9 +57,9 @@ const WrappedRoutes = () => (
           <Route path="recharts" element={<Recharts />} />
           <Route path="amcharts" element={<Amcharts />} />
         </Route>
-        <Route path="/account" element={<Account/>} />
-        <Route path="/default_pages" element={<DefaultPages/>} />
-        <Route path="/tables/*" element={<Tables/>}>
+        <Route path="/account" element={<Account />} />
+        <Route path="/default_pages" element={<DefaultPages />} />
+        <Route path="/tables/*" element={<Tables />}>
           <Route path="basic_tables" element={<BasicTables />} />
           <Route path="data_table" element={<DataTable />} />
           <Route path="dnd_table" element={<DragAndDropTable />} />
@@ -68,17 +68,17 @@ const WrappedRoutes = () => (
           <Route path="material_table" element={<MaterialTable />} />
           <Route path="api_table" element={<ApiTable />} />
         </Route>
-        <Route path="/documentation/*" element={<Documentation/>} />
-          <Route path="/documentation/introduction" element={<Introduction />} />
-          <Route path="/documentation/installation" element={<Installation />} />
-          <Route path="/documentation/file_structure" element={<FileStructure />} />
-          <Route path="/documentation/components" element={<Components />} />
-          <Route path="/documentation/form" element={<Form />} />
-          <Route path="/documentation/color_themes" element={<ColorThemes />} />
-          <Route path="/documentation/navigation_item" element={<NavigationItem />} />
-          <Route path="/documentation/resources" element={<Resources />} />
-          <Route path="/documentation/changelog" element={<Changelog />} />
-          <Route path="/documentation/faq" element={<FAQ />} />
+        <Route path="/documentation/*" element={<Documentation />} />
+        <Route path="/documentation/introduction" element={<Introduction />} />
+        <Route path="/documentation/installation" element={<Installation />} />
+        <Route path="/documentation/file_structure" element={<FileStructure />} />
+        <Route path="/documentation/components" element={<Components />} />
+        <Route path="/documentation/form" element={<Form />} />
+        <Route path="/documentation/color_themes" element={<ColorThemes />} />
+        <Route path="/documentation/navigation_item" element={<NavigationItem />} />
+        <Route path="/documentation/resources" element={<Resources />} />
+        <Route path="/documentation/changelog" element={<Changelog />} />
+        <Route path="/documentation/faq" element={<FAQ />} />
       </Routes>
     </ContainerWrap>
   </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-// import { logout as logoutAuth0 } from '@/shared/components/account/auth/withAuth0';
 import { handleLogout } from '@/redux/actions/authActions.js';
 import {
  colorBackground, colorHover, colorText, colorBorder, 
@@ -16,7 +15,7 @@ const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 const TopbarProfile = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   // const user = useSelector(state => state.user);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector(state => state.auth);
   
   const username = user?.username;
   

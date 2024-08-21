@@ -20,8 +20,8 @@ const authFromSession = JSON.parse(localStorage.getItem('auth')) || { loggedIn: 
 const initialAuthState = {
   error: null,
   loggedIn: authFromSession.loggedIn,
-  user: authFromSession.user
-}
+  user: authFromSession.user,
+};
 
 const reducer = combineReducers({
   theme: themeReducer,

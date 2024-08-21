@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress as MuiCircularProgress } from '@mui/material';
 import SurveyPage from './SurveyPage';
-import { getSurveyPage, getSurveyQuestions} from '../../../utils/api/survey-api';
+import { getSurveyPage, getSurveyQuestions } from '../../../utils/api/survey-api';
 
 const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   console.log(`surveypageloader loads ${surveyId} , ${surveyPageId}`);

@@ -4,12 +4,12 @@ import {
   AUTHENTICATE_LOGIN, 
   AUTHENTICATE_LOGOUT, 
   AUTHENTICATE_REGISTER, 
-  AUTHENTICATE_REGISTER_ERROR
+  AUTHENTICATE_REGISTER_ERROR,
 } from '../actions/authActions';
 
 const initialState = {
   loggedIn: false,
-  user: null,   // To store the user object including user_id, fullName, etc.
+  user: null, // To store the user object including user_id, fullName, etc.
   error: null,
 
 };
@@ -20,12 +20,12 @@ const authReducer = (state = initialState, action) => {
       return { 
         ...state,
         loggedIn: true,
-        user: action.payload.user,  // Store the entire user object in the state
+        user: action.payload.user, // Store the entire user object in the state
         error: null,
       };
     case AUTHENTICATE_LOGOUT:
       return {
-        ...initialState,  // Reset to the initial state
+        ...initialState, // Reset to the initial state
       };
     case AUTHENTICATE_ERROR_AUTH:
       return {

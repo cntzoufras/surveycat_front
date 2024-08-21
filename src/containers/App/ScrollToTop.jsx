@@ -11,7 +11,6 @@ const ScrollToTop = ({ children }) => {
   }, [location]);
 
   return children;
-
 };
 
 ScrollToTop.propTypes = {

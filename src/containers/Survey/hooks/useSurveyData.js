@@ -24,7 +24,7 @@ const useSurveyData = ({ surveyId, surveyPageId, location }) => {
       const [surveyResponse, surveyPageResponse, stockSurveysResponse] = await Promise.all([
         axios.get(`http://surveycat.test/api/surveys/${surveyId}`),
         axios.get(`http://surveycat.test/api/survey-pages/${surveyPageId}`),
-        axios.get('http://surveycat.test/api/stock-surveys')
+        axios.get('http://surveycat.test/api/stock-surveys'),
       ]);
 
       if (isMounted) {
@@ -38,7 +38,6 @@ const useSurveyData = ({ surveyId, surveyPageId, location }) => {
         // Log to verify that state is being set correctly
         console.log('Survey Data:', surveyResponse.data);
         console.log('Survey Page Data:', surveyPageResponse.data);
-
       }
     } catch (error) {
       console.error('Error fetching survey data:', error);
@@ -68,7 +67,6 @@ const useSurveyData = ({ surveyId, surveyPageId, location }) => {
     setSelectedStockSurvey,
     fetchSurveyData,
   };
-  
 };
 
 export default useSurveyData;

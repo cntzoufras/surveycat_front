@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box as MuiBox, Typography as MuiTypography, TextField as MuiTextField, Select as MuiSelect, MenuItem as MuiMenuItem, Button as MuiButton, Grid as MuiGrid } from '@mui/material';
+import {
+ Box as MuiBox, Typography as MuiTypography, TextField as MuiTextField, Select as MuiSelect, MenuItem as MuiMenuItem, Button as MuiButton, Grid as MuiGrid, 
+} from '@mui/material';
 import { useParams, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';  // Import useSelector hook
+import { useSelector } from 'react-redux'; // Import useSelector hook
 import { useNavigate } from 'react-router-dom';
+import {
+ updateSurveyTitle, updateSurveyDescription, updateSurveyPageTitle, updateSurveyPageDescription, 
+} from '@/utils/api/survey-api';
 import useDebounce from '../hooks/useDebounce';
 import useSurveyData from '../hooks/useSurveyData';
 import useSurveyQuestions from '../hooks/useSurveyQuestions';
 import useSurveyPages from '../hooks/useSurveyPages';
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
-import { updateSurveyTitle, updateSurveyDescription, updateSurveyPageTitle, updateSurveyPageDescription } from '@/utils/api/survey-api';
 
 const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   console.log('SurveyPage props:', { surveyPage, questions });
@@ -17,10 +21,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { surveyId, surveyPageId } = useParams();
-  console.log("SurveyPage component rendered with surveyId:", surveyId, "and surveyPageId:", surveyPageId);
+  console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
   
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector(state => state.auth);
   const user_id = user?.id;
   console.log('user_id:', user_id);
   
@@ -51,7 +55,9 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       fetchSurveyData,
     } = useSurveyData({ surveyId, surveyPageId, location });
 
-  const { surveyQuestions, fetchSurveyQuestions, addQuestion, deleteQuestion } = useSurveyQuestions({ surveyId, surveyPageId });
+  const {
+ surveyQuestions, fetchSurveyQuestions, addQuestion, deleteQuestion, 
+} = useSurveyQuestions({ surveyId, surveyPageId });
   const { surveyPages, fetchSurveyPages, addSurveyPage } = useSurveyPages({ surveyId });
 
   const [layout, setLayout] = useState('default');
@@ -69,7 +75,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
 
     const fetchData = async () => {
       console.log('fetchData function triggered');
-      console.log('fetchData function triggered with surveyId:', surveyId, "and surveyPageId:", surveyPageId);
+      console.log('fetchData function triggered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
       try {
         if (surveyId && surveyPageId) {
@@ -148,7 +154,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   
   const openAddQuestionModal = () => {
     setIsAddQuestionModalOpen(true);
-    console.log('modal open state: ', isAddQuestionModalOpen)
+    console.log('modal open state: ', isAddQuestionModalOpen);
     };
   const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
   const handleStockSurveyChange = e => setSelectedStockSurvey(e.target.value);
@@ -190,12 +196,13 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
               surveyPages={surveyPages}
               currentSurveyPageId={surveyPageId}
               onAddNewPage={handleAddNewPage}
-              validationErrors={validationErrors} />
+              validationErrors={validationErrors}
+            />
           )}
         </MuiBox>
       </MuiGrid>
     </MuiGrid>
   );
-}
+};
 
 export default SurveyPage;

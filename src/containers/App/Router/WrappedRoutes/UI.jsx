@@ -18,20 +18,20 @@ import Datepicker from '../../../UI/Datepickers';
 
 export default () => (
   <Routes>
-    <Route path="/ui/alerts" element={<Alerts/>} />
-    <Route path="/ui/buttons" element={<Buttons/>} />
-    <Route path="/ui/carousel" element={<Carousel/>} />
-    <Route path="/ui/collapse" element={<Collapse/>} />
-    <Route path="/ui/datepicker" element={<Datepicker/>} />
-    <Route path="/ui/grids" element={<Grids/>} />
-    <Route path="/ui/modals" element={<Modals/>} />
-    <Route path="/ui/notifications" element={<Notifications/>} />
-    <Route path="/ui/panels" element={<Panels/>} />
-    <Route path="/ui/progress_bars" element={<ProgressBars/>} />
-    <Route path="/ui/range_sliders" element={<RangeSliders/>} />
-    <Route path="/ui/tabs" element={<Tabs/>} />
-    <Route path="/ui/timeline" element={<Timeline/>} />
-    <Route path="/ui/tooltips" element={<Tooltips/>} />
-    <Route path="/ui/typography" element={<Typography/>} />
+    <Route path="/ui/alerts" element={<Alerts />} />
+    <Route path="/ui/buttons" element={<Buttons />} />
+    <Route path="/ui/carousel" element={<Carousel />} />
+    <Route path="/ui/collapse" element={<Collapse />} />
+    <Route path="/ui/datepicker" element={<Datepicker />} />
+    <Route path="/ui/grids" element={<Grids />} />
+    <Route path="/ui/modals" element={<Modals />} />
+    <Route path="/ui/notifications" element={<Notifications />} />
+    <Route path="/ui/panels" element={<Panels />} />
+    <Route path="/ui/progress_bars" element={<ProgressBars />} />
+    <Route path="/ui/range_sliders" element={<RangeSliders />} />
+    <Route path="/ui/tabs" element={<Tabs />} />
+    <Route path="/ui/timeline" element={<Timeline />} />
+    <Route path="/ui/tooltips" element={<Tooltips />} />
+    <Route path="/ui/typography" element={<Typography />} />
   </Routes>
 );

@@ -8,7 +8,7 @@ import {
   sidebarClose,
   marginRight,
 } from '@/utils/directions';
-import SidebarContent from './SidebarContent';
+import SidebarContent from '../components/sidebar/SidebarContent';
 
 const Sidebar = ({
   changeMobileSidebarVisibility, sidebarShow, collapse, changeToLight, changeToDark, 
