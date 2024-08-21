@@ -32,7 +32,13 @@ jobs:
       run: |
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
-        docker-compose --version      
+        docker-compose --version
+        
+    - name: Create .env file
+      run: |
+        echo "REACT_APP_API_URL=http://snf-893977.vm.okeanos.grnet.gr:40000/api" > .env
+        echo "REACT_APP_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr" >> .env
+        echo "REACT_APP_IMAGE_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr/images" >> .env
 
     - name: Build and push Docker images to Dockerhub
       run: |
