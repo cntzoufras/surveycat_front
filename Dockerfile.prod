@@ -7,6 +7,9 @@ WORKDIR /surveycat
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
+# Copy the .env file created during CI/CD into the container
+COPY .env /app/.env
+
 RUN yarn build
 
 FROM nginx:alpine as production-stage
