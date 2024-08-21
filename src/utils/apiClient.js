@@ -1,10 +1,10 @@
+import Cookies from 'js-cookie';
 import axiosInstance from './api/base/axios';
 import appConfigApi from './api/appConfigApi';
 import covidApi from './api/covidApi';
 import todoApi from './api/todoApi';
 import surveyApi from './api/surveyApi';
 import pokemonApi from './api/pokemonApi';
-import Cookies from 'js-cookie';
 
 // Function to get CSRF token and set it in default headers
 const setCsrfToken = async () => {
@@ -16,9 +16,7 @@ const setCsrfToken = async () => {
 };
 
 // Function to get the token from local storage
-const getToken = () => {
-  return localStorage.getItem('auth_token');
-};
+const getToken = () => localStorage.getItem('auth_token');
 
 // Function to set the token in local storage
 const setToken = (token) => {
@@ -40,7 +38,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   // Set the Authorization header with the token if it exists
   const token = getToken();
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   // Set CSRF token from cookies if available
@@ -50,20 +48,18 @@ axiosInstance.interceptors.request.use(async (config) => {
   }
 
   return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+}, error => Promise.reject(error));
 
 // Function to set the Authorization header with a token
 export const setAuthToken = (token) => {
   setToken(token); // Save the token using the helper function
-  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
 // Function to remove the Authorization header
 export const removeAuthToken = () => {
   removeToken(); // Remove the token using the helper function
-  delete axiosInstance.defaults.headers.common['Authorization'];
+  delete axiosInstance.defaults.headers.common.Authorization;
 };
 
 const api = {

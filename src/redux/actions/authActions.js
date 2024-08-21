@@ -7,14 +7,14 @@ export const AUTHENTICATE_LOGOUT = 'AUTHENTICATE_LOGOUT';
 export const AUTHENTICATE_REGISTER = 'AUTHENTICATE_REGISTER';
 export const AUTHENTICATE_REGISTER_ERROR = 'AUTHENTICATE_REGISTER_ERROR';
 
-export function auth({ name, avatar, token }) {
-  return {
-    type: AUTHENTICATE,
-    payload: { user },
-  };
-}
+// export function auth({ name, avatar, token }) {
+//   return {
+//     type: AUTHENTICATE,
+//     payload: { user },
+//   };
+// }
 
-export function login({  user }) {
+export function login({ user }) {
   return {
     type: AUTHENTICATE_LOGIN,
     payload: { user },
@@ -45,10 +45,10 @@ export const handleLogout = () => async (dispatch) => {
     await axios.post(`${process.env.REACT_APP_BASE_URL}/logout`, {}, {
       headers: {
         'Content-Type': 'application/json',
-        'Accept':'application/json',
+        Accept: 'application/json',
       },
       withCredentials: true,
-      withXSRFToken:true
+      withXSRFToken: true,
     });
 
     dispatch(logout());
@@ -68,10 +68,10 @@ export const handleLogin = credentials => async (dispatch) => {
         'Content-Type': 'application/json',
       },
       withCredentials: true, // Ensure cookies are sent,
-      withXSRFToken:true
+      withXSRFToken: true,
     });
     
-    const user = response.data.user;
+    const { user } = response.data;
     console.log('Dispatching AUTHENTICATE_LOGIN with user:', user);
 
     dispatch({
@@ -80,13 +80,13 @@ export const handleLogin = credentials => async (dispatch) => {
     });
 
     localStorage.setItem('auth', JSON.stringify({ loggedIn: true, user }));
-    console.log('Login successful: ', user)
+    console.log('Login successful: ', user);
   } catch (error) {
     dispatch({
       type: AUTHENTICATE_ERROR_AUTH,
       error: 'Login failed. Please check your credentials.',
     });
-  };
+  }
 };
 
 export const handleAuthError = error => (dispatch) => {
@@ -96,7 +96,6 @@ export const handleAuthError = error => (dispatch) => {
 export const handleRegister = ({
  username, email, password, password_confirmation,
  }) => async (dispatch) => {
- 
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`);
     
@@ -112,7 +111,7 @@ export const handleRegister = ({
             
         },
         // withCredentials: true, // Ensure cookies are sent,
-        withXSRFToken:true
+        withXSRFToken: true,
     });
 
     // const { token } = response.data;
