@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Form } from 'react-bootstrap';
 import OptionInputList from './OptionInputList';
 
-const  AddQuestionModal = ({ isOpen, onClose, onSubmit, validationErrors = {} }) => {
+const  AddQuestionModal = ({ 
+  isOpen, 
+  onClose, 
+  onSubmit, 
+  validationErrors = {}, 
+  surveyPages = [], 
+  currentSurveyPageId,
+  onAddNewPage 
+  }) => {
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
+  const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
   const [questionType, setQuestionType] = useState('textarea');
   const [numOptions, setNumOptions] = useState(2);
   const [optionInputs, setOptionInputs] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestionTags, setSelectedQuestionTags] = useState([]);
 
+  useEffect(() => {
+      if (currentSurveyPageId) {
+        setSelectedSurveyPage(currentSurveyPageId);
+      }
+    }, [currentSurveyPageId]);
+
   const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
+  const handleSurveyPageChange = (e) => setSelectedSurveyPage(e.target.value);
+
   const handleSurveyPageInputChange = (e) => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
     setQuestionType(e.target.value);
@@ -56,17 +73,15 @@ const  AddQuestionModal = ({ isOpen, onClose, onSubmit, validationErrors = {} })
     e.preventDefault();
     const questionData = {
       title: newQuestion,
-      is_required: isRequired,
-      surveyPage,
-      question_type_id: questionType,
+      surveyPageId: selectedSurveyPage,
+      type: questionType,
       options: (questionType === 'radio' || questionType === 'checkbox')
         ? optionInputs.slice(0, numOptions).filter(Boolean)
         : [],
       selectedOptions,
       question_tags: selectedQuestionTags,
       is_required: false,
-      question_type_id: 2,
-      survey_page_id: 1,
+      question_type_id: questionType,
       additional_settings: {
         color: 'blue',
         align: 'center',
@@ -77,6 +92,7 @@ const  AddQuestionModal = ({ isOpen, onClose, onSubmit, validationErrors = {} })
     };
     onSubmit(questionData);
   };
+
 
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
@@ -104,15 +120,20 @@ const  AddQuestionModal = ({ isOpen, onClose, onSubmit, validationErrors = {} })
             />
           </Form.Group>
 
-          <Form.Group controlId="formSurveyPage">
+           <Form.Group controlId="formSurveyPage">
             <Form.Label>Survey Page</Form.Label>
-            <Form.Control
-              type="text"
-              value={surveyPage}
-              onChange={handleSurveyPageInputChange}
-              placeholder="Survey Page"
-            />
+            <Form.Control as="select" value={selectedSurveyPage} onChange={handleSurveyPageChange}>
+              {surveyPages.map((page) => (
+                <option key={page.id} value={page.id}>
+                  {page.title || `Page ${page.id}`}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
+
+          <Button variant="link" onClick={onAddNewPage}>
+            + Add New Page
+          </Button>
 
           {questionType === 'radio' || questionType === 'checkbox' ? (
             <div>
@@ -160,6 +181,12 @@ AddQuestionModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   validationErrors: PropTypes.object,
+  surveyPages: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+  })).isRequired,
+  currentSurveyPageId: PropTypes.string,
+  onAddNewPage: PropTypes.func.isRequired,
 };
 
 AddQuestionModal.defaultProps = {

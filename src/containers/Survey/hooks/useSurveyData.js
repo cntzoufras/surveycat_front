@@ -1,7 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 const useSurveyData = ({ surveyId, surveyPageId, location }) => {
+  console.log('useSurveyData hook called with:', surveyId, surveyPageId);
+
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
   const [surveyPageTitle, setSurveyPageTitle] = useState('');
@@ -10,22 +12,47 @@ const useSurveyData = ({ surveyId, surveyPageId, location }) => {
   const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
 
   const fetchSurveyData = useCallback(async () => {
+  if (!surveyId || !surveyPageId) {
+    console.error('surveyId or surveyPageId is missing');
+    return;
+  }
+  
+  console.log('fetchSurveyData called');
+    let isMounted = true;
+
     try {
       const [surveyResponse, surveyPageResponse, stockSurveysResponse] = await Promise.all([
         axios.get(`http://surveycat.test/api/surveys/${surveyId}`),
         axios.get(`http://surveycat.test/api/survey-pages/${surveyPageId}`),
         axios.get('http://surveycat.test/api/stock-surveys')
       ]);
-      
-      setSurveyTitle(surveyResponse.data.title);
-      setSurveyDescription(surveyResponse.data.description);
-      setSurveyPageTitle(surveyPageResponse.data.title);
-      setSurveyPageDescription(surveyPageResponse.data.description);
-      setStockSurveys(stockSurveysResponse.data.data);
+
+      if (isMounted) {
+        console.log('Survey response:', surveyResponse.data);
+        setSurveyTitle(surveyResponse.data.title);
+        setSurveyDescription(surveyResponse.data.description);
+        setSurveyPageTitle(surveyPageResponse.data.title);
+        setSurveyPageDescription(surveyPageResponse.data.description);
+        setStockSurveys(stockSurveysResponse.data.data);
+        
+        // Log to verify that state is being set correctly
+        console.log('Survey Data:', surveyResponse.data);
+        console.log('Survey Page Data:', surveyPageResponse.data);
+
+      }
     } catch (error) {
       console.error('Error fetching survey data:', error);
     }
-  }, [surveyId, surveyPageId]);
+
+    return () => {
+        isMounted = false;
+      };
+    }, [surveyId, surveyPageId]);
+
+
+  useEffect(() => {
+    fetchSurveyData();
+  }, [fetchSurveyData]);
 
   return {
     surveyTitle,
@@ -41,6 +68,7 @@ const useSurveyData = ({ surveyId, surveyPageId, location }) => {
     setSelectedStockSurvey,
     fetchSurveyData,
   };
+  
 };
 
 export default useSurveyData;

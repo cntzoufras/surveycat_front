@@ -21,9 +21,12 @@ const StyledTypography = styled(MuiTypography)`
 
 const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
-
   const { user, error, loggedIn } = useSelector((state) => state.auth);
   const user_id = user?.id;
+  
+  if (!user_id) {
+    return <div>Loading...</div>;  // Or some other fallback
+  }
 
   return (
     <StyledBox>

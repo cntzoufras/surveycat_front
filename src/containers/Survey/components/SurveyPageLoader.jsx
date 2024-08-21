@@ -4,63 +4,72 @@ import SurveyPage from './SurveyPage';
 import { getSurveyPage, getSurveyQuestions} from '../../../utils/api/survey-api';
 
 const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
+  console.log(`surveypageloader loads ${surveyId} , ${surveyPageId}`);
   const [surveyPage, setSurveyPage] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  const fetchQuestions = async () => {
-    try {
-      console.log(`surveyId: ', ${surveyId}, surveyPageId: ${surveyPageId}`);
+  const [error, setError] = useState(null);
 
-      const response = await getSurveyQuestions(surveyId, surveyPageId);
-      setQuestions(response.data.data);
+  
+  useEffect(() => {
+  const fetchSurveyPageData = async () => {
+    try {
+      console.log('Fetching survey page data');
+      
+      const surveyPageResponse = await getSurveyPage(surveyPageId);
+        const surveyPageData = Array.isArray(surveyPageResponse.data) ? surveyPageResponse.data[0] : surveyPageResponse.data;
+        
+        if (!surveyPageData) {
+          throw new Error('Survey page data is missing or invalid');
+        }
+        
+        setSurveyPage({
+          title: surveyPageData.title || 'Untitled Survey Page',
+          description: surveyPageData.description || 'No description available.',
+          ...surveyPageData,
+        });
+
+      const questionsResponse = await getSurveyQuestions(surveyId, surveyPageId);
+      console.log('Survey questions response:', questionsResponse.data);
+      setQuestions(questionsResponse.data.data || []); // Handle cases with no questions
+
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching questions:', error);
+      console.error('Error fetching survey page or questions:', error);
+
+      if (error.message === 'Survey ID or Survey Page ID is missing') {
+        setError('Invalid URL. Please navigate through the application.');
+      } else {
+        setError('Error fetching survey page or questions');
+      }
+
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchSurveyPageData = async () => {
-      const fetchQuestions = async () => {
-        try {
-          console.log(`surveyId: ', ${surveyId}, surveyPageId: ${surveyPageId}`);
+  if (surveyId && surveyPageId) {
+    fetchSurveyPageData();
+  } else {
+    setError('Survey ID or Survey Page ID is missing');
+    setIsLoading(false);
+  }
+}, [surveyId, surveyPageId]);
 
-          const response = await getSurveyQuestions(surveyId, surveyPageId);
-          console.log(`fetchQuestions: ${Object.keys(response.data)}`)
-          setQuestions(response.data.data);
-        } catch (error) {
-          console.error('Error fetching questions:', error);
-        }
-      };
-      await fetchQuestions();
 
-      try {
-        const surveyPageResponse = await getSurveyPage(surveyPageId);
-        setSurveyPage(surveyPageResponse.data.data);
-        console.log(`survey page: `)
-        console.log(`surveyId: ', ${surveyId}, surveyPageId: ${surveyPageId}`);
+  if (isLoading) {
+    return <MuiCircularProgress />;
+  }
 
-        await fetchQuestions();
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching Survey Page:', error);
-        setIsLoading(false);
-      }
-    };
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-    if (surveyId && surveyPageId) {
-      console.log(`FETCH SURVEY DATA: surveyId: ', ${surveyId}, surveyPageId: ${surveyPageId}`);
-      fetchSurveyPageData();
-    } else {
-      setIsLoading(false);
-    }
-  }, [surveyId, surveyPageId]);
+  if (!surveyPage) {
+    return <div>Error loading survey page: No survey page found.</div>;
+  }
 
-  return isLoading ? (
-    <MuiCircularProgress />
-  ) : (
-    <SurveyPage surveyPage={surveyPage} fetchQuestions={fetchQuestions} questions={questions} />
-  );
+  // Pass the surveyPage data and questions to SurveyPage component
+  return <SurveyPage surveyPage={surveyPage} questions={questions} />;
 };
 
 export default SurveyPageLoader;

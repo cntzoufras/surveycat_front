@@ -1,22 +1,34 @@
 import { useState, useCallback } from 'react';
-import axios from 'axios';
+import { createSurveyQuestion, getSurveyQuestions } from '@/utils/api/survey-api.js';
 
 const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
   const [surveyQuestions, setSurveyQuestions] = useState([]);
 
   const fetchSurveyQuestions = useCallback(async () => {
+    let isMounted = true;
+
     try {
-      const response = await axios.get(`http://surveycat.test/api/surveys/${surveyId}/pages/${surveyPageId}/survey-questions`);
-      setSurveyQuestions(response.data.data);
+      const response = await getSurveyQuestions(surveyId, surveyPageId);
+      if (isMounted) {
+        setSurveyQuestions(response.data.data);
+      }
     } catch (error) {
-      console.error('Error fetching questions:', error);
+      if (isMounted) {
+        console.error('Error fetching questions:', error);
+      }
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [surveyId, surveyPageId]);
+
 
   const addQuestion = async (questionData) => {
     try {
-      await axios.post('http://surveycat.test/api/survey-questions', { ...questionData, survey_page_id: surveyPageId });
-      fetchSurveyQuestions();
+      console.log('sending question');
+      const response = await createSurveyQuestion({ ...questionData, survey_page_id: surveyPageId });
+      fetchSurveyQuestions(); // Refetch questions after successfully adding a new one
     } catch (error) {
       console.error('Error adding question:', error);
     }
@@ -24,13 +36,16 @@ const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
 
   const deleteQuestion = async (questionId) => {
     try {
-      await axios.delete(`http://surveycat.test/api/survey-questions/${questionId}`);
+      await axios.delete(`http://surveycat.test/api/survey-questions/${questionId}`,
+      {
+        withCredentials:true
+      });
       fetchSurveyQuestions();
     } catch (error) {
       console.error('Error deleting question:', error);
     }
   };
-
+  
   return {
     surveyQuestions,
     fetchSurveyQuestions,

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';  // Import useSelector hook
-import axios from 'axios';
 import { Box as MuiBox, Typography as MuiTypography, TextField as MuiTextField, Button as MuiButton, FormControl as MuiFormControl, InputLabel as MuiInputLabel, Select as MuiSelect, MenuItem as MuiMenuItem } from '@mui/material';
 import styled from '@emotion/styled';
 import { getSurveyCategories, getSurveyThemes, createSurvey, createSurveyPage } from '@/utils/api/survey-api.js';
 import { useNavigate } from 'react-router-dom';
 import FontSelector from './FontSelector';
-
+import useSurveyPages from '../hooks/useSurveyPages';
 
 const MuiStyledFormControl = styled(MuiFormControl)`
   margin-bottom: 1rem;
@@ -26,9 +25,8 @@ const MuiStyledErrorBox = styled(MuiBox)`
   border-radius: 4px;
 `;
 
-const SurveyForm = ({user_id}) => {
-  console.log(`user_id: `, user_id);
-
+const SurveyForm = ({ user_id }) => {
+  console.log(`SurveyForm user_id: ${user_id}`);
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
   const [surveyCategories, setSurveyCategories] = useState([]);
@@ -39,26 +37,31 @@ const SurveyForm = ({user_id}) => {
   const [selectedFont, setSelectedFont] = useState('Roboto'); // Default font
 
   const navigate = useNavigate();
-
-  useEffect(() => {
+  
+   useEffect(() => {
     let isMounted = true;
 
-    getSurveyCategories()
-      .then(response => {
-        if (isMounted) setSurveyCategories(response.data.data);
-      })
-      .catch(console.error);
+    const fetchData = async () => {
+      try {
+        const categoriesResponse = await getSurveyCategories();
+        const themesResponse = await getSurveyThemes();
+        if (isMounted) {
+          setSurveyCategories(categoriesResponse.data.data);
+          setSurveyThemes(themesResponse.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-    getSurveyThemes()
-      .then(response => {
-        if (isMounted) setSurveyThemes(response.data.data);
-      })
-      .catch(console.error);
+    fetchData();
 
     return () => {
-      isMounted = false;
+      isMounted = false; // Cleanup function to avoid setting state on unmounted component
     };
   }, []);
+  
+  const { addSurveyPage } = useSurveyPages();
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,17 +77,18 @@ const SurveyForm = ({user_id}) => {
     
       const response = await createSurvey(surveyData);
       const surveyId = response.data.id;
-
+      
       const surveyPageData = {
         title: '',
         description: '',
         survey_id: surveyId,
       };
 
-      const surveyPageResponse = await createSurveyPage(surveyPageData);
+      const surveyPageResponse = await addSurveyPage(surveyPageData);
+      console.log('survey page response einai: ',surveyPageResponse);
       const surveyPageId = surveyPageResponse.data.id;
       
-      navigate(`/survey/${surveyId}/survey-pages/${surveyPageId}`, {
+      navigate(`/surveys/${surveyId}/survey-pages/${surveyPageId}`, {
       state: { surveyData, surveyPageData },
     });
     
