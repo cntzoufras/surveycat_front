@@ -15,7 +15,7 @@ services:
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
       - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
       - ./nginx_logs:/var/log/nginx
-      - ./.env.prod:/app/.env
+      # - ./.env.prod:/app/.env
 
     networks:
       - webnet
