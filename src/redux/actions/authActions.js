@@ -34,7 +34,7 @@ export function logout() {
 
 export const handleLogout = () => async (dispatch) => {
   try {
-    const auth = JSON.parse(sessionStorage.getItem('auth'));
+    const auth = JSON.parse(localStorage.getItem('auth'));
     console.log('auth:', auth);
     const token = auth ? auth.token : null;
 
@@ -52,7 +52,7 @@ export const handleLogout = () => async (dispatch) => {
     });
 
     dispatch(logout());
-    sessionStorage.removeItem('auth');
+    localStorage.removeItem('auth');
   } catch (error) {
     console.error('Logout failed:', error);
   }
@@ -79,7 +79,7 @@ export const handleLogin = credentials => async (dispatch) => {
       payload: { user },
     });
 
-    sessionStorage.setItem('auth', JSON.stringify({ loggedIn: true, user }));
+    localStorage.setItem('auth', JSON.stringify({ loggedIn: true, user }));
     console.log('Login successful: ', user)
   } catch (error) {
     dispatch({

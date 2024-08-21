@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 // Function to get CSRF token and set it in default headers
 const setCsrfToken = async () => {
   try {
-    await axiosInstance.get('/sanctum/csrf-cookie');
+    // await axiosInstance.get('/sanctum/csrf-cookie');
   } catch (error) {
     console.error('Error fetching CSRF token:', error);
   }

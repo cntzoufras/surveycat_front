@@ -15,14 +15,13 @@ import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
 import todoReducer from '../Todo/redux/reducer';
 
-const authFromSession = JSON.parse(sessionStorage.getItem('auth')) || { loggedIn: false, user: null };
+const authFromSession = JSON.parse(localStorage.getItem('auth')) || { loggedIn: false, user: null };
 
 const initialAuthState = {
   error: null,
   loggedIn: authFromSession.loggedIn,
   user: authFromSession.user
 }
-
 
 const reducer = combineReducers({
   theme: themeReducer,
