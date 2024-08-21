@@ -8,6 +8,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "lint:css": "stylelint './src/**/*.js'",
+    "lint": "eslint src/**/*.{js,jsx}",
     "eject": "react-app-rewired eject",
     "docker": "docker-compose up",
     "docker-build": "docker-compose build",
