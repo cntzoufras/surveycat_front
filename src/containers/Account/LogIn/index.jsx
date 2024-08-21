@@ -37,8 +37,8 @@ const LogIn = ({ error }) => {
     try {
       const response = await dispatch(reduxHandleLogin(credentials));
 
-      // Check if loggedIn is true in sessionStorage
-      const authData = JSON.parse(sessionStorage.getItem('auth'));
+      // Check if loggedIn is true in localStorage
+      const authData = JSON.parse(localStorage.getItem('auth'));
       
       if (authData && authData.loggedIn) {
         console.log(`authData: ${authData}`);
