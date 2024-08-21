@@ -74,26 +74,19 @@ ThemeComponent.propTypes = {
 
 const ConnectedThemeComponent = ThemeComponent;
 
-const App = () => {
-  // useEffect(() => {
-  //   window.addEventListener('load', initAuthSanctum);
-  // }, []);
-
-  return (
-    <Provider store={store}>
-      <BrowserRouter basename="/">
-        <I18nextProvider i18n={i18n}>
-          <ConnectedThemeComponent>
-            <LoadScript loadingElement={<Loading loading />} googleMapsApiKey="">
-              <ScrollToTop>
-                <Router />
-              </ScrollToTop>
-            </LoadScript>
-          </ConnectedThemeComponent>
-        </I18nextProvider>
-      </BrowserRouter>
-    </Provider>
-  );
-};
-
+const App = () => (
+  <Provider store={store}>
+    <BrowserRouter basename="/">
+      <I18nextProvider i18n={i18n}>
+        <ConnectedThemeComponent>
+          <LoadScript loadingElement={<Loading loading />} googleMapsApiKey="">
+            <ScrollToTop>
+              <Router />
+            </ScrollToTop>
+          </LoadScript>
+        </ConnectedThemeComponent>
+      </I18nextProvider>
+    </BrowserRouter>
+  </Provider>
+);
 export default App;

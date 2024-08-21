@@ -34,8 +34,8 @@ const ECommerceDashboardEdit = () => {
   );
 };
 
-ECommerceDashboardEdit.propTypes = {
-  match: PropTypes.shape().isRequired,
-};
+// ECommerceDashboardEdit.propTypes = {
+//   match: PropTypes.shape().isRequired,
+// };
 
 export default ECommerceDashboardEdit;

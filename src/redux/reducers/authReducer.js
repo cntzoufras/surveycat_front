@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   loggedIn: false,
-  user: null, // To store the user object including user_id, fullName, etc.
+  user: null,
   error: null,
 
 };

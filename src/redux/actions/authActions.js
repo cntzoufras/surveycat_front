@@ -92,39 +92,6 @@ export const handleLogin = credentials => async (dispatch) => {
 export const handleAuthError = error => (dispatch) => {
   dispatch(authError(error));
 };
-
-export const handleRegister = ({
- username, email, password, password_confirmation,
- }) => async (dispatch) => {
-  try {
-    await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`);
-    
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
-      username,
-      email,
-      password,
-      password_confirmation,
-    }, {
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            
-        },
-        // withCredentials: true, // Ensure cookies are sent,
-        withXSRFToken: true,
-    });
-
-    // const { token } = response.data;
-    // console.log(token)
-    // dispatch(registerSuccess(token));
-    return response;
-  } catch (error) {
-    console.error('Registration failed:', error);
-    dispatch(registerError(error));
-    throw error.response.data;
-  }
-};
-
 export function registerSuccess(token) {
   return {
     type: AUTHENTICATE_REGISTER,
@@ -138,3 +105,34 @@ export function registerError(error) {
     error,
   };
 }
+
+export const handleRegister = ({
+ username, email, password, passwordConfirmation,
+ }) => async (dispatch) => {
+  try {
+    await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`);
+    
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
+      username,
+      email,
+      password,
+      passwordConfirmation,
+    }, {
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            
+        },
+        withXSRFToken: true,
+    });
+
+    
+    return response;
+  } catch (error) {
+    console.error('Registration failed:', error);
+    dispatch(registerError(error));
+    throw error.response.data;
+  }
+};
+
+

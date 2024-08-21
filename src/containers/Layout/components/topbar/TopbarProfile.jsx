@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { handleLogout } from '@/redux/actions/authActions.js';
+import { handleLogout } from '@/redux/actions/authActions';
 import {
  colorBackground, colorHover, colorText, colorBorder, 
 } from '@/utils/palette';

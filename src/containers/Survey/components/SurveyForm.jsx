@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux'; // Import useSelector hook
+import PropTypes from 'prop-types';
 import {
- Box as MuiBox, Typography as MuiTypography, TextField as MuiTextField, Button as MuiButton, FormControl as MuiFormControl, InputLabel as MuiInputLabel, Select as MuiSelect, MenuItem as MuiMenuItem, 
+ Box as MuiBox, 
+ Typography as MuiTypography, 
+ TextField as MuiTextField, 
+ Button as MuiButton, 
+ FormControl as MuiFormControl, 
+ InputLabel as MuiInputLabel, 
+ Select as MuiSelect, 
+ MenuItem as MuiMenuItem,
 } from '@mui/material';
 import styled from '@emotion/styled';
 import {
  getSurveyCategories, getSurveyThemes, createSurvey, createSurveyPage, 
-} from '@/utils/api/survey-api.js';
+} from '@/utils/api/survey-api';
 import { useNavigate } from 'react-router-dom';
 import FontSelector from './FontSelector';
 import useSurveyPages from '../hooks/useSurveyPages';
@@ -29,8 +36,8 @@ const MuiStyledErrorBox = styled(MuiBox)`
   border-radius: 4px;
 `;
 
-const SurveyForm = ({ user_id }) => {
-  console.log(`SurveyForm user_id: ${user_id}`);
+const SurveyForm = ({ userId }) => {
+  console.log(`SurveyForm userId: ${userId}`);
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
   const [surveyCategories, setSurveyCategories] = useState([]);
@@ -75,7 +82,7 @@ const SurveyForm = ({ user_id }) => {
         description: surveyDescription,
         survey_category_id: selectedCategoryId,
         theme_id: selectedThemeId,
-        user_id,
+        user_id: userId,
       };
     
       const response = await createSurvey(surveyData);
@@ -199,6 +206,10 @@ const SurveyForm = ({ user_id }) => {
       </form>
     </MuiBox>
   );
+};
+
+SurveyForm.propTypes = {
+  userId: PropTypes.string.isRequired,
 };
 
 export default SurveyForm;

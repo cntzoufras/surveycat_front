@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Modal, Button, Form } from 'react-bootstrap';
 import OptionInputList from './OptionInputList';
 
-const  AddQuestionModal = ({ 
+const AddQuestionModal = ({ 
   isOpen, 
   onClose, 
   onSubmit, 
   validationErrors = {}, 
   surveyPages = [], 
   currentSurveyPageId,
-  onAddNewPage 
+  onAddNewPage, 
   }) => {
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
@@ -27,10 +27,10 @@ const  AddQuestionModal = ({
       }
     }, [currentSurveyPageId]);
 
-  const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
-  const handleSurveyPageChange = (e) => setSelectedSurveyPage(e.target.value);
+  const handleQuestionInputChange = e => setNewQuestion(e.target.value);
+  const handleSurveyPageChange = e => setSelectedSurveyPage(e.target.value);
 
-  const handleSurveyPageInputChange = (e) => setSurveyPage(e.target.value);
+  const handleSurveyPageInputChange = e => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
     setQuestionType(e.target.value);
     if (e.target.value !== 'radio' && e.target.value !== 'checkbox') {
@@ -120,10 +120,10 @@ const  AddQuestionModal = ({
             />
           </Form.Group>
 
-           <Form.Group controlId="formSurveyPage">
+          <Form.Group controlId="formSurveyPage">
             <Form.Label>Survey Page</Form.Label>
             <Form.Control as="select" value={selectedSurveyPage} onChange={handleSurveyPageChange}>
-              {surveyPages.map((page) => (
+              {surveyPages.map(page => (
                 <option key={page.id} value={page.id}>
                   {page.title || `Page ${page.id}`}
                 </option>
@@ -131,12 +131,15 @@ const  AddQuestionModal = ({
             </Form.Control>
           </Form.Group>
 
-          <Button variant="link" onClick={async () => {
+          <Button
+            variant="link"
+            onClick={async () => {
             const newPage = await onAddNewPage();
             if (newPage) {
               setSelectedSurveyPage(newPage.id); // Automatically select the new page
             }
-          }}>
+          }}
+          >
             + Add New Page
           </Button>
 
@@ -161,7 +164,7 @@ const  AddQuestionModal = ({
 
           {Object.keys(validationErrors).length > 0 && (
             <div className="validation-errors">
-              {Object.keys(validationErrors).map((key) => (
+              {Object.keys(validationErrors).map(key => (
                 <p key={key} style={{ color: 'red' }}>{validationErrors[key]}</p>
               ))}
             </div>
@@ -179,13 +182,15 @@ const  AddQuestionModal = ({
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 AddQuestionModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  validationErrors: PropTypes.object,
+  validationErrors: PropTypes.shape({
+    [PropTypes.string]: PropTypes.string,
+  }),
   surveyPages: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
@@ -196,6 +201,7 @@ AddQuestionModal.propTypes = {
 
 AddQuestionModal.defaultProps = {
   validationErrors: {},
+  currentSurveyPageId: '',
 };
 
 export default AddQuestionModal;

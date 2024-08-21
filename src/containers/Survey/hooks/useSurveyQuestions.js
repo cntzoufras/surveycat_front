@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createSurveyQuestion, getSurveyQuestions, deleteSurveyQuestion } from '@/utils/api/survey-api.js';
+import { createSurveyQuestion, getSurveyQuestions, deleteSurveyQuestion } from '@/utils/api/survey-api';
 
 const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
   const [surveyQuestions, setSurveyQuestions] = useState([]);

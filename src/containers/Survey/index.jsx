@@ -22,9 +22,9 @@ const StyledTypography = styled(MuiTypography)`
 const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
   const { user, error, loggedIn } = useSelector(state => state.auth);
-  const user_id = user?.id;
+  const userId = user?.id;
   
-  if (!user_id) {
+  if (!userId) {
     return <div>Loading...</div>; // Or some other fallback
   }
 
@@ -33,7 +33,7 @@ const SurveyPageWrapper = () => {
       <StyledTypography variant="h3" component="h1" gutterBottom>
         Survey Design
       </StyledTypography>
-      {!surveyId && !surveyPageId && <SurveyForm user_id={user_id} />}
+      {!surveyId && !surveyPageId && <SurveyForm userId={userId} />}
       {surveyId && surveyPageId && (
         <SurveyPageLoader surveyId={surveyId} surveyPageId={surveyPageId} />
       )}

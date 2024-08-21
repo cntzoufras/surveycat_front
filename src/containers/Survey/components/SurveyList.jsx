@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import {
+  Box as MuiBox,
+  Typography as MuiTypography,
+  Grid as MuiGrid,
+  Paper as MuiPaper,
+} from '@mui/material';
+import { getSurveys } from '@/utils/api/survey-api';
 
 const SurveyList = () => {
   const [surveys, setSurveys] = useState([]);
@@ -6,10 +13,9 @@ const SurveyList = () => {
   useEffect(() => {
     const fetchSurveys = async () => {
       try {
-        const response = await fetch('http://surveycat.test/api/surveys');
+        const response = await getSurveys();
         if (response.ok) {
-          const surveyData = await response.json();
-          setSurveys(surveyData);
+          setSurveys(response.data);
         } else {
           console.error('Error fetching surveys:', response.status);
         }
@@ -17,29 +23,30 @@ const SurveyList = () => {
         console.error('Error fetching surveys:', error);
       }
     };
-
     fetchSurveys();
   }, []);
 
   return (
-    <div>
-      <h2>Surveys</h2>
-      {surveys.map((survey) => (
-        <div key={survey.id} style={}>
-          <h3>{survey.title}</h3>
-          <p>Style: {survey.style}</p>
-          <h4>Questions:</h4>
-          {survey.questions.map((question, index) => (
-            <div key={index}>
-              <p>Question: {question.question}</p>
-              <p>Type: {question.type}</p>
-              <p>Style: {question.style}</p>
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+    <MuiBox p={3}>
+      <MuiTypography variant="h4" gutterBottom>
+        Surveys
+      </MuiTypography>
+      <MuiGrid container spacing={3}>
+        {surveys.map(survey => (
+          <MuiGrid item xs={12} md={6} lg={4} key={survey.id}>
+            <MuiPaper elevation={3} style={{ padding: '16px' }}>
+              <MuiTypography variant="h6">{survey.title}</MuiTypography>
+              <MuiTypography variant="body2">Style: {survey.style}</MuiTypography>
+              <MuiBox mt={2}>
+                <MuiTypography variant="subtitle2">Number of Pages: {survey.pages.length}</MuiTypography>
+              </MuiBox>
+            </MuiPaper>
+          </MuiGrid>
+        ))}
+      </MuiGrid>
+    </MuiBox>
   );
 };
 
 export default SurveyList;
+

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
  Box as MuiBox, 
  FormControl as MuiFormControl, 
@@ -44,5 +45,10 @@ const FontSelector = ({ selectedFont, setSelectedFont }) => (
     </MuiFormControl>
   </MuiBox>
   );
+
+FontSelector.propTypes = {
+  selectedFont: PropTypes.string.isRequired,
+  setSelectedFont: PropTypes.func.isRequired,
+};
 
 export default FontSelector;
