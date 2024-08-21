@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.5
+      IMAGE_VERSION: 2.6
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -36,10 +36,9 @@ jobs:
         
     - name: Create .env file
       run: |
-        mkdir -p /app/surveycat
-        echo "REACT_APP_API_URL=http://snf-893977.vm.okeanos.grnet.gr:40000/api" > /app/.env
-        echo "REACT_APP_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr" >> /app/.env
-        echo "REACT_APP_IMAGE_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr/images" >> /app/.env
+        echo "REACT_APP_API_URL=http://snf-893977.vm.okeanos.grnet.gr:40000/api" >> .env
+        echo "REACT_APP_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr" >> .env
+        echo "REACT_APP_IMAGE_BASE_URL=http://snf-893977.vm.okeanos.grnet.gr/images" >> .env
 
     - name: Build and push Docker images to Dockerhub
       run: |
@@ -54,10 +53,10 @@ jobs:
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.5
+          IMAGE_VERSION: 2.6
     
     - name: Deploy to Production Server
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.1 && docker-compose -f docker-compose.prod.yml up -d'
       env:
-          IMAGE_VERSION: 2.5
+          IMAGE_VERSION: 2.6
