@@ -120,7 +120,7 @@ const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
           <FormGroupLabel>Repeat password</FormGroupLabel>
           <FormGroupField>
             <Field
-              name="password_confirmation"
+              name="passwordConfirmation"
               component={PasswordField}
               placeholder="Repeat password"
               className="input-without-border-radius"
