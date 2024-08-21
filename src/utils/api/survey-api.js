@@ -45,3 +45,5 @@ export const updateSurveyPageTitle = (surveyPageId, title, userId) => api.put(`/
 
 export const updateSurveyPageDescription = (surveyPageId, description, userId) => api.put(`/survey-pages/${surveyPageId}`, { description, user_id: userId });
 
+export const deleteSurveyQuestion = surveyQuestionId => api.delete(`http://surveycat.test/api/survey-questions/${surveyQuestionId}`,
+);

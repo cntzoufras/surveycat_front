@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createSurveyQuestion, getSurveyQuestions } from '@/utils/api/survey-api.js';
+import { createSurveyQuestion, getSurveyQuestions, deleteSurveyQuestion } from '@/utils/api/survey-api.js';
 
 const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
   const [surveyQuestions, setSurveyQuestions] = useState([]);
@@ -34,12 +34,9 @@ const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
     }
   };
 
-  const deleteQuestion = async (questionId) => {
+  const deleteQuestion = async (surveyQuestionId) => {
     try {
-      await axios.delete(`http://surveycat.test/api/survey-questions/${questionId}`,
-      {
-        withCredentials:true
-      });
+    const response = await deleteSurveyQuestion(surveyQuestionId);
       fetchSurveyQuestions();
     } catch (error) {
       console.error('Error deleting question:', error);
