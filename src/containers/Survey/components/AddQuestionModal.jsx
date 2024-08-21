@@ -131,7 +131,12 @@ const  AddQuestionModal = ({
             </Form.Control>
           </Form.Group>
 
-          <Button variant="link" onClick={onAddNewPage}>
+          <Button variant="link" onClick={async () => {
+            const newPage = await onAddNewPage();
+            if (newPage) {
+              setSelectedSurveyPage(newPage.id); // Automatically select the new page
+            }
+          }}>
             + Add New Page
           </Button>
 

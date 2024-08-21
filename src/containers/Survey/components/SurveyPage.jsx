@@ -128,6 +128,23 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const handleSurveyPageTitleChange = e => setSurveyPageTitle(e.target.value);
   const handleSurveyPageDescriptionChange = e => setSurveyPageDescription(e.target.value);
   const handleLayoutChange = e => setLayout(e.target.value);
+  const handleAddNewPage = async () => {
+    try {
+      const newPageData = {
+        title: '',
+        description: '',
+        survey_id: surveyId,
+      };
+      const response = await addSurveyPage(newPageData);
+      fetchSurveyPages(); // Fetch pages again to update the list
+      setSurveyPageTitle(''); // Clear any existing title in the state
+      setSurveyPageDescription(''); // Clear any existing description in the state
+      return response.data; // Return the new page data
+    } catch (error) {
+      console.error('Error adding new page:', error);
+    }
+  };
+
   
   const openAddQuestionModal = () => {
     setIsAddQuestionModalOpen(true);
