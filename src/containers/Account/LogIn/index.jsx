@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LogInForm from '@/shared/components/account/loginForm/LogInForm';
 import { handleLogin as reduxHandleLogin, handleAuthError } from '@/redux/actions/authActions';
-import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
 
 import {
   AccountCard,
@@ -15,6 +14,7 @@ import {
   AccountTitle,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
+import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
 
 const LogIn = ({ error }) => {
   const [email, setEmail] = useState('');
@@ -53,7 +53,6 @@ const LogIn = ({ error }) => {
       }
     } catch (err) {
       console.error('Login error:', err.message);
-      return;
     }
   };
 
