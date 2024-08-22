@@ -11,6 +11,8 @@ import ResetPasswordPhoto from '../../Account/ResetPasswordPhoto';
 import Todo from '../../Todo';
 import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
+import AuthCheck from '../AuthCheck'
+import PrivateRoute from './PrivateRoute';
 
 const Router = () => (
   <MainWrapper>
@@ -18,16 +20,39 @@ const Router = () => (
       <Routes>
         <Route path="/" element={<LogIn />} />
         <Route path="/404" element={<NotFound404 />} />
-        <Route path="/lock_screen" element={<LockScreen />} />
         <Route path="/login" element={<LogIn />} />
         <Route exact path="/auth/register" element={<Register />} />
-        <Route path="/register_photo" element={<RegisterPhoto />} />
         <Route path="/reset_password" element={<ResetPassword />} />
-        <Route path="/reset_password_photo" element={<ResetPasswordPhoto />} />
-        <Route path="/" element={<WrappedRoutes />} />
-        <Route exact path="/todo" element={<Todo />} />
-        <Route exact path="/survey" element={<Survey />} />
-        <Route path="/*" element={<WrappedRoutes />} />
+        <Route 
+          exact path="/todo" 
+          element={
+            <AuthCheck>
+              <PrivateRoute>
+                <Todo />
+              </PrivateRoute>
+            </AuthCheck>
+          }
+        />
+        <Route 
+          exact path="/survey" 
+          element={
+            <AuthCheck>
+              <PrivateRoute>
+                <Survey />
+              </PrivateRoute>
+            </AuthCheck>
+          } 
+        />
+        <Route 
+          path="/*" 
+          element={
+            <AuthCheck>
+              <PrivateRoute>
+                <WrappedRoutes />
+              </PrivateRoute>
+            </AuthCheck>
+          } 
+        />
       </Routes>
     </main>
   </MainWrapper>
