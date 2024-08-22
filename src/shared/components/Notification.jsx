@@ -84,7 +84,7 @@ ImageNotification.defaultProps = {
 };
 
 const FullWideNotification = ({ color, message }) => (
-  <NotificationContent fullWidth color={color}>
+  <NotificationContent color={color}>
     <NotificationMessage>{message}</NotificationMessage>
   </NotificationContent>
 );
@@ -153,17 +153,19 @@ const NotificationMessageWrap = styled.div`
 `;
 
 const NotificationContent = styled.div`
-  max-width: 200px;
-  width: calc(100% - 160px);
+  width: 100%;  // Full width of the parent
+  max-width: 480px;  // Same as the form width or set according to your input width
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
   background: ${props => getColor(props.color || props.theme)};
   position: relative;
-  margin: 10px 25px;
+  margin: 10px auto;  // Center within the form container
+  padding: 10px;  // Adjust padding to fit content better
   display: flex;
+  justify-content: center;  // Centers the content within the notification box
 
   ${props => props.fullWidth && `
-    max-width: 15vw;
     width: 100vw;
+    max-width: none;
     margin: 0;
     padding: 20px 40px 20px 25px;
 
@@ -179,5 +181,6 @@ const NotificationContent = styled.div`
     }
   `}
 `;
+
 
 // endregion
