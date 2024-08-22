@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { authenticateUser } from '@/redux/actions/authActions'; // Action to load user data
@@ -6,7 +7,7 @@ import Loading from '@/shared/components/account/auth/Loading'; // A loading com
 
 const AuthCheck = ({ children }) => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector(state => state.auth);
 
   useEffect(() => {
     if (!user) {
@@ -26,6 +27,10 @@ const AuthCheck = ({ children }) => {
   }
 
   return children; // Render the child components if the user is authenticated
+};
+
+AuthCheck.propTypes = {
+  children: PropTypes.node.isRequired, // 'children' should be of type node and is required
 };
 
 export default AuthCheck;

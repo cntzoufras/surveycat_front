@@ -10,6 +10,20 @@ export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const AUTHENTICATE_USER_LOADING = 'AUTHENTICATE_USER_LOADING';
 export const AUTHENTICATE_USER_ERROR = 'AUTHENTICATE_USER_ERROR';
 
+export function authError(error) {
+  return {
+    type: AUTHENTICATE_ERROR_AUTH,
+    error,
+  };
+}
+
+export function registerError(error) {
+  return {
+    type: AUTHENTICATE_REGISTER_ERROR,
+    error,
+  };
+}
+
 export const authenticateUser = () => async (dispatch) => {
   dispatch({ type: AUTHENTICATE_USER_LOADING });
 
@@ -47,13 +61,6 @@ export function login({ user }) {
 
 export function logout() {
   return { type: AUTHENTICATE_LOGOUT };
-}
-
-export function authError(error) {
-  return {
-    type: AUTHENTICATE_ERROR_AUTH,
-    error,
-  };
 }
 
 export const handleLogout = () => async (dispatch) => {
@@ -146,10 +153,3 @@ export const handleRegister = ({
 export const handleAuthError = error => (dispatch) => {
   dispatch(authError(error));
 };
-
-export function registerError(error) {
-  return {
-    type: AUTHENTICATE_REGISTER_ERROR,
-    error,
-  };
-}

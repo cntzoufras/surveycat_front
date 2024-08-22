@@ -15,7 +15,7 @@ const initialState = {
   user: null,
   error: null,
   loading: false,
-  registrationSuccess: false
+  registrationSuccess: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -26,7 +26,7 @@ const authReducer = (state = initialState, action) => {
         loggedIn: true,
         user: action.payload.user, // Store the entire user object in the state
         error: null,
-      }
+      };
     case AUTHENTICATE_USER:
       return { 
         ...state,

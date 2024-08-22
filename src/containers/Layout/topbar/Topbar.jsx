@@ -30,14 +30,14 @@ const Topbar = ({
       }
   };
  
-  return(
+  return (
     <TopbarContainer>
       <TopbarLeft>
         <TopbarSidebarButton
           onClickMobile={changeMobileSidebarVisibility}
           onClickDesktop={changeSidebarVisibility}
         />
-        <TopbarLogo to={auth && auth.loggedIn ? "/app_dashboard" : "/"} onClick={handleLogoClick}/>
+        <TopbarLogo to={auth && auth.loggedIn ? '/app_dashboard' : '/'} onClick={handleLogoClick} />
       </TopbarLeft>
       <TopbarRight>
         <TopbarSearchWrap>

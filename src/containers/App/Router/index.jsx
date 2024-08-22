@@ -11,7 +11,7 @@ import ResetPasswordPhoto from '../../Account/ResetPasswordPhoto';
 import Todo from '../../Todo';
 import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
-import AuthCheck from '../AuthCheck'
+import AuthCheck from '../AuthCheck';
 import PrivateRoute from './PrivateRoute';
 
 const Router = () => (
@@ -24,34 +24,36 @@ const Router = () => (
         <Route exact path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route 
-          exact path="/todo" 
-          element={
+          exact 
+          path="/todo" 
+          element={(
             <AuthCheck>
               <PrivateRoute>
                 <Todo />
               </PrivateRoute>
             </AuthCheck>
-          }
+          )}
         />
         <Route 
-          exact path="/survey" 
-          element={
+          exact 
+          path="/survey" 
+          element={(
             <AuthCheck>
               <PrivateRoute>
                 <Survey />
               </PrivateRoute>
             </AuthCheck>
-          } 
+          )} 
         />
         <Route 
           path="/*" 
-          element={
+          element={(
             <AuthCheck>
               <PrivateRoute>
                 <WrappedRoutes />
               </PrivateRoute>
             </AuthCheck>
-          } 
+          )} 
         />
       </Routes>
     </main>

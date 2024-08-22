@@ -78,11 +78,11 @@ const App = () => (
     <BrowserRouter basename="/">
       <I18nextProvider i18n={i18n}>
         <ConnectedThemeComponent>
-            <ScrollToTop>
-              <React.Suspense fallback={<Loading loading />}>
-                <Router />
-              </React.Suspense>
-            </ScrollToTop>
+          <ScrollToTop>
+            <React.Suspense fallback={<Loading loading />}>
+              <Router />
+            </React.Suspense>
+          </ScrollToTop>
         </ConnectedThemeComponent>
       </I18nextProvider>
     </BrowserRouter>
