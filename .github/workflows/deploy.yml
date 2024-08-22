@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.10
+      IMAGE_VERSION: 2.11
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -47,7 +47,7 @@ jobs:
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.10
+          IMAGE_VERSION: 2.11
           
     - name: Create .env file (Post Build)
       run: |
@@ -57,6 +57,6 @@ jobs:
     
     - name: Deploy to Production Server
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.10 && docker-compose -f docker-compose.prod.yml up -d'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.11 && docker-compose -f docker-compose.prod.yml up -d'
       env:
-          IMAGE_VERSION: 2.10
+          IMAGE_VERSION: 2.11
