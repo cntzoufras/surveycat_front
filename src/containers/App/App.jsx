@@ -10,7 +10,7 @@ import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider, Css
 import { createTheme as createMaterialTheme, ThemeProvider as MaterialV4ThemeProvider } from '@material-ui/core/styles';
 import { LoadScript } from '@react-google-maps/api';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
-import Loading from '@/shared/components/Loading';
+import Loading from '@/shared/components/account/auth/Loading';
 
 import Router from './Router';
 import store from './store';
