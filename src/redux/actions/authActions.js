@@ -130,7 +130,6 @@ export const handleRegister = ({
     return response;
   } catch (error) {
     console.error('Registration failed:', error);
-    console.error('Response: ', response);
     dispatch(registerError(error));
     throw error.response.data;
   }
