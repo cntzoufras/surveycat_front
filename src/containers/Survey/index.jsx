@@ -1,7 +1,6 @@
-// SurveyApp.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Box as MuiBox, Typography as MuiTypography } from '@mui/material';
+import { Box as MuiBox, Typography as MuiTypography, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // Import useSelector hook
 
@@ -24,8 +23,15 @@ const SurveyPageWrapper = () => {
   const { user, error, loggedIn } = useSelector(state => state.auth);
   const userId = user?.id;
   
+  useEffect(() => {
+    if (!userId) {
+      console.warn('... refreshing page.');
+      window.location.reload();
+    }
+  }, [userId]);
+
   if (!userId) {
-    return <div>Loading...</div>; // Or some other fallback
+    return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
   }
 
   return (
