@@ -6,19 +6,47 @@ export const AUTHENTICATE_LOGIN = 'AUTHENTICATE_LOGIN';
 export const AUTHENTICATE_LOGOUT = 'AUTHENTICATE_LOGOUT';
 export const AUTHENTICATE_REGISTER = 'AUTHENTICATE_REGISTER';
 export const AUTHENTICATE_REGISTER_ERROR = 'AUTHENTICATE_REGISTER_ERROR';
+export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+export const AUTHENTICATE_USER_LOADING = 'AUTHENTICATE_USER_LOADING';
+export const AUTHENTICATE_USER_ERROR = 'AUTHENTICATE_USER_ERROR';
 
-// export function auth({ name, avatar, token }) {
-//   return {
-//     type: AUTHENTICATE,
-//     payload: { user },
-//   };
-// }
+export const authenticateUser = () => async (dispatch) => {
+  dispatch({ type: AUTHENTICATE_USER_LOADING });
+
+  try {
+    const auth = JSON.parse(localStorage.getItem('auth'));
+
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/user`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+      withXSRFToken: true,
+    });
+
+    const { user } = response.data;
+
+    dispatch({
+      type: AUTHENTICATE_USER,
+      payload: { user },
+    });
+  } catch (error) {
+    console.error('Authentication failed:', error);
+    dispatch(authError('Authentication failed. Please log in again.'));
+    localStorage.removeItem('auth'); // Clear auth data if authentication fails
+  }
+};
 
 export function login({ user }) {
   return {
     type: AUTHENTICATE_LOGIN,
     payload: { user },
   };
+}
+
+export function logout() {
+  return { type: AUTHENTICATE_LOGOUT };
 }
 
 export function authError(error) {
@@ -28,19 +56,10 @@ export function authError(error) {
   };
 }
 
-export function logout() {
-  return { type: AUTHENTICATE_LOGOUT };
-}
-
 export const handleLogout = () => async (dispatch) => {
   try {
     const auth = JSON.parse(localStorage.getItem('auth'));
     console.log('auth:', auth);
-    const token = auth ? auth.token : null;
-
-    if (!token) {
-      throw new Error('No auth token found');
-    }
 
     await axios.post(`${process.env.REACT_APP_BASE_URL}/logout`, {}, {
       headers: {
@@ -53,6 +72,8 @@ export const handleLogout = () => async (dispatch) => {
 
     dispatch(logout());
     localStorage.removeItem('auth');
+    // Redirect to the login page
+    window.location.href = '/login';
   } catch (error) {
     console.error('Logout failed:', error);
   }
@@ -75,36 +96,23 @@ export const handleLogin = credentials => async (dispatch) => {
     console.log('Dispatching AUTHENTICATE_LOGIN with user:', user);
 
     dispatch({
-      type: 'AUTHENTICATE_LOGIN',
+      type: AUTHENTICATE_LOGIN,
       payload: { user },
     });
 
     localStorage.setItem('auth', JSON.stringify({ loggedIn: true, user }));
     console.log('Login successful: ', user);
   } catch (error) {
-    dispatch({
-      type: AUTHENTICATE_ERROR_AUTH,
-      error: 'Login failed. Please check your credentials.',
-    });
+    // Check if the error response is due to unverified email
+    if (error.response && error.response.status === 403 && error.response.data.message.includes('Email not verified')) {
+      dispatch(authError('Email not verified. Please check your inbox for the verification link.'));
+    } else {
+      // Generic login failure message
+      dispatch(authError('Login failed. Please check your credentials.'));
+    }
+    console.error('Login error:', error.response ? error.response.data : error.message);
   }
 };
-
-export const handleAuthError = error => (dispatch) => {
-  dispatch(authError(error));
-};
-export function registerSuccess(token) {
-  return {
-    type: AUTHENTICATE_REGISTER,
-    payload: { token },
-  };
-}
-
-export function registerError(error) {
-  return {
-    type: AUTHENTICATE_REGISTER_ERROR,
-    error,
-  };
-}
 
 export const handleRegister = ({
  username, email, password, passwordConfirmation,
@@ -135,4 +143,13 @@ export const handleRegister = ({
   }
 };
 
+export const handleAuthError = error => (dispatch) => {
+  dispatch(authError(error));
+};
 
+export function registerError(error) {
+  return {
+    type: AUTHENTICATE_REGISTER_ERROR,
+    error,
+  };
+}
