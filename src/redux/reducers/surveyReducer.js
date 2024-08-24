@@ -1,8 +1,8 @@
 const initialState = {
-  questions: [],  // This will hold the list of questions
-  choices: [],    // This will hold the list of choices
-  loading: false, // Flag to indicate loading state
-  error: null,    // To capture any errors
+  questions: [],
+  choices: [],
+  loading: false,
+  error: null,
 };
 
 const surveyReducer = (state = initialState, action) => {

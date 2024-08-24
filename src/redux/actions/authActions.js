@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import api from '@/utils/api/survey-api';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const AUTHENTICATE_ERROR_AUTH = 'AUTHENTICATE_ERROR_AUTH';
@@ -67,7 +68,7 @@ export function logout() {
 export const setupInterceptor = (navigate, dispatch) => {
   api.interceptors.response.use(
     response => response,
-    async error => {
+    async (error) => {
       if (error.response && error.response.status === 401) {
         // Clear authentication and session cookies
         Cookies.remove('auth');
@@ -88,7 +89,7 @@ export const setupInterceptor = (navigate, dispatch) => {
       }
 
       return Promise.reject(error);
-    }
+    },
   );
 };
 
@@ -135,8 +136,8 @@ export const handleLogout = () => async (dispatch) => {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      withCredentials: true, // Ensure cookies are sent
-      withXSRFToken: true,   // Include CSRF token if necessary
+      withCredentials: true,
+      withXSRFToken: true,
     });
 
     // Clear local storage

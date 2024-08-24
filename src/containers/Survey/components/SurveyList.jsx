@@ -58,7 +58,7 @@ const SurveyList = () => {
           </MuiBox>
         ) : (
           <MuiGrid container spacing={3}>
-            {surveys.map((survey) => (
+            {surveys.map(survey => (
               <MuiGrid item xs={12} md={6} lg={4} key={survey.id}>
                 <MuiPaper elevation={3} style={{ padding: '16px' }}>
                   <MuiTypography variant="h6">{survey.title}</MuiTypography>

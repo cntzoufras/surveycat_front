@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { useDispatch, Provider, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { setupInterceptor } from '@/redux/actions/authActions';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { Provider, useSelector } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,7 +20,7 @@ import GlobalStyles from './globalStyles';
 import RechartStyles from './rechartStyles';
 import NotificationStyles from './notificationStyles';
 import CalendarStyles from './calendarStyles';
-import { setupInterceptor } from '@/utils/api/survey-api';
+
 
 i18n.init(i18nextConfig);
 
@@ -81,30 +80,27 @@ const InterceptorSetup = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Set up the Axios interceptor with navigate and dispatch
     setupInterceptor(navigate, dispatch);
   }, [navigate, dispatch]);
 
-  return null; // This component doesn't need to render anything
+  return null;
 };
 
 const App = () => {
-  return (
-    <Provider store={store}>
-      <BrowserRouter basename="/">
-        <I18nextProvider i18n={i18n}>
-          <ConnectedThemeComponent>
-            <ScrollToTop>
-              <InterceptorSetup /> 
-              <React.Suspense fallback={<Loading loading />}>
-                <Router />
-              </React.Suspense>
-            </ScrollToTop>
-          </ConnectedThemeComponent>
-        </I18nextProvider>
-      </BrowserRouter>
-    </Provider>
-  );
+  <Provider store={store}>
+    <BrowserRouter basename="/">
+      <I18nextProvider i18n={i18n}>
+        <ConnectedThemeComponent>
+          <ScrollToTop>
+            <InterceptorSetup /> 
+            <React.Suspense fallback={<Loading loading />}>
+              <Router />
+            </React.Suspense>
+          </ScrollToTop>
+        </ConnectedThemeComponent>
+      </I18nextProvider>
+    </BrowserRouter>
+  </Provider>;
 };
 
 export default App;

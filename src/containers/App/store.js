@@ -12,9 +12,9 @@ import {
   pokemonReducer,
 } from '@/redux/reducers/index';
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
+import surveyReducer from '@/redux/reducers/surveyReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
 import todoReducer from '../Todo/redux/reducer';
-import surveyReducer from '@/redux/reducers/surveyReducer';
 
 const authFromSession = JSON.parse(localStorage.getItem('auth')) || { loggedIn: false, user: null };
 
