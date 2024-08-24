@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
-import OptionInputList from './OptionInputList';
 import { createSurveyQuestion, createSurveyQuestionChoices } from '@/redux/actions/surveyActions';
+import OptionInputList from './OptionInputList';
 
 const AddQuestionModal = ({ 
   isOpen, 
@@ -14,9 +14,8 @@ const AddQuestionModal = ({
   currentSurveyPageId,
   onAddNewPage, 
   }) => {
-
   const dispatch = useDispatch();
-  const surveyState = useSelector((state) => state.survey); // Accessing the survey state
+  const surveyState = useSelector(state => state.survey); // Accessing the survey state
 
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
@@ -39,11 +38,10 @@ const AddQuestionModal = ({
   const handleSurveyPageInputChange = e => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
     console.log(e.target.value);
-    setQuestionType(e.target.value);  // Update questionType state
-    if (e.target.value === 1 || e.target.value === 2) {  // Adjusted condition for options
+    setQuestionType(e.target.value);
+    if (e.target.value === 1 || e.target.value === 2) {
       setNumOptions(2);
-      setOptionInputs(['','']);
-      
+      setOptionInputs(['', '']);
     } else {
       setNumOptions(0);
       setOptionInputs([]);
@@ -82,13 +80,13 @@ const handleNumOptionsChange = (e) => {
     const questionData = {
       title: newQuestion,
       surveyPageId: selectedSurveyPage,
-      options: (questionType !== '1' && questionType !== '2')  // 'Multiple Choice' or 'Checkboxes'
+      options: (questionType !== '1' && questionType !== '2')
         ? optionInputs.slice(0, numOptions).filter(Boolean)
         : [],
       selectedOptions,
       question_tags: JSON.stringify(selectedQuestionTags),
       is_required: false,
-      question_type_id: questionType,  // Use the selected question type ID
+      question_type_id: questionType,
       additional_settings: {
         color: 'blue',
         align: 'center',
