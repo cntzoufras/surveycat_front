@@ -176,20 +176,21 @@ export const handleRegister = ({
  username, email, password, passwordConfirmation,
  }) => async (dispatch) => {
   try {
-    await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`);
+    await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });    
     
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
       username,
       email,
       password,
       passwordConfirmation,
-    }, {
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            
-        },
-        withXSRFToken: true,
+    }, 
+    {
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',            
+      },
+      withCredentials: true, // Ensure cookies are sent,
+      withXSRFToken: true,
     });
 
     
