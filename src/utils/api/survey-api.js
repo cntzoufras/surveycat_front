@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { logout } from '@/redux/actions/authActions'; // Adjust the import path as necessary
 
 const api = axios.create({
   baseURL: 'http://surveycat.test/api',
@@ -10,33 +11,31 @@ const api = axios.create({
     withCredentials: true,
 });
 
-axios.defaults.withCredentials = true;
-
-// Add a request interceptor to include the Bearer token in all requests
 api.interceptors.request.use(
-  (config) => {
-    // Renamed to camelCase
-    const csrfToken = Cookies.get('XSRF-TOKEN');
-    
-    if (csrfToken) {
-      // Creating a new config object to avoid reassigning the parameter
-      const updatedConfig = {
-        ...config,
-        headers: {
-          ...config.headers,
-          'X-XSRF-TOKEN': csrfToken,
-        },
-      };
-      return updatedConfig;
+  async (config) => {
+    let csrfToken = Cookies.get('XSRF-TOKEN');
+
+    // If the CSRF token is missing, fetch it
+    if (!csrfToken) {
+      await axios.get(`${config.baseURL}/sanctum/csrf-cookie`, { withCredentials: true });
+      csrfToken = Cookies.get('XSRF-TOKEN');
     }
+
+    if (csrfToken) {
+      config.headers['X-XSRF-TOKEN'] = csrfToken;
+    }
+
     return config;
   },
   error => Promise.reject(error),
 );
 
 
-export const getSurveys = userId => (
-  api.get('/surveys')
+export default api;
+
+
+export const getUserSurveys = () => (
+  api.get('/surveys/user')
 );
 export const getSurveyCategories = () => (
   api.get('/survey-categories')
@@ -54,10 +53,10 @@ export const createSurveyPage = surveyPageData => (
   api.post('/survey-pages', surveyPageData)
 );
 export const getSurveyQuestions = (surveyId, surveyPageId) => (
-  api.get(`/surveys/${surveyId}/survey-pages/${surveyPageId}/survey-questions`)
+  api.get(`/surveys/${surveyId}/pages/${surveyPageId}/questions`)
 );
 export const getSurveyPages = surveyId => (
-  api.get(`/surveys/${surveyId}/survey-pages`)
+  api.get(`/surveys/${surveyId}/pages`)
 );
 export const createSurveyQuestion = questionData => (
   api.post('/survey-questions', questionData)
