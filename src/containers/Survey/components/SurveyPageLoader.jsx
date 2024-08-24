@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress as MuiCircularProgress } from '@mui/material';
+import { CircularProgress as MuiCircularProgress, Typography } from '@mui/material';
 import SurveyPage from './SurveyPage';
 import { getSurveyPage, getSurveyQuestions } from '../../../utils/api/survey-api';
 
@@ -61,11 +61,11 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }
 
   if (loadError) {
-    return <div>{loadError}</div>;
+    return <Typography variant="subtitle2" gutterBottom>{loadError}</Typography>;
   }
 
   if (!surveyPage) {
-    return <div>Error loading survey page: No survey page found.</div>;
+    return <Typography variant="subtitle2" gutterBottom>Error loading survey page: No survey page found.</Typography>;
   }
 
   return <SurveyPage surveyPage={surveyPage} questions={questions} />;
