@@ -183,8 +183,7 @@ export const handleRegister = ({
       email,
       password,
       passwordConfirmation,
-    }, 
-    {
+    }, {
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',            
