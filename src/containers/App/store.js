@@ -14,6 +14,7 @@ import {
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import covidReducer from '../Maps/VectorMapWithRequestData/redux/covidReducer';
 import todoReducer from '../Todo/redux/reducer';
+import surveyReducer from '@/redux/reducers/surveyReducer';
 
 const authFromSession = JSON.parse(localStorage.getItem('auth')) || { loggedIn: false, user: null };
 
@@ -36,6 +37,7 @@ const reducer = combineReducers({
   covid: covidReducer,
   todo: todoReducer,
   pokemon: pokemonReducer,
+  survey: surveyReducer,
 });
 const store = createStore(reducer, applyMiddleware(thunk));
 
