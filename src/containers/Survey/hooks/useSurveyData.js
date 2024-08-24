@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const useSurveyData = ({ surveyId, surveyPageId }) => {
   console.log('useSurveyData hook called with:', surveyId, surveyPageId);
@@ -23,10 +24,17 @@ const useSurveyData = ({ surveyId, surveyPageId }) => {
       console.log('fetchSurveyData called');
 
       try {
+        
+        // Ensure the CSRF token is set
+        const csrfToken = Cookies.get('XSRF-TOKEN');
+        if (!csrfToken) {
+          await axios.get('http://surveycat.test/sanctum/csrf-cookie', { withCredentials: true });
+        }
+
         const [surveyResponse, surveyPageResponse, stockSurveysResponse] = await Promise.all([
-          axios.get(`http://surveycat.test/api/surveys/${surveyId}`),
-          axios.get(`http://surveycat.test/api/survey-pages/${surveyPageId}`),
-          axios.get('http://surveycat.test/api/surveys/stock'),
+          axios.get(`http://surveycat.test/api/surveys/${surveyId}`, { withCredentials: true }),
+          axios.get(`http://surveycat.test/api/survey-pages/${surveyPageId}`, { withCredentials: true }),
+          axios.get('http://surveycat.test/api/surveys/stock', { withCredentials: true }),
         ]);
 
         if (isMounted) {
@@ -34,7 +42,7 @@ const useSurveyData = ({ surveyId, surveyPageId }) => {
           setSurveyTitle(surveyResponse.data.title);
           setSurveyDescription(surveyResponse.data.description);
           setSurveyPageTitle(surveyPageResponse.data.title);
-          setSurveyPageDescription(surveyPageResponse.data.description);
+          setSurveyPageDescription(surveyPageResponse.data.description); 
           setStockSurveys(stockSurveysResponse.data.data);
         }
       } catch (error) {
