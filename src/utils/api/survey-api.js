@@ -30,6 +30,35 @@ api.interceptors.request.use(
   error => Promise.reject(error),
 );
 
+// Function to set up the response interceptor with navigate and dispatch
+export const setupInterceptor = (navigate, dispatch) => {
+  api.interceptors.response.use(
+    response => response,
+    async error => {
+      if (error.response && error.response.status === 401) {
+        // Clear authentication and session cookies
+        Cookies.remove('auth');
+        Cookies.remove('surveycat_session');
+        Cookies.remove('XSRF-TOKEN');
+
+        // Dispatch logout action to Redux store
+        dispatch(logout());
+
+        // Redirect to the login page
+        navigate('/login');
+      }
+
+      // Handle CSRF token mismatch error by refreshing the CSRF token
+      if (error.response && error.response.status === 419) {
+        await axios.get(`${error.config.baseURL}/sanctum/csrf-cookie`, { withCredentials: true });
+        return api(error.config); // Retry the original request
+      }
+
+      return Promise.reject(error);
+    }
+  );
+};
+
 
 export default api;
 
