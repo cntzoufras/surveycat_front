@@ -7,7 +7,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider, CssBaseline } from '@mui/material/styles';
+import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider } from '@mui/material/styles';
 import { createTheme as createMaterialTheme, ThemeProvider as MaterialV4ThemeProvider } from '@material-ui/core/styles';
 import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
@@ -86,7 +86,7 @@ const InterceptorSetup = () => {
   return null;
 };
 
-const App = () => {
+const App = () => (
   <Provider store={store}>
     <BrowserRouter basename="/">
       <I18nextProvider i18n={i18n}>
@@ -100,7 +100,7 @@ const App = () => {
         </ConnectedThemeComponent>
       </I18nextProvider>
     </BrowserRouter>
-  </Provider>;
-};
+  </Provider>
+  );
 
 export default App;
