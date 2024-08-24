@@ -37,6 +37,7 @@ import NavigationItem from '../../../Documentation/08_new_navigation_item/index'
 import Resources from '../../../Documentation/10_resources/index';
 import Changelog from '../../../Documentation/11_changelog/index';
 import FAQ from '../../../Documentation/12_faq/index';
+import SurveyList from '../../../Survey/components/SurveyList';
 
 const WrappedRoutes = () => (
   <div>
@@ -50,6 +51,7 @@ const WrappedRoutes = () => (
         <Route path="/fitness_dashboard" element={<FitnessDashboard />} />
         <Route path="/todo" element={<Todo />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
+        <Route path="/surveys" element={<SurveyList />} />
         <Route path="/surveys/:surveyId/survey-pages/:surveyPageId" element={<SurveyDesign />} />  
         <Route path="/charts/*" element={<Charts />}>
           <Route path="charts_js" element={<ChartsJS />} />
