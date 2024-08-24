@@ -75,7 +75,6 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
     let isMounted = true;
 
     const fetchData = async () => {
-      console.log('fetchData function triggered');
       console.log('fetchData function triggered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
       try {
@@ -228,9 +227,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             variant="outlined" 
             margin="normal" 
             multiline 
-            rows={4} 
+            rows={6} 
             value={surveyPageDescription} 
             onChange={handleSurveyPageDescriptionChange} 
+            InputLabelProps={{ shrink: true }} 
           />
           <MuiSelect fullWidth value={layout} onChange={handleLayoutChange} displayEmpty>
             <MuiMenuItem value="default">Default</MuiMenuItem>
