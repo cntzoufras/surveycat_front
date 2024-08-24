@@ -98,7 +98,7 @@ const SurveyForm = ({ userId }) => {
       console.log('survey page response einai: ', surveyPageResponse);
       const surveyPageId = surveyPageResponse.data.id;
       
-      navigate(`/surveys/${surveyId}/survey-pages/${surveyPageId}`, {
+      navigate(`/surveys/${surveyId}/pages/${surveyPageId}`, {
       state: { surveyData, surveyPageData },
     });
     } catch (error) {

@@ -52,7 +52,7 @@ const WrappedRoutes = () => (
         <Route path="/todo" element={<Todo />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys" element={<SurveyList />} />
-        <Route path="/surveys/:surveyId/survey-pages/:surveyPageId" element={<SurveyDesign />} />  
+        <Route path="/surveys/:surveyId/pages/:surveyPageId" element={<SurveyDesign />} />  
         <Route path="/charts/*" element={<Charts />}>
           <Route path="charts_js" element={<ChartsJS />} />
           <Route path="react_vis" element={<ReactVis />} />
