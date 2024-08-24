@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import QuestionItem from './QuestionItem';
 
 const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
-  console.log(questions);
-  
+  console.log(`Questions in prop of QuestionList: ${questions}`);
   // Check if questions is null, undefined, or an empty array
   if (!questions || questions.length === 0) {
     return (
@@ -20,7 +19,7 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
       <h2>Questions</h2>
       {questions.map((question, index) => (
         <QuestionItem
-          key={question.id} // Use question ID as the key
+          key={question.id}
           question={question}
           index={index}
           onDelete={onDelete}

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import OptionInputList from './OptionInputList';
+import { createSurveyQuestion, createSurveyQuestionChoices } from '@/redux/actions/surveyActions';
 
 const AddQuestionModal = ({ 
   isOpen, 
@@ -12,10 +14,14 @@ const AddQuestionModal = ({
   currentSurveyPageId,
   onAddNewPage, 
   }) => {
+
+  const dispatch = useDispatch();
+  const surveyState = useSelector((state) => state.survey); // Accessing the survey state
+
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
   const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
-  const [questionType, setQuestionType] = useState('textarea');
+  const [questionType, setQuestionType] = useState('');
   const [numOptions, setNumOptions] = useState(2);
   const [optionInputs, setOptionInputs] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -32,18 +38,20 @@ const AddQuestionModal = ({
 
   const handleSurveyPageInputChange = e => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
-    setQuestionType(e.target.value);
-    if (e.target.value !== 'radio' && e.target.value !== 'checkbox') {
+    console.log(e.target.value);
+    setQuestionType(e.target.value);  // Update questionType state
+    if (e.target.value === 1 || e.target.value === 2) {  // Adjusted condition for options
+      setNumOptions(2);
+      setOptionInputs(['','']);
+      
+    } else {
       setNumOptions(0);
       setOptionInputs([]);
       setSelectedOptions([]);
-    } else {
-      setNumOptions(2);
-      setOptionInputs(['', '']);
     }
   };
 
-  const handleNumOptionsChange = (e) => {
+const handleNumOptionsChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setNumOptions(value > 0 ? value : 1);
     const updatedOptionInputs = [...optionInputs];
@@ -74,14 +82,13 @@ const AddQuestionModal = ({
     const questionData = {
       title: newQuestion,
       surveyPageId: selectedSurveyPage,
-      type: questionType,
-      options: (questionType === 'radio' || questionType === 'checkbox')
+      options: (questionType !== '1' && questionType !== '2')  // 'Multiple Choice' or 'Checkboxes'
         ? optionInputs.slice(0, numOptions).filter(Boolean)
         : [],
       selectedOptions,
-      question_tags: selectedQuestionTags,
+      question_tags: JSON.stringify(selectedQuestionTags),
       is_required: false,
-      question_type_id: questionType,
+      question_type_id: questionType,  // Use the selected question type ID
       additional_settings: {
         color: 'blue',
         align: 'center',
@@ -93,7 +100,6 @@ const AddQuestionModal = ({
     onSubmit(questionData);
   };
 
-
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
@@ -104,9 +110,17 @@ const AddQuestionModal = ({
           <Form.Group controlId="formQuestionType">
             <Form.Label>Question Type</Form.Label>
             <Form.Control as="select" value={questionType} onChange={handleQuestionTypeChange}>
-              <option value="text">Text</option>
-              <option value="radio">Radio Button</option>
-              <option value="checkbox">Checkbox</option>
+              <option value="1">Multiple Choice</option>
+              <option value="2">Checkboxes</option>
+              <option value="3">Star Rating</option>
+              <option value="4">Best worst scale</option>
+              <option value="5">Single Textbox</option>
+              <option value="6">Comment Box</option>
+              <option value="7">Dropdown</option>
+              <option value="8">Ranking</option>
+              <option value="9">Slider</option>
+              <option value="10">Multiple Checkboxes</option>
+              <option value="11">Date / Time</option>
             </Form.Control>
           </Form.Group>
 
@@ -143,7 +157,7 @@ const AddQuestionModal = ({
             + Add New Page
           </Button>
 
-          {questionType === 'radio' || questionType === 'checkbox' ? (
+          {questionType === '1' || questionType === '2' ? (
             <div>
               <Form.Group controlId="formNumOptions">
                 <Form.Label>Number of Options</Form.Label>

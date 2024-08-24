@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
- Box as MuiBox, 
- Typography as MuiTypography, 
- TextField as MuiTextField, 
- Select as MuiSelect, 
- MenuItem as MuiMenuItem, 
- Button as MuiButton, 
- Grid as MuiGrid, 
+  Box as MuiBox, 
+  Typography as MuiTypography, 
+  TextField as MuiTextField, 
+  Select as MuiSelect, 
+  MenuItem as MuiMenuItem, 
+  Button as MuiButton, 
+  Grid as MuiGrid, 
 } from '@mui/material';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
- updateSurveyTitle, updateSurveyDescription, updateSurveyPageTitle, updateSurveyPageDescription, 
+  updateSurveyTitle, updateSurveyDescription, updateSurveyPageTitle, updateSurveyPageDescription, 
 } from '@/utils/api/survey-api';
 import useDebounce from '../hooks/useDebounce';
 import useSurveyData from '../hooks/useSurveyData';
@@ -34,17 +34,12 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const userId = user?.id;
   console.log('userId:', userId);
   
-  
   useEffect(() => {
     if (!userId) {
       console.log('User is not logged in, redirecting to login...');
       navigate('/login');
     }
 }, [userId, navigate]);
-
-  // if (!userId) {
-  //   return <div>Loading user data...</div>;
-  // }
 
   const {
       surveyTitle,
@@ -166,6 +161,17 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
     console.log('modal open state: ', isAddQuestionModalOpen);
     };
   const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
+  
+  const handleAddQuestionSubmit = async (questionData) => {
+    try {
+      await addQuestion(questionData);
+      await fetchSurveyQuestions(); // Refresh the question list after adding a new question
+      closeAddQuestionModal(); // Close the modal after successful submission
+    } catch (error) {
+      console.error('Error adding question:', error);
+    }
+  };
+
   const handleStockSurveyChange = e => setSelectedStockSurvey(e.target.value);
 
   return (
@@ -249,7 +255,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             <AddQuestionModal 
               isOpen={isAddQuestionModalOpen} 
               onClose={closeAddQuestionModal} 
-              onSubmit={addQuestion} 
+              onSubmit={handleAddQuestionSubmit} 
               surveyPages={surveyPages}
               currentSurveyPageId={surveyPageId}
               onAddNewPage={handleAddNewPage}
