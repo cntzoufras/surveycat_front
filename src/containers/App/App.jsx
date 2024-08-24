@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { Provider, useSelector } from 'react-redux';
@@ -19,6 +21,7 @@ import GlobalStyles from './globalStyles';
 import RechartStyles from './rechartStyles';
 import NotificationStyles from './notificationStyles';
 import CalendarStyles from './calendarStyles';
+import { setupInterceptor } from '@/utils/api/survey-api';
 
 i18n.init(i18nextConfig);
 
@@ -73,19 +76,35 @@ ThemeComponent.propTypes = {
 
 const ConnectedThemeComponent = ThemeComponent;
 
-const App = () => (
-  <Provider store={store}>
-    <BrowserRouter basename="/">
-      <I18nextProvider i18n={i18n}>
-        <ConnectedThemeComponent>
-          <ScrollToTop>
-            <React.Suspense fallback={<Loading loading />}>
-              <Router />
-            </React.Suspense>
-          </ScrollToTop>
-        </ConnectedThemeComponent>
-      </I18nextProvider>
-    </BrowserRouter>
-  </Provider>
-);
+const InterceptorSetup = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Set up the Axios interceptor with navigate and dispatch
+    setupInterceptor(navigate, dispatch);
+  }, [navigate, dispatch]);
+
+  return null; // This component doesn't need to render anything
+};
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <BrowserRouter basename="/">
+        <I18nextProvider i18n={i18n}>
+          <ConnectedThemeComponent>
+            <ScrollToTop>
+              <InterceptorSetup /> 
+              <React.Suspense fallback={<Loading loading />}>
+                <Router />
+              </React.Suspense>
+            </ScrollToTop>
+          </ConnectedThemeComponent>
+        </I18nextProvider>
+      </BrowserRouter>
+    </Provider>
+  );
+};
+
 export default App;

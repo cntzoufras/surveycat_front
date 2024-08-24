@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const AUTHENTICATE_ERROR_AUTH = 'AUTHENTICATE_ERROR_AUTH';
@@ -63,27 +64,32 @@ export function logout() {
   return { type: AUTHENTICATE_LOGOUT };
 }
 
-export const handleLogout = () => async (dispatch) => {
-  try {
-    const auth = JSON.parse(localStorage.getItem('auth'));
-    console.log('auth:', auth);
+export const setupInterceptor = (navigate, dispatch) => {
+  api.interceptors.response.use(
+    response => response,
+    async error => {
+      if (error.response && error.response.status === 401) {
+        // Clear authentication and session cookies
+        Cookies.remove('auth');
+        Cookies.remove('surveycat_session');
+        Cookies.remove('XSRF-TOKEN');
 
-    await axios.post(`${process.env.REACT_APP_BASE_URL}/logout`, {}, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      withCredentials: true,
-      withXSRFToken: true,
-    });
+        // Dispatch logout action to Redux store
+        dispatch(logout());
 
-    dispatch(logout());
-    localStorage.removeItem('auth');
-    // Redirect to the login page
-    window.location.href = '/login';
-  } catch (error) {
-    console.error('Logout failed:', error);
-  }
+        // Redirect to the login page
+        navigate('/login');
+      }
+
+      // Handle CSRF token mismatch error by refreshing the CSRF token
+      if (error.response && error.response.status === 419) {
+        await axios.get(`${error.config.baseURL}/sanctum/csrf-cookie`, { withCredentials: true });
+        return api(error.config); // Retry the original request
+      }
+
+      return Promise.reject(error);
+    }
+  );
 };
 
 export const handleLogin = credentials => async (dispatch) => {
@@ -118,6 +124,50 @@ export const handleLogin = credentials => async (dispatch) => {
       dispatch(authError('Login failed. Please check your credentials.'));
     }
     console.error('Login error:', error.response ? error.response.data : error.message);
+  }
+};
+
+export const handleLogout = () => async (dispatch) => {
+  try {
+    // Make a POST request to your API's logout endpoint
+    await axios.post(`${process.env.REACT_APP_BASE_URL}/logout`, {}, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      withCredentials: true, // Ensure cookies are sent
+      withXSRFToken: true,   // Include CSRF token if necessary
+    });
+
+    // Clear local storage
+    localStorage.removeItem('auth');
+
+    const baseDomain = `.${new URL(process.env.REACT_APP_BASE_URL).hostname}`;
+    console.log(baseDomain);
+    const isSecure = new URL(process.env.REACT_APP_BASE_URL).protocol === 'https:';
+
+    // Remove cookies with the correct domain, secure flag, and SameSite attribute
+    const cookieOptions = { path: '/', domain: baseDomain, sameSite: 'Lax' };
+
+    // Remove with and without secure flag
+    Cookies.remove('auth', cookieOptions);
+    Cookies.remove('surveycat_session', cookieOptions);
+    Cookies.remove('XSRF-TOKEN', cookieOptions);
+
+    if (isSecure) {
+      Cookies.remove('auth', { ...cookieOptions, secure: true });
+      Cookies.remove('surveycat_session', { ...cookieOptions, secure: true });
+      Cookies.remove('XSRF-TOKEN', { ...cookieOptions, secure: true });
+    }
+
+    // Dispatch logout action to Redux store
+    dispatch(logout());
+
+    // Redirect to the login page
+    window.location.href = '/login';
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Optionally, you can handle errors or retry the request here
   }
 };
 

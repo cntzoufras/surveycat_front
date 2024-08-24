@@ -51,7 +51,12 @@ const authReducer = (state = initialState, action) => {
       };
     case AUTHENTICATE_LOGOUT:
       return {
-        ...initialState,
+        // ...initialState,
+        loggedIn: false,
+        user: null,
+        error: null,
+        loading: false,
+        registrationSuccess: false,
       };
     case AUTHENTICATE_REGISTER:
       return {

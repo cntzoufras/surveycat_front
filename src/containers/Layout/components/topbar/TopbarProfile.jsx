@@ -74,7 +74,6 @@ const TopbarProfile = () => {
             <TopbarMenuLink
               title="Log Out"
               icon="exit"
-              path="/logout"
               onClick={logout}
             />
           </TopbarMenu>
