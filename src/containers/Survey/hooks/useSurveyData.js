@@ -26,7 +26,7 @@ const useSurveyData = ({ surveyId, surveyPageId }) => {
         const [surveyResponse, surveyPageResponse, stockSurveysResponse] = await Promise.all([
           axios.get(`http://surveycat.test/api/surveys/${surveyId}`),
           axios.get(`http://surveycat.test/api/survey-pages/${surveyPageId}`),
-          axios.get('http://surveycat.test/api/stock-surveys'),
+          axios.get('http://surveycat.test/api/surveys/stock'),
         ]);
 
         if (isMounted) {
