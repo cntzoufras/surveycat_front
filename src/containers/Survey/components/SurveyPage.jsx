@@ -39,22 +39,22 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       console.log('User is not logged in, redirecting to login...');
       navigate('/login');
     }
-}, [userId, navigate]);
+  }, [userId, navigate]);
 
   const {
-      surveyTitle,
-      surveyDescription,
-      surveyPageTitle,
-      surveyPageDescription,
-      setSurveyTitle,
-      setSurveyDescription,
-      setSurveyPageTitle,
-      setSurveyPageDescription,
-      stockSurveys,
-      selectedStockSurvey,
-      setSelectedStockSurvey,
-      fetchSurveyData,
-    } = useSurveyData({ surveyId, surveyPageId, location });
+    surveyTitle,
+    surveyDescription,
+    surveyPageTitle,
+    surveyPageDescription,
+    setSurveyTitle,
+    setSurveyDescription,
+    setSurveyPageTitle,
+    setSurveyPageDescription,
+    stockSurveys,
+    selectedStockSurvey,
+    setSelectedStockSurvey,
+    fetchSurveyData,
+  } = useSurveyData({ surveyId, surveyPageId, location });
 
   const { surveyPages, fetchSurveyPages, addSurveyPage } = useSurveyPages();
   
@@ -172,8 +172,8 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const handleAddQuestionSubmit = async (questionData) => {
     try {
       await addQuestion(questionData);
-      await fetchSurveyQuestions(); // Refresh the question list after adding a new question
-      closeAddQuestionModal(); // Close the modal after successful submission
+      await fetchSurveyQuestions();
+      closeAddQuestionModal();
     } catch (error) {
       console.error('Error adding question:', error);
     }
@@ -182,10 +182,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const handleStockSurveyChange = e => setSelectedStockSurvey(e.target.value);
 
   return (
-    <MuiGrid container spacing={6}>
-      <MuiGrid item sm={4}>
+    <MuiGrid container spacing={4}>
+      <MuiGrid item xs={12} md={4}>
         <MuiBox sx={{ paddingBottom: 4 }}>
-          <MuiTypography variant="h6" sx={{ fontWeight:300 }}>Select Stock Survey</MuiTypography>
+          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={selectedStockSurvey} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
             {stockSurveys.map(survey => (
@@ -227,7 +227,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             margin="normal" 
             value={surveyPageTitle} 
             onChange={handleSurveyPageTitleChange} 
-            sx={{paddingBottom:1.5}}
+            sx={{ paddingBottom: 1.5 }}
           />
           <MuiTextField 
             fullWidth 
@@ -244,12 +244,11 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             <MuiMenuItem value="default">Default</MuiMenuItem>
             <MuiMenuItem value="default">Single</MuiMenuItem>
             <MuiMenuItem value="default">Multiple</MuiMenuItem>
-            {/* Add other layout options here */}
           </MuiSelect>
         </MuiBox>
       </MuiGrid>
-      <MuiGrid item sm={8}>
-        <MuiBox sx={{ marginLeft: 4 }}>
+      <MuiGrid item xs={12} md={8}>
+        <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
           <QuestionList 
             questions={surveyQuestions} 
             onDelete={deleteQuestion} 
@@ -258,7 +257,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           <MuiButton 
             variant="contained" 
             color="primary" 
-            sx={{ marginTop: 0.1 }} // Add spacing between questions and the button
+            sx={{ marginTop: 0.1 }}
             onClick={openAddQuestionModal}
           >
             Add Question
@@ -290,11 +289,9 @@ SurveyPage.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string,
-      // Add more fields as needed
     }),
   ).isRequired,
   handleOptionSelection: PropTypes.func.isRequired,
 };
-
 
 export default SurveyPage;
