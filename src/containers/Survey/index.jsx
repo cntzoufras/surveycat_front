@@ -10,7 +10,7 @@ import SurveyPageLoader from './components/SurveyPageLoader';
 const StyledBox = styled(MuiBox)`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 2rem;
 `;
 
@@ -22,7 +22,7 @@ const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
   const { user, error, loggedIn } = useSelector(state => state.auth);
   const userId = user?.id;
-  console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`)
+  console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`);
   
   if (!userId) {
     return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
@@ -37,7 +37,7 @@ const SurveyPageWrapper = () => {
 
   return (
     <StyledBox>
-      <StyledTypography variant="h3" component="h1" gutterBottom>
+      <StyledTypography variant="h2" component="h1" sx={{ align:'left', paddingBottom: 'rem', }} gutterBottom>
         Survey Design
       </StyledTypography>
       {!surveyId && !surveyPageId && <SurveyForm userId={userId} />}
