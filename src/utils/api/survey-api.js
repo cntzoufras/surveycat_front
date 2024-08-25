@@ -46,17 +46,20 @@ export const getSurveyThemes = () => (
 export const getSurveyPage = surveyPageId => (
   api.get(`/survey-pages/${surveyPageId}`)
 );
-export const createSurvey = surveyData => (
-  api.post('/surveys', surveyData)
-);
-export const createSurveyPage = surveyPageData => (
-  api.post('/survey-pages', surveyPageData)
-);
 export const getSurveyQuestions = (surveyId, surveyPageId) => (
   api.get(`/surveys/${surveyId}/pages/${surveyPageId}/questions`)
 );
 export const getSurveyPages = surveyId => (
   api.get(`/surveys/${surveyId}/pages`)
+);
+export const getSurveysWithPagesAndThemes = () => (
+  api.get('/surveys/all')
+);
+export const createSurvey = surveyData => (
+  api.post('/surveys', surveyData)
+);
+export const createSurveyPage = surveyPageData => (
+  api.post('/survey-pages', surveyPageData)
 );
 export const createSurveyQuestion = questionData => (
   api.post('/survey-questions', questionData)
