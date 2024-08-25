@@ -17,7 +17,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const QuestionItem = ({
   question, index, onDelete, onOptionSelection,
 }) => {
-  // Handle missing properties by providing fallbacks
   const questionTitle = question.title || 'No question title provided';
   const questionType = question.question_type_id || 'unknown type';
   const questionPage = question.survey_page_id || 'No page info';
@@ -30,10 +29,10 @@ const QuestionItem = ({
       
       {['radio', 'checkbox'].includes(questionType) && question.options && (
         <List>
-          {question.options.map(option => (
-            <ListItem key={`${question.id}-${option}`}>
+          {question.options.map((option, optIndex) => (
+            <ListItem key={`${question.id}-${optIndex}`} disablePadding>
               <FormControlLabel
-                control={questionType === '2' ? (
+                control={questionType === 'radio' ? (
                   <Radio
                     checked={question.selectedOption === option}
                     onChange={() => onOptionSelection(question.id, option)}
@@ -56,11 +55,9 @@ const QuestionItem = ({
       )}
 
       {onDelete && (
-        <ListItemSecondaryAction>
-          <IconButton edge="start" aria-label="delete" onClick={() => onDelete(question.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
+        <IconButton edge="end" aria-label="delete" onClick={() => onDelete(question.id)}>
+          <DeleteIcon />
+        </IconButton>
       )}
     </Box>
   );
