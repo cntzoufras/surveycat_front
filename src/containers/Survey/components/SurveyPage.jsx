@@ -56,10 +56,14 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       fetchSurveyData,
     } = useSurveyData({ surveyId, surveyPageId, location });
 
-  const {
- surveyQuestions, fetchSurveyQuestions, addQuestion, deleteQuestion, 
-} = useSurveyQuestions({ surveyId, surveyPageId });
-  const { surveyPages, fetchSurveyPages, addSurveyPage } = useSurveyPages({ surveyId });
+  const { surveyPages, fetchSurveyPages, addSurveyPage } = useSurveyPages();
+  
+  const { 
+    surveyQuestions, 
+    fetchSurveyQuestions, 
+    addQuestion, 
+    deleteQuestion, 
+  } = useSurveyQuestions({ surveyId, surveyPageId });
 
   const [layout, setLayout] = useState('default');
   const [validationErrors] = useState({});
@@ -78,9 +82,13 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       console.log('fetchData function triggered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
       try {
-        if (surveyId && surveyPageId) {
+        if (surveyId && surveyPageId && isMounted) {
           console.log(`Fetching data for SurveyID: ${surveyId} SurveyPageID: ${surveyPageId}`);
-          await Promise.all([fetchSurveyData(), fetchSurveyPages(), fetchSurveyQuestions()]);
+          await Promise.all([
+            fetchSurveyData(), 
+            fetchSurveyPages(surveyId), 
+            fetchSurveyQuestions()
+          ]);
         }
       } catch (error) {
           console.error('Error fetching data:', error);
@@ -89,7 +97,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       return true;
     };
 
-  if (isMounted) {
+    if (isMounted) {
       fetchData();
     }
 
@@ -280,7 +288,7 @@ SurveyPage.propTypes = {
   questions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      text: PropTypes.string,
+      title: PropTypes.string,
       // Add more fields as needed
     }),
   ).isRequired,

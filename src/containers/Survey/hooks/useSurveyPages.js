@@ -31,23 +31,31 @@ const useSurveyPages = () => {
     };
   }, []);
 
-  const addSurveyPage = async (surveyPageData) => {
+    const addSurveyPage = useCallback(async (surveyPageData) => {
+    let isMounted = true;
+
     try {
       if (!surveyPageData.survey_id) {
         throw new Error('survey_id is required to create a survey page');
       }
 
       const response = await createSurveyPage(surveyPageData);
-      
-      // Fetch pages after adding a new one, only if survey_id is valid
-      fetchSurveyPages(surveyPageData.survey_id);
+
+      if (isMounted) {
+        fetchSurveyPages(surveyPageData.survey_id);
+      }
 
       return response;
     } catch (error) {
       console.error('Error adding survey page:', error);
       throw error;
     }
-  };
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchSurveyPages]);
+
 
   return {
     surveyPages,
