@@ -13,6 +13,8 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Correctly define isMounted before use
+
     const fetchSurveyPageData = async () => {
       try {
         console.log('Fetching survey page data');
@@ -26,27 +28,33 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
           ? surveyPageResponse.data[0] 
           : surveyPageResponse.data;
         
-        setSurveyPage({
-          title: surveyPageData.title || 'Untitled Survey Page',
-          description: surveyPageData.description || 'No description available.',
-          ...surveyPageData,
-        });
+        if (isMounted) {
+          setSurveyPage({
+            title: surveyPageData.title || 'Untitled Survey Page',
+            description: surveyPageData.description || 'No description available.',
+            ...surveyPageData,
+          });
+        }
 
         const questionsResponse = await getSurveyQuestions(surveyId, surveyPageId);
         console.log('Survey questions response:', questionsResponse.data);
-        setQuestions(questionsResponse.data.data || []);
 
-        setIsLoading(false);
+        if (isMounted) {
+          setQuestions(questionsResponse.data.data || []);
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error('Error fetching survey page or questions:', error);
 
-        if (error.message === 'Survey ID or Survey Page ID is missing') {
-          setLoadError('Invalid URL. Please navigate through the application.');
-        } else {
-          setLoadError('Error fetching survey page or questions');
-        }
+        if (isMounted) {
+          if (error.message === 'Survey ID or Survey Page ID is missing') {
+            setLoadError('Invalid URL. Please navigate through the application.');
+          } else {
+            setLoadError('Error fetching survey page or questions');
+          }
 
-        setIsLoading(false);
+          setIsLoading(false);
+        }
       }
     };
 
@@ -56,6 +64,10 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
       setLoadError('Survey ID or Survey Page ID is missing');
       setIsLoading(false);
     }
+
+    return () => {
+      isMounted = false; // Cleanup: Set isMounted to false when the component unmounts
+    };
   }, [surveyId, surveyPageId]);
 
   if (isLoading) {
@@ -67,14 +79,13 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }
 
   if (!surveyPage) {
-    return <Typography variant="subtitle2" gutterBottom>
-      Error loading survey page: No survey page found.
-    </Typography>;
+    return  <Typography variant="subtitle2" gutterBottom>
+              Error loading survey page: No survey page found.
+            </Typography>;
   }
 
   return <SurveyPage surveyPage={surveyPage} questions={questions} />;
 };
-
 SurveyPageLoader.propTypes = {
   surveyId: PropTypes.string.isRequired,
   surveyPageId: PropTypes.string.isRequired,

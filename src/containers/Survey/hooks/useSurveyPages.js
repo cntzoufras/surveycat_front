@@ -5,19 +5,19 @@ const useSurveyPages = () => {
   const [surveyPages, setSurveyPages] = useState([]);
 
   const fetchSurveyPages = useCallback((surveyId) => {
+    if (!surveyId) {
+      console.error('Invalid surveyId passed to fetchSurveyPages');
+      return;
+    }
+
     let isMounted = true;
 
     const fetchData = async () => {
-      if (!surveyId) {
-        console.error('Invalid surveyId passed to fetchSurveyPages');
-        return;
-      }
-
       try {
         const response = await getSurveyPages(surveyId);
         if (isMounted) {
           console.log('Fetched survey pages:', response.data);
-          setSurveyPages(response.data); // Assuming the response structure contains pages in data.data
+          setSurveyPages(response.data);
         }
       } catch (error) {
         console.error('Error fetching survey pages:', error);

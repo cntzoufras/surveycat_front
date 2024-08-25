@@ -20,12 +20,8 @@ const useSurveyData = ({ surveyId, surveyPageId }) => {
         console.error('surveyId or surveyPageId is missing');
         return;
       }
-
       console.log('fetchSurveyData called');
-
       try {
-        
-        // Ensure the CSRF token is set
         const csrfToken = Cookies.get('XSRF-TOKEN');
         if (!csrfToken) {
           await axios.get('http://surveycat.test/sanctum/csrf-cookie', { withCredentials: true });
@@ -39,11 +35,12 @@ const useSurveyData = ({ surveyId, surveyPageId }) => {
 
         if (isMounted) {
           console.log('Survey response:', surveyResponse.data);
-          setSurveyTitle(surveyResponse.data.title);
-          setSurveyDescription(surveyResponse.data.description);
-          setSurveyPageTitle(surveyPageResponse.data.title);
-          setSurveyPageDescription(surveyPageResponse.data.description); 
-          setStockSurveys(stockSurveysResponse.data.data);
+          setSurveyTitle(surveyResponse.data.title || ''); // Fallback to empty string
+          setSurveyDescription(surveyResponse.data.description || ''); // Fallback to empty string
+          setSurveyPageTitle(surveyPageResponse.data.title || ''); // Fallback to empty string
+          setSurveyPageDescription(surveyPageResponse.data.description || ''); // Fallback to empty string
+          setStockSurveys(stockSurveysResponse.data.data || []);
+
         }
       } catch (error) {
         console.error('Error fetching survey data:', error);
