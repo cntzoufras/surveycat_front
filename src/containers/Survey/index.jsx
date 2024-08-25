@@ -22,7 +22,7 @@ const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
   const { user, error, loggedIn } = useSelector(state => state.auth);
   const userId = user?.id;
-  
+  console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`)
   useEffect(() => {
     if (!userId) {
       console.warn('... refreshing page.');
@@ -51,6 +51,6 @@ const SurveyDesign = () => (
   <div>
     <SurveyPageWrapper />
   </div>
-  );
+);
 
 export default SurveyDesign;
