@@ -76,7 +76,7 @@ const SurveyList = () => {
             {surveys.map(survey => (
               <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
                 <MuiPaper
-                  elevation={3}
+                  elevation={24}
                   sx={{
                     padding: 2,
                     minHeight: '150px',
@@ -85,22 +85,53 @@ const SurveyList = () => {
                     cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',
+                    textAlign: 'left',
                     justifyContent: 'space-between',
                   }}
                 >
                   <Link
-                    to={`/survey/${survey.id}/pages/${survey.survey_pages[0]?.id}`}
+                    to={`/surveys/${survey.id}/pages/${survey.survey_pages[0]?.id}`}
                     style={{ textDecoration: 'none', color: 'inherit' }} 
                   >
-                    <MuiTypography variant="h5" gutterBottom>
+                    <MuiTypography 
+                      variant="h2" 
+                      sx={{
+                        color: '#505050',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }} 
+                      gutterBottom
+                    >
                       {survey.title}
                     </MuiTypography>
-                    <MuiTypography variant="body2">
+                    <MuiTypography 
+                      variant="body2"
+                      sx={{
+                        color: '#505050',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }} 
+                      gutterBottom
+                    >
                       Theme: {survey.theme ? survey.theme.title : '-'}
                     </MuiTypography>
                     <MuiBox mt={2}>
-                      <MuiTypography variant="subtitle2">
-                        Number of Pages: {survey.survey_pages ? survey.survey_pages.length : 0}
+                      <MuiTypography 
+                        variant="subtitle2"
+                        sx={{
+                          color: '#757575',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                        }}
+                        gutterBottom
+                      >
+                        Pages: {survey.survey_pages ? survey.survey_pages.length : 0}
                       </MuiTypography>
                     </MuiBox>
                   </Link>

@@ -23,16 +23,17 @@ const SurveyPageWrapper = () => {
   const { user, error, loggedIn } = useSelector(state => state.auth);
   const userId = user?.id;
   console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`)
+  
+  if (!userId) {
+    return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
+  }
+  
   useEffect(() => {
     if (!userId) {
       console.warn('... refreshing page.');
       window.location.reload();
     }
   }, [userId]);
-
-  if (!userId) {
-    return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
-  }
 
   return (
     <StyledBox>

@@ -5,7 +5,8 @@ import SurveyPage from './SurveyPage';
 import { getSurveyPage, getSurveyQuestions } from '../../../utils/api/survey-api';
 
 const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
-  console.log(`surveypageloader loads ${surveyId} , ${surveyPageId}`);
+  console.log(`SurveyPageLoader loads Survey ID: ${surveyId}, Survey Page ID: ${surveyPageId}`);
+  
   const [surveyPage, setSurveyPage] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,14 +16,15 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
     const fetchSurveyPageData = async () => {
       try {
         console.log('Fetching survey page data');
+        
         const surveyPageResponse = await getSurveyPage(surveyPageId);
+        if (!surveyPageResponse || !surveyPageResponse.data) {
+          throw new Error('Survey page data is missing or invalid');
+        }
+        
         const surveyPageData = Array.isArray(surveyPageResponse.data) 
           ? surveyPageResponse.data[0] 
           : surveyPageResponse.data;
-        
-        if (!surveyPageData) {
-          throw new Error('Survey page data is missing or invalid');
-        }
         
         setSurveyPage({
           title: surveyPageData.title || 'Untitled Survey Page',
@@ -65,7 +67,9 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }
 
   if (!surveyPage) {
-    return <Typography variant="subtitle2" gutterBottom>Error loading survey page: No survey page found.</Typography>;
+    return <Typography variant="subtitle2" gutterBottom>
+      Error loading survey page: No survey page found.
+    </Typography>;
   }
 
   return <SurveyPage surveyPage={surveyPage} questions={questions} />;
