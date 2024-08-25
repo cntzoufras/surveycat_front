@@ -1,38 +1,76 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Radio,
+  Checkbox,
+  FormControlLabel,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const QuestionItem = ({
-  question, index, onDelete, onOptionSelection, 
-}) => (
-  <div key={question.id}> 
-    <p>{`${index + 1}. ${question.text} (${question.type}) (${question.surveyPage})`}</p>
-    {['radio', 'checkbox'].includes(question.type) && (
-    <div>
-      {question.options.map(option => (
-        <div key={`${question.id}-${option}`}>
-          <input
-            type={question.type}
-            name={`question-${index}`}
-            value={option}
-            checked={question.selectedOption === option} 
-            onChange={() => onOptionSelection(question.id, option)}
-          />
-          {option}
-        </div>
-      ))}
-    </div>
-    )}
-    {onDelete && ( 
-    <button type="button" onClick={() => onDelete(question.id)}>Delete</button> 
-    )}
-  </div>
-);
+  question, index, onDelete, onOptionSelection,
+}) => {
+  // Handle missing properties by providing fallbacks
+  const questionTitle = question.title || 'No question title provided';
+  const questionType = question.question_type_id || 'unknown type';
+  const questionPage = question.survey_page_id || 'No page info';
+
+  return (
+    <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
+      <Typography variant="h6">
+        {`${index + 1}. ${questionTitle} (${questionType}) (${questionPage})`}
+      </Typography>
+      
+      {['radio', 'checkbox'].includes(questionType) && question.options && (
+        <List>
+          {question.options.map(option => (
+            <ListItem key={`${question.id}-${option}`}>
+              <FormControlLabel
+                control={questionType === '2' ? (
+                  <Radio
+                    checked={question.selectedOption === option}
+                    onChange={() => onOptionSelection(question.id, option)}
+                    name={`question-${index}`}
+                    value={option}
+                  />
+                ) : (
+                  <Checkbox
+                    checked={question.selectedOption === option}
+                    onChange={() => onOptionSelection(question.id, option)}
+                    name={`question-${index}`}
+                    value={option}
+                  />
+                )}
+                label={option}
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
+
+      {onDelete && (
+        <ListItemSecondaryAction>
+          <IconButton edge="start" aria-label="delete" onClick={() => onDelete(question.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )}
+    </Box>
+  );
+};
 
 QuestionItem.propTypes = {
   question: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    question_type_id: PropTypes.number,
     surveyPage: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
     selectedOption: PropTypes.string,
