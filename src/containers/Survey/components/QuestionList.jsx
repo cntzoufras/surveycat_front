@@ -33,8 +33,8 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
 QuestionList.propTypes = {
   questions: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    question_type_id: PropTypes.number.isRequired,
     surveyPage: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
     selectedOption: PropTypes.string,
