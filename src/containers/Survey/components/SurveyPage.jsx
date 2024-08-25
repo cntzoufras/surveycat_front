@@ -65,10 +65,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const [validationErrors] = useState({});
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
 
-  const debouncedSurveyTitle = useDebounce(surveyTitle, 1000);
-  const debouncedSurveyDescription = useDebounce(surveyDescription, 1000);
-  const debouncedSurveyPageTitle = useDebounce(surveyPageTitle, 1000);
-  const debouncedSurveyPageDescription = useDebounce(surveyPageDescription, 1000);
+  const debouncedSurveyTitle = useDebounce(surveyTitle, 5000);
+  const debouncedSurveyDescription = useDebounce(surveyDescription, 5000);
+  const debouncedSurveyPageTitle = useDebounce(surveyPageTitle, 5000);
+  const debouncedSurveyPageDescription = useDebounce(surveyPageDescription, 5000);
   
   useEffect(() => {
     console.log('SurveyPage useEffect triggered with surveyId:', surveyId, 'surveyPageId:', surveyPageId);
