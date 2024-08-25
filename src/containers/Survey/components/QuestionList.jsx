@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import QuestionItem from './QuestionItem';
+import { 
+  Box as MuiBox, 
+  Typography as MuiTypography, 
+  List as MuiList 
+} from '@mui/material';
+
 
 const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
   console.log(`Questions in prop of QuestionList: ${questions}`);
@@ -15,19 +21,24 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
   }
 
   return (
-    <div>
-      <h2>Questions</h2>
-      {questions.map((question, index) => (
-        <QuestionItem
-          key={question.id}
-          question={question}
-          index={index}
-          onDelete={onDelete}
-          onOptionSelection={onOptionSelection}
-        />
-      ))}
-    </div>
+    <MuiBox sx={{ marginBottom: 4 }}>
+      <MuiTypography variant="h6" sx={{ fontWeight:300 }} gutterBottom>
+        Questions
+      </MuiTypography>
+      <MuiList>
+        {questions.map((question, index) => (
+          <QuestionItem
+            key={question.id}
+            question={question}
+            index={index}
+            onDelete={onDelete}
+            onOptionSelection={onOptionSelection}
+          />
+        ))}
+      </MuiList>
+    </MuiBox>
   );
+
 };
 
 QuestionList.propTypes = {

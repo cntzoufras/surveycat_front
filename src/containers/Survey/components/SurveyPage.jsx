@@ -183,7 +183,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
 
   return (
     <MuiGrid container spacing={6}>
-      <MuiGrid item sm={6}>
+      <MuiGrid item sm={4}>
         <MuiBox sx={{ paddingBottom: 4 }}>
           <MuiTypography variant="h6" sx={{ fontWeight:300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={selectedStockSurvey} onChange={handleStockSurveyChange}>
@@ -248,8 +248,8 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           </MuiSelect>
         </MuiBox>
       </MuiGrid>
-      <MuiGrid>
-        <MuiBox>
+      <MuiGrid item sm={8}>
+        <MuiBox sx={{ marginLeft: 4 }}>
           <QuestionList 
             questions={surveyQuestions} 
             onDelete={deleteQuestion} 
@@ -258,6 +258,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           <MuiButton 
             variant="contained" 
             color="primary" 
+            sx={{ marginTop: 0.1 }} // Add spacing between questions and the button
             onClick={openAddQuestionModal}
           >
             Add Question
