@@ -10,7 +10,7 @@ const useSurveyQuestions = ({ surveyId, surveyPageId }) => {
     try {
       const response = await getSurveyQuestions(surveyId, surveyPageId);
       if (isMounted) {
-        setSurveyQuestions(response.data.data);
+        setSurveyQuestions(response.data);
       }
     } catch (error) {
       if (isMounted) {
