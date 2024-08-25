@@ -174,10 +174,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const handleStockSurveyChange = e => setSelectedStockSurvey(e.target.value);
 
   return (
-    <MuiGrid container spacing={4}>
-      <MuiGrid item xs={3}>
-        <MuiBox>
-          <MuiTypography variant="h6">Select Premade Survey</MuiTypography>
+    <MuiGrid container spacing={6}>
+      <MuiGrid item sm={6}>
+        <MuiBox sx={{ paddingBottom: 4 }}>
+          <MuiTypography variant="h6" sx={{ fontWeight:300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={selectedStockSurvey} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
             {stockSurveys.map(survey => (
@@ -185,14 +185,12 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             ))}
           </MuiSelect>
         </MuiBox>
-      </MuiGrid>
-      <MuiGrid item xs={9}>
         <MuiBox>
           <MuiTypography 
-            fontWeight="medium" 
-            variant="h2"
+            fontWeight="300" 
+            variant="h3"
           >
-            Survey: {surveyTitle}
+            {surveyTitle}
           </MuiTypography>
           <MuiTextField 
             fullWidth 
@@ -208,11 +206,12 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             variant="outlined" 
             margin="normal" 
             multiline 
-            rows={4} 
+            rows={6} 
             value={surveyDescription} 
             onChange={handleSurveyDescriptionChange} 
+            sx={{ paddingBottom: 3, fontWeight: 300 }}
           />
-          <MuiTypography variant="h4">Page: {surveyPageTitle}</MuiTypography>
+          <MuiTypography variant="h5" sx={{ paddingBottom: 1.5, fontWeight: 300 }}>Survey Page title: {surveyPageTitle}</MuiTypography>
           <MuiTextField 
             fullWidth 
             label="Page Title" 
@@ -220,6 +219,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             margin="normal" 
             value={surveyPageTitle} 
             onChange={handleSurveyPageTitleChange} 
+            sx={{paddingBottom:1.5}}
           />
           <MuiTextField 
             fullWidth 
@@ -238,6 +238,10 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             <MuiMenuItem value="default">Multiple</MuiMenuItem>
             {/* Add other layout options here */}
           </MuiSelect>
+        </MuiBox>
+      </MuiGrid>
+      <MuiGrid>
+        <MuiBox>
           <QuestionList 
             questions={surveyQuestions} 
             onDelete={deleteQuestion} 
@@ -250,19 +254,18 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           >
             Add Question
           </MuiButton>
-          
-          {isAddQuestionModalOpen && (
-            <AddQuestionModal 
-              isOpen={isAddQuestionModalOpen} 
-              onClose={closeAddQuestionModal} 
-              onSubmit={handleAddQuestionSubmit} 
-              surveyPages={surveyPages}
-              currentSurveyPageId={surveyPageId}
-              onAddNewPage={handleAddNewPage}
-              validationErrors={validationErrors}
-            />
-          )}
-        </MuiBox>
+        </MuiBox>  
+        {isAddQuestionModalOpen && (
+          <AddQuestionModal 
+            isOpen={isAddQuestionModalOpen} 
+            onClose={closeAddQuestionModal} 
+            onSubmit={handleAddQuestionSubmit} 
+            surveyPages={surveyPages}
+            currentSurveyPageId={surveyPageId}
+            onAddNewPage={handleAddNewPage}
+            validationErrors={validationErrors}
+          />
+        )}
       </MuiGrid>
     </MuiGrid>
   );
