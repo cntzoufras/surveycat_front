@@ -16,7 +16,7 @@ import {
 import { handleRegister as reduxHandleRegister, handleAuthError } from '@/redux/actions/authActions';
 import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
 
-const Register = ({ history, handleError, error }) => {
+const Register = ({ error }) => {
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
   const [errors, setErrors] = useState({});
   
@@ -80,11 +80,7 @@ const Register = ({ history, handleError, error }) => {
 };
 
 Register.propTypes = {
-  handleError: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
 };
 
 export default Register;

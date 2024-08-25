@@ -70,7 +70,7 @@ const ActiveUsers = ({ dir }) => {
 };
 
 ActiveUsers.propTypes = {
-  dir: PropTypes.string.isRequired,
+  dir: PropTypes.string,
 };
 
 export default ActiveUsers;

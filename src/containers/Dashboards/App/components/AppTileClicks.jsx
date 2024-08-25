@@ -75,7 +75,7 @@ const AppTileClicks = ({ dir }) => {
 };
 
 AppTileClicks.propTypes = {
-  dir: PropTypes.string.isRequired,
+  dir: PropTypes.string,
 };
 
 export default AppTileClicks;
