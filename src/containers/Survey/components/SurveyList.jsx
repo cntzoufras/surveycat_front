@@ -7,8 +7,9 @@ import {
   Button as MuiButton,
   Link as MuiLink,
 } from '@mui/material';
-import { getUserSurveys } from '@/utils/api/survey-api';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getSurveysWithPagesAndThemes } from '@/utils/api/survey-api';
 
 // Create a theme with Roboto font
 const theme = createTheme({
@@ -21,25 +22,39 @@ const SurveyList = () => {
   const [surveys, setSurveys] = useState([]);
 
   useEffect(() => {
-    const fetchSurveys = async () => {
+    let isMounted = true; // Track if the component is mounted
+
+    const fetchSurveysWithDetails = async () => {
       try {
-        const response = await getUserSurveys();
-        if (response.ok) {
-          setSurveys(response.data);
-        } else {
-          console.error('Error fetching surveys:', response.status);
+        const response = await getSurveysWithPagesAndThemes(); // Updated API call
+
+        if (isMounted) {
+          if (response.status === 200) {
+            setSurveys(response.data);
+          } else {
+            console.error('Error fetching surveys:', response.status);
+          }
         }
       } catch (error) {
-        console.error('Error fetching surveys:', error);
+        if (isMounted) {
+          console.error('Error fetching surveys:', error.message);
+        }
       }
     };
-    fetchSurveys();
+
+    fetchSurveysWithDetails();
+
+    // Cleanup function to set isMounted to false when the component unmounts
+    return () => {
+      isMounted = false;
+    };
   }, []);
+
 
   return (
     <ThemeProvider theme={theme}>
-      <MuiBox p={3} textAlign="center">
-        <MuiTypography variant="h4" gutterBottom>
+      <MuiBox p={2} textAlign="center">
+        <MuiTypography textAlign="left" variant="h2" gutterBottom>
           Surveys
         </MuiTypography>
         {surveys.length === 0 ? (
@@ -57,19 +72,38 @@ const SurveyList = () => {
             </MuiButton>
           </MuiBox>
         ) : (
-          <MuiGrid container spacing={3}>
+          <MuiGrid container spacing={3} justifyContent="center">
             {surveys.map(survey => (
-              <MuiGrid item xs={12} md={6} lg={4} key={survey.id}>
-                <MuiPaper elevation={3} style={{ padding: '16px' }}>
-                  <MuiTypography variant="h6">{survey.title}</MuiTypography>
-                  <MuiTypography variant="body2">
-                    Style: {survey.style}
-                  </MuiTypography>
-                  <MuiBox mt={2}>
-                    <MuiTypography variant="subtitle2">
-                      Number of Pages: {survey.pages.length}
+              <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
+                <MuiPaper
+                  elevation={3}
+                  sx={{
+                    padding: 2,
+                    minHeight: '150px',
+                    maxWidth: '100%',
+                    margin: '0 auto',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Link
+                    to={`/survey/${survey.id}/pages/${survey.survey_pages[0]?.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }} 
+                  >
+                    <MuiTypography variant="h5" gutterBottom>
+                      {survey.title}
                     </MuiTypography>
-                  </MuiBox>
+                    <MuiTypography variant="body2">
+                      Theme: {survey.theme ? survey.theme.title : '-'}
+                    </MuiTypography>
+                    <MuiBox mt={2}>
+                      <MuiTypography variant="subtitle2">
+                        Number of Pages: {survey.survey_pages ? survey.survey_pages.length : 0}
+                      </MuiTypography>
+                    </MuiBox>
+                  </Link>
                 </MuiPaper>
               </MuiGrid>
             ))}
