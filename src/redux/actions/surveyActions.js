@@ -4,12 +4,24 @@ export const CREATE_SURVEY_QUESTION_SUCCESS = 'CREATE_SURVEY_QUESTION_SUCCESS';
 export const CREATE_SURVEY_QUESTION_FAIL = 'CREATE_SURVEY_QUESTION_FAIL';
 export const CREATE_SURVEY_QUESTION_CHOICES_SUCCESS = 'CREATE_SURVEY_QUESTION_CHOICES_SUCCESS';
 export const CREATE_SURVEY_QUESTION_CHOICES_FAIL = 'CREATE_SURVEY_QUESTION_CHOICES_FAIL';
+export const CREATE_SURVEY_SUCCESS = 'CREATE_SURVEY_SUCCESS';
+export const CREATE_SURVEY_FAIL = 'CREATE_SURVEY_FAIL';
+export const CREATE_SURVEY_PAGE_SUCCESS = 'CREATE_SURVEY_PAGE_SUCCESS';
+export const CREATE_SURVEY_PAGE_FAIL = 'CREATE_SURVEY_PAGE_FAIL';
 
 export const ADD_SURVEY_PAGE_SUCCESS = 'ADD_SURVEY_PAGE_SUCCESS';
 export const ADD_SURVEY_PAGE_FAIL = 'ADD_SURVEY_PAGE_FAIL';
 
+export const FETCH_SURVEY_CATEGORIES_SUCCESS = 'FETCH_SURVEY_CATEGORIES_SUCCESS';
+export const FETCH_SURVEY_CATEGORIES_FAIL = 'FETCH_SURVEY_CATEGORIES_FAIL';
+export const FETCH_SURVEY_THEMES_SUCCESS = 'FETCH_SURVEY_THEMES_SUCCESS';
+export const FETCH_SURVEY_THEMES_FAIL = 'FETCH_SURVEY_THEMES_FAIL';
+
 export const FETCH_SURVEY_QUESTIONS = 'FETCH_SURVEY_QUESTIONS';
-export const FETCH_SURVEY_PAGES = 'FETCH_SURVEY_PAGES';
+
+export const FETCH_SURVEY_PAGES_SUCCESS = 'FETCH_SURVEY_PAGES_SUCCESS';
+export const FETCH_SURVEY_PAGES_FAIL = 'FETCH_SURVEY_PAGES_FAIL';
+
 
 export const FETCH_STOCK_SURVEYS_SUCCESS = 'FETCH_STOCK_SURVEYS_SUCCESS';
 export const FETCH_STOCK_SURVEYS_FAIL = 'FETCH_STOCK_SURVEYS_FAIL';
@@ -31,15 +43,37 @@ export const DELETE_SURVEY_QUESTION_SUCCESS = 'DELETE_SURVEY_QUESTION_SUCCESS';
 export const DELETE_SURVEY_QUESTION_FAIL = 'DELETE_SURVEY_QUESTION_FAIL';
 
 
-// Action to add a new survey page
-export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) => {
+export const fetchSurveyCategoriesAction = () => async (dispatch) => {
   try {
-    const response = await api.post(`/survey-pages`, newPageData);
-    dispatch({ type: ADD_SURVEY_PAGE_SUCCESS, payload: response.data });
-    return response.data;
+    const response = await api.get('/survey-categories');
+    console.log('katigories einai: ', response.data.data);
+    dispatch({ type: FETCH_SURVEY_CATEGORIES_SUCCESS, payload: response.data.data });
   } catch (error) {
-    dispatch({ type: ADD_SURVEY_PAGE_FAIL, payload: error.message });
-    throw error;
+    dispatch({ type: FETCH_SURVEY_CATEGORIES_FAIL, payload: error.message });
+  }
+};
+
+export const fetchSurveyThemesAction = () => async (dispatch) => {
+  try {
+    const response = await api.get('/themes');
+    dispatch({ type: FETCH_SURVEY_THEMES_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    dispatch({ type: FETCH_SURVEY_THEMES_FAIL, payload: error.message });
+  }
+};
+
+export const fetchSurveyPagesAction = (surveyId) => async (dispatch) => {
+  try {
+    const response = await api.get(`/surveys/${surveyId}/pages`);
+    dispatch({
+      type: FETCH_SURVEY_PAGES_SUCCESS,
+      payload: response.data, // Assuming response.data contains the list of survey pages
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_SURVEY_PAGES_FAIL,
+      payload: error.message,
+    });
   }
 };
 
@@ -64,6 +98,40 @@ export const fetchStockSurveysAction = () => async (dispatch) => {
     dispatch({ type: FETCH_STOCK_SURVEYS_SUCCESS, payload: response.data.data });
   } catch (error) {
     dispatch({ type: FETCH_STOCK_SURVEYS_FAIL, payload: error.message });
+    throw error;
+  }
+};
+
+// Action to add a new survey page
+export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) => {
+  try {
+    const response = await api.post(`/survey-pages`, newPageData);
+    dispatch({ type: ADD_SURVEY_PAGE_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: ADD_SURVEY_PAGE_FAIL, payload: error.message });
+    throw error;
+  }
+};
+
+export const createSurveyAction = (surveyData) => async (dispatch) => {
+  try {
+    const response = await api.post('/surveys', surveyData);
+    dispatch({ type: CREATE_SURVEY_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: CREATE_SURVEY_FAIL, payload: error.message });
+    throw error;
+  }
+};
+
+export const createSurveyPageAction = (surveyPageData) => async (dispatch) => {
+  try {
+    const response = await api.post('/survey-pages', surveyPageData);
+    dispatch({ type: CREATE_SURVEY_PAGE_SUCCESS, payload: response.data });
+    return response.data; // Return survey page data for chaining actions
+  } catch (error) {
+    dispatch({ type: CREATE_SURVEY_PAGE_FAIL, payload: error.message });
     throw error;
   }
 };
