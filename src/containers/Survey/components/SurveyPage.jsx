@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useCallback } from 'react';
+import debounce from 'lodash/debounce';
 import {
   Box as MuiBox, 
   Typography as MuiTypography, 
@@ -20,6 +20,7 @@ import {
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
   fetchSurveyQuestionsAction,
+  fetchSurveyPagesAction,
   fetchStockSurveysAction,
   deleteSurveyQuestionAction,
   createSurveyQuestionAction,
@@ -27,21 +28,30 @@ import {
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
 
-const SurveyPage = () => { // Removed unnecessary props
+const SurveyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
-  console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
   const { user } = useSelector(state => state.auth);
   const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
-  const stockSurveys = useSelector(state => state.survey.stockSurveys || []); // Safely initialized
+  const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
   
   const surveyTitle = useSelector(state => state.survey.survey?.title);
   const surveyDescription = useSelector(state => state.survey.survey?.description);
   const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
   const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
+
+  // Local state to manage the input field
+  const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle || '');
+  const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription || '');
+  const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState(surveyPageTitle || '');
+  const [
+    localSurveyPageDescription, 
+    setLocalSurveyPageDescription
+  ] = useState(surveyPageDescription || '');
+
 
   const [layout, setLayout] = useState('default');
   const [validationErrors, setValidationErrors] = useState({});
@@ -53,11 +63,18 @@ const SurveyPage = () => { // Removed unnecessary props
       navigate('/login');
     }
   }, [user, navigate]);
+  
+  useEffect(() => {
+    if (surveyId) {
+      // Prefetch stock surveys on component mount
+      dispatch(fetchStockSurveysAction());
+    }
+    
+  }, [surveyId, dispatch]);
 
   useEffect(() => {
     if (surveyId) {
       dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
-      dispatch(fetchStockSurveysAction());
     }
   }, [surveyId, surveyPageId, dispatch]);
 
@@ -67,24 +84,82 @@ const SurveyPage = () => { // Removed unnecessary props
     }
   }, [surveyPages, surveyPageId]);
 
+  // Update the local state when the surveyTitle changes in the Redux store (e.g., after a refresh)
+  useEffect(() => {
+    setLocalSurveyTitle(surveyTitle || '');
+  }, [surveyTitle]);
+  
+  useEffect(() => {
+    setLocalSurveyDescription(surveyDescription || '');
+  }, [surveyDescription]);
+  
+  useEffect(() => {
+    setLocalSurveyPageTitle(surveyPageTitle || '');
+  }, [surveyPageTitle]);
+  
+  useEffect(() => {
+    setLocalSurveyPageDescription(surveyPageDescription || '');
+  }, [surveyPageDescription]);
+  
+
+  const debouncedUpdateSurveyTitle = useCallback(
+    debounce((newSurveyTitle) => {
+      if (newSurveyTitle.trim()) { // Ensure it's not empty before sending the request
+        dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+      }
+    }, 1500), // Slightly longer debounce time to allow easier typing
+    [dispatch, surveyId]
+  );
+  
+  const debouncedUpdateSurveyDescription = useCallback(
+    debounce((newSurveyDescription) => {
+      if (newSurveyDescription.trim()) { // Ensure it's not empty before sending the request
+        dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+      }
+    }, 1500), 
+    [dispatch, surveyId]
+  );
+  
+  const debouncedUpdateSurveyPageTitle = useCallback(
+    debounce((newSurveyPageTitle) => {
+      if (newSurveyPageTitle.trim()) { // Ensure it's not empty before sending the request
+        dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
+      }
+    }, 1500), 
+    [dispatch, surveyPageId]
+  );
+  
+  const debouncedUpdateSurveyPageDescription = useCallback(
+    debounce((newSurveyPageDescription) => {
+      if (newSurveyPageDescription.trim()) { // Ensure it's not empty before sending the request
+        dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+      }
+    }, 1500), 
+    [dispatch, surveyPageId]
+  );
+
   const handleSurveyTitleChange = (e) => {
     const newSurveyTitle = e.target.value;
-    dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+    setLocalSurveyTitle(newSurveyTitle);
+    debouncedUpdateSurveyTitle(newSurveyTitle);
   };
 
   const handleSurveyDescriptionChange = (e) => {
     const newSurveyDescription = e.target.value;
-    dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+    setLocalSurveyDescription(newSurveyDescription);
+    debouncedUpdateSurveyDescription(newSurveyDescription);
   };
   
   const handleSurveyPageTitleChange = (e) => {
-    const newPageTitle = e.target.value;
-    dispatch(updateSurveyPageTitleAction(surveyPageId, newPageTitle));
+    const newSurveyPageTitle = e.target.value;
+    setLocalSurveyPageTitle(newSurveyPageTitle);
+    debouncedUpdateSurveyPageTitle(newSurveyPageTitle)
   };
   
   const handleSurveyPageDescriptionChange = (e) => {
     const newSurveyPageDescription = e.target.value;
-    dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+    setLocalSurveyPageDescription(newSurveyPageDescription);
+    debouncedUpdateSurveyPageDescription(newSurveyPageDescription);
   };
   
   const handleLayoutChange = (e) => {
@@ -154,14 +229,11 @@ const SurveyPage = () => { // Removed unnecessary props
     }
   };
 
-  const renderStockSurveys = () => {
-    if (stockSurveys.length === 0) {
-      return <MuiMenuItem value=""><em>No Surveys Available</em></MuiMenuItem>;
-    }
+  const handleStockSurveyChange = (e) => {
+    const selectedSurveyId = e.target.value;
+    setLayout(selectedSurveyId)
 
-    return stockSurveys.map(survey => (
-      <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
-    ));
+    // Logic to handle selection of stock survey goes here
   };
 
   return (
@@ -171,7 +243,9 @@ const SurveyPage = () => { // Removed unnecessary props
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={surveyId} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
-            {renderStockSurveys()}
+            {stockSurveys.map(survey => (
+              <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
+            ))}
           </MuiSelect>
         </MuiBox>
         <MuiBox>
@@ -183,8 +257,8 @@ const SurveyPage = () => { // Removed unnecessary props
             label="Survey Title" 
             variant="outlined" 
             margin="normal" 
-            value={surveyTitle || ''} 
-            onChange={handleSurveyTitleChange} 
+            value={localSurveyTitle} // Use the local state
+            onChange={handleSurveyTitleChange} // Local state change and debounced API call
           />
           <MuiTextField 
             fullWidth 
@@ -193,7 +267,7 @@ const SurveyPage = () => { // Removed unnecessary props
             margin="normal" 
             multiline 
             rows={6} 
-            value={surveyDescription || ''} 
+            value={localSurveyDescription || ''} 
             onChange={handleSurveyDescriptionChange} 
             sx={{ paddingBottom: 3, fontWeight: 300 }}
           />
@@ -205,7 +279,7 @@ const SurveyPage = () => { // Removed unnecessary props
             label="Page Title" 
             variant="outlined" 
             margin="normal" 
-            value={surveyPageTitle || ''} 
+            value={localSurveyPageTitle || ''} 
             onChange={handleSurveyPageTitleChange} 
             sx={{ paddingBottom: 1.5 }}
           />
@@ -216,7 +290,7 @@ const SurveyPage = () => { // Removed unnecessary props
             margin="normal" 
             multiline 
             rows={6} 
-            value={surveyPageDescription || ''} 
+            value={localSurveyPageDescription || ''} 
             onChange={handleSurveyPageDescriptionChange} 
             InputLabelProps={{ shrink: true }} 
           />
@@ -247,7 +321,6 @@ const SurveyPage = () => { // Removed unnecessary props
           <QuestionList 
             questions={surveyQuestions} 
             onDelete={handleDeleteQuestion} 
-            onOptionSelection={handleOptionSelection} 
           />
           <MuiButton 
             variant="contained" 
@@ -274,18 +347,7 @@ const SurveyPage = () => { // Removed unnecessary props
 };
 
 SurveyPage.propTypes = {
-  surveyPage: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }),
-  questions: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string,
-    }),
-  ),
-  handleOptionSelection: PropTypes.func,
+  // No props passed directly anymore, everything is managed by Redux and component state
 };
 
 export default SurveyPage;
