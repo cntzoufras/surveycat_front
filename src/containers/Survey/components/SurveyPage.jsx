@@ -27,7 +27,7 @@ import {
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
 
-const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
+const SurveyPage = () => { // Removed unnecessary props
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
@@ -36,12 +36,12 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const { user } = useSelector(state => state.auth);
   const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
-  const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
+  const stockSurveys = useSelector(state => state.survey.stockSurveys || []); // Safely initialized
   
   const surveyTitle = useSelector(state => state.survey.survey?.title);
   const surveyDescription = useSelector(state => state.survey.survey?.description);
-  const surveyPageTitle = surveyPage?.title;
-  const surveyPageDescription = surveyPage?.description;
+  const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
+  const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
   const [layout, setLayout] = useState('default');
   const [validationErrors, setValidationErrors] = useState({});
@@ -61,12 +61,11 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
     }
   }, [surveyId, surveyPageId, dispatch]);
 
-  // Update current page index based on the surveyPage prop
   useEffect(() => {
-    if (surveyPages.length > 0 && surveyPage) {
-      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPage.id));
+    if (surveyPages.length > 0 && surveyPageId) {
+      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPageId));
     }
-  }, [surveyPages, surveyPage]);
+  }, [surveyPages, surveyPageId]);
 
   const handleSurveyTitleChange = (e) => {
     const newSurveyTitle = e.target.value;
@@ -155,7 +154,15 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
     }
   };
 
-  const handleStockSurveyChange = e => setSelectedStockSurvey(e.target.value);
+  const renderStockSurveys = () => {
+    if (stockSurveys.length === 0) {
+      return <MuiMenuItem value=""><em>No Surveys Available</em></MuiMenuItem>;
+    }
+
+    return stockSurveys.map(survey => (
+      <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
+    ));
+  };
 
   return (
     <MuiGrid container spacing={4}>
@@ -164,9 +171,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={surveyId} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
-            {stockSurveys.map(survey => (
-              <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
-            ))}
+            {renderStockSurveys()}
           </MuiSelect>
         </MuiBox>
         <MuiBox>
@@ -273,14 +278,14 @@ SurveyPage.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
     description: PropTypes.string,
-  }).isRequired,
+  }),
   questions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       title: PropTypes.string,
     }),
-  ).isRequired,
-  handleOptionSelection: PropTypes.func.isRequired,
+  ),
+  handleOptionSelection: PropTypes.func,
 };
 
 export default SurveyPage;
