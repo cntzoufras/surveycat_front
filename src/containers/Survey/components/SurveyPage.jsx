@@ -20,7 +20,9 @@ import {
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
   fetchSurveyQuestionsAction,
+  fetchStockSurveysAction, // Import the new action
   deleteSurveyQuestionAction,
+  createSurveyQuestionAction,
 } from '@/redux/actions/surveyActions'; // Action to load user data
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
@@ -30,11 +32,16 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
   console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
-  
 
   const { user } = useSelector(state => state.auth);
-  const surveyPages = useSelector(state => state.survey.surveyPages); // Redux state for survey pages
-  const surveyQuestions = useSelector(state => state.survey.questions); // Redux state for questions
+  const surveyPages = useSelector(state => state.survey.surveyPages);
+  const surveyQuestions = useSelector(state => state.survey.questions);
+  const stockSurveys = useSelector(state => state.survey.stockSurveys);
+  
+  const surveyTitle = useSelector(state => state.survey.survey?.title);
+  const surveyDescription = useSelector(state => state.survey.survey?.description);
+  const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
+  const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
   const [layout, setLayout] = useState('default');
   const [validationErrors, setValidationErrors] = useState({});
@@ -50,6 +57,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   useEffect(() => {
     if (surveyId) {
       dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+      dispatch(fetchStockSurveysAction());
     }
   }, [surveyId, surveyPageId, dispatch]);
 
@@ -155,7 +163,6 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect fullWidth value={surveyId} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
-            {/* Assuming stockSurveys is provided via props or state */}
             {stockSurveys.map(survey => (
               <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
             ))}
