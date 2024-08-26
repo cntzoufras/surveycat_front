@@ -8,7 +8,7 @@ import customizerReducer from './customizerReducer';
 import todoReducer from './todoReducer';
 import authReducer from './authReducer';
 import pokemonReducer from './pokemonReducer';
-
+import surveyReducer from './surveyReducer';
 
 export {
   themeReducer,
@@ -21,4 +21,5 @@ export {
   todoReducer,
   authReducer,
   pokemonReducer,
+  surveyReducer
 };
