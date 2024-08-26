@@ -172,6 +172,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const handleAddQuestionSubmit = async (questionData) => {
     try {
       await addQuestion(questionData);
+      await new Promise(resolve => setTimeout(resolve, 700));
       await fetchSurveyQuestions();
       closeAddQuestionModal();
     } catch (error) {
