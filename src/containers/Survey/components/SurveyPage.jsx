@@ -43,7 +43,6 @@ const SurveyPage = () => {
   const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
   const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
-  // Local state to manage the input field
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle || '');
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription || '');
   const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState(surveyPageTitle || '');
@@ -66,7 +65,6 @@ const SurveyPage = () => {
   
   useEffect(() => {
     if (surveyId) {
-      // Prefetch stock surveys on component mount
       dispatch(fetchStockSurveysAction());
     }
     
@@ -84,7 +82,6 @@ const SurveyPage = () => {
     }
   }, [surveyPages, surveyPageId]);
 
-  // Update the local state when the surveyTitle changes in the Redux store (e.g., after a refresh)
   useEffect(() => {
     setLocalSurveyTitle(surveyTitle || '');
   }, [surveyTitle]);
@@ -101,19 +98,18 @@ const SurveyPage = () => {
     setLocalSurveyPageDescription(surveyPageDescription || '');
   }, [surveyPageDescription]);
   
-
   const debouncedUpdateSurveyTitle = useCallback(
     debounce((newSurveyTitle) => {
-      if (newSurveyTitle.trim()) { // Ensure it's not empty before sending the request
+      if (newSurveyTitle.trim()) {
         dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
       }
-    }, 1500), // Slightly longer debounce time to allow easier typing
+    }, 1500),
     [dispatch, surveyId]
   );
   
   const debouncedUpdateSurveyDescription = useCallback(
     debounce((newSurveyDescription) => {
-      if (newSurveyDescription.trim()) { // Ensure it's not empty before sending the request
+      if (newSurveyDescription.trim()) {
         dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
       }
     }, 1500), 
@@ -122,7 +118,7 @@ const SurveyPage = () => {
   
   const debouncedUpdateSurveyPageTitle = useCallback(
     debounce((newSurveyPageTitle) => {
-      if (newSurveyPageTitle.trim()) { // Ensure it's not empty before sending the request
+      if (newSurveyPageTitle.trim()) {
         dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
       }
     }, 1500), 
@@ -131,7 +127,7 @@ const SurveyPage = () => {
   
   const debouncedUpdateSurveyPageDescription = useCallback(
     debounce((newSurveyPageDescription) => {
-      if (newSurveyPageDescription.trim()) { // Ensure it's not empty before sending the request
+      if (newSurveyPageDescription.trim()) {
         dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
       }
     }, 1500), 
