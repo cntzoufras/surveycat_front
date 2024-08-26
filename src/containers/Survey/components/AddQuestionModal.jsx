@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { createSurveyQuestion, createSurveyQuestionChoices } from '@/redux/actions/surveyActions';
+import { createSurveyQuestionAction, createSurveyQuestionChoicesAction } from '@/redux/actions/surveyActions'; // Corrected imports
 import OptionInputList from './OptionInputList';
 
 const AddQuestionModal = ({ 
@@ -17,14 +17,14 @@ const AddQuestionModal = ({
 
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
-  const [validationErrors, setValidationErrors] = useState({});
   const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
   const [questionType, setQuestionType] = useState('1');
   const [numOptions, setNumOptions] = useState(2);
   const [optionInputs, setOptionInputs] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestionTags, setSelectedQuestionTags] = useState([]);
-  const [isRequired, setIsRequired] = useState(false); // New state for "is required"
+  const [isRequired, setIsRequired] = useState(false); 
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (currentSurveyPageId) {
@@ -34,7 +34,7 @@ const AddQuestionModal = ({
 
   const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
   const handleSurveyPageChange = (e) => setSelectedSurveyPage(e.target.value);
-  const handleIsRequiredChange = () => setIsRequired(!isRequired); // Toggle required status
+  const handleIsRequiredChange = () => setIsRequired(!isRequired); 
 
   const handleQuestionTypeChange = (e) => {
     console.log(`handleQuestionTypeChange e.target.value: $(e.target.value)`);
@@ -76,7 +76,7 @@ const AddQuestionModal = ({
   };
 
   const handleTagChange = (e) => {
-    setSelectedQuestionTags(e.target.value.split(',')); // Assume tags are comma-separated
+    setSelectedQuestionTags(e.target.value.split(',')); 
   };
 
   const handleSubmit = async (e) => {
@@ -85,7 +85,7 @@ const AddQuestionModal = ({
       title: newQuestion,
       survey_page_id: selectedSurveyPage,
       options: (questionType === '1' || questionType === '2')
-        ? optionInputs.slice(0, numOptions).filter(Boolean) // Only keep filled options
+        ? optionInputs.slice(0, numOptions).filter(Boolean) 
         : [],
       selectedOptions,
       question_tags: JSON.stringify(selectedQuestionTags),
@@ -101,23 +101,23 @@ const AddQuestionModal = ({
     };
 
     try {
-      const newQuestionResponse = await dispatch(createSurveyQuestion(questionData));
+      const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData)); // Corrected action name
 
-      if (questionType === '1' || questionType === '2') {  // For "Multiple Choice" or "Checkboxes"
+      if (questionType === '1' || questionType === '2') { 
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
           survey_question_id: newQuestionResponse.id,
         }));
-        await dispatch(createSurveyQuestionChoices(choicesData));
+        await dispatch(createSurveyQuestionChoicesAction(choicesData)); // Corrected action name
       }
 
       onClose();
-      setValidationErrors({}); // Clear validation errors on successful submission
+      setValidationErrors({}); 
 
     } catch (error) {
       console.error('Failed to create question or choices:', error);
-      if (error.response && error.response.status === 422) {
+      if (error.response && error.response.status === 422) { 
         setValidationErrors(error.response.data.errors);
       }
     }
@@ -126,7 +126,7 @@ const AddQuestionModal = ({
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add Question {isRequired && <span style={{color: 'red'}}>*</span>}</Modal.Title> {/* Add asterisk if required */}
+        <Modal.Title>Add Question {isRequired && <span style={{color: 'red'}}>*</span>}</Modal.Title> 
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -136,7 +136,7 @@ const AddQuestionModal = ({
               as="select" 
               value={questionType} 
               onChange={handleQuestionTypeChange}
-              isInvalid={!!validationErrors.question_type_id} // Show error state
+              isInvalid={!!validationErrors.question_type_id} 
             >
               <option value="1">Multiple Choice</option>
               <option value="2">Checkboxes</option>
@@ -164,7 +164,7 @@ const AddQuestionModal = ({
               value={newQuestion}
               onChange={handleQuestionInputChange}
               placeholder="Enter your question"
-              isInvalid={!!validationErrors.title} // Show error state
+              isInvalid={!!validationErrors.title} 
             />
             {validationErrors.title && (
               <Form.Control.Feedback type="invalid">
@@ -179,7 +179,7 @@ const AddQuestionModal = ({
               as="select" 
               value={selectedSurveyPage} 
               onChange={handleSurveyPageChange}
-              isInvalid={!!validationErrors.survey_page_id} // Show error state
+              isInvalid={!!validationErrors.survey_page_id} 
             >
               {surveyPages.map(page => (
                 <option key={page.id} value={page.id}>
@@ -198,7 +198,7 @@ const AddQuestionModal = ({
             <Form.Label>Tags</Form.Label>
             <Form.Control
               type="text"
-              value={selectedQuestionTags.join(',')} // Display tags as comma-separated
+              value={selectedQuestionTags.join(',')} 
               onChange={handleTagChange}
               placeholder="Enter tags separated by commas"
             />
@@ -221,7 +221,7 @@ const AddQuestionModal = ({
                   type="number"
                   value={numOptions}
                   onChange={handleNumOptionsChange}
-                  isInvalid={!!validationErrors.options} // Show error state
+                  isInvalid={!!validationErrors.options} 
                 />
                 {validationErrors.options && (
                   <Form.Control.Feedback type="invalid">
@@ -263,9 +263,6 @@ const AddQuestionModal = ({
 AddQuestionModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  validationErrors: PropTypes.shape({
-    [PropTypes.string]: PropTypes.string,
-  }),
   surveyPages: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string,
@@ -275,7 +272,6 @@ AddQuestionModal.propTypes = {
 };
 
 AddQuestionModal.defaultProps = {
-  validationErrors: {},
   currentSurveyPageId: '',
 };
 
