@@ -43,6 +43,7 @@ const SurveyPage = () => {
   const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
   const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
+  // Local state to manage the input field
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle || '');
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription || '');
   const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState(surveyPageTitle || '');
@@ -67,7 +68,6 @@ const SurveyPage = () => {
     if (surveyId) {
       dispatch(fetchStockSurveysAction());
     }
-    
   }, [surveyId, dispatch]);
 
   useEffect(() => {
@@ -82,6 +82,7 @@ const SurveyPage = () => {
     }
   }, [surveyPages, surveyPageId]);
 
+  // Update the local state when the surveyTitle changes in the Redux store (e.g., after a refresh)
   useEffect(() => {
     setLocalSurveyTitle(surveyTitle || '');
   }, [surveyTitle]);
@@ -97,7 +98,7 @@ const SurveyPage = () => {
   useEffect(() => {
     setLocalSurveyPageDescription(surveyPageDescription || '');
   }, [surveyPageDescription]);
-  
+
   const debouncedUpdateSurveyTitle = useCallback(
     debounce((newSurveyTitle) => {
       if (newSurveyTitle.trim()) {
@@ -122,7 +123,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
       }
     }, 1500), 
-    [dispatch, surveyPageId]
+    [dispatch, surveyId, surveyPageId]
   );
   
   const debouncedUpdateSurveyPageDescription = useCallback(
@@ -131,7 +132,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
       }
     }, 1500), 
-    [dispatch, surveyPageId]
+    [dispatch, surveyId, surveyPageId]
   );
 
   const handleSurveyTitleChange = (e) => {
@@ -149,7 +150,7 @@ const SurveyPage = () => {
   const handleSurveyPageTitleChange = (e) => {
     const newSurveyPageTitle = e.target.value;
     setLocalSurveyPageTitle(newSurveyPageTitle);
-    debouncedUpdateSurveyPageTitle(newSurveyPageTitle)
+    debouncedUpdateSurveyPageTitle(newSurveyPageTitle);
   };
   
   const handleSurveyPageDescriptionChange = (e) => {
@@ -171,10 +172,15 @@ const SurveyPage = () => {
       };
       const newPage = await dispatch(addSurveyPageAction(surveyId, newPageData));
 
-      navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
+      // Update the state to reflect the new page
+      setCurrentPageIndex(surveyPages.length); // Index of the new page
+      setLocalSurveyPageTitle(''); // Reset the title
+      setLocalSurveyPageDescription(''); // Reset the description
 
-      setCurrentPageIndex(surveyPages.length);
+      // Navigate to the new page's URL
+      navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
       setValidationErrors({});
+
     } catch (error) {
       console.error('Error adding new page:', error);
       if (error.response && error.response.status === 422) {
@@ -186,12 +192,16 @@ const SurveyPage = () => {
   const handleNextPage = () => {
     if (currentPageIndex < surveyPages.length - 1) {
       setCurrentPageIndex(currentPageIndex + 1);
+      const nextPageId = surveyPages[currentPageIndex + 1].id;
+      navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPageIndex > 0) {
       setCurrentPageIndex(currentPageIndex - 1);
+      const prevPageId = surveyPages[currentPageIndex - 1].id;
+      navigate(`/surveys/${surveyId}/pages/${prevPageId}`);
     }
   };
 
@@ -227,9 +237,8 @@ const SurveyPage = () => {
 
   const handleStockSurveyChange = (e) => {
     const selectedSurveyId = e.target.value;
-    setLayout(selectedSurveyId)
-
-    // Logic to handle selection of stock survey goes here
+    setLayout(selectedSurveyId);
+    // Handle stock survey selection logic
   };
 
   return (
@@ -253,8 +262,8 @@ const SurveyPage = () => {
             label="Survey Title" 
             variant="outlined" 
             margin="normal" 
-            value={localSurveyTitle} // Use the local state
-            onChange={handleSurveyTitleChange} // Local state change and debounced API call
+            value={localSurveyTitle}
+            onChange={handleSurveyTitleChange}
           />
           <MuiTextField 
             fullWidth 
@@ -263,12 +272,12 @@ const SurveyPage = () => {
             margin="normal" 
             multiline 
             rows={6} 
-            value={localSurveyDescription || ''} 
+            value={localSurveyDescription} 
             onChange={handleSurveyDescriptionChange} 
             sx={{ paddingBottom: 3, fontWeight: 300 }}
           />
           <MuiTypography variant="h5" sx={{ paddingBottom: 1.5, fontWeight: 300 }}>
-            Survey Page title: {surveyPageTitle || 'No page selected'}
+            Survey Page title: {localSurveyPageTitle || 'No page selected'}
           </MuiTypography>
           <MuiTextField 
             fullWidth 
@@ -340,10 +349,6 @@ const SurveyPage = () => {
       </MuiGrid>
     </MuiGrid>
   );
-};
-
-SurveyPage.propTypes = {
-  // No props passed directly anymore, everything is managed by Redux and component state
 };
 
 export default SurveyPage;
