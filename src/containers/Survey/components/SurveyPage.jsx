@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'; // For cycling through pages
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import {
   updateSurveyTitleAction,
   updateSurveyDescriptionAction, 
@@ -20,18 +20,17 @@ import {
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
   fetchSurveyQuestionsAction,
-  fetchStockSurveysAction, // Import the new action
+  fetchStockSurveysAction,
   deleteSurveyQuestionAction,
   createSurveyQuestionAction,
-} from '@/redux/actions/surveyActions'; // Action to load user data
+} from '@/redux/actions/surveyActions';
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
 
-const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
+const SurveyPage = ({ handleOptionSelection }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
-  console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
   const { user } = useSelector(state => state.auth);
   const surveyPages = useSelector(state => state.survey.surveyPages);
@@ -63,9 +62,9 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
 
   useEffect(() => {
     if (surveyPages.length > 0) {
-      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPage?.id));
+      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPageId));
     }
-  }, [surveyPages, surveyPage]);
+  }, [surveyPages, surveyPageId]);
 
   const handleSurveyTitleChange = (e) => {
     const newSurveyTitle = e.target.value;
@@ -102,7 +101,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
 
       navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
 
-      setCurrentPageIndex(surveyPages.length); // Since it's a new page, it should be the last one
+      setCurrentPageIndex(surveyPages.length);
       setValidationErrors({});
     } catch (error) {
       console.error('Error adding new page:', error);
@@ -268,17 +267,6 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
 };
 
 SurveyPage.propTypes = {
-  surveyPage: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    description: PropTypes.string,
-  }).isRequired,
-  questions: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string,
-    }),
-  ).isRequired,
   handleOptionSelection: PropTypes.func.isRequired,
 };
 
