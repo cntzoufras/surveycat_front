@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
- Box as MuiBox, 
- Typography as MuiTypography, 
- TextField as MuiTextField, 
- Button as MuiButton, 
- FormControl as MuiFormControl, 
- InputLabel as MuiInputLabel, 
- Select as MuiSelect, 
- MenuItem as MuiMenuItem,
+  Box as MuiBox,
+  Typography as MuiTypography,
+  TextField as MuiTextField,
+  Button as MuiButton,
+  FormControl as MuiFormControl,
+  InputLabel as MuiInputLabel,
+  Select as MuiSelect,
+  MenuItem as MuiMenuItem,
 } from '@mui/material';
 import styled from '@emotion/styled';
-import {
- getSurveyCategories, getSurveyThemes, createSurvey, createSurveyPage, 
-} from '@/utils/api/survey-api';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FontSelector from './FontSelector';
-import useSurveyPages from '../hooks/useSurveyPages';
+import {
+  fetchSurveyCategoriesAction,
+  fetchSurveyThemesAction,
+  createSurveyAction,
+  createSurveyPageAction,
+} from '@/redux/actions/surveyActions';
 
 const MuiStyledFormControl = styled(MuiFormControl)`
   margin-bottom: 1rem;
@@ -37,43 +40,24 @@ const MuiStyledErrorBox = styled(MuiBox)`
 `;
 
 const SurveyForm = ({ userId }) => {
-  console.log(`SurveyForm userId: ${userId}`);
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
-  const [surveyCategories, setSurveyCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const [surveyThemes, setSurveyThemes] = useState([]);
   const [selectedThemeId, setSelectedThemeId] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
   const [selectedFont, setSelectedFont] = useState('Roboto'); // Default font
 
   const navigate = useNavigate();
-  
-   useEffect(() => {
-    let isMounted = true;
+  const dispatch = useDispatch();
 
-    const fetchData = async () => {
-      try {
-        const categoriesResponse = await getSurveyCategories();
-        const themesResponse = await getSurveyThemes();
-        if (isMounted) {
-          setSurveyCategories(categoriesResponse.data.data);
-          setSurveyThemes(themesResponse.data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      isMounted = false; // Cleanup function to avoid setting state on unmounted component
-    };
-  }, []);
+  useEffect(() => {
+    dispatch(fetchSurveyCategoriesAction());
+    dispatch(fetchSurveyThemesAction());
+  }, [dispatch]);
   
-  const { addSurveyPage } = useSurveyPages();
-  
+  const surveyCategories = useSelector((state) => state.survey.surveyCategories);
+  const surveyThemes = useSelector((state) => state.survey.surveyThemes);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -84,23 +68,22 @@ const SurveyForm = ({ userId }) => {
         theme_id: selectedThemeId,
         user_id: userId,
       };
-    
-      const response = await createSurvey(surveyData);
-      const surveyId = response.data.id;
-      
+
+      const surveyResponse = await dispatch(createSurveyAction(surveyData));
+      const surveyId = surveyResponse.id;
+
       const surveyPageData = {
         title: '',
         description: '',
         survey_id: surveyId,
       };
 
-      const surveyPageResponse = await addSurveyPage(surveyPageData);
-      console.log('survey page response einai: ', surveyPageResponse);
-      const surveyPageId = surveyPageResponse.data.id;
-      
+      const surveyPageResponse = await dispatch(createSurveyPageAction(surveyPageData));
+      const surveyPageId = surveyPageResponse.id;
+
       navigate(`/surveys/${surveyId}/pages/${surveyPageId}`, {
-      state: { surveyData, surveyPageData },
-    });
+        state: { surveyData, surveyPageData },
+      });
     } catch (error) {
       if (error.response && error.response.status === 422) {
         setValidationErrors(error.response.data.errors);
@@ -109,20 +92,19 @@ const SurveyForm = ({ userId }) => {
       }
     }
   };
-  
+
   return (
     <MuiBox mb={3} sx={{ fontFamily: 'Roboto, Arial, sans-serif', width: 800, maxWidth: 800 }}>
       <form onSubmit={handleSubmit}>
         <FontSelector selectedFont={selectedFont} setSelectedFont={setSelectedFont} />
         <MuiBox style={{ fontFamily: selectedFont }}>
-
           <MuiTextField
             fullWidth
             label="Survey Title"
             variant="outlined"
             margin="normal"
             value={surveyTitle}
-            onChange={e => setSurveyTitle(e.target.value)}
+            onChange={(e) => setSurveyTitle(e.target.value)}
             required
           />
           <MuiTextField
@@ -133,7 +115,7 @@ const SurveyForm = ({ userId }) => {
             multiline
             rows={12}
             value={surveyDescription}
-            onChange={e => setSurveyDescription(e.target.value)}
+            onChange={(e) => setSurveyDescription(e.target.value)}
           />
           <MuiStyledFormControl fullWidth required>
             <CustomInputLabel id="category-label" shrink={Boolean(selectedCategoryId)}>
@@ -145,13 +127,13 @@ const SurveyForm = ({ userId }) => {
               id="category-select"
               value={selectedCategoryId}
               label="Category"
-              onChange={e => setSelectedCategoryId(e.target.value)}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
               sx={{ width: '100%', maxWidth: 400 }}
             >
               <MuiMenuItem value="" disabled>
                 <em>Select Category</em>
               </MuiMenuItem>
-              {surveyCategories.map(category => (
+            {Array.isArray(surveyCategories) && surveyCategories.map((category) => (
                 <MuiMenuItem key={category.id} value={category.id} sx={{ lineHeight: 1.5 }}>
                   {category.title}
                 </MuiMenuItem>
@@ -168,14 +150,13 @@ const SurveyForm = ({ userId }) => {
               id="theme-select"
               value={selectedThemeId}
               label="Theme"
-              onChange={e => setSelectedThemeId(e.target.value)}
+              onChange={(e) => setSelectedThemeId(e.target.value)}
               sx={{ maxWidth: 400 }}
-              
             >
               <MuiMenuItem value="" disabled>
                 <em>Select Theme</em>
               </MuiMenuItem>
-              {surveyThemes.map(theme => (
+              {Array.isArray(surveyThemes) && surveyThemes.map((theme) => (
                 <MuiMenuItem key={theme.id} value={theme.id} sx={{ lineHeight: 1.5 }}>
                   {theme.title}
                 </MuiMenuItem>
@@ -198,7 +179,7 @@ const SurveyForm = ({ userId }) => {
         </MuiBox>
         {Object.keys(validationErrors).length > 0 && (
           <MuiStyledErrorBox marginTop="1rem" bgcolor="#f44336" color="white" padding="1rem" borderRadius="4px">
-            {Object.keys(validationErrors).map(key => (
+            {Object.keys(validationErrors).map((key) => (
               <MuiTypography key={key}>{validationErrors[key]}</MuiTypography>
             ))}
           </MuiStyledErrorBox>
