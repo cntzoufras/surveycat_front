@@ -8,7 +8,6 @@ import OptionInputList from './OptionInputList';
 const AddQuestionModal = ({ 
   isOpen, 
   onClose, 
-  validationErrors = {}, 
   surveyPages = [], 
   currentSurveyPageId,
   onAddNewPage, 
@@ -18,6 +17,7 @@ const AddQuestionModal = ({
 
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
   const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
   const [questionType, setQuestionType] = useState('1');
   const [numOptions, setNumOptions] = useState(2);
@@ -27,9 +27,9 @@ const AddQuestionModal = ({
   const [isRequired, setIsRequired] = useState(false); // New state for "is required"
 
   useEffect(() => {
-      if (currentSurveyPageId) {
-        setSelectedSurveyPage(currentSurveyPageId);
-      }
+    if (currentSurveyPageId) {
+      setSelectedSurveyPage(currentSurveyPageId);
+    }
   }, [currentSurveyPageId]);
 
   const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
@@ -39,7 +39,7 @@ const AddQuestionModal = ({
   const handleQuestionTypeChange = (e) => {
     console.log(`handleQuestionTypeChange e.target.value: $(e.target.value)`);
     setQuestionType(e.target.value);
-    if (e.target.value === 1 || e.target.value === 2) {
+    if (e.target.value === '1' || e.target.value === '2') {
       setNumOptions(2);
       setOptionInputs(['', '']);
     } else {
@@ -113,9 +113,13 @@ const AddQuestionModal = ({
       }
 
       onClose();
+      setValidationErrors({}); // Clear validation errors on successful submission
 
     } catch (error) {
       console.error('Failed to create question or choices:', error);
+      if (error.response && error.response.status === 422) {
+        setValidationErrors(error.response.data.errors);
+      }
     }
   };
 
@@ -128,7 +132,12 @@ const AddQuestionModal = ({
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formQuestionType">
             <Form.Label>Question Type</Form.Label>
-            <Form.Control as="select" value={questionType} onChange={handleQuestionTypeChange}>
+            <Form.Control 
+              as="select" 
+              value={questionType} 
+              onChange={handleQuestionTypeChange}
+              isInvalid={!!validationErrors.question_type_id} // Show error state
+            >
               <option value="1">Multiple Choice</option>
               <option value="2">Checkboxes</option>
               <option value="3">Star Rating</option>
@@ -141,6 +150,11 @@ const AddQuestionModal = ({
               <option value="10">Multiple Checkboxes</option>
               <option value="11">Date / Time</option>
             </Form.Control>
+            {validationErrors.question_type_id && (
+              <Form.Control.Feedback type="invalid">
+                {validationErrors.question_type_id}
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
 
           <Form.Group controlId="formQuestionText">
@@ -150,18 +164,34 @@ const AddQuestionModal = ({
               value={newQuestion}
               onChange={handleQuestionInputChange}
               placeholder="Enter your question"
+              isInvalid={!!validationErrors.title} // Show error state
             />
+            {validationErrors.title && (
+              <Form.Control.Feedback type="invalid">
+                {validationErrors.title}
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
 
           <Form.Group controlId="formSurveyPage">
             <Form.Label>Survey Page</Form.Label>
-            <Form.Control as="select" value={selectedSurveyPage} onChange={handleSurveyPageChange}>
+            <Form.Control 
+              as="select" 
+              value={selectedSurveyPage} 
+              onChange={handleSurveyPageChange}
+              isInvalid={!!validationErrors.survey_page_id} // Show error state
+            >
               {surveyPages.map(page => (
                 <option key={page.id} value={page.id}>
                   {page.title || `Page ${page.id}`}
                 </option>
               ))}
             </Form.Control>
+            {validationErrors.survey_page_id && (
+              <Form.Control.Feedback type="invalid">
+                {validationErrors.survey_page_id}
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
 
           <Form.Group controlId="formTags">
@@ -191,7 +221,13 @@ const AddQuestionModal = ({
                   type="number"
                   value={numOptions}
                   onChange={handleNumOptionsChange}
+                  isInvalid={!!validationErrors.options} // Show error state
                 />
+                {validationErrors.options && (
+                  <Form.Control.Feedback type="invalid">
+                    {validationErrors.options}
+                  </Form.Control.Feedback>
+                )}
               </Form.Group>
               <OptionInputList
                 questionType={questionType}
