@@ -8,14 +8,13 @@ import OptionInputList from './OptionInputList';
 const AddQuestionModal = ({ 
   isOpen, 
   onClose, 
-  onSubmit, 
   validationErrors = {}, 
   surveyPages = [], 
   currentSurveyPageId,
   onAddNewPage, 
-  }) => {
+}) => {
   const dispatch = useDispatch();
-  const surveyState = useSelector(state => state.survey); // Accessing the survey state
+  const surveyState = useSelector(state => state.survey);
 
   const [newQuestion, setNewQuestion] = useState('');
   const [surveyPage, setSurveyPage] = useState('');
@@ -25,19 +24,20 @@ const AddQuestionModal = ({
   const [optionInputs, setOptionInputs] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [selectedQuestionTags, setSelectedQuestionTags] = useState([]);
+  const [isRequired, setIsRequired] = useState(false); // New state for "is required"
 
   useEffect(() => {
       if (currentSurveyPageId) {
         setSelectedSurveyPage(currentSurveyPageId);
       }
-    }, [currentSurveyPageId]);
+  }, [currentSurveyPageId]);
 
-  const handleQuestionInputChange = e => setNewQuestion(e.target.value);
-  const handleSurveyPageChange = e => setSelectedSurveyPage(e.target.value);
+  const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
+  const handleSurveyPageChange = (e) => setSelectedSurveyPage(e.target.value);
+  const handleIsRequiredChange = () => setIsRequired(!isRequired); // Toggle required status
 
-  const handleSurveyPageInputChange = e => setSurveyPage(e.target.value);
   const handleQuestionTypeChange = (e) => {
-    console.log(e.target.value);
+    console.log(`handleQuestionTypeChange e.target.value: $(e.target.value)`);
     setQuestionType(e.target.value);
     if (e.target.value === 1 || e.target.value === 2) {
       setNumOptions(2);
@@ -49,7 +49,7 @@ const AddQuestionModal = ({
     }
   };
 
-const handleNumOptionsChange = (e) => {
+  const handleNumOptionsChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setNumOptions(value > 0 ? value : 1);
     const updatedOptionInputs = [...optionInputs];
@@ -75,33 +75,54 @@ const handleNumOptionsChange = (e) => {
     setSelectedOptions(Array.from(selectedOptionsSet));
   };
 
-  const handleSubmit = (e) => {
+  const handleTagChange = (e) => {
+    setSelectedQuestionTags(e.target.value.split(',')); // Assume tags are comma-separated
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const questionData = {
       title: newQuestion,
-      surveyPageId: selectedSurveyPage,
-      options: (questionType !== '1' && questionType !== '2')
-        ? optionInputs.slice(0, numOptions).filter(Boolean)
+      survey_page_id: selectedSurveyPage,
+      options: (questionType === '1' || questionType === '2')
+        ? optionInputs.slice(0, numOptions).filter(Boolean) // Only keep filled options
         : [],
       selectedOptions,
       question_tags: JSON.stringify(selectedQuestionTags),
-      is_required: false,
+      is_required: isRequired,
       question_type_id: questionType,
       additional_settings: {
-        color: 'blue',
+        color: '#7ec8e3',
         align: 'center',
-        font_style: 'bold',
+        font_style: 'none',
         font_family: 'Calibri',
-        font_size: '4',
+        font_size: '9',
       },
     };
-    onSubmit(questionData);
+
+    try {
+      const newQuestionResponse = await dispatch(createSurveyQuestion(questionData));
+
+      if (questionType === '1' || questionType === '2') {  // For "Multiple Choice" or "Checkboxes"
+        const choicesData = optionInputs.map((content, index) => ({
+          content,
+          sort_index: index,
+          survey_question_id: newQuestionResponse.id,
+        }));
+        await dispatch(createSurveyQuestionChoices(choicesData));
+      }
+
+      onClose();
+
+    } catch (error) {
+      console.error('Failed to create question or choices:', error);
+    }
   };
 
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add Question</Modal.Title>
+        <Modal.Title>Add Question {isRequired && <span style={{color: 'red'}}>*</span>}</Modal.Title> {/* Add asterisk if required */}
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -143,17 +164,24 @@ const handleNumOptionsChange = (e) => {
             </Form.Control>
           </Form.Group>
 
-          <Button
-            variant="link"
-            onClick={async () => {
-            const newPage = await onAddNewPage();
-            if (newPage) {
-              setSelectedSurveyPage(newPage.id); // Automatically select the new page
-            }
-          }}
-          >
-            + Add New Page
-          </Button>
+          <Form.Group controlId="formTags">
+            <Form.Label>Tags</Form.Label>
+            <Form.Control
+              type="text"
+              value={selectedQuestionTags.join(',')} // Display tags as comma-separated
+              onChange={handleTagChange}
+              placeholder="Enter tags separated by commas"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formIsRequired">
+            <Form.Check
+              type="checkbox"
+              label="Is Required?"
+              checked={isRequired}
+              onChange={handleIsRequiredChange}
+            />
+          </Form.Group>
 
           {questionType === '1' || questionType === '2' ? (
             <div>
@@ -199,7 +227,6 @@ const handleNumOptionsChange = (e) => {
 AddQuestionModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
   validationErrors: PropTypes.shape({
     [PropTypes.string]: PropTypes.string,
   }),
