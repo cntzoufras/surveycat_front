@@ -27,20 +27,21 @@ import {
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
 
-const SurveyPage = ({ handleOptionSelection }) => {
+const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
+  console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
 
   const { user } = useSelector(state => state.auth);
   const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
-  const stockSurveys = useSelector(state => state.survey.stockSurveys);
+  const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
   
   const surveyTitle = useSelector(state => state.survey.survey?.title);
   const surveyDescription = useSelector(state => state.survey.survey?.description);
-  const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
-  const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
+  const surveyPageTitle = surveyPage?.title;
+  const surveyPageDescription = surveyPage?.description;
 
   const [layout, setLayout] = useState('default');
   const [validationErrors, setValidationErrors] = useState({});
@@ -60,11 +61,12 @@ const SurveyPage = ({ handleOptionSelection }) => {
     }
   }, [surveyId, surveyPageId, dispatch]);
 
+  // Update current page index based on the surveyPage prop
   useEffect(() => {
-    if (surveyPages.length > 0) {
-      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPageId));
+    if (surveyPages.length > 0 && surveyPage) {
+      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPage.id));
     }
-  }, [surveyPages, surveyPageId]);
+  }, [surveyPages, surveyPage]);
 
   const handleSurveyTitleChange = (e) => {
     const newSurveyTitle = e.target.value;
@@ -267,6 +269,17 @@ const SurveyPage = ({ handleOptionSelection }) => {
 };
 
 SurveyPage.propTypes = {
+  surveyPage: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
+  questions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string,
+    }),
+  ).isRequired,
   handleOptionSelection: PropTypes.func.isRequired,
 };
 
