@@ -24,6 +24,7 @@ import {
   fetchStockSurveysAction,
   deleteSurveyQuestionAction,
   createSurveyQuestionAction,
+  publishSurveyAction // <-- Import the publish action here
 } from '@/redux/actions/surveyActions';
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
@@ -37,7 +38,7 @@ const SurveyPage = () => {
   const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
-
+  
   const surveyTitle = useSelector(state => state.survey.survey?.title);
   const surveyDescription = useSelector(state => state.survey.survey?.description);
   const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
@@ -53,12 +54,17 @@ const SurveyPage = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
 
   useEffect(() => {
     if (!user?.id) {
       navigate('/login');
     }
   }, [user, navigate]);
+  
+  useEffect(() => {
+    // dispatch(fetchSurveyAction());
+  });
 
   useEffect(() => {
     if (surveyId) {
@@ -138,6 +144,14 @@ const SurveyPage = () => {
     }, 1500),
     [dispatch, surveyId, surveyPageId]
   );
+  
+  const handleStockSurveyChange = (e) => {
+    const selectedSurveyId = e.target.value;
+    setSelectedStockSurvey(selectedSurveyId);
+    if (selectedSurveyId) {
+      // navigate(`/surveys/${selectedSurveyId}/pages`);
+    }
+  };
 
   const handleSurveyTitleChange = (e) => {
     const newSurveyTitle = e.target.value;
@@ -150,19 +164,19 @@ const SurveyPage = () => {
     setLocalSurveyDescription(newSurveyDescription);
     debouncedUpdateSurveyDescription(newSurveyDescription);
   };
-
+  
   const handleSurveyPageTitleChange = (e) => {
     const newSurveyPageTitle = e.target.value;
     setLocalSurveyPageTitle(newSurveyPageTitle);
     debouncedUpdateSurveyPageTitle(newSurveyPageTitle);
   };
-
+  
   const handleSurveyPageDescriptionChange = (e) => {
     const newSurveyPageDescription = e.target.value;
     setLocalSurveyPageDescription(newSurveyPageDescription);
     debouncedUpdateSurveyPageDescription(newSurveyPageDescription);
   };
-
+  
   const handleLayoutChange = (e) => {
     setLayout(e.target.value);
   };
@@ -244,17 +258,34 @@ const SurveyPage = () => {
     }
   };
 
+  // New function to handle survey publishing
+  const handlePublishSurvey = async () => {
+    try {
+      const publishResponse = await dispatch(publishSurveyAction(surveyId));
+      const publicUrl = `/surveys/public/${publishResponse.id}`;
+      navigate(publicUrl);
+    } catch (error) {
+      console.error('Error publishing survey:', error);
+      // Handle any errors related to publishing the survey here
+    }
+  };
+
   return (
     <MuiGrid container spacing={4}>
       <MuiGrid item xs={12} md={4}>
-        <MuiBox sx={{ paddingBottom: 4 }}>
+        <MuiBox sx={{ paddingBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
-          <MuiSelect fullWidth value={surveyId} onChange={handleSurveyPageSelection}>
-            <MuiMenuItem value=""><em>None</em></MuiMenuItem>
-            {surveyPages.map(page => (
-              <MuiMenuItem key={page.id} value={page.id}>{page.title || 'No page title yet'}</MuiMenuItem>
-            ))}
-          </MuiSelect>
+            <MuiSelect 
+              fullWidth 
+              value={selectedStockSurvey} 
+              onChange={handleStockSurveyChange} // Ensure this updates the local state
+            >
+              <MuiMenuItem value=""><em>None</em></MuiMenuItem>
+              {stockSurveys.map(survey => (
+                <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
+              ))}
+            </MuiSelect>
         </MuiBox>
         <MuiBox>
           <MuiTypography fontWeight="300" variant="h3">
@@ -334,6 +365,7 @@ const SurveyPage = () => {
             >
               Add New Page
             </MuiButton>
+            
           </MuiBox>
         </MuiBox>
       </MuiGrid>
@@ -351,6 +383,23 @@ const SurveyPage = () => {
           >
             Add Question
           </MuiButton>
+          <MuiBox sx={{marginTop: 20, lg: 12 }}>
+            <MuiButton
+              variant="contained"
+              color="success"
+              onClick={handlePublishSurvey}
+              fullWidth
+              sx={{
+                backgroundColor: '252525',
+                '&:hover': {
+                  backgroundColor: 'darkorange',
+                },
+                
+              }}
+              >
+              Publish
+            </MuiButton>
+          </MuiBox>
         </MuiBox>
         {isAddQuestionModalOpen && (
           <AddQuestionModal
@@ -361,6 +410,7 @@ const SurveyPage = () => {
             currentSurveyPageId={surveyPages[currentPageIndex]?.id}
             onAddNewPage={handleAddNewPage}
           />
+          
         )}
       </MuiGrid>
     </MuiGrid>
