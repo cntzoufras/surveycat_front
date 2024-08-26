@@ -8,142 +8,81 @@ import {
   MenuItem as MuiMenuItem, 
   Button as MuiButton, 
   Grid as MuiGrid, 
+  IconButton as MuiIconButton
 } from '@mui/material';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material'; // For cycling through pages
 import {
-  updateSurveyTitle, updateSurveyDescription, updateSurveyPageTitle, updateSurveyPageDescription, 
-} from '@/utils/api/survey-api';
-import useDebounce from '../hooks/useDebounce';
-import useSurveyData from '../hooks/useSurveyData';
-import useSurveyQuestions from '../hooks/useSurveyQuestions';
-import useSurveyPages from '../hooks/useSurveyPages';
+  updateSurveyTitleAction,
+  updateSurveyDescriptionAction, 
+  updateSurveyPageTitleAction, 
+  updateSurveyPageDescriptionAction,
+  addSurveyPageAction,
+  fetchSurveyQuestionsAction,
+  deleteSurveyQuestionAction,
+} from '@/redux/actions/surveyActions'; // Action to load user data
 import QuestionList from './QuestionList';
 import AddQuestionModal from './AddQuestionModal';
 
 const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
-  console.log('SurveyPage props:', { surveyPage, questions });
-
   const navigate = useNavigate();
-  const location = useLocation();
+  const dispatch = useDispatch();
   const { surveyId, surveyPageId } = useParams();
   console.log('SurveyPage component rendered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
   
 
   const { user } = useSelector(state => state.auth);
-  const userId = user?.id;
-  console.log('userId:', userId);
-  
-  useEffect(() => {
-    if (!userId) {
-      console.log('User is not logged in, redirecting to login...');
-      navigate('/login');
-    }
-  }, [userId, navigate]);
-
-  const {
-    surveyTitle,
-    surveyDescription,
-    surveyPageTitle,
-    surveyPageDescription,
-    setSurveyTitle,
-    setSurveyDescription,
-    setSurveyPageTitle,
-    setSurveyPageDescription,
-    stockSurveys,
-    selectedStockSurvey,
-    setSelectedStockSurvey,
-    fetchSurveyData,
-  } = useSurveyData({ surveyId, surveyPageId, location });
-
-  const { surveyPages, fetchSurveyPages, addSurveyPage } = useSurveyPages();
-  
-  const { 
-    surveyQuestions, 
-    fetchSurveyQuestions, 
-    addQuestion, 
-    deleteQuestion, 
-  } = useSurveyQuestions({ surveyId, surveyPageId });
+  const surveyPages = useSelector(state => state.survey.surveyPages); // Redux state for survey pages
+  const surveyQuestions = useSelector(state => state.survey.questions); // Redux state for questions
 
   const [layout, setLayout] = useState('default');
-  const [validationErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const debouncedSurveyTitle = useDebounce(surveyTitle, 5000);
-  const debouncedSurveyDescription = useDebounce(surveyDescription, 5000);
-  const debouncedSurveyPageTitle = useDebounce(surveyPageTitle, 5000);
-  const debouncedSurveyPageDescription = useDebounce(surveyPageDescription, 5000);
+  useEffect(() => {
+    if (!user?.id) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (surveyId) {
+      dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+    }
+  }, [surveyId, surveyPageId, dispatch]);
+
+  useEffect(() => {
+    if (surveyPages.length > 0) {
+      setCurrentPageIndex(surveyPages.findIndex(page => page.id === surveyPage?.id));
+    }
+  }, [surveyPages, surveyPage]);
+
+  const handleSurveyTitleChange = (e) => {
+    const newSurveyTitle = e.target.value;
+    dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+  };
+
+  const handleSurveyDescriptionChange = (e) => {
+    const newSurveyDescription = e.target.value;
+    dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+  };
   
-  useEffect(() => {
-    console.log('SurveyPage useEffect triggered with surveyId:', surveyId, 'surveyPageId:', surveyPageId);
-    let isMounted = true;
+  const handleSurveyPageTitleChange = (e) => {
+    const newPageTitle = e.target.value;
+    dispatch(updateSurveyPageTitleAction(surveyPageId, newPageTitle));
+  };
+  
+  const handleSurveyPageDescriptionChange = (e) => {
+    const newSurveyPageDescription = e.target.value;
+    dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+  };
+  
+  const handleLayoutChange = (e) => {
+    setLayout(e.target.value);
+  };
 
-    const fetchData = async () => {
-      console.log('fetchData function triggered with surveyId:', surveyId, 'and surveyPageId:', surveyPageId);
-
-      try {
-        if (surveyId && surveyPageId && isMounted) {
-          console.log(`Fetching data for SurveyID: ${surveyId} SurveyPageID: ${surveyPageId}`);
-          await Promise.all([
-            fetchSurveyData(), 
-            fetchSurveyPages(surveyId), 
-            fetchSurveyQuestions()
-          ]);
-        }
-      } catch (error) {
-          console.error('Error fetching data:', error);
-          return null;
-      }
-      return true;
-    };
-
-    if (isMounted) {
-      fetchData();
-    }
-
-    return () => {
-      isMounted = false;
-      console.log('SurveyPage component unmounted');
-    };
-  }, [surveyId, surveyPageId, fetchSurveyData, fetchSurveyPages, fetchSurveyQuestions]);
-
-  useEffect(() => {
-    if (debouncedSurveyTitle) {
-      updateSurveyTitle(surveyId, debouncedSurveyTitle, userId)
-        .then(() => fetchSurveyData())
-        .catch(error => console.error('Error updating survey title:', error));
-    }
-  }, [debouncedSurveyTitle, surveyId, fetchSurveyData, userId]);
-
-  useEffect(() => {
-    if (debouncedSurveyDescription) {
-      updateSurveyDescription(surveyId, debouncedSurveyDescription, userId)
-        .then(() => fetchSurveyData())
-        .catch(error => console.error('Error updating survey description:', error));
-    }
-  }, [debouncedSurveyDescription, surveyId, fetchSurveyData, userId]);
-
-  useEffect(() => {
-    if (debouncedSurveyPageTitle) {
-      updateSurveyPageTitle(surveyPageId, debouncedSurveyPageTitle, userId)
-        .then(() => fetchSurveyData())
-        .catch(error => console.error('Error updating page title:', error));
-    }
-  }, [debouncedSurveyPageTitle, surveyPageId, fetchSurveyData, userId]);
-
-  useEffect(() => {
-    if (debouncedSurveyPageDescription) {
-      updateSurveyPageDescription(surveyPageId, debouncedSurveyPageDescription, userId)
-        .then(() => fetchSurveyData())
-        .catch(error => console.error('Error updating page description:', error));
-    }
-  }, [debouncedSurveyPageDescription, surveyPageId, fetchSurveyData, userId]);
-
-  const handleSurveyTitleChange = e => setSurveyTitle(e.target.value);
-  const handleSurveyDescriptionChange = e => setSurveyDescription(e.target.value);
-  const handleSurveyPageTitleChange = e => setSurveyPageTitle(e.target.value);
-  const handleSurveyPageDescriptionChange = e => setSurveyPageDescription(e.target.value);
-  const handleLayoutChange = e => setLayout(e.target.value);
   const handleAddNewPage = async () => {
     try {
       const newPageData = {
@@ -151,32 +90,59 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
         description: '',
         survey_id: surveyId,
       };
-      const response = await addSurveyPage(newPageData);
-      fetchSurveyPages();
-      setSurveyPageTitle('');
-      setSurveyPageDescription('');
-      return response.data;
+      const newPage = await dispatch(addSurveyPageAction(surveyId, newPageData));
+
+      navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
+
+      setCurrentPageIndex(surveyPages.length); // Since it's a new page, it should be the last one
+      setValidationErrors({});
     } catch (error) {
       console.error('Error adding new page:', error);
-      return null;
+      if (error.response && error.response.status === 422) {
+        setValidationErrors(error.response.data.errors);
+      }
     }
   };
 
-  
-  const openAddQuestionModal = () => {
-    setIsAddQuestionModalOpen(true);
-    console.log('modal open state: ', isAddQuestionModalOpen);
-    };
+  const handleNextPage = () => {
+    if (currentPageIndex < surveyPages.length - 1) {
+      setCurrentPageIndex(currentPageIndex + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPageIndex > 0) {
+      setCurrentPageIndex(currentPageIndex - 1);
+    }
+  };
+
+  const openAddQuestionModal = () => setIsAddQuestionModalOpen(true);
   const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
-  
+
   const handleAddQuestionSubmit = async (questionData) => {
     try {
-      await addQuestion(questionData);
-      await new Promise(resolve => setTimeout(resolve, 700));
-      await fetchSurveyQuestions();
+      await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
+      await dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
       closeAddQuestionModal();
+      setValidationErrors({});
     } catch (error) {
       console.error('Error adding question:', error);
+      if (error.response && error.response.status === 422) {
+        setValidationErrors(error.response.data.errors);
+      }
+    }
+  };
+
+  const handleDeleteQuestion = async (questionId) => {
+    try {
+      await dispatch(deleteSurveyQuestionAction(questionId));
+      await dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+      setValidationErrors({});
+    } catch (error) {
+      console.error('Error adding question:', error);
+      if (error.response && error.response.status === 422) {
+        setValidationErrors(error.response.data.errors);
+      }
     }
   };
 
@@ -187,18 +153,16 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
       <MuiGrid item xs={12} md={4}>
         <MuiBox sx={{ paddingBottom: 4 }}>
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
-          <MuiSelect fullWidth value={selectedStockSurvey} onChange={handleStockSurveyChange}>
+          <MuiSelect fullWidth value={surveyId} onChange={handleStockSurveyChange}>
             <MuiMenuItem value=""><em>None</em></MuiMenuItem>
+            {/* Assuming stockSurveys is provided via props or state */}
             {stockSurveys.map(survey => (
               <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
             ))}
           </MuiSelect>
         </MuiBox>
         <MuiBox>
-          <MuiTypography 
-            fontWeight="300" 
-            variant="h3"
-          >
+          <MuiTypography fontWeight="300" variant="h3">
             {surveyTitle}
           </MuiTypography>
           <MuiTextField 
@@ -206,7 +170,7 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             label="Survey Title" 
             variant="outlined" 
             margin="normal" 
-            value={surveyTitle} 
+            value={surveyTitle || ''} 
             onChange={handleSurveyTitleChange} 
           />
           <MuiTextField 
@@ -216,17 +180,19 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             margin="normal" 
             multiline 
             rows={6} 
-            value={surveyDescription} 
+            value={surveyDescription || ''} 
             onChange={handleSurveyDescriptionChange} 
             sx={{ paddingBottom: 3, fontWeight: 300 }}
           />
-          <MuiTypography variant="h5" sx={{ paddingBottom: 1.5, fontWeight: 300 }}>Survey Page title: {surveyPageTitle}</MuiTypography>
+          <MuiTypography variant="h5" sx={{ paddingBottom: 1.5, fontWeight: 300 }}>
+            Survey Page title: {surveyPageTitle || 'No page selected'}
+          </MuiTypography>
           <MuiTextField 
             fullWidth 
             label="Page Title" 
             variant="outlined" 
             margin="normal" 
-            value={surveyPageTitle} 
+            value={surveyPageTitle || ''} 
             onChange={handleSurveyPageTitleChange} 
             sx={{ paddingBottom: 1.5 }}
           />
@@ -237,22 +203,37 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             margin="normal" 
             multiline 
             rows={6} 
-            value={surveyPageDescription} 
+            value={surveyPageDescription || ''} 
             onChange={handleSurveyPageDescriptionChange} 
             InputLabelProps={{ shrink: true }} 
           />
           <MuiSelect fullWidth value={layout} onChange={handleLayoutChange} displayEmpty>
             <MuiMenuItem value="default">Default</MuiMenuItem>
-            <MuiMenuItem value="default">Single</MuiMenuItem>
-            <MuiMenuItem value="default">Multiple</MuiMenuItem>
+            <MuiMenuItem value="single">Single</MuiMenuItem>
+            <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
           </MuiSelect>
+          <MuiBox sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 2 }}>
+            <MuiIconButton onClick={handlePrevPage} disabled={currentPageIndex <= 0}>
+              <ArrowBackIos />
+            </MuiIconButton>
+            <MuiIconButton onClick={handleNextPage} disabled={currentPageIndex >= surveyPages.length - 1}>
+              <ArrowForwardIos />
+            </MuiIconButton>
+            <MuiButton 
+              variant="contained" 
+              color="secondary" 
+              onClick={handleAddNewPage}
+            >
+              Add New Page
+            </MuiButton>
+          </MuiBox>
         </MuiBox>
       </MuiGrid>
       <MuiGrid item xs={12} md={8}>
         <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
           <QuestionList 
             questions={surveyQuestions} 
-            onDelete={deleteQuestion} 
+            onDelete={handleDeleteQuestion} 
             onOptionSelection={handleOptionSelection} 
           />
           <MuiButton 
@@ -270,9 +251,8 @@ const SurveyPage = ({ surveyPage, questions, handleOptionSelection }) => {
             onClose={closeAddQuestionModal} 
             onSubmit={handleAddQuestionSubmit} 
             surveyPages={surveyPages}
-            currentSurveyPageId={surveyPageId}
+            currentSurveyPageId={surveyPages[currentPageIndex]?.id}
             onAddNewPage={handleAddNewPage}
-            validationErrors={validationErrors}
           />
         )}
       </MuiGrid>
