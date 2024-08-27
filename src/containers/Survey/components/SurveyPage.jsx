@@ -251,15 +251,24 @@ const SurveyPage = () => {
     }
   };
 
-  const handlePublishSurvey = async () => {
+const handlePublishSurvey = async () => {
     try {
-      const publishResponse = await dispatch(publishSurveyAction(surveyId));
+      // Ensure the title in the local state is used for publishing
+      if (!localSurveyTitle.trim()) {
+        console.error('Title is required to create a public link.');
+        return;
+      }
+
+      // Assuming `publishSurveyAction` requires the title as well
+      const publishResponse = await dispatch(publishSurveyAction(surveyId, localSurveyTitle));
       const publicUrl = `/surveys/public/${publishResponse.id}`;
       navigate(publicUrl);
     } catch (error) {
       console.error('Error publishing survey:', error);
     }
-  };
+};
+
+
 
   return (
     <MuiGrid container spacing={4}>
@@ -278,6 +287,9 @@ const SurveyPage = () => {
           </MuiSelect>
         </MuiBox>
         <MuiBox>
+          <MuiTypography fontWeight="300" variant="h3">
+            {localSurveyTitle || 'Survey Title'}
+          </MuiTypography>
           <SurveyTitleField
             value={localSurveyTitle}
             onChange={handleSurveyTitleChange}
