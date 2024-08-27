@@ -1,4 +1,8 @@
 import {
+  FETCH_SURVEY_SUCCESS,
+  FETCH_SURVEY_FAIL,
+  FETCH_SURVEYS_SUCCESS,
+  FETCH_SURVEYS_FAIL,
   FETCH_SURVEY_QUESTIONS,
   FETCH_SURVEY_PAGES_SUCCESS,
   FETCH_SURVEY_PAGES_FAIL,
@@ -35,6 +39,7 @@ import {
 } from '../actions/surveyActions';
 
 const initialState = {
+  surveys:[],
   survey: null, // Holds the current survey's main details like title, description, etc.
   surveyCategories: [],
   surveyThemes: [],
@@ -83,6 +88,32 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case FETCH_SURVEYS_SUCCESS:
+      return {
+        ...state,
+        surveys: action.payload,
+        loading: false,
+        error: null,
+      };
+    case FETCH_SURVEYS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
+    case FETCH_SURVEY_SUCCESS:
+      return {
+        ...state,
+        survey: action.payload,
+        error: null,
+      };
+    case FETCH_SURVEY_FAIL:
+      return {
+        ...state,
+        survey: action.payload,
+        loading: false,
+        error: null,
       };
     case FETCH_SURVEY_CATEGORIES_SUCCESS:
       return {
