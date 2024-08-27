@@ -20,7 +20,6 @@ import {
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
   fetchSurveyQuestionsAction,
-  fetchSurveyPagesAction,
   fetchStockSurveysAction,
   fetchSurveyAction,
   deleteSurveyQuestionAction,
@@ -45,14 +44,11 @@ const SurveyPage = () => {
   const { user } = useSelector(state => state.auth);
 
   const survey = useSelector(state => state.survey.survey);
+  const surveyPages = survey?.survey_pages || []; // Survey pages are now directly from the survey object
   const surveyTitle = survey?.title || '';
   const surveyDescription = survey?.description || '';
-
-  const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
-  const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
-  const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
@@ -74,7 +70,6 @@ const SurveyPage = () => {
   useEffect(() => {
     if (surveyId) {
       dispatch(fetchSurveyAction(surveyId));
-      dispatch(fetchSurveyPagesAction(surveyId));
       dispatch(fetchStockSurveysAction());
     }
   }, [surveyId, dispatch]);
@@ -105,14 +100,6 @@ const SurveyPage = () => {
   useEffect(() => {
     setLocalSurveyDescription(surveyDescription);
   }, [surveyDescription]);
-
-  useEffect(() => {
-    setLocalSurveyPageTitle(surveyPageTitle || '');
-  }, [surveyPageTitle]);
-
-  useEffect(() => {
-    setLocalSurveyPageDescription(surveyPageDescription || '');
-  }, [surveyPageDescription]);
 
   const debouncedUpdateSurveyTitle = useCallback(
     debounce((newSurveyTitle) => {
