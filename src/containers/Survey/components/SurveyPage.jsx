@@ -22,6 +22,8 @@ import {
   fetchSurveyQuestionsAction,
   fetchSurveyPagesAction,
   fetchStockSurveysAction,
+  fetchSurveysAction,
+  fetchSurveyAction,
   deleteSurveyQuestionAction,
   createSurveyQuestionAction,
   publishSurveyAction // <-- Import the publish action here
@@ -35,12 +37,18 @@ const SurveyPage = () => {
   const { surveyId, surveyPageId } = useParams();
 
   const { user } = useSelector(state => state.auth);
+  
+  const survey = useSelector(state => state.survey.survey); 
+  const surveyTitle = survey?.title || '';  
+  const surveyDescription = survey?.description || '';
+
   const surveyPages = useSelector(state => state.survey.surveyPages);
   const surveyQuestions = useSelector(state => state.survey.questions);
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
   
-  const surveyTitle = useSelector(state => state.survey.survey?.title);
-  const surveyDescription = useSelector(state => state.survey.survey?.description);
+  // const surveyTitle = useSelector(state => state.survey.title);
+  console.log('SurveyPage > surveyTitle > useSelector',surveyTitle);
+  // const surveyDescription = useSelector(state => state.survey.survey?.description);
   const surveyPageTitle = useSelector(state => state.survey.surveyPage?.title);
   const surveyPageDescription = useSelector(state => state.survey.surveyPage?.description);
 
@@ -63,11 +71,14 @@ const SurveyPage = () => {
   }, [user, navigate]);
   
   useEffect(() => {
-    // dispatch(fetchSurveyAction());
+    if (surveyId) {
+      dispatch(fetchSurveyAction(surveyId));
+    }
   });
 
   useEffect(() => {
     if (surveyId) {
+      dispatch(fetchSurveyAction(surveyId)); 
       dispatch(fetchSurveyPagesAction(surveyId)); // Ensure survey pages are fetched
       dispatch(fetchStockSurveysAction());
     }
@@ -94,12 +105,20 @@ const SurveyPage = () => {
   }, [surveyPages, surveyPageId]);
 
   useEffect(() => {
-    setLocalSurveyTitle(surveyTitle || '');
+   if (surveyTitle) setLocalSurveyTitle(surveyTitle);
   }, [surveyTitle]);
 
   useEffect(() => {
-    setLocalSurveyDescription(surveyDescription || '');
+    if (surveyDescription) setLocalSurveyDescription(surveyDescription);
   }, [surveyDescription]);
+
+  // useEffect(() => {
+    // setLocalSurveyTitle(surveyTitle || '');
+  // }, [surveyTitle]);
+
+  // useEffect(() => {
+    // setLocalSurveyDescription(surveyDescription || '');
+  // }, [surveyDescription]);
 
   useEffect(() => {
     setLocalSurveyPageTitle(surveyPageTitle || '');
