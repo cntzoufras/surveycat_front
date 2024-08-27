@@ -42,6 +42,8 @@ export const UPDATE_SURVEY_LAYOUT_FAIL = 'UPDATE_SURVEY_LAYOUT_FAIL';
 export const DELETE_SURVEY_QUESTION_SUCCESS = 'DELETE_SURVEY_QUESTION_SUCCESS';
 export const DELETE_SURVEY_QUESTION_FAIL = 'DELETE_SURVEY_QUESTION_FAIL';
 
+export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
+export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
 
 export const fetchSurveyCategoriesAction = () => async (dispatch) => {
   try {
@@ -224,6 +226,17 @@ export const updateSurveyLayoutAction = (surveyId, layout) => async (dispatch) =
     return response.data;
   } catch (error) {
     dispatch({ type: UPDATE_SURVEY_LAYOUT_FAIL, payload: error.message });
+    throw error;
+  }
+};
+
+export const publishSurveyAction = (surveyId) => async (dispatch) => {
+  try {
+    const response = await api.put(`/surveys/${surveyId}/publish`);
+    dispatch({ type: PUBLISH_SURVEY_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: PUBLISH_SURVEY_FAIL, payload: error.message });
     throw error;
   }
 };

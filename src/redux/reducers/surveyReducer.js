@@ -1,5 +1,3 @@
-// src/redux/reducers/surveyReducer.js
-
 import {
   FETCH_SURVEY_QUESTIONS,
   FETCH_SURVEY_PAGES_SUCCESS,
@@ -32,8 +30,9 @@ import {
   UPDATE_SURVEY_LAYOUT_FAIL,
   DELETE_SURVEY_QUESTION_SUCCESS,
   DELETE_SURVEY_QUESTION_FAIL,
+  PUBLISH_SURVEY_SUCCESS,
+  PUBLISH_SURVEY_FAIL,
 } from '../actions/surveyActions';
-
 
 const initialState = {
   survey: null, // Holds the current survey's main details like title, description, etc.
@@ -41,12 +40,13 @@ const initialState = {
   surveyThemes: [],
   surveyPage: null, // Holds the current survey page details like title, description, etc.
   surveyPages: [], // Holds all pages related to a survey
-  stockSurveys: [], // Add stockSurveys to the initial state
+  stockSurveys: [], // Holds stock surveys
   questions: [], // Holds questions related to the current survey page
   choices: [], // Holds the choices related to the current questions
   layout: 'default', // Tracks layout settings for the survey
   loading: false, // Indicates if any async operation is in progress
   error: null, // Holds any error messages encountered during operations
+  isPublished: false, // Tracks whether the survey is published
 };
 
 const surveyReducer = (state = initialState, action) => {
@@ -62,6 +62,17 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
+    case CREATE_SURVEY_PAGE_SUCCESS:
+      return {
+        ...state,
+        surveyPages: [...state.surveyPages, action.payload],
+        error: null,
+      };
+    case CREATE_SURVEY_PAGE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case ADD_SURVEY_PAGE_SUCCESS:
       return {
         ...state,
@@ -73,55 +84,26 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
-    case CREATE_SURVEY_PAGE_SUCCESS:
-      return {
-        ...state,
-        surveyPage: action.payload,
-        surveyPages: [...state.surveyPages, action.payload],
-        error: null,
-      };
-    case CREATE_SURVEY_PAGE_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case FETCH_SURVEY_PAGES_SUCCESS:
-      return {
-        ...state,
-        surveyPages: action.payload,
-        loading: false,
-        error: null,
-      };
-    case FETCH_SURVEY_PAGES_FAIL:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
     case FETCH_SURVEY_CATEGORIES_SUCCESS:
       return {
         ...state,
         surveyCategories: action.payload,
-        loading: false,
         error: null,
       };
     case FETCH_SURVEY_CATEGORIES_FAIL:
       return {
         ...state,
-        loading: false,
         error: action.payload,
       };
     case FETCH_SURVEY_THEMES_SUCCESS:
       return {
         ...state,
         surveyThemes: action.payload,
-        loading: false,
         error: null,
       };
     case FETCH_SURVEY_THEMES_FAIL:
       return {
         ...state,
-        loading: false,
         error: action.payload,
       };
     case FETCH_SURVEY_QUESTIONS:
@@ -129,11 +111,23 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         questions: action.payload,
       };
+    case FETCH_SURVEY_PAGES_SUCCESS:
+      return {
+        ...state,
+        surveyPages: action.payload,
+        error: null,
+      };
+    case FETCH_SURVEY_PAGES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case FETCH_STOCK_SURVEYS_SUCCESS:
       return {
         ...state,
         stockSurveys: action.payload,
         loading: false,
+        error: null,
       };
     case FETCH_STOCK_SURVEYS_FAIL:
       return {
@@ -229,6 +223,28 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
+    case DELETE_SURVEY_QUESTION_SUCCESS:
+      return {
+        ...state,
+        questions: state.questions.filter(q => q.id !== action.payload),
+        error: null,
+      };
+    case DELETE_SURVEY_QUESTION_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case PUBLISH_SURVEY_SUCCESS:
+      return {
+        ...state,
+        isPublished: true,
+        error: null,
+      };
+    case PUBLISH_SURVEY_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case 'LOADING':
       return {
         ...state,
@@ -240,4 +256,3 @@ const surveyReducer = (state = initialState, action) => {
 };
 
 export default surveyReducer;
-
