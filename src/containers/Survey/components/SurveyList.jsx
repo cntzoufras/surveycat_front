@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
+  Button as MuiButton,
   Box as MuiBox,
   Typography as MuiTypography,
   Grid as MuiGrid,
   Paper as MuiPaper,
-  Button as MuiButton,
   Link as MuiLink,
 } from '@mui/material';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getSurveysWithPagesAndThemes } from '@/utils/api/survey-api';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchSurveyThemesAction,
+  fetchSurveysAction,
+  fetchSurveyPagesAction,
+} from '@/redux/actions/surveyActions';
 
-// Create a theme with Roboto font
 const theme = createTheme({
   typography: {
     fontFamily: 'Roboto, sans-serif',
@@ -19,36 +23,31 @@ const theme = createTheme({
 });
 
 const SurveyList = () => {
-  const [surveys, setSurveys] = useState([]);
+  const dispatch = useDispatch();
+  const surveys = useSelector((state) => state.survey.surveys);
+  const themes = useSelector((state) => state.survey.surveyThemes);
 
   useEffect(() => {
-    let isMounted = true; // Track if the component is mounted
+    dispatch(fetchSurveyThemesAction());
+    dispatch(fetchSurveysAction());
+  }, [dispatch]);
 
-    const fetchSurveysWithDetails = async () => {
-      try {
-        const response = await getSurveysWithPagesAndThemes(); // Updated API call
+  useEffect(() => {
+    surveys.forEach((survey) => {
+      // dispatch(fetchSurveyPagesAction(survey.id));
+    });
+  }, [surveys, dispatch]);
 
-        if (isMounted) {
-          if (response.status === 200) {
-            setSurveys(response.data);
-          } else {
-            console.error('Error fetching surveys:', response.status);
-          }
-        }
-      } catch (error) {
-        if (isMounted) {
-          console.error('Error fetching surveys:', error.message);
-        }
-      }
-    };
+  const getThemeTitle = (themeId) => {
+    const theme = themes.find((t) => t.id === themeId);
+    return theme ? theme.title : '-';
+  };
 
-    fetchSurveysWithDetails();
-
-    // Cleanup function to set isMounted to false when the component unmounts
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const getFirstSurveyPageId = (survey, surveyPage) => {
+    return survey.survey_pages && survey.survey_pages.length > 0
+    ? survey.survey_pages[0].id
+    : '';
+  };
 
 
   return (
@@ -62,18 +61,19 @@ const SurveyList = () => {
             <MuiTypography variant="h6" gutterBottom>
               No surveys yet.
             </MuiTypography>
-            <MuiButton
-              variant="contained"
-              color="primary"
-              component={MuiLink}
-              href="/survey-design"
+            <MuiLink
+              component={Link}
+              to="/survey-design"
+              sx={{ textDecoration: 'none' }}
             >
-              Create a new survey
-            </MuiButton>
+              <MuiButton variant="contained" color="primary">
+                Create a new survey
+              </MuiButton>
+            </MuiLink>
           </MuiBox>
         ) : (
           <MuiGrid container spacing={3} justifyContent="center">
-            {surveys.map(survey => (
+            {surveys.map((survey) => (
               <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
                 <MuiPaper
                   elevation={24}
@@ -90,23 +90,25 @@ const SurveyList = () => {
                   }}
                 >
                   <Link
-                    to={`/surveys/${survey.id}/pages/${survey.survey_pages[0]?.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }} 
+                    to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
+                      survey
+                    )}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-                    <MuiTypography 
-                      variant="h2" 
+                    <MuiTypography
+                      variant="h2"
                       sx={{
                         color: '#505050',
                         cursor: 'pointer',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                      }} 
+                      }}
                       gutterBottom
                     >
                       {survey.title}
                     </MuiTypography>
-                    <MuiTypography 
+                    <MuiTypography
                       variant="body2"
                       sx={{
                         color: '#505050',
@@ -114,13 +116,13 @@ const SurveyList = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                      }} 
+                      }}
                       gutterBottom
                     >
-                      Theme: {survey.theme ? survey.theme.title : '-'}
+                      Theme: {getThemeTitle(survey.theme_id)}
                     </MuiTypography>
                     <MuiBox mt={2}>
-                      <MuiTypography 
+                      <MuiTypography
                         variant="subtitle2"
                         sx={{
                           color: '#757575',
