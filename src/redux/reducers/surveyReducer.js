@@ -34,8 +34,12 @@ import {
   UPDATE_SURVEY_LAYOUT_FAIL,
   DELETE_SURVEY_QUESTION_SUCCESS,
   DELETE_SURVEY_QUESTION_FAIL,
+  DELETE_SURVEY_PAGE_REQUEST,
+  DELETE_SURVEY_PAGE_SUCCESS,
+  DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
   PUBLISH_SURVEY_FAIL,
+  
 } from '../actions/surveyActions';
 
 const initialState = {
@@ -175,6 +179,24 @@ const surveyReducer = (state = initialState, action) => {
     case CREATE_SURVEY_QUESTION_FAIL:
       return {
         ...state,
+        error: action.payload,
+      };
+    case DELETE_SURVEY_PAGE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case DELETE_SURVEY_PAGE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        surveyPages: state.surveyPages.filter(page => page.id !== action.payload),
+      };
+    case DELETE_SURVEY_PAGE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
         error: action.payload,
       };
     case DELETE_SURVEY_QUESTION_SUCCESS:

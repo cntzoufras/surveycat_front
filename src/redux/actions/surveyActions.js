@@ -45,6 +45,10 @@ export const UPDATE_SURVEY_LAYOUT_FAIL = 'UPDATE_SURVEY_LAYOUT_FAIL';
 
 export const DELETE_SURVEY_QUESTION_SUCCESS = 'DELETE_SURVEY_QUESTION_SUCCESS';
 export const DELETE_SURVEY_QUESTION_FAIL = 'DELETE_SURVEY_QUESTION_FAIL';
+export const DELETE_SURVEY_PAGE_REQUEST = 'DELETE_SURVEY_PAGE_REQUEST';
+export const DELETE_SURVEY_PAGE_SUCCESS = 'DELETE_SURVEY_PAGE_SUCCESS';
+export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
+
 
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
@@ -251,6 +255,43 @@ export const updateSurveyLayoutAction = (surveyId, layout) => async (dispatch) =
   } catch (error) {
     dispatch({ type: UPDATE_SURVEY_LAYOUT_FAIL, payload: error.message });
     throw error;
+  }
+};
+
+export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatch, getState) => {
+  dispatch({ type: DELETE_SURVEY_PAGE_REQUEST });
+
+  try {
+    await api.delete(`/api/survey-pages/${surveyPageId}`);
+
+    // Fetch the updated survey to get the pages after deletion
+    await dispatch(fetchSurveyAction(surveyId));
+
+    // Get the updated survey pages from state
+    const { surveyPages } = getState().survey;
+
+    // Find the survey page with the least sort_index
+    if (surveyPages.length > 0) {
+      const leastSortIndexPage = surveyPages.reduce((minPage, currentPage) => 
+        currentPage.sort_index < minPage.sort_index ? currentPage : minPage
+      );
+
+      // Redirect to the survey page with the least sort index
+      window.location.href = `/surveys/${surveyId}/survey-pages/${leastSortIndexPage.id}`;
+    } else {
+      // If no pages left, redirect to the survey overview page
+      window.location.href = `/surveys/${surveyId}`;
+    }
+
+    dispatch({
+      type: DELETE_SURVEY_PAGE_SUCCESS,
+      payload: surveyPageId,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_SURVEY_PAGE_FAILURE,
+      payload: error.response ? error.response.data : 'Network Error',
+    });
   }
 };
 
