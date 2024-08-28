@@ -266,9 +266,7 @@ const handlePublishSurvey = async () => {
     } catch (error) {
       console.error('Error publishing survey:', error);
     }
-};
-
-
+  };
 
   return (
     <MuiGrid container spacing={4}>
@@ -287,9 +285,6 @@ const handlePublishSurvey = async () => {
           </MuiSelect>
         </MuiBox>
         <MuiBox>
-          <MuiTypography fontWeight="300" variant="h3">
-            {localSurveyTitle || 'Survey Title'}
-          </MuiTypography>
           <SurveyTitleField
             value={localSurveyTitle}
             onChange={handleSurveyTitleChange}
@@ -317,6 +312,14 @@ const handlePublishSurvey = async () => {
         </MuiBox>
       </MuiGrid>
       <MuiGrid item xs={12} md={8}>
+        <MuiBox sx={{ marginBottom: 4, marginLeft: { xs: 0, md: 4 }  }}>
+          <MuiTypography fontWeight="300" variant="h3" align="left">
+            {localSurveyTitle || 'Survey Title'}
+          </MuiTypography>
+          <MuiTypography fontWeight="300" variant="body1" align="justify" sx={{ whiteSpace: 'pre-line', mt: 2 }}>
+            {localSurveyDescription || 'Survey Description'}
+          </MuiTypography>
+        </MuiBox>
         <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
           <QuestionList questions={surveyQuestions} onDelete={handleDeleteQuestion} />
           <MuiButton variant="contained" color="primary" sx={{ marginTop: 0.1 }} onClick={openAddQuestionModal}>
