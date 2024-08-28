@@ -20,7 +20,7 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
     );
   }
 
-  return (
+    return (
     <MuiBox sx={{ marginBottom: 4 }}>
       <MuiTypography variant="h6" sx={{ fontWeight:300 }} gutterBottom>
         Questions
@@ -32,12 +32,12 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
             question={question}
             index={index}
             onDelete={onDelete}
-            onOptionSelection={onOptionSelection}
           />
         ))}
       </MuiList>
     </MuiBox>
   );
+
 
 };
 

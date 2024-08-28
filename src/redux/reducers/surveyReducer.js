@@ -39,10 +39,13 @@ import {
   DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
   PUBLISH_SURVEY_FAIL,
-  
+  FETCH_SURVEY_QUESTION_CHOICES_REQUEST,
+  FETCH_SURVEY_QUESTION_CHOICES_SUCCESS,
+  FETCH_SURVEY_QUESTION_CHOICES_FAILURE,
 } from '../actions/surveyActions';
 
 const initialState = {
+  surveyQuestionChoices: [], // An array to hold choices for questions
   surveys:[],
   survey: null, // Holds the current survey's main details like title, description, etc.
   surveyCategories: [],
@@ -169,6 +172,28 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
         loading: false,
+      };
+    case FETCH_SURVEY_QUESTION_CHOICES_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_SURVEY_QUESTION_CHOICES_SUCCESS:
+      return {
+        ...state,
+        surveyQuestionChoices: {
+          ...state.surveyQuestionChoices,
+          [action.payload.questionId]: action.payload.choices,
+        },
+        isLoading: false,
+        error: null,
+      };
+    case FETCH_SURVEY_QUESTION_CHOICES_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
       };
     case CREATE_SURVEY_QUESTION_SUCCESS:
       return {

@@ -12,6 +12,10 @@ export const CREATE_SURVEY_PAGE_FAIL = 'CREATE_SURVEY_PAGE_FAIL';
 export const ADD_SURVEY_PAGE_SUCCESS = 'ADD_SURVEY_PAGE_SUCCESS';
 export const ADD_SURVEY_PAGE_FAIL = 'ADD_SURVEY_PAGE_FAIL';
 
+export const FETCH_SURVEY_QUESTION_CHOICES_REQUEST = 'FETCH_SURVEY_QUESTION_CHOICES_REQUEST';
+export const FETCH_SURVEY_QUESTION_CHOICES_SUCCESS = 'FETCH_SURVEY_QUESTION_CHOICES_SUCCESS';
+export const FETCH_SURVEY_QUESTION_CHOICES_FAILURE = 'FETCH_SURVEY_QUESTION_CHOICES_FAILURE';
+
 export const FETCH_SURVEY_CATEGORIES_SUCCESS = 'FETCH_SURVEY_CATEGORIES_SUCCESS';
 export const FETCH_SURVEY_CATEGORIES_FAIL = 'FETCH_SURVEY_CATEGORIES_FAIL';
 export const FETCH_SURVEY_THEMES_SUCCESS = 'FETCH_SURVEY_THEMES_SUCCESS';
@@ -52,6 +56,15 @@ export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
 
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
+
+export const fetchSurveyQuestionChoicesAction = () => async (surveyQuestionId) => {
+  try {
+    const response = await api.get('/survey-question-choices/question/${surveyQuestionId}');
+    dispatch({ type: FETCH_SURVEY_THEMES_SUCCESS, payload: response.data.data });
+  } catch (error) {
+    dispatch({ type: FETCH_SURVEY_THEMES_FAIL, payload: error.message });
+  }
+};
 
 export const fetchSurveyAction = (surveyId) => async(dispatch) => {
   try {
