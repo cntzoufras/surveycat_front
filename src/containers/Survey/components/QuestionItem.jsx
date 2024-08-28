@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
   Typography,
   IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import questionTypeNames from '../../../utils/api/questionTypes';
-import QuestionRenderer from './QuestionRenderer'; // Import the QuestionRenderer
+import QuestionRenderer from './QuestionRenderer';
 
 const QuestionItem = ({
-  question, index, onDelete, onOptionSelection,
+  question, index, onDelete,
 }) => {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const handleDeleteClick = () => {
+    setDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDelete(question.id);
+    setDialogOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setDialogOpen(false);
+  };
+
   const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
 
   return (
@@ -23,9 +44,33 @@ const QuestionItem = ({
       <QuestionRenderer question={question} />
 
       {onDelete && (
-        <IconButton edge="end" aria-label="delete" onClick={() => onDelete(question.id)}>
-          <DeleteIcon />
-        </IconButton>
+        <>
+          <IconButton edge="end" aria-label="delete" onClick={handleDeleteClick}>
+            <DeleteIcon />
+          </IconButton>
+
+          <Dialog
+            open={isDialogOpen}
+            onClose={handleCancelDelete}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Are you sure you want to delete this question?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelDelete} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
       )}
     </Box>
   );
@@ -41,7 +86,6 @@ QuestionItem.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
   onDelete: PropTypes.func,
-  onOptionSelection: PropTypes.func.isRequired,
 };
 
 QuestionItem.defaultProps = {
