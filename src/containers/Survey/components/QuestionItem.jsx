@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -11,14 +12,30 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
+import { fetchSurveyQuestionChoicesAction, fetchSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions'; // Import your action
 import DeleteIcon from '@mui/icons-material/Delete';
 import questionTypeNames from '../../../utils/api/questionTypes';
 import QuestionRenderer from './QuestionRenderer';
 
 const QuestionItem = ({
-  question, index, onDelete,
+  question, index, onDelete, onOptionSelection
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
+
+  useEffect(() => {
+    dispatch(fetchSurveyQuestionsWithChoices)
+    if (
+      question.question_type_id === 1 || 
+      question.question_type_id === 2 || 
+      question.question_type_id === 10
+      ) {
+      dispatch(fetchSurveyQuestionChoicesAction(question.id));
+      console.log()
+    }
+  }, [dispatch, question.id, question.question_type_id]);
 
   const handleDeleteClick = () => {
     setDialogOpen(true);
@@ -32,8 +49,6 @@ const QuestionItem = ({
   const handleCancelDelete = () => {
     setDialogOpen(false);
   };
-
-  const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
 
   return (
     <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
