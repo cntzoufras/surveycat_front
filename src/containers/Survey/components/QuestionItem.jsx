@@ -47,11 +47,6 @@ const QuestionItem = ({
   const handleCancelDelete = () => {
     setDialogOpen(false);
   };
-  
-  useEffect(() => {
-    console.log(`Question sto log: `)
-    console.log(question);
-  })
 
   return (
     <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
