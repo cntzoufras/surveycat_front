@@ -207,7 +207,8 @@ const surveyReducer = (state = initialState, action) => {
     case FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS:
       return {
         ...state,
-        survey_question_choices: action.payload.reduce((acc, question) => {
+        questions:action.payload,
+        surveyQuestionChoices: action.payload.reduce((acc, question) => {
             acc[question.id] = question.survey_question_choices;
             return acc;
         }, {}),
