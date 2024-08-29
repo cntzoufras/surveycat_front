@@ -39,6 +39,8 @@ import {
   DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
   PUBLISH_SURVEY_FAIL,
+  SUBMIT_SURVEY_RESPONSE_SUCCESS,
+  SUBMIT_SURVEY_RESPONSE_FAILURE,
   FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST,
   FETCH_SINGLE_SURVEY_QUESTION_CHOICES_SUCCESS,
   FETCH_SINGLE_SURVEY_QUESTION_CHOICES_FAILURE,
@@ -49,6 +51,9 @@ import {
 
 const initialState = {
   surveyQuestionChoices: [], // An array to hold choices for questions
+  surveyResponses:[],
+  isSubmitting: false,
+  submitError: null,
   surveys:[],
   survey: null, // Holds the current survey's main details like title, description, etc.
   surveyCategories: [],
@@ -348,6 +353,20 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case SUBMIT_SURVEY_RESPONSE_SUCCESS:
+      return {
+        ...state,
+        surveyResponses: [...state.surveyResponses, action.payload], // Add the new submission to the state
+        isSubmitting: false,
+        submitError: null,
+      };
+      
+    case SUBMIT_SURVEY_RESPONSE_FAILURE:
+      return {
+        ...state,
+        isSubmitting: false,
+        submitError: action.payload, // Store the error message
       };
     case 'LOADING':
       return {

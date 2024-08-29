@@ -10,6 +10,15 @@ const api = axios.create({
     withCredentials: true,
 });
 
+const publicApi = axios.create({
+  baseURL: 'http://surveycat.test/api',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+  withCredentials: false, // No credentials needed for public access
+});
+
 api.interceptors.request.use(
   async (config) => {
     let csrfToken = Cookies.get('XSRF-TOKEN');
@@ -31,8 +40,15 @@ api.interceptors.request.use(
   error => Promise.reject(error),
 );
 
+export { publicApi };
 export default api;
 
+// Example usage of publicApi for unauthenticated users
+export const fetchPublicSurveyBySlug = (surveySlug) => publicApi.get(`/surveys/ps/${surveySlug}`);
+export const fetchPublicSurveyById = (surveyId) => {
+  const response = publicApi.get(`/surveys/p/${surveyId}`)
+  console.log('MESA RESPONSE EINAI: ',response);
+};
 
 export const getUserSurveys = () => (
   api.get('/surveys/user')

@@ -1,5 +1,5 @@
 import api from '@/utils/api/survey-api';
-
+import { fetchPublicSurveyById } from '../../utils/api/survey-api';
 export const CREATE_SURVEY_QUESTION_SUCCESS = 'CREATE_SURVEY_QUESTION_SUCCESS';
 export const CREATE_SURVEY_QUESTION_FAIL = 'CREATE_SURVEY_QUESTION_FAIL';
 export const CREATE_SURVEY_QUESTION_CHOICES_SUCCESS = 'CREATE_SURVEY_QUESTION_CHOICES_SUCCESS';
@@ -61,6 +61,9 @@ export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
 
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
+export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
+export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
+
 
 export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch) => {
   
@@ -84,7 +87,6 @@ export const fetchSingleSurveyQuestionChoices = (surveyQuestionId) => async (dis
 export const fetchSurveyAction = (surveyId) => async(dispatch) => {
   try {
     const response = await api.get(`/surveys/${surveyId}/details`);
-    console.log('fetchSurveyWithPagesAndThemesAction response einai: ', response.data);
     dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
@@ -120,6 +122,25 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
   }
 };
 
+export const fetchSurveyBySlugAction = (surveySlug) => async (dispatch) => {
+  try {
+    const response = await fetchPublicSurveyBySlug(surveySlug);
+    dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
+  }
+};
+
+export const fetchSurveyByIdAction = (surveyId) => async (dispatch) => {
+  try {
+    
+    const response = await fetchPublicSurveyById(surveyId);
+    dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
+  }
+};
+
 export const fetchSurveyPagesAction = (surveyId) => async (dispatch) => {
   try {
     const response = await api.get(`/surveys/${surveyId}/pages`);
@@ -135,7 +156,6 @@ export const fetchSurveyPagesAction = (surveyId) => async (dispatch) => {
   }
 };
 
-// Action to fetch survey questions
 export const fetchSurveyQuestionsAction = (surveyId, surveyPageId) => async (dispatch) => {
   try {
     const response = await api.get(`/surveys/${surveyId}/pages/${surveyPageId}/questions`);
@@ -329,5 +349,16 @@ export const publishSurveyAction = (surveyId) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: PUBLISH_SURVEY_FAIL, payload: error.message });
     throw error;
+  }
+};
+
+export const submitSurveySubmissionAction = (surveyId, submissions) => async (dispatch) => {
+  try {
+    const response = await api.post(`/surveys/${surveyId}/submit`, { submissions });
+    dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
+    // Handle success - maybe navigate to a thank you page
+  } catch (error) {
+    dispatch({ type: SUBMIT_SURVEY_RESPONSE_FAIL, payload: error.message });
+    // Handle error - show an error message
   }
 };
