@@ -22,7 +22,7 @@ import {
   addSurveyPageAction,
   deleteSurveyPageAction,  // Import delete action
   deleteSurveyQuestionAction,
-  fetchSurveyQuestionsAction,
+  fetchAllSurveyQuestionsWithChoices,
   fetchStockSurveysAction,
   fetchSurveyAction,
   createSurveyQuestionAction,
@@ -53,6 +53,8 @@ const SurveyPage = () => {
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
 
   const [surveyPages, setSurveyPages] = useState(survey?.survey_pages || []); 
+  const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
+
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
   const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState('');
@@ -74,8 +76,11 @@ const SurveyPage = () => {
     if (surveyId) {
       dispatch(fetchSurveyAction(surveyId));
       dispatch(fetchStockSurveysAction());
+      if(surveyPageId) {
+        dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+      }
     }
-  }, [surveyId, dispatch]);
+  }, [surveyId, surveyPageId, dispatch]);
   
   useEffect(() => {
     if (survey?.survey_pages) {
@@ -84,10 +89,14 @@ const SurveyPage = () => {
   }, [survey?.survey_pages]);
 
   useEffect(() => {
-    if (surveyId && surveyPageId) {
-      dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+    if (surveyQuestions.length > 0 && surveyPageId) {
+      // Filter questions by the current survey page
+      const filteredQuestions = surveyQuestions.filter(
+        question => question.survey_page_id === surveyPageId
+      );
+      setCurrentPageQuestions(filteredQuestions);
     }
-  }, [surveyId, surveyPageId, dispatch]);
+  }, [surveyQuestions, surveyPageId]);
 
   useEffect(() => {
     if (surveyPages.length > 0 && surveyPageId) {
@@ -179,7 +188,7 @@ const SurveyPage = () => {
     setLayout(e.target.value);
   };
 
-    const handleAddNewPage = async () => {
+  const handleAddNewPage = async () => {
     try {
       const newPageData = {
         title: '',
@@ -267,7 +276,7 @@ const SurveyPage = () => {
   const handleAddQuestionSubmit = async (questionData) => {
     try {
       await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
-      await dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+      await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
       closeAddQuestionModal();
       setValidationErrors({});
     } catch (error) {
@@ -282,7 +291,7 @@ const SurveyPage = () => {
     try {
       console.log(`Question id: ${questionId}`);
       await dispatch(deleteSurveyQuestionAction(questionId));
-      await dispatch(fetchSurveyQuestionsAction(surveyId, surveyPageId));
+      await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
       setValidationErrors({});
     } catch (error) {
       console.error('Error deleting question:', error);
@@ -373,7 +382,7 @@ const handlePublishSurvey = async () => {
           </MuiTypography>
         </MuiBox>
         <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
-          <QuestionList questions={surveyQuestions} onDelete={handleDeleteQuestion} />
+          <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
           <MuiButton variant="contained" color="primary" sx={{ marginTop: 0.1 }} onClick={openAddQuestionModal}>
             Add Question
           </MuiButton>

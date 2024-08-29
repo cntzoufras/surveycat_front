@@ -6,20 +6,19 @@ const QuestionRenderer = ({ question }) => {
   if (!question) return null;
 
   const { title, question_type_id, survey_question_choices } = question;
-  console.log(`QuestionRenderer > question: `, question);
 
-  return (
+    return (
     <div>
       <h4>{title}</h4>
 
       {/* Render Radio buttons for question type 1 (Multiple Choice) */}
-      {question_type_id === 1 && survey_question_choices && (
+      {question_type_id === 1 && Array.isArray(survey_question_choices) && (
         <List>
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
                 control={<Radio name={`question-${index}`} value={survey_question_choice.content} />}
-                label={survey_question_choice.content} // Ensure that 'content' is a string
+                label={survey_question_choice.content}
               />
             </ListItem>
           ))}
@@ -27,13 +26,13 @@ const QuestionRenderer = ({ question }) => {
       )}
 
       {/* Render Checkboxes for question type 2 or 10 */}
-      {(question_type_id === 2 || question_type_id === 10) && survey_question_choices && (
+      {(question_type_id === 2 || question_type_id === 10) && Array.isArray(survey_question_choices) && (
         <List>
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
                 control={<Checkbox name={`question-${index}`} value={survey_question_choice.content} />}
-                label={survey_question_choice.content} // Ensure that 'content' is a string
+                label={survey_question_choice.content}
               />
             </ListItem>
           ))}
@@ -54,8 +53,9 @@ QuestionRenderer.propTypes = {
       id: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       sort_index: PropTypes.number.isRequired,
-    })).isRequired,
+    })),
   }).isRequired,
 };
 
 export default QuestionRenderer;
+

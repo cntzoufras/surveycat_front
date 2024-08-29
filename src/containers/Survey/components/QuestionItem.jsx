@@ -13,7 +13,6 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
-import { fetchSingleSurveyQuestionChoices } from '@/redux/actions/surveyActions'; // Import your actions
 import DeleteIcon from '@mui/icons-material/Delete';
 import questionTypeNames from '../../../utils/api/questionTypes';
 import QuestionRenderer from './QuestionRenderer';
@@ -22,18 +21,8 @@ const QuestionItem = ({
   question, index, onDelete, onOptionSelection
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const dispatch = useDispatch();
-  const { surveyId } = useParams();
-  const surveyQuestionId = question.id;
-
+  
   const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
-
-  useEffect(() => {
-    if (surveyId) {
-      dispatch(fetchSingleSurveyQuestionChoices(surveyQuestionId));
-    }
-
-  }, [ dispatch, surveyId ]);
 
   const handleDeleteClick = () => {
     setDialogOpen(true);
