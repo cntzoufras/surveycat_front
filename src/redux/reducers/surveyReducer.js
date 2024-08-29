@@ -39,9 +39,12 @@ import {
   DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
   PUBLISH_SURVEY_FAIL,
-  FETCH_SURVEY_QUESTION_CHOICES_REQUEST,
-  FETCH_SURVEY_QUESTION_CHOICES_SUCCESS,
-  FETCH_SURVEY_QUESTION_CHOICES_FAILURE,
+  FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST,
+  FETCH_SINGLE_SURVEY_QUESTION_CHOICES_SUCCESS,
+  FETCH_SINGLE_SURVEY_QUESTION_CHOICES_FAILURE,
+  FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST,
+  FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS,
+  FETCH_SURVEY_QUESTIONS_WITH_CHOICES_FAILURE,
 } from '../actions/surveyActions';
 
 const initialState = {
@@ -54,7 +57,7 @@ const initialState = {
   surveyPages: [], // Holds all pages related to a survey
   stockSurveys: [], // Holds stock surveys
   questions: [], // Holds questions related to the current survey page
-  choices: [], // Holds the choices related to the current questions
+  survey_question_choices: [], // Holds the choices related to the current questions
   layout: 'default', // Tracks layout settings for the survey
   loading: false, // Indicates if any async operation is in progress
   error: null, // Holds any error messages encountered during operations
@@ -173,23 +176,45 @@ const surveyReducer = (state = initialState, action) => {
         error: action.payload,
         loading: false,
       };
-    case FETCH_SURVEY_QUESTION_CHOICES_REQUEST:
+    case FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST:
       return {
         ...state,
         isLoading: true,
         error: null,
       };
-    case FETCH_SURVEY_QUESTION_CHOICES_SUCCESS:
+    case FETCH_SINGLE_SURVEY_QUESTION_CHOICES_SUCCESS:
       return {
         ...state,
         surveyQuestionChoices: {
           ...state.surveyQuestionChoices,
-          [action.payload.questionId]: action.payload.choices,
+          [action.payload.questionId]: action.payload.survey_question_choices,
         },
         isLoading: false,
         error: null,
       };
-    case FETCH_SURVEY_QUESTION_CHOICES_FAILURE:
+    case FETCH_SINGLE_SURVEY_QUESTION_CHOICES_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      };
+    case FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS:
+      return {
+        ...state,
+        survey_question_choices: action.payload.reduce((acc, question) => {
+            acc[question.id] = question.survey_question_choices;
+            return acc;
+        }, {}),
+        isLoading: false,
+        error: null,
+    };
+    case FETCH_SURVEY_QUESTIONS_WITH_CHOICES_FAILURE:
       return {
         ...state,
         isLoading: false,
@@ -238,7 +263,7 @@ const surveyReducer = (state = initialState, action) => {
     case CREATE_SURVEY_QUESTION_CHOICES_SUCCESS:
       return {
         ...state,
-        choices: [...state.choices, ...action.payload],
+        survey_question_choices: [...state.survey_question_choices, ...action.payload],
         error: null,
       };
     case CREATE_SURVEY_QUESTION_CHOICES_FAIL:

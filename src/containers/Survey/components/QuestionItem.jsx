@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -12,7 +13,7 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
-import { fetchSurveyQuestionChoicesAction, fetchSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions'; // Import your action
+import { fetchSingleSurveyQuestionChoices } from '@/redux/actions/surveyActions'; // Import your actions
 import DeleteIcon from '@mui/icons-material/Delete';
 import questionTypeNames from '../../../utils/api/questionTypes';
 import QuestionRenderer from './QuestionRenderer';
@@ -22,20 +23,17 @@ const QuestionItem = ({
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
+  const { surveyId } = useParams();
+  const surveyQuestionId = question.id;
 
   const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
 
   useEffect(() => {
-    dispatch(fetchSurveyQuestionsWithChoices)
-    if (
-      question.question_type_id === 1 || 
-      question.question_type_id === 2 || 
-      question.question_type_id === 10
-      ) {
-      dispatch(fetchSurveyQuestionChoicesAction(question.id));
-      console.log()
+    if (surveyId) {
+      dispatch(fetchSingleSurveyQuestionChoices(surveyQuestionId));
     }
-  }, [dispatch, question.id, question.question_type_id]);
+
+  }, [ dispatch, surveyId ]);
 
   const handleDeleteClick = () => {
     setDialogOpen(true);
@@ -49,11 +47,16 @@ const QuestionItem = ({
   const handleCancelDelete = () => {
     setDialogOpen(false);
   };
+  
+  useEffect(() => {
+    console.log(`Question sto log: `)
+    console.log(question);
+  })
 
   return (
     <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
       <Typography variant="h6">
-        {`${index + 1}. ${question.title} (${questionTypeName})`}
+        {`${index + 1}. ${question.title} ( ${questionTypeName} )`}
       </Typography>
       
       <QuestionRenderer question={question} />
@@ -96,6 +99,7 @@ QuestionItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     question_type_id: PropTypes.number.isRequired,
+    survey_id: PropTypes.string.isRequired, // Add this line to pass survey_id
     options: PropTypes.arrayOf(PropTypes.string),
     selectedOptions: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
