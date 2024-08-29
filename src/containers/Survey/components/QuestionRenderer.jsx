@@ -4,13 +4,13 @@ import { Radio, Checkbox, FormControlLabel, List, ListItem } from '@mui/material
 
 const QuestionRenderer = ({ question }) => {
   if (!question) return null;
-  
+
   const { title, question_type_id, survey_question_choices } = question;
-  console.log(`QuestionRenderer > question: `,question);
+  console.log(`QuestionRenderer > question: `, question);
 
   return (
     <div>
-      <h4>{title}, {survey_question_choices}</h4>
+      <h4>{title}</h4>
 
       {/* Render Radio buttons for question type 1 (Multiple Choice) */}
       {question_type_id === 1 && survey_question_choices && (
@@ -19,7 +19,7 @@ const QuestionRenderer = ({ question }) => {
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
                 control={<Radio name={`question-${index}`} value={survey_question_choice.content} />}
-                label={survey_question_choice.content}
+                label={survey_question_choice.content} // Ensure that 'content' is a string
               />
             </ListItem>
           ))}
@@ -33,7 +33,7 @@ const QuestionRenderer = ({ question }) => {
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
                 control={<Checkbox name={`question-${index}`} value={survey_question_choice.content} />}
-                label={survey_question_choice.content}
+                label={survey_question_choice.content} // Ensure that 'content' is a string
               />
             </ListItem>
           ))}
@@ -54,7 +54,7 @@ QuestionRenderer.propTypes = {
       id: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
       sort_index: PropTypes.number.isRequired,
-    })),
+    })).isRequired,
   }).isRequired,
 };
 
