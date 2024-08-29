@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import QuestionItem from './QuestionItem';
 import { 
   Box as MuiBox, 
   Typography as MuiTypography, 
   List as MuiList 
 } from '@mui/material';
+import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions';
 
 
 const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
   console.log(`Questions in prop of QuestionList: ${questions}`);
-  // Check if questions is null, undefined, or an empty array
+  
+  const dispatch = useDispatch();
+  const { surveyId } = useParams();
+  
+  useEffect(() => {
+    if (surveyId) {
+      dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+    }
+  }, [ dispatch, surveyId ]);
+
   if (!questions || questions.length === 0) {
     return (
       <div>
