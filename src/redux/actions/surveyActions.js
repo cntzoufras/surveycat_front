@@ -1,5 +1,5 @@
-import api from '@/utils/api/survey-api';
-import { fetchPublicSurveyById } from '../../utils/api/survey-api';
+import api,{ publicApi } from '@/utils/api/survey-api';
+
 export const CREATE_SURVEY_QUESTION_SUCCESS = 'CREATE_SURVEY_QUESTION_SUCCESS';
 export const CREATE_SURVEY_QUESTION_FAIL = 'CREATE_SURVEY_QUESTION_FAIL';
 export const CREATE_SURVEY_QUESTION_CHOICES_SUCCESS = 'CREATE_SURVEY_QUESTION_CHOICES_SUCCESS';
@@ -11,7 +11,6 @@ export const CREATE_SURVEY_PAGE_FAIL = 'CREATE_SURVEY_PAGE_FAIL';
 
 export const ADD_SURVEY_PAGE_SUCCESS = 'ADD_SURVEY_PAGE_SUCCESS';
 export const ADD_SURVEY_PAGE_FAIL = 'ADD_SURVEY_PAGE_FAIL';
-
 
 export const FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST = 'FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST';
 export const FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS = 'FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS';
@@ -58,15 +57,13 @@ export const DELETE_SURVEY_PAGE_REQUEST = 'DELETE_SURVEY_PAGE_REQUEST';
 export const DELETE_SURVEY_PAGE_SUCCESS = 'DELETE_SURVEY_PAGE_SUCCESS';
 export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
 
-
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
 export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
 export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 
-
 export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch) => {
-  
+  dispatch({ type: FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST });
   try {
     const response = await api.get(`/surveys/${surveyId}/questions-with-choices`);
     dispatch({ type: FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS, payload: response.data });
@@ -76,6 +73,7 @@ export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch)
 };
 
 export const fetchSingleSurveyQuestionChoices = (surveyQuestionId) => async (dispatch) => {
+  dispatch({ type: FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST });
   try {
     const response = await api.get(`/survey-question-choices/question/${surveyQuestionId}`);
     dispatch({ type: FETCH_SINGLE_SURVEY_QUESTION_CHOICES_SUCCESS, payload: response.data.data });
@@ -124,7 +122,8 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
 
 export const fetchSurveyBySlugAction = (surveySlug) => async (dispatch) => {
   try {
-    const response = await fetchPublicSurveyBySlug(surveySlug);
+    const response = publicApi.get(`/surveys/p/${surveySlug}`)
+    
     dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
@@ -133,8 +132,7 @@ export const fetchSurveyBySlugAction = (surveySlug) => async (dispatch) => {
 
 export const fetchSurveyByIdAction = (surveyId) => async (dispatch) => {
   try {
-    
-    const response = await fetchPublicSurveyById(surveyId);
+    const response = publicApi.get(`/surveys/p/${surveyId}`)
     dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
@@ -257,6 +255,7 @@ export const updateSurveyTitleAction = (surveyId, title) => async (dispatch) => 
     throw error;
   }
 };
+
 // Action to update survey description
 export const updateSurveyDescriptionAction = (surveyId, description) => async (dispatch) => {
   try {
@@ -358,7 +357,7 @@ export const submitSurveySubmissionAction = (surveyId, submissions) => async (di
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
   } catch (error) {
-    dispatch({ type: SUBMIT_SURVEY_RESPONSE_FAIL, payload: error.message });
+    dispatch({ type: SUBMIT_SURVEY_RESPONSE_FAILURE, payload: error.message });
     // Handle error - show an error message
   }
 };
