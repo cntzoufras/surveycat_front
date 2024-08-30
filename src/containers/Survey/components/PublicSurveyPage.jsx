@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import PublicQuestionList from './public/QuestionList'; // Reuse your existing component
-import { fetchSurveyByIdAction, fetchSurveyBySlugAction } from '@/redux/actions/surveyActions'; // You'll need to create this action
-import { submitSurveySubmissionAction } from '@/redux/actions/surveyActions'; // You'll need to create this action
+import PublicQuestionList from './public/QuestionList';
+import { fetchPublicSurveyBySlugAction } from '@/redux/actions/surveyActions';  // Ensure this is correct
+import { submitSurveySubmissionAction } from '@/redux/actions/surveyActions';
 
 const PublicSurveyPage = () => {
-  const { surveySlug } = useParams();
   const dispatch = useDispatch();
-  const survey = useSelector(state => state.survey.survey);
-  const surveyQuestions = useSelector(state => state.survey.questions);
+  const { surveySlug } = useParams();
+
+  const survey = useSelector(state => state.survey.publicSurvey);
+  const surveyPages = useSelector(state => state.survey.publicSurveyPages);
+  const surveyQuestions = useSelector(state => state.survey.publicSurveyQuestions);
 
   const [responses, setResponses] = useState({});
-
+  
   useEffect(() => {
     if (surveySlug) {
-      dispatch(fetchSurveyByIdAction(surveySlug));
+      dispatch(fetchPublicSurveyBySlugAction(surveySlug));
     }
   }, [surveySlug, dispatch]);
 
@@ -28,7 +30,6 @@ const PublicSurveyPage = () => {
 
   const handleSubmit = () => {
     dispatch(submitSurveySubmissionAction(survey.id, responses));
-    // Add logic to handle submission success/failure
   };
 
   if (!survey) {
