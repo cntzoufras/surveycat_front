@@ -13,7 +13,7 @@ import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
 import AuthCheck from '../AuthCheck';
 import PrivateRoute from './PrivateRoute';
-
+import PublicSurveyPage from '../../Survey/components/PublicSurveyPage'
 const Router = () => (
   <MainWrapper>
     <main>
@@ -23,6 +23,7 @@ const Router = () => (
         <Route path="/login" element={<LogIn />} />
         <Route exact path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/surveys/p/:surveySlug" element={<PublicSurveyPage />} />
         <Route 
           exact 
           path="/todo" 
