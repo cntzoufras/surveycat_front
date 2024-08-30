@@ -47,6 +47,9 @@ import {
   FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST,
   FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS,
   FETCH_SURVEY_QUESTIONS_WITH_CHOICES_FAILURE,
+  FETCH_PUBLIC_SURVEY_REQUEST,
+  FETCH_PUBLIC_SURVEY_SUCCESS,
+  FETCH_PUBLIC_SURVEY_FAILURE,
 } from '../actions/surveyActions';
 
 const initialState = {
@@ -225,6 +228,29 @@ const surveyReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+    case FETCH_PUBLIC_SURVEY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_PUBLIC_SURVEY_SUCCESS:
+      const { survey, surveyPages, surveyQuestions, surveyQuestionChoices } = action.payload;
+      const newState = {
+        ...state,
+        loading: false,
+        publicSurvey: survey,
+        publicSurveyPages: [...surveyPages],
+        publicSurveyQuestions: [...surveyQuestions],
+        publicSurveyQuestionChoices: [...surveyQuestionChoices],
+      };
+      return newState;
+    case FETCH_PUBLIC_SURVEY_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
     case CREATE_SURVEY_QUESTION_SUCCESS:
       return {
         ...state,
@@ -345,7 +371,7 @@ const surveyReducer = (state = initialState, action) => {
     case SUBMIT_SURVEY_RESPONSE_SUCCESS:
       return {
         ...state,
-        surveyResponses: [...state.surveyResponses, action.payload], // Add the new submission to the state
+        surveyResponses: [...state.surveyResponses, action.payload],
         loading: false,
         submitError: null,
       };

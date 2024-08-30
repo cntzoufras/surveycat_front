@@ -62,6 +62,10 @@ export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
 export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
 export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 
+export const FETCH_PUBLIC_SURVEY_REQUEST = 'FETCH_PUBLIC_SURVEY_REQUEST';
+export const FETCH_PUBLIC_SURVEY_SUCCESS = 'FETCH_PUBLIC_SURVEY_SUCCESS';
+export const FETCH_PUBLIC_SURVEY_FAILURE = 'FETCH_PUBLIC_SURVEY_FAILURE';
+
 export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch) => {
   dispatch({ type: FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST });
   try {
@@ -120,24 +124,6 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
   }
 };
 
-export const fetchSurveyBySlugAction = (surveySlug) => async (dispatch) => {
-  try {
-    const response = publicApi.get(`/surveys/p/${surveySlug}`)
-    
-    dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
-  } catch (error) {
-    dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
-  }
-};
-
-export const fetchSurveyByIdAction = (surveyId) => async (dispatch) => {
-  try {
-    const response = publicApi.get(`/surveys/p/${surveyId}`)
-    dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
-  } catch (error) {
-    dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
-  }
-};
 
 export const fetchSurveyPagesAction = (surveyId) => async (dispatch) => {
   try {
@@ -175,6 +161,44 @@ export const fetchStockSurveysAction = () => async (dispatch) => {
     throw error;
   }
 };
+
+export const fetchPublicSurveyBySlugAction = (surveySlug) => async (dispatch) => {
+  try {
+    const response = await publicApi.get(`/surveys/ps/${surveySlug}`);
+    console.log(`Response: ${response}`)
+    console.log(`Response.data: ${response.data}`)
+    
+    const survey = response.data;
+    console.log(`Survey:`, survey);
+    
+    
+    const surveyPages = survey.survey_pages || [];
+    console.log(`surveyPages:`, surveyPages)
+    
+    const surveyQuestions = surveyPages.flatMap(page => page.survey_questions || []);
+    console.log(`surveyQuestions: `, surveyQuestions)
+    
+    const surveyQuestionChoices = surveyQuestions.flatMap(question => question.survey_question_choices || []);
+    console.log(`surveyQuestionChoices: `, surveyQuestionChoices);
+    
+    
+    dispatch({
+      type: FETCH_PUBLIC_SURVEY_SUCCESS,
+      payload: {
+        survey,
+        surveyPages,
+        surveyQuestions,
+        surveyQuestionChoices,
+      },
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_PUBLIC_SURVEY_FAILURE,
+      payload: error.message,
+    });
+  }
+};
+
 
 // Action to add a new survey page
 export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) => {
