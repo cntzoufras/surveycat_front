@@ -310,8 +310,8 @@ const handlePublishSurvey = async () => {
       }
 
       // Assuming `publishSurveyAction` requires the title as well
-      const publishResponse = await dispatch(publishSurveyAction(surveyId, localSurveyTitle));
-      const publicUrl = `/surveys/p/${publishResponse.id}`;
+      const publishResponse = await dispatch(publishSurveyAction(surveyId));
+      const publicUrl = `/surveys/ps/${publishResponse.public_link}`;
       navigate(publicUrl);
     } catch (error) {
       console.error('Error publishing survey:', error);
