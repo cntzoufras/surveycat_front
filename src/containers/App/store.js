@@ -1,4 +1,4 @@
-import { combineReducers, createStore, applyMiddleware, } from 'redux';
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import {
   themeReducer,
@@ -24,6 +24,8 @@ const initialAuthState = {
   user: authFromSession.user,
 };
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const reducer = combineReducers({
   theme: themeReducer,
   rtl: rtlReducer,
@@ -39,6 +41,7 @@ const reducer = combineReducers({
   pokemon: pokemonReducer,
   survey: surveyReducer,
 });
-const store = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+
 
 export default store;
