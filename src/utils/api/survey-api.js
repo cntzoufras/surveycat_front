@@ -45,10 +45,6 @@ export default api;
 
 // Example usage of publicApi for unauthenticated users
 export const fetchPublicSurveyBySlug = (surveySlug) => publicApi.get(`/surveys/ps/${surveySlug}`);
-export const fetchPublicSurveyById = (surveyId) => {
-  const response = publicApi.get(`/surveys/p/${surveyId}`)
-  console.log('MESA RESPONSE EINAI: ',response);
-};
 
 export const getUserSurveys = () => (
   api.get('/surveys/user')
