@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PublicQuestionList from './public/QuestionList';
-import { fetchPublicSurveyBySlugAction } from '@/redux/actions/surveyActions';  // Ensure this is correct
+import { fetchPublicSurveyBySlugAction } from '@/redux/actions/surveyActions';
 import { submitSurveySubmissionAction } from '@/redux/actions/surveyActions';
 
 const PublicSurveyPage = () => {
@@ -14,7 +14,7 @@ const PublicSurveyPage = () => {
   const surveyQuestions = useSelector(state => state.survey.publicSurveyQuestions);
 
   const [responses, setResponses] = useState({});
-  
+
   useEffect(() => {
     if (surveySlug) {
       dispatch(fetchPublicSurveyBySlugAction(surveySlug));
@@ -36,8 +36,15 @@ const PublicSurveyPage = () => {
     return <div>Loading...</div>;
   }
 
+  const themeStyles = {
+    fontFamily: survey?.theme?.theme_setting?.settings?.typography?.fontFamily || 'Arial, sans-serif',
+    fontSize: survey?.theme?.theme_setting?.settings?.typography?.fontSize || '12px',
+    color: survey?.theme?.theme_setting?.settings?.primaryColor || '#252525',
+    backgroundColor: survey?.theme?.theme_setting?.settings?.backgroundColor || '#909090',
+  };
+  
   return (
-    <div>
+    <div style={themeStyles}>
       <h1>{survey.title}</h1>
       <p>{survey.description}</p>
       <PublicQuestionList questions={surveyQuestions} onResponseChange={handleResponseChange} />
