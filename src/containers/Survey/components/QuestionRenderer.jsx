@@ -7,6 +7,11 @@ const QuestionRenderer = ({ question }) => {
 
   const { title, question_type_id, survey_question_choices } = question;
 
+  const handleChange = (event) => {
+    onAnswerChange(event.target.value);
+  };
+
+
     return (
     <div>
       <h4>{title}</h4>
@@ -17,7 +22,13 @@ const QuestionRenderer = ({ question }) => {
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={<Radio name={`question-${index}`} value={survey_question_choice.content} />}
+                control={
+                  <Radio
+                    name={`question-${question.id}`}
+                    value={survey_question_choice.content}
+                    onChange={handleChange}  // Trigger change when user selects an option
+                  />
+                }
                 label={survey_question_choice.content}
               />
             </ListItem>
@@ -31,7 +42,13 @@ const QuestionRenderer = ({ question }) => {
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={<Checkbox name={`question-${index}`} value={survey_question_choice.content} />}
+                control={
+                  <Checkbox
+                    name={`question-${question.id}`}
+                    value={survey_question_choice.content}
+                    onChange={handleChange}  // Trigger change when user checks/unchecks an option
+                  />
+                }
                 label={survey_question_choice.content}
               />
             </ListItem>
@@ -55,6 +72,7 @@ QuestionRenderer.propTypes = {
       sort_index: PropTypes.number.isRequired,
     })),
   }).isRequired,
+  onAnswerChange: PropTypes.func.isRequired, // Added prop type for the onAnswerChange callback
 };
 
 export default QuestionRenderer;

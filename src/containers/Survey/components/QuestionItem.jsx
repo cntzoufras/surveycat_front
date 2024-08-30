@@ -18,12 +18,16 @@ import questionTypeNames from '../../../utils/api/questionTypes';
 import QuestionRenderer from './QuestionRenderer';
 
 const QuestionItem = ({
-  question, index, onDelete, onOptionSelection
+  question, index, onDelete, onResponseChange
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   
   const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
 
+  const handleAnswerChange = (value) => {
+    onResponseChange(question.id, value);
+  };
+  
   const handleDeleteClick = () => {
     setDialogOpen(true);
   };
@@ -40,11 +44,13 @@ const QuestionItem = ({
   return (
     <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
       <Typography variant="h6">
-        {`${index + 1}. ${question.title} ( ${questionTypeName} )`}
+        {`${index + 1}. ${question.title} (${questionTypeName})`}
       </Typography>
       
-      <QuestionRenderer question={question} />
+      {/* Render the question using the QuestionRenderer, passing the handleAnswerChange function */}
+      <QuestionRenderer question={question} onAnswerChange={handleAnswerChange} />
 
+      {/* Conditionally render the delete button and dialog if onDelete is provided */}
       {onDelete && (
         <>
           <IconButton edge="end" aria-label="delete" onClick={handleDeleteClick}>
@@ -89,6 +95,7 @@ QuestionItem.propTypes = {
   }).isRequired,
   index: PropTypes.number.isRequired,
   onDelete: PropTypes.func,
+  onResponseChange: PropTypes.func.isRequired,
 };
 
 QuestionItem.defaultProps = {

@@ -11,7 +11,7 @@ import {
 import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions';
 
 
-const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
+const QuestionList = ({ questions, onDelete, onResponseChange }) => {
   console.log(`Questions in prop of QuestionList: ${questions}`);
   
   const dispatch = useDispatch();
@@ -44,6 +44,7 @@ const QuestionList = ({ questions, onDelete, onOptionSelection }) => {
             question={question}
             index={index}
             onDelete={onDelete}
+            onResponseChange={onResponseChange}
           />
         ))}
       </MuiList>
