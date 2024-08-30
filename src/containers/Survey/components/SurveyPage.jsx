@@ -303,13 +303,11 @@ const SurveyPage = () => {
 
 const handlePublishSurvey = async () => {
     try {
-      // Ensure the title in the local state is used for publishing
       if (!localSurveyTitle.trim()) {
         console.error('Title is required to create a public link.');
         return;
       }
 
-      // Assuming `publishSurveyAction` requires the title as well
       const publishResponse = await dispatch(publishSurveyAction(surveyId));
       const publicUrl = `/surveys/ps/${publishResponse.public_link}`;
       navigate(publicUrl);
