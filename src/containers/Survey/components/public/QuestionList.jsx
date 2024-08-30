@@ -18,6 +18,7 @@ const PublicQuestionList = ({ questions, onResponseChange }) => {
             <ul>
               {question.survey_question_choices.map((choice) => (
                 <li key={choice.id}>
+                  <h6>{choice.content}</h6>
                   <input
                     type="radio"
                     name={question.id}
