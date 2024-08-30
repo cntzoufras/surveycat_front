@@ -23,7 +23,7 @@ const Router = () => (
         <Route path="/login" element={<LogIn />} />
         <Route exact path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
-        <Route path="/surveys/p/:surveySlug" element={<PublicSurveyPage />} />
+        <Route path="/surveys/ps/:surveySlug" element={<PublicSurveyPage />} />
         <Route 
           exact 
           path="/todo" 
