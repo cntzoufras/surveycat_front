@@ -3,17 +3,29 @@ import PropTypes from 'prop-types';
 import { Radio, FormControlLabel, Checkbox, List, ListItem } from '@mui/material';
 
 const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValues, setSelectedValues] = useState([]);
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    onAnswerChange(event.target.value);
+  const handleRadioChange = (event) => {
+    const value = event.target.value;
+    setSelectedValues([value]);
+    onAnswerChange(question.id, value);  // Pass the question ID and selected value
+  };
+
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    const updatedValues = event.target.checked 
+      ? [...selectedValues, value] 
+      : selectedValues.filter((v) => v !== value);
+
+    setSelectedValues(updatedValues);
+    onAnswerChange(question.id, updatedValues);  // Pass the question ID and selected values
   };
 
   return (
     <div>
       <h4>{question.title}</h4>
 
+      {/* Render Radio buttons for question type 1 (Multiple Choice) */}
       {question.question_type_id === 1 && Array.isArray(question.survey_question_choices) && (
         <List>
           {question.survey_question_choices.map((survey_question_choice, index) => (
@@ -23,8 +35,8 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                   <Radio
                     name={`question-${question.id}`}
                     value={survey_question_choice.id}
-                    checked={selectedValue === survey_question_choice.id}  // Set the checked state
-                    onChange={handleChange}
+                    checked={selectedValues.includes(survey_question_choice.id)}
+                    onChange={handleRadioChange}
                   />
                 }
                 label={survey_question_choice.content}
@@ -33,7 +45,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           ))}
         </List>
       )}
-      
+
       {/* Render Checkboxes for question type 2 or 10 */}
       {(question.question_type_id === 2 || question.question_type_id === 10) && Array.isArray(question.survey_question_choices) && (
         <List>
@@ -43,8 +55,9 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 control={
                   <Checkbox
                     name={`question-${question.id}`}
-                    value={survey_question_choice.id}  // Use the choice ID as the value
-                    onChange={handleChange}  // Trigger change when user checks/unchecks an option
+                    value={survey_question_choice.id}
+                    checked={selectedValues.includes(survey_question_choice.id)}
+                    onChange={handleCheckboxChange}
                   />
                 }
                 label={survey_question_choice.content}
