@@ -92,11 +92,11 @@ const AddQuestionModal = ({
       is_required: isRequired,
       question_type_id: questionType,
       additional_settings: {
-        color: '#7ec8e3',
-        align: 'center',
-        font_style: 'none',
-        font_family: 'Calibri',
-        font_size: '9',
+        // color: '#7ec8e3',
+        // align: 'center',
+        // font_style: 'none',
+        // font_family: 'Calibri',
+        // font_size: '9',
       },
     };
 
