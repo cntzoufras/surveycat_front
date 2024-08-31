@@ -32,6 +32,7 @@ import {
   UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL,
   UPDATE_SURVEY_LAYOUT_SUCCESS,
   UPDATE_SURVEY_LAYOUT_FAIL,
+  UPDATE_QUESTIONS,
   DELETE_SURVEY_QUESTION_SUCCESS,
   DELETE_SURVEY_QUESTION_FAIL,
   DELETE_SURVEY_PAGE_REQUEST,
@@ -365,6 +366,11 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case UPDATE_QUESTIONS: // in design, after question is added
+      return {
+        ...state,
+        questions: [...state.questions, action.payload], // Append the new question
       };
     case PUBLISH_SURVEY_SUCCESS:
       return {

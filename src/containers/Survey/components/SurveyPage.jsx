@@ -59,6 +59,7 @@ const SurveyPage = () => {
 
   const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
   const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0); // key to force re-render
 
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
@@ -103,7 +104,7 @@ const SurveyPage = () => {
       );
       setCurrentPageQuestions(filteredQuestions);
     }
-  }, [surveyQuestions, surveyPageId]);
+  }, [surveyQuestions, surveyPageId, refreshKey]); // added refreshKey
 
   useEffect(() => {
     if (surveyPages.length > 0 && surveyPageId) {
@@ -292,6 +293,7 @@ const SurveyPage = () => {
     try {
       await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
       await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+      setRefreshKey(prev => prev + 1); // <-- Trigger re-render
       closeAddQuestionModal();
     } catch (error) {
       console.error('Error adding question:', error);
@@ -302,6 +304,7 @@ const SurveyPage = () => {
     try {
       await dispatch(deleteSurveyQuestionAction(questionId));
       await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+      setRefreshKey(prev => prev + 1); // <-- Trigger re-render
     } catch (error) {
       console.error('Error deleting question:', error);
     }

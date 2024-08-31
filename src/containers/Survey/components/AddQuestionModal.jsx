@@ -91,7 +91,7 @@ const AddQuestionModal = ({
       title: newQuestion,
       survey_page_id: selectedSurveyPage,
       options: (questionType === '1' || questionType === '2')
-        ? optionInputs.slice(0, numOptions).filter(Boolean)
+        ? optionInputs.slice(0, numOptions).filter(Boolean) 
         : [],
       selectedOptions,
       question_tags: JSON.stringify(selectedQuestionTags),
@@ -107,15 +107,31 @@ const AddQuestionModal = ({
     };
 
     try {
+      // Dispatching the action to create the question
       const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
 
-      if (questionType === '1' || questionType === '2') {
+      if (questionType === '1' || questionType === '2') { 
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
           survey_question_id: newQuestionResponse.id,
         }));
-        await dispatch(createSurveyQuestionChoicesAction(choicesData));
+        const choicesResponse = await dispatch(createSurveyQuestionChoicesAction(choicesData));
+        
+        // Updating Redux with the new question and choices
+        dispatch({
+          type: 'UPDATE_QUESTIONS',
+          payload: {
+            ...newQuestionResponse,
+            choices: choicesResponse, // Assuming choicesResponse contains the created choices
+          }
+        });
+      } else {
+        // If no choices, just update with the question
+        dispatch({
+          type: 'UPDATE_QUESTIONS',
+          payload: newQuestionResponse,
+        });
       }
 
       onClose();
