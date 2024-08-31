@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import {
   Card, CardBody, CardTitleWrap, CardTitle, CardSubhead,
@@ -8,7 +7,7 @@ import { Button, ButtonToolbar } from '@/shared/components/Button';
 import Popover from '@/shared/components/Popover';
 import { TooltipCardWrap } from './BasicElements';
 
-const PopoverRight = ({ dir }) => {
+const PopoverRight = () => {
   const { t } = useTranslation('common');
 
   return (
@@ -41,7 +40,7 @@ const PopoverRight = ({ dir }) => {
 };
 
 PopoverRight.propTypes = {
-  dir: PropTypes.string.isRequired,
+  // dir: PropTypes.string.isRequired,
 };
 
 export default PopoverRight;

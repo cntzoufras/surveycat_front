@@ -10,7 +10,8 @@ const PublicSurveyPage = () => {
   const { surveySlug } = useParams();
 
   const survey = useSelector(state => state.survey.publicSurvey);
-  const surveyPages = useSelector(state => state.survey.publicSurveyPages);
+  // TODO PUBLIC SURVEY PAGES
+  // const surveyPages = useSelector(state => state.survey.publicSurveyPages);
   const surveyQuestions = useSelector(state => state.survey.publicSurveyQuestions);
 
   const [responses, setResponses] = useState({});
@@ -48,7 +49,7 @@ const PublicSurveyPage = () => {
       <h1>{survey.title}</h1>
       <p>{survey.description}</p>
       <PublicQuestionList questions={surveyQuestions} onResponseChange={handleResponseChange} />
-      <button onClick={handleSubmit}>Submit</button>
+      <button type="button" onClick={handleSubmit}>Submit</button>
     </div>
   );
 };

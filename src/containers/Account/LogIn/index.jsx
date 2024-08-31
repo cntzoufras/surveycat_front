@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LogInForm from '@/shared/components/account/loginForm/LogInForm';
-import { handleLogin as reduxHandleLogin, handleAuthError } from '@/redux/actions/authActions';
+import { handleLogin as reduxHandleLogin } from '@/redux/actions/authActions';
 
 import {
   AccountCard,
@@ -37,7 +37,6 @@ const LogIn = ({ error }) => {
     try {
       const response = await dispatch(reduxHandleLogin(credentials));
 
-      // Check if loggedIn is true in localStorage
       const authData = JSON.parse(localStorage.getItem('auth'));
       
       if (authData && authData.loggedIn) {

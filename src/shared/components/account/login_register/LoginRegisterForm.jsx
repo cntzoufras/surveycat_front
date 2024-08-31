@@ -14,7 +14,7 @@ import {
   FormGroupLabel,
 } from '@/shared/components/form/FormElements';
 import { marginLeft } from '@/utils/directions';
-import { Button, ButtonToolbar } from '@/shared/components/Button';
+
 import { AccountButton, AccountButtons, ForgotFormGroup } from '../AccountElements';
 
 const required = value => (value ? undefined : 'Required');
@@ -56,7 +56,7 @@ const validateConfirmPassword = (value, allValues) => {
   return undefined;
 };
 
-const RegisterForm = ({ onSubmit, errorMessage, showNotification }) => (
+const RegisterForm = ({ onSubmit, errorMessage }) => (
   <Form onSubmit={onSubmit}>
     {({ handleSubmit }) => (
       <FormContainer onSubmit={handleSubmit}>
@@ -150,7 +150,7 @@ RegisterForm.propTypes = {
     PropTypes.string,
     PropTypes.object,
   ]),
-  showNotification: PropTypes.func.isRequired,
+  // showNotification: PropTypes.func.isRequired,
 };
 
 RegisterForm.defaultProps = {

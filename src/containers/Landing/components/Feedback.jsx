@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { landingAccentColor } from '@/utils/palette';
 import { LandingButton, LandingContainer } from '../BasicLandingElements';
 
-const background = `${process.env.PUBLIC_URL}/img/landing/design_code_bg.png`;
 const designAndCodeImg = `${process.env.PUBLIC_URL}/img/landing/design_and_code.svg`;
 const macbookImg = `${process.env.PUBLIC_URL}/img/landing/feedback_macbook.png`;
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
 import Plots from './components/Plots';
@@ -13,8 +12,6 @@ import 'react-vis/dist/style.css';
 
 const ReactVis = () => {
   const { t } = useTranslation('common');
-
-  const rtl = useSelector(state => state.rtl);
 
   return (
     <Container>

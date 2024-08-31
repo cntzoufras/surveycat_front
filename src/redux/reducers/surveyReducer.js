@@ -234,19 +234,23 @@ const surveyReducer = (state = initialState, action) => {
         loading: true,
         error: null,
       };
-    case FETCH_PUBLIC_SURVEY_SUCCESS:
+    case FETCH_PUBLIC_SURVEY_SUCCESS: {
       const {
- survey, surveyPages, surveyQuestions, surveyQuestionChoices, 
-} = action.payload;
+          survey, 
+          surveyPages, 
+          surveyQuestions, 
+          surveyQuestionChoices, 
+      } = action.payload;
       const newState = {
-        ...state,
-        loading: false,
-        publicSurvey: survey,
-        publicSurveyPages: [...surveyPages],
-        publicSurveyQuestions: [...surveyQuestions],
-        publicSurveyQuestionChoices: [...surveyQuestionChoices],
+          ...state,
+          loading: false,
+          publicSurvey: survey,
+          publicSurveyPages: [...surveyPages],
+          publicSurveyQuestions: [...surveyQuestions],
+          publicSurveyQuestionChoices: [...surveyQuestionChoices],
       };
       return newState;
+    }
     case FETCH_PUBLIC_SURVEY_FAILURE:
       return {
         ...state,
@@ -351,7 +355,10 @@ const surveyReducer = (state = initialState, action) => {
     case UPDATE_SURVEY_LAYOUT_SUCCESS:
       return {
         ...state,
-        layout: action.payload.layout,
+        survey: {
+          ...state.survey,
+          layout: action.payload.layout,
+        },
         error: null,
       };
     case UPDATE_SURVEY_LAYOUT_FAIL:

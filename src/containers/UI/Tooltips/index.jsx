@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
 import TooltipTop from './components/TooltipTop';
 import TooltipBottom from './components/TooltipBottom';
@@ -14,7 +13,7 @@ import PopoverLeft from './components/PopoverLeft';
 const TooltipsPopovers = () => {
   const { t } = useTranslation('common');
 
-  const rtl = useSelector(state => state.rtl);
+  // const rtl = useSelector(state => state.rtl);
 
   return (
     <Container>

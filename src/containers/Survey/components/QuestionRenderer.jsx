@@ -1,65 +1,65 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
- Radio, Checkbox, FormControlLabel, List, ListItem, 
+  Radio, Checkbox, FormControlLabel, List, ListItem, 
 } from '@mui/material';
 
-const QuestionRenderer = ({ question }) => {
+const QuestionRenderer = ({ question, onAnswerChange }) => {
   if (!question) return null;
 
-  const { title, question_type_id, survey_question_choices } = question;
+  // Destructure and convert snake_case to camelCase
+  const { title, question_type_id: questionTypeId, survey_question_choices: surveyQuestionChoices } = question;
 
   const handleChange = (event) => {
     onAnswerChange(event.target.value);
   };
 
+  return (
+    <div>
+      <h4>{title}</h4>
 
-    return (
-      <div>
-        <h4>{title}</h4>
-
-        {/* Render Radio buttons for question type 1 (Multiple Choice) */}
-        {question_type_id === 1 && Array.isArray(survey_question_choices) && (
+      {/* Render Radio buttons for question type 1 (Multiple Choice) */}
+      {questionTypeId === 1 && Array.isArray(surveyQuestionChoices) && (
         <List>
-          {survey_question_choices.map((survey_question_choice, index) => (
-            <ListItem key={`${question.id}-${index}`} disablePadding>
+          {surveyQuestionChoices.map(surveyQuestionChoice => (
+            <ListItem key={surveyQuestionChoice.id} disablePadding>
               <FormControlLabel
                 control={(
                   <Radio
                     name={`question-${question.id}`}
-                    value={survey_question_choice.content}
+                    value={surveyQuestionChoice.content}
                     onChange={handleChange} // Trigger change when user selects an option
                   />
                 )}
-                label={survey_question_choice.content}
+                label={surveyQuestionChoice.content}
               />
             </ListItem>
           ))}
         </List>
       )}
 
-        {/* Render Checkboxes for question type 2 or 10 */}
-        {(question_type_id === 2 || question_type_id === 10) && Array.isArray(survey_question_choices) && (
+      {/* Render Checkboxes for question type 2 or 10 */}
+      {(questionTypeId === 2 || questionTypeId === 10) && Array.isArray(surveyQuestionChoices) && (
         <List>
-          {survey_question_choices.map((survey_question_choice, index) => (
-            <ListItem key={`${question.id}-${index}`} disablePadding>
+          {surveyQuestionChoices.map(surveyQuestionChoice => (
+            <ListItem key={surveyQuestionChoice.id} disablePadding>
               <FormControlLabel
                 control={(
                   <Checkbox
                     name={`question-${question.id}`}
-                    value={survey_question_choice.content}
+                    value={surveyQuestionChoice.content}
                     onChange={handleChange} // Trigger change when user checks/unchecks an option
                   />
                 )}
-                label={survey_question_choice.content}
+                label={surveyQuestionChoice.content}
               />
             </ListItem>
           ))}
         </List>
       )}
 
-        {/* Add other question types here if needed */}
-      </div>
+      {/* Add other question types here if needed */}
+    </div>
   );
 };
 
@@ -74,8 +74,7 @@ QuestionRenderer.propTypes = {
       sort_index: PropTypes.number.isRequired,
     })),
   }).isRequired,
-  onAnswerChange: PropTypes.func.isRequired, // Added prop type for the onAnswerChange callback
+  onAnswerChange: PropTypes.func.isRequired,
 };
 
 export default QuestionRenderer;
-

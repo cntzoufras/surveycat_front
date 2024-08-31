@@ -1,13 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
- Modal as MuiModal, Box as MuiBox, Typography as MuiTypography, Button as MuiButton, 
+  Modal as MuiModal, Box as MuiBox, Typography as MuiTypography, Button as MuiButton, 
 } from '@mui/material';
 
 const ConfirmPublishModal = ({ open, onClose, onConfirm }) => (
   <MuiModal open={open} onClose={onClose}>
     <MuiBox sx={{
- width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', mt: '20%', 
-}}
+      width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', mt: '20%',
+    }}
     >
       <MuiTypography variant="h6" gutterBottom>
         Confirm Publish
@@ -25,6 +26,12 @@ const ConfirmPublishModal = ({ open, onClose, onConfirm }) => (
       </MuiBox>
     </MuiBox>
   </MuiModal>
-  );
+);
+
+ConfirmPublishModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
 
 export default ConfirmPublishModal;

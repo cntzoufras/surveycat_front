@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
@@ -28,7 +27,7 @@ const data = generateRandomData(100, -2000, 2000, 300, 6000);
 
 const tickFormer = tick => `${tick / 1000}k`;
 
-const ActiveUsers = ({ dir }) => {
+const ActiveUsers = () => {
   const { t } = useTranslation('common');
 
   const themeName = useSelector(state => state.theme.className);
@@ -52,12 +51,10 @@ const ActiveUsers = ({ dir }) => {
               tickFormatter={tickFormer}
               interval="preserveStartEnd"
               width={50}
-              orientation={dir === 'rtl' ? 'right' : 'left'}
             />
             <XAxis
               hide
               padding={{ left: 30, right: 30 }}
-              reversed={dir === 'rtl'}
             />
             <CartesianGrid vertical={false} />
             <Tooltip {...getTooltipStyles(themeName, 'defaultItems')} />
@@ -70,7 +67,7 @@ const ActiveUsers = ({ dir }) => {
 };
 
 ActiveUsers.propTypes = {
-  dir: PropTypes.string,
+  // dir: PropTypes.string,
 };
 
 export default ActiveUsers;

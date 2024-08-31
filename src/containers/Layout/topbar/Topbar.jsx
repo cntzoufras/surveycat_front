@@ -1,9 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import TopbarMail from '../components/topbar/TopbarMail';
 import TopbarProfile from '../components/topbar/TopbarProfile';
-import TopbarNotification from '../components/topbar/TopbarNotification';
 import TopbarSearch from '../components/topbar/TopbarSearch';
 import TopbarSidebarButton from '../components/topbar/TopbarSidebarButton';
 import {

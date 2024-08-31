@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,

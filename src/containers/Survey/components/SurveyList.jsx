@@ -13,10 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchSurveyThemesAction,
   fetchSurveysAction,
-  fetchSurveyPagesAction,
 } from '@/redux/actions/surveyActions';
 
-const theme = createTheme({
+const customTheme = createTheme({
   typography: {
     fontFamily: 'Roboto, sans-serif',
   },
@@ -32,24 +31,17 @@ const SurveyList = () => {
     dispatch(fetchSurveysAction());
   }, [dispatch]);
 
-  useEffect(() => {
-    surveys.forEach((survey) => {
-      // dispatch(fetchSurveyPagesAction(survey.id));
-    });
-  }, [surveys, dispatch]);
-
   const getThemeTitle = (themeId) => {
-    const theme = themes.find(t => t.id === themeId);
-    return theme ? theme.title : '-';
+    const foundTheme = themes.find(t => t.id === themeId);
+    return foundTheme ? foundTheme.title : '-';
   };
 
-  const getFirstSurveyPageId = (survey, surveyPage) => (survey.survey_pages && survey.survey_pages.length > 0
+  const getFirstSurveyPageId = survey => (survey.survey_pages && survey.survey_pages.length > 0
     ? survey.survey_pages[0].id
     : '');
 
-
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={customTheme}>
       <MuiBox p={2} textAlign="center">
         <MuiTypography textAlign="left" variant="h2" gutterBottom>
           Surveys

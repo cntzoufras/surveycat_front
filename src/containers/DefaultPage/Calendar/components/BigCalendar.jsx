@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import Calendar from '@/shared/components/Calendar';
 import {
@@ -7,7 +6,7 @@ import {
 } from '@/shared/components/Card';
 import events from './events';
 
-const BigCalendar = ({ dir }) => (
+const BigCalendar = () => (
   <Col md={12} lg={12} xl={9}>
     <Card>
       <CardBody>
@@ -18,7 +17,7 @@ const BigCalendar = ({ dir }) => (
 );
 
 BigCalendar.propTypes = {
-  dir: PropTypes.string.isRequired,
+  // dir: PropTypes.string.isRequired,
 };
 
 export default BigCalendar;

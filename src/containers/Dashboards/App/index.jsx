@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
 import CurrentUsers from './components/CurrentUsers';
@@ -14,8 +13,6 @@ import SocialMarketing from './components/SocialMarketing';
 
 const AppDashboard = () => {
   const { t } = useTranslation('common');
-
-  const rtl = useSelector(state => state.rtl);
 
   return (
     <Container className="dashboard">

@@ -19,14 +19,14 @@ const CheckboxesRenderer = ({ question, onOptionSelection }) => {
 
   return (
     <List>
-      {question.options.map((option, index) => (
-        <ListItem key={`${question.id}-${index}`} disablePadding>
+      {question.options.map(option => (
+        <ListItem key={`${question.id}-${option}`} disablePadding>
           <FormControlLabel
             control={(
               <Checkbox
                 checked={question.selectedOptions.includes(option)}
                 onChange={() => handleCheckboxChange(option)}
-                name={`question-${index}`}
+                name={`question-${option}`}
                 value={option}
               />
             )}

@@ -1,14 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import showResults from '@/utils/showResults';
 import MaskExamples from './components/MaskExamples';
 
 const MaskForm = () => {
   const { t } = useTranslation('common');
-
-  const rtl = useSelector(state => state.rtl);
 
   return (
     <Container>

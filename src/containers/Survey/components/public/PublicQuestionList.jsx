@@ -22,7 +22,16 @@ const PublicQuestionList = ({ questions, onResponseChange }) => {
 };
 
 PublicQuestionList.propTypes = {
-  questions: PropTypes.array.isRequired,
+  questions: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    question_type_id: PropTypes.number.isRequired,
+    survey_question_choices: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      sort_index: PropTypes.number.isRequired,
+    })),
+  })).isRequired,
   onResponseChange: PropTypes.func.isRequired,
 };
 

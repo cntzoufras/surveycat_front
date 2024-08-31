@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { Container, Row } from 'react-bootstrap';
 import { changeNewOrderTableData, loadNewOrderTableData } from '@/redux/actions/newOrderTableActions';
 import NewOrderEditForm from './components/NewOrderEditForm';
@@ -9,7 +8,6 @@ import NewOrderEditForm from './components/NewOrderEditForm';
 const ECommerceDashboardEdit = () => {
   const [isRedirect, setIsRedirect] = useState(false);
   const { index } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {

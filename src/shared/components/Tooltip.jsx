@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { colorGray } from '@/utils/palette';
 
 const Tooltip = ({
- dir, text, children, ...other
+ text, children, ...other
 }) => {
   const tooltip = <StyledTooltip>{text}</StyledTooltip>;
 
@@ -20,7 +20,7 @@ const Tooltip = ({
 };
 
 Tooltip.propTypes = {
-  dir: PropTypes.string.isRequired,
+  // dir: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };

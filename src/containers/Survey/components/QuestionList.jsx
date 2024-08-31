@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -9,7 +9,6 @@ import {
 } from '@mui/material';
 import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions';
 import QuestionItem from './QuestionItem';
-
 
 const QuestionList = ({ questions, onDelete, onResponseChange }) => {
   console.log(`Questions in prop of QuestionList: ${questions}`);
@@ -32,23 +31,23 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
     );
   }
 
-    return (
-      <MuiBox sx={{ marginBottom: 4 }}>
-        <MuiTypography variant="h6" sx={{ fontWeight: 300 }} gutterBottom>
-          Questions
-        </MuiTypography>
-        <MuiList>
-          {questions.map((question, index) => (
-            <QuestionItem
-              key={question.id}
-              question={question}
-              index={index}
-              onDelete={onDelete}
-              onResponseChange={onResponseChange}
-            />
+  return (
+    <MuiBox sx={{ marginBottom: 4 }}>
+      <MuiTypography variant="h6" sx={{ fontWeight: 300 }} gutterBottom>
+        Questions
+      </MuiTypography>
+      <MuiList>
+        {questions.map((question, index) => (
+          <QuestionItem
+            key={question.id}
+            question={question}
+            index={index}
+            onDelete={onDelete}
+            onResponseChange={onResponseChange}
+          />
         ))}
-        </MuiList>
-      </MuiBox>
+      </MuiList>
+    </MuiBox>
   );
 };
 
@@ -62,7 +61,7 @@ QuestionList.propTypes = {
     selectedOption: PropTypes.string,
   })).isRequired,
   onDelete: PropTypes.func,
-  onOptionSelection: PropTypes.func.isRequired,
+  onResponseChange: PropTypes.func.isRequired, // Added validation for onResponseChange
 };
 
 QuestionList.defaultProps = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TextField as MuiTextField } from '@mui/material';
 
 const SurveyDescriptionField = ({ value, onChange }) => (
@@ -13,6 +14,11 @@ const SurveyDescriptionField = ({ value, onChange }) => (
     onChange={onChange}
     sx={{ paddingBottom: 3, fontWeight: 300 }}
   />
-  );
+);
+
+SurveyDescriptionField.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default SurveyDescriptionField;

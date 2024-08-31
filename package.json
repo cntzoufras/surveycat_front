@@ -43,6 +43,7 @@
     "immutable": "^4.2.4",
     "jquery": ">=1.8.0",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
     "mdi-react": "^7.4.0",
     "moment": "^2.26.0",
     "os-browserify": "^0.3.0",

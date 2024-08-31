@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Button, ButtonToolbar } from '@/shared/components/Button';
 import {
@@ -8,7 +7,7 @@ import {
 import Tooltip from '@/shared/components/Tooltip';
 import { TooltipCardWrap } from './BasicElements';
 
-const TooltipRight = ({ dir }) => {
+const TooltipRight = () => {
   const { t } = useTranslation('common');
 
   return (
@@ -35,7 +34,7 @@ const TooltipRight = ({ dir }) => {
 };
 
 TooltipRight.propTypes = {
-  dir: PropTypes.string.isRequired,
+  // dir: PropTypes.string.isRequired,
 };
 
 export default TooltipRight;

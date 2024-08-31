@@ -13,12 +13,12 @@ import {
   AccountTitle,
   AccountWrap,
 } from '@/shared/components/account/AccountElements';
-import { handleRegister as reduxHandleRegister, handleAuthError } from '@/redux/actions/authActions';
-import { FullWideNotification, showNotification } from '../../../shared/components/Notification';
+import { handleRegister as reduxHandleRegister } from '@/redux/actions/authActions';
+import { FullWideNotification } from '../../../shared/components/Notification';
 
 const Register = ({ error }) => {
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
-  const [errors, setErrors] = useState({});
+  const [setErrors] = useState({});
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -81,6 +81,10 @@ const Register = ({ error }) => {
 
 Register.propTypes = {
   error: PropTypes.string,
+};
+
+Register.defaultProps = {
+  error: '',
 };
 
 export default Register;

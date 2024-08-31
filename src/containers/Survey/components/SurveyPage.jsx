@@ -57,14 +57,14 @@ const SurveyPage = () => {
   const surveyQuestions = useSelector(state => state.survey.questions);
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
 
-  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []); 
+  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
   const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
 
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
   const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
   const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState('');
   const [localSurveyPageDescription, setLocalSurveyPageDescription] = useState('');
-  const [layout, setLayout] = useState('default');
+  const [layout, setLayout] = useState('multiple');
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -91,7 +91,10 @@ const SurveyPage = () => {
     if (surveyData?.survey_pages) {
       setSurveyPages(surveyData.survey_pages);
     }
-  }, [surveyData?.survey_pages]);
+    if (surveyData?.layout) {
+      setLayout(surveyData.layout);
+    }
+  }, [surveyData?.survey_pages, surveyData?.layout]);
 
   useEffect(() => {
     if (surveyQuestions.length > 0 && surveyPageId) {
@@ -191,7 +194,7 @@ const SurveyPage = () => {
 
   const handleLayoutChange = async (e) => {
     const newLayout = e.target.value;
-    let userId = user?.id;
+    const userId = user?.id;
     setLayout(newLayout);
     try {
       await dispatch(updateSurveyLayoutAction(surveyId, newLayout, userId));
@@ -244,11 +247,14 @@ const SurveyPage = () => {
     }
   }, [surveyPages, navigate, surveyId]);
 
-  const handleSurveyPageSelection = useCallback((selectedPageId) => {
-    if (selectedPageId) {
-      navigate(`/surveys/${surveyId}/pages/${selectedPageId}`);
-    }
-  }, [navigate, surveyId]);
+  const handleSurveyPageSelection = useCallback(
+    (selectedPageId) => {
+      if (selectedPageId) {
+        navigate(`/surveys/${surveyId}/pages/${selectedPageId}`);
+      }
+    },
+    [navigate, surveyId],
+  );
 
   const handleDeletePage = async () => {
     if (surveyPages.length === 0) {
@@ -319,15 +325,18 @@ const SurveyPage = () => {
   return (
     <MuiGrid container spacing={4}>
       <MuiGrid item xs={12} md={4}>
-        <MuiBox sx={{ 
-          paddingBottom: 4, 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
+        <MuiBox
+          sx={{
+            paddingBottom: 4,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
-          <MuiSelect
+          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>
+            Select Stock Survey
+          </MuiTypography>
+          <MuiSelect 
             fullWidth
             value={selectedStockSurvey}
             onChange={handleStockSurveyChange}
@@ -375,11 +384,12 @@ const SurveyPage = () => {
             </span>
           </Tooltip>
         </MuiBox>
-        <MuiBox sx={{ 
-          paddingBottom: 4, 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
+        <MuiBox
+          sx={{
+            paddingBottom: 4,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>
@@ -400,7 +410,12 @@ const SurveyPage = () => {
           <MuiTypography fontWeight="300" variant="h3" align="left">
             {localSurveyTitle || 'Survey Title'}
           </MuiTypography>
-          <MuiTypography fontWeight="300" variant="body1" align="justify" sx={{ whiteSpace: 'pre-line', mt: 2 }}>
+          <MuiTypography
+            fontWeight="300"
+            variant="body1"
+            align="justify"
+            sx={{ whiteSpace: 'pre-line', mt: 2 }}
+          >
             {localSurveyDescription || 'Survey Description'}
           </MuiTypography>
         </MuiBox>

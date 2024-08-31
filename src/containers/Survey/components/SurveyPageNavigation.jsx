@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { 
   Button as MuiButton, 
   Box as MuiBox, 
@@ -17,7 +18,7 @@ const SurveyPageNavigation = ({
     </MuiIconButton>
     <MuiSelect
       value={surveyPages[currentPageIndex]?.id || ''}
-      onChange={e => onSelectPage(e.target.value)} // Corrected to pass only the value
+      onChange={e => onSelectPage(e.target.value)}
       displayEmpty
       sx={{ width: '50%' }}
     >
@@ -26,7 +27,7 @@ const SurveyPageNavigation = ({
         <MuiMenuItem key={page.id} value={page.id}>
           {page.title || 'No page title yet'}
         </MuiMenuItem>
-        ))}
+      ))}
     </MuiSelect>
     <MuiIconButton onClick={onNext} disabled={currentPageIndex >= surveyPages.length - 1}>
       <ArrowForwardIos />
@@ -35,6 +36,20 @@ const SurveyPageNavigation = ({
       Add New Page
     </MuiButton>
   </MuiBox>
-  );
+);
+
+SurveyPageNavigation.propTypes = {
+  currentPageIndex: PropTypes.number.isRequired,
+  surveyPages: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string,
+    }),
+  ).isRequired,
+  onPrev: PropTypes.func.isRequired,
+  onNext: PropTypes.func.isRequired,
+  onSelectPage: PropTypes.func.isRequired,
+  onAddNewPage: PropTypes.func.isRequired,
+};
 
 export default SurveyPageNavigation;

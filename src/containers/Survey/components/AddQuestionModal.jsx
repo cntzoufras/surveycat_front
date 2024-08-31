@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { createSurveyQuestionAction, createSurveyQuestionChoicesAction } from '@/redux/actions/surveyActions'; // Corrected imports
+import { 
+  createSurveyQuestionAction,
+  createSurveyQuestionChoicesAction, 
+} from '@/redux/actions/surveyActions';
 import OptionInputList from './OptionInputList';
 
 const AddQuestionModal = ({ 
@@ -10,13 +13,11 @@ const AddQuestionModal = ({
   onClose, 
   surveyPages = [], 
   currentSurveyPageId,
-  onAddNewPage, 
 }) => {
   const dispatch = useDispatch();
-  const surveyState = useSelector(state => state.survey);
+  // Removed unused surveyState, surveyPage, setSurveyPage
 
   const [newQuestion, setNewQuestion] = useState('');
-  const [surveyPage, setSurveyPage] = useState('');
   const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
   const [questionType, setQuestionType] = useState('1');
   const [numOptions, setNumOptions] = useState(2);
@@ -37,7 +38,6 @@ const AddQuestionModal = ({
   const handleIsRequiredChange = () => setIsRequired(!isRequired); 
 
   const handleQuestionTypeChange = (e) => {
-    console.log('handleQuestionTypeChange e.target.value: $(e.target.value)');
     setQuestionType(e.target.value);
     if (e.target.value === '1' || e.target.value === '2') {
       setNumOptions(2);
@@ -63,16 +63,6 @@ const AddQuestionModal = ({
     const updatedInputs = [...optionInputs];
     updatedInputs[index] = e.target.value;
     setOptionInputs(updatedInputs);
-  };
-
-  const handleNewQuestionOptionSelection = (e, option) => {
-    const selectedOptionsSet = new Set(selectedOptions);
-    if (selectedOptionsSet.has(option)) {
-      selectedOptionsSet.delete(option);
-    } else {
-      selectedOptionsSet.add(option);
-    }
-    setSelectedOptions(Array.from(selectedOptionsSet));
   };
 
   const handleTagChange = (e) => {
@@ -101,7 +91,7 @@ const AddQuestionModal = ({
     };
 
     try {
-      const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData)); // Corrected action name
+      const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
 
       if (questionType === '1' || questionType === '2') { 
         const choicesData = optionInputs.map((content, index) => ({
@@ -109,7 +99,7 @@ const AddQuestionModal = ({
           sort_index: index,
           survey_question_id: newQuestionResponse.id,
         }));
-        await dispatch(createSurveyQuestionChoicesAction(choicesData)); // Corrected action name
+        await dispatch(createSurveyQuestionChoicesAction(choicesData));
       }
 
       onClose();
@@ -267,7 +257,6 @@ AddQuestionModal.propTypes = {
     title: PropTypes.string,
   })).isRequired,
   currentSurveyPageId: PropTypes.string,
-  onAddNewPage: PropTypes.func.isRequired,
 };
 
 AddQuestionModal.defaultProps = {

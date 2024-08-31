@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,7 +26,7 @@ const data = [
   },
 ];
 
-const AppTileClicks = ({ dir }) => {
+const AppTileClicks = () => {
   const { t } = useTranslation('common');
 
   const themeName = useSelector(state => state.theme.className);
@@ -55,14 +54,14 @@ const AppTileClicks = ({ dir }) => {
             <XAxis
               type="number"
               hide
-              reversed={dir === 'rtl'}
+              
             />
             <YAxis
               type="category"
               dataKey="name"
               tickLine={false}
               verticalAnchor="start"
-              orientation={dir === 'rtl' ? 'right' : 'left'}
+              
             />
             <Tooltip {...getTooltipStyles(themeName, 'defaultItems')} />
             <Bar dataKey="pv" fill="#48b5ff" barSize={12} />
@@ -75,7 +74,7 @@ const AppTileClicks = ({ dir }) => {
 };
 
 AppTileClicks.propTypes = {
-  dir: PropTypes.string,
+  // dir: PropTypes.string,
 };
 
 export default AppTileClicks;

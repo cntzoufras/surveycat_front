@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import styled from 'styled-components';
 import ProgressBar from '@/shared/components/ProgressBar';
@@ -13,7 +12,7 @@ import {
 } from '@/utils/directions';
 import Statistics from './Statistics';
 
-const Summary = ({ dir }) => (
+const Summary = () => (
   <Col md={12} lg={8} xl={8}>
     <Card>
       <CardBody>
@@ -70,7 +69,7 @@ const Summary = ({ dir }) => (
 );
 
 Summary.propTypes = {
-  dir: PropTypes.string.isRequired,
+  // dir: PropTypes.string.isRequired,
 };
 
 export default Summary;

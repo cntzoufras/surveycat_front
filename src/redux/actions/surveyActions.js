@@ -305,9 +305,9 @@ export const updateSurveyPageDescriptionAction = (surveyPageId, description) => 
 };
 
 // Action to update survey layout
-export const updateSurveyLayoutAction = (surveyId, layout) => async (dispatch) => {
+export const updateSurveyLayoutAction = (surveyId, layout, userId) => async (dispatch) => {
   try {
-    const response = await api.put(`/surveys/${surveyId}`, { layout });
+    const response = await api.put(`/surveys/${surveyId}`, { layout, user_id: userId });
     dispatch({ type: UPDATE_SURVEY_LAYOUT_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
@@ -330,12 +330,13 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
 
     // Find the survey page with the least sort_index
     if (surveyPages.length > 0) {
-      const leastSortIndexPage = surveyPages.reduce((minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage));
-
-      // Redirect to the survey page with the least sort index
+      const leastSortIndexPage = surveyPages.reduce(
+(minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage),
+       surveyPages[0],
+);
+      
       window.location.href = `/surveys/${surveyId}/survey-pages/${leastSortIndexPage.id}`;
     } else {
-      // If no pages left, redirect to the survey overview page
       window.location.href = `/surveys/${surveyId}`;
     }
 
@@ -353,7 +354,6 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
 
 export const publishSurveyAction = surveyId => async (dispatch) => {
   try {
- 2;
     const response = await api.put(`/surveys/${surveyId}/publish`);
     dispatch({ type: PUBLISH_SURVEY_SUCCESS, payload: response.data });
     return response.data;
@@ -363,8 +363,8 @@ export const publishSurveyAction = surveyId => async (dispatch) => {
   }
 };
 
-export const submitSurveySubmissionAction = (surveyId, submission_data) => async (dispatch) => {
-  const data = JSON.stringify(submission_data);
+export const submitSurveySubmissionAction = (surveyId, submissionData) => async (dispatch) => {
+  const data = JSON.stringify(submissionData);
   try {
     const response = await api.post(
 '/survey-submissions', 

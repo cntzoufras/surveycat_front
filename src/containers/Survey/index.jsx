@@ -20,13 +20,9 @@ const StyledTypography = styled(MuiTypography)`
 
 const SurveyPageWrapper = () => {
   const { surveyId, surveyPageId } = useParams();
-  const { user, error, loggedIn } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.auth);
   const userId = user?.id;
   console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`);
-  
-  if (!userId) {
-    return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
-  }
   
   useEffect(() => {
     if (!userId) {
@@ -35,6 +31,10 @@ const SurveyPageWrapper = () => {
     }
   }, [userId]);
 
+  if (!userId) {
+    return <Typography variant="h6" gutterBottom>Loading page...</Typography>;
+  }
+  
   return (
     <StyledBox>
       <StyledTypography variant="h2" component="h1" sx={{ align: 'left', paddingBottom: 'rem' }} gutterBottom>

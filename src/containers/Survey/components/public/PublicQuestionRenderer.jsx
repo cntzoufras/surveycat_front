@@ -30,18 +30,18 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
       {/* Render Radio buttons for question type 1 (Multiple Choice) */}
       {question.question_type_id === 1 && Array.isArray(question.survey_question_choices) && (
         <List>
-          {question.survey_question_choices.map((survey_question_choice, index) => (
-            <ListItem key={`${question.id}-${index}`} disablePadding>
+          {question.survey_question_choices.map(surveyQuestionChoice => (
+            <ListItem key={`${question.id}-${surveyQuestionChoice.id}`} disablePadding>
               <FormControlLabel
                 control={(
                   <Radio
                     name={`question-${question.id}`}
-                    value={survey_question_choice.id}
-                    checked={selectedValues.includes(survey_question_choice.id)}
+                    value={surveyQuestionChoice.id}
+                    checked={selectedValues.includes(surveyQuestionChoice.id)}
                     onChange={handleRadioChange}
                   />
                 )}
-                label={survey_question_choice.content}
+                label={surveyQuestionChoice.content}
               />
             </ListItem>
           ))}
@@ -49,20 +49,21 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
       )}
 
       {/* Render Checkboxes for question type 2 or 10 */}
-      {(question.question_type_id === 2 || question.question_type_id === 10) && Array.isArray(question.survey_question_choices) && (
+      {(question.question_type_id === 2 || question.question_type_id === 10) 
+        && Array.isArray(question.survey_question_choices) && (
         <List>
-          {question.survey_question_choices.map((survey_question_choice, index) => (
-            <ListItem key={`${question.id}-${index}`} disablePadding>
+          {question.survey_question_choices.map(surveyQuestionChoice => (
+            <ListItem key={`${question.id}-${surveyQuestionChoice.id}`} disablePadding>
               <FormControlLabel
                 control={(
                   <Checkbox
                     name={`question-${question.id}`}
-                    value={survey_question_choice.id}
-                    checked={selectedValues.includes(survey_question_choice.id)}
+                    value={surveyQuestionChoice.id}
+                    checked={selectedValues.includes(surveyQuestionChoice.id)}
                     onChange={handleCheckboxChange}
                   />
                 )}
-                label={survey_question_choice.content}
+                label={surveyQuestionChoice.content}
               />
             </ListItem>
           ))}
