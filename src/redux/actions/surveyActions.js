@@ -165,22 +165,11 @@ export const fetchStockSurveysAction = () => async (dispatch) => {
 export const fetchPublicSurveyBySlugAction = (surveySlug) => async (dispatch) => {
   try {
     const response = await publicApi.get(`/surveys/ps/${surveySlug}`);
-    console.log(`Response: ${response}`)
-    console.log(`Response.data: ${response.data}`)
-    
     const survey = response.data;
-    console.log(`Survey:`, survey);
-    
     
     const surveyPages = survey.survey_pages || [];
-    console.log(`surveyPages:`, surveyPages)
-    
     const surveyQuestions = surveyPages.flatMap(page => page.survey_questions || []);
-    console.log(`surveyQuestions: `, surveyQuestions)
-    
     const surveyQuestionChoices = surveyQuestions.flatMap(question => question.survey_question_choices || []);
-    console.log(`surveyQuestionChoices: `, surveyQuestionChoices);
-    
     
     dispatch({
       type: FETCH_PUBLIC_SURVEY_SUCCESS,
@@ -365,7 +354,7 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
 };
 
 export const publishSurveyAction = (surveyId) => async (dispatch) => {
-  try {
+  try {2
     const response = await api.put(`/surveys/${surveyId}/publish`);
     dispatch({ type: PUBLISH_SURVEY_SUCCESS, payload: response.data });
     return response.data;
@@ -375,9 +364,11 @@ export const publishSurveyAction = (surveyId) => async (dispatch) => {
   }
 };
 
-export const submitSurveySubmissionAction = (surveyId, submissions) => async (dispatch) => {
+export const submitSurveySubmissionAction = (surveyId, submission_data) => async (dispatch) => {
+  const data = JSON.stringify(submission_data);
   try {
-    const response = await api.post(`/surveys/${surveyId}/submit`, { submissions });
+    const response = await api.post(`/survey-submissions`, 
+    { survey_id: surveyId,  submission_data: data });
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
   } catch (error) {

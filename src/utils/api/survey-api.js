@@ -25,7 +25,7 @@ api.interceptors.request.use(
 
     // If the CSRF token is missing, fetch it
     if (!csrfToken) {
-      await axios.get(`${config.baseURL}/sanctum/csrf-cookie`, { withCredentials: true });
+      await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
       csrfToken = Cookies.get('XSRF-TOKEN');
     }
 
@@ -42,9 +42,6 @@ api.interceptors.request.use(
 
 export { publicApi };
 export default api;
-
-// Example usage of publicApi for unauthenticated users
-export const fetchPublicSurveyBySlug = (surveySlug) => publicApi.get(`/surveys/ps/${surveySlug}`);
 
 export const getUserSurveys = () => (
   api.get('/surveys/user')
