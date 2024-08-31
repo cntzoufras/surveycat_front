@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, 
+  useEffect, 
+  useCallback, 
+  useRef, 
+} from 'react';
 import debounce from 'lodash/debounce';
 import {
   Box as MuiBox,
@@ -12,7 +17,7 @@ import {
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ArrowBackIos, ArrowForwardIos, Delete } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 
 import {
   updateSurveyTitleAction,
@@ -20,14 +25,15 @@ import {
   updateSurveyPageTitleAction,
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
-  deleteSurveyPageAction, // Import delete action
+  deleteSurveyPageAction,
   deleteSurveyQuestionAction,
   fetchAllSurveyQuestionsWithChoices,
   fetchStockSurveysAction,
   fetchSurveyAction,
   createSurveyQuestionAction,
   publishSurveyAction,
-} from '@/redux/actions/surveyActions'; // ... other imports
+  updateSurveyLayoutAction,
+} from '@/redux/actions/surveyActions';
 
 import SurveyTitleField from './SurveyTitleField';
 import SurveyDescriptionField from './SurveyDescriptionField';
@@ -45,14 +51,13 @@ const SurveyPage = () => {
 
   const { user } = useSelector(state => state.auth);
 
-  const survey = useSelector(state => state.survey.survey);
-  // const surveyPages = survey?.survey_pages || []; // Survey pages are now directly from the survey object
-  const surveyTitle = survey?.title || '';
-  const surveyDescription = survey?.description || '';
+  const surveyData = useSelector(state => state.survey.survey);
+  const surveyTitle = surveyData?.title || '';
+  const surveyDescription = surveyData?.description || '';
   const surveyQuestions = useSelector(state => state.survey.questions);
   const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
 
-  const [surveyPages, setSurveyPages] = useState(survey?.survey_pages || []); 
+  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []); 
   const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
 
   const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
@@ -60,10 +65,10 @@ const SurveyPage = () => {
   const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState('');
   const [localSurveyPageDescription, setLocalSurveyPageDescription] = useState('');
   const [layout, setLayout] = useState('default');
-  const [validationErrors, setValidationErrors] = useState({});
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  const currentPageIndexRef = useRef(currentPageIndex);
   const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
 
   useEffect(() => {
@@ -81,16 +86,15 @@ const SurveyPage = () => {
       }
     }
   }, [surveyId, surveyPageId, dispatch]);
-  
+
   useEffect(() => {
-    if (survey?.survey_pages) {
-      setSurveyPages(survey.survey_pages);
+    if (surveyData?.survey_pages) {
+      setSurveyPages(surveyData.survey_pages);
     }
-  }, [survey?.survey_pages]);
+  }, [surveyData?.survey_pages]);
 
   useEffect(() => {
     if (surveyQuestions.length > 0 && surveyPageId) {
-      // Filter questions by the current survey page
       const filteredQuestions = surveyQuestions.filter(
         question => question.survey_page_id === surveyPageId,
       );
@@ -100,10 +104,11 @@ const SurveyPage = () => {
 
   useEffect(() => {
     if (surveyPages.length > 0 && surveyPageId) {
-      const currentPageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
-      setCurrentPageIndex(currentPageIndex);
+      const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
+      setCurrentPageIndex(pageIndex);
+      currentPageIndexRef.current = pageIndex;
 
-      const currentPage = surveyPages[currentPageIndex];
+      const currentPage = surveyPages[pageIndex];
       if (currentPage) {
         setLocalSurveyPageTitle(currentPage.title || '');
         setLocalSurveyPageDescription(currentPage.description || '');
@@ -184,8 +189,15 @@ const SurveyPage = () => {
     debouncedUpdateSurveyPageDescription(newSurveyPageDescription);
   };
 
-  const handleLayoutChange = (e) => {
-    setLayout(e.target.value);
+  const handleLayoutChange = async (e) => {
+    const newLayout = e.target.value;
+    let userId = user?.id;
+    setLayout(newLayout);
+    try {
+      await dispatch(updateSurveyLayoutAction(surveyId, newLayout, userId));
+    } catch (error) {
+      console.error('Failed to update layout:', error);
+    }
   };
 
   const handleAddNewPage = async () => {
@@ -197,75 +209,72 @@ const SurveyPage = () => {
       };
       const newPage = await dispatch(addSurveyPageAction(surveyId, newPageData));
 
-      // Update the surveyPages state immediately after adding the new page
       const updatedSurveyPages = [...surveyPages, newPage];
       setSurveyPages(updatedSurveyPages);
 
-      // Navigate to the newly added page
       setCurrentPageIndex(updatedSurveyPages.length - 1);
+      currentPageIndexRef.current = updatedSurveyPages.length - 1;
       setLocalSurveyPageTitle('');
       setLocalSurveyPageDescription('');
       navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
-
-      // Clear any validation errors
-      setValidationErrors({});
     } catch (error) {
       console.error('Error adding new page:', error);
-      if (error.response && error.response.status === 422) {
-        setValidationErrors(error.response.data.errors);
-      }
     }
   };
 
-  const handleNextPage = () => {
-    if (currentPageIndex < surveyPages.length - 1) {
-      const nextPageId = surveyPages[currentPageIndex + 1]?.id;
+  const handleNextPage = useCallback(() => {
+    if (currentPageIndexRef.current < surveyPages.length - 1) {
+      const nextPageId = surveyPages[currentPageIndexRef.current + 1]?.id;
       if (nextPageId) {
-        setCurrentPageIndex(currentPageIndex + 1);
+        setCurrentPageIndex(currentPageIndexRef.current + 1);
+        currentPageIndexRef.current += 1;
         navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
       }
     }
-  };
+  }, [surveyPages, navigate, surveyId]);
 
-  const handlePrevPage = () => {
-    if (currentPageIndex > 0) {
-      const prevPageId = surveyPages[currentPageIndex - 1]?.id;
+  const handlePrevPage = useCallback(() => {
+    if (currentPageIndexRef.current > 0) {
+      const prevPageId = surveyPages[currentPageIndexRef.current - 1]?.id;
       if (prevPageId) {
-        setCurrentPageIndex(currentPageIndex - 1);
+        setCurrentPageIndex(currentPageIndexRef.current - 1);
+        currentPageIndexRef.current -= 1;
         navigate(`/surveys/${surveyId}/pages/${prevPageId}`);
       }
     }
-  };
+  }, [surveyPages, navigate, surveyId]);
 
-  const handleSurveyPageSelection = (selectedPageId) => {
+  const handleSurveyPageSelection = useCallback((selectedPageId) => {
     if (selectedPageId) {
       navigate(`/surveys/${surveyId}/pages/${selectedPageId}`);
     }
-  };
+  }, [navigate, surveyId]);
 
   const handleDeletePage = async () => {
-    console.log(`SurveyPages apo handleDeletePage: ${surveyPages}`);
     if (surveyPages.length === 0) {
-        alert('Cannot delete the last survey page.');
-        return;
+      alert('Cannot delete the last survey page.');
+      return;
     }
 
-    const confirmation = window.confirm('Deleting this page will also delete all associated questions. Are you sure you want to continue?');
+    const confirmation = window.confirm(
+      'Deleting this page will also delete all associated questions. Are you sure you want to continue?',
+    );
     if (confirmation) {
-        try {
-            await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
-            const remainingPages = surveyPages.filter(page => page.id !== surveyPageId);
-            if (remainingPages.length > 0) {
-                const nextPageId = remainingPages.reduce((minPage, page) => (page.sort_index < minPage.sort_index ? page : minPage)).id;
-                navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
-            }
-        } catch (error) {
-            setValidationErrors(error.response ? error.response.data.errors : {});
-            console.error('Error deleting page:', error);
+      try {
+        await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
+        const remainingPages = surveyPages.filter(page => page.id !== surveyPageId);
+        if (remainingPages.length > 0) {
+          const nextPageId = remainingPages.reduce(
+            (minPage, page) => (page.sort_index < minPage.sort_index ? page : minPage),
+            remainingPages[0],
+          ).id;
+          navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
         }
+      } catch (error) {
+        console.error('Error deleting page:', error);
+      }
     }
-};
-
+  };
 
   const openAddQuestionModal = () => setIsAddQuestionModalOpen(true);
   const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
@@ -278,30 +287,21 @@ const SurveyPage = () => {
       await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
       await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
       closeAddQuestionModal();
-      setValidationErrors({});
     } catch (error) {
       console.error('Error adding question:', error);
-      if (error.response && error.response.status === 422) {
-        setValidationErrors(error.response.data.errors);
-      }
     }
   };
 
   const handleDeleteQuestion = async (questionId) => {
     try {
-      console.log(`Question id: ${questionId}`);
       await dispatch(deleteSurveyQuestionAction(questionId));
       await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-      setValidationErrors({});
     } catch (error) {
       console.error('Error deleting question:', error);
-      if (error.response && error.response.status === 422) {
-        setValidationErrors(error.response.data.errors);
-      }
     }
   };
 
-const handlePublishSurvey = async () => {
+  const handlePublishSurvey = async () => {
     try {
       if (!localSurveyTitle.trim()) {
         console.error('Title is required to create a public link.');
@@ -319,9 +319,12 @@ const handlePublishSurvey = async () => {
   return (
     <MuiGrid container spacing={4}>
       <MuiGrid item xs={12} md={4}>
-        <MuiBox sx={{
- paddingBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-}}
+        <MuiBox sx={{ 
+          paddingBottom: 4, 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          }}
         >
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect
@@ -357,7 +360,7 @@ const handlePublishSurvey = async () => {
             surveyPages={surveyPages}
             onPrev={handlePrevPage}
             onNext={handleNextPage}
-            onSelectPage={handleSurveyPageSelection} // Correctly passing the function
+            onSelectPage={handleSurveyPageSelection}
             onAddNewPage={handleAddNewPage}
           />
           <Tooltip title={surveyPages.length === 1 ? 'Cannot delete the last page' : 'Delete this page'}>
@@ -371,6 +374,25 @@ const handlePublishSurvey = async () => {
               </MuiIconButton>
             </span>
           </Tooltip>
+        </MuiBox>
+        <MuiBox sx={{ 
+          paddingBottom: 4, 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          }}
+        >
+          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>
+            Select Layout
+          </MuiTypography>
+          <MuiSelect
+            fullWidth
+            value={layout}
+            onChange={handleLayoutChange}
+          >
+            <MuiMenuItem value="single">Single</MuiMenuItem>
+            <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
+          </MuiSelect>
         </MuiBox>
       </MuiGrid>
       <MuiGrid item xs={12} md={8}>
@@ -387,7 +409,7 @@ const handlePublishSurvey = async () => {
           <MuiButton variant="contained" color="primary" sx={{ marginTop: 0.1 }} onClick={openAddQuestionModal}>
             Add Question
           </MuiButton>
-          <MuiBox sx={{ marginTop: 20, lg: 12 }}>
+          <MuiBox sx={{ marginTop: 20 }}>
             <MuiButton
               variant="contained"
               color="success"
