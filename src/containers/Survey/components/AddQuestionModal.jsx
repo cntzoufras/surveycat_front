@@ -15,8 +15,8 @@ const AddQuestionModal = ({
   currentSurveyPageId,
 }) => {
   const dispatch = useDispatch();
-  // Removed unused surveyState, surveyPage, setSurveyPage
 
+  // State variables
   const [newQuestion, setNewQuestion] = useState('');
   const [selectedSurveyPage, setSelectedSurveyPage] = useState(currentSurveyPageId || '');
   const [questionType, setQuestionType] = useState('1');
@@ -32,6 +32,22 @@ const AddQuestionModal = ({
       setSelectedSurveyPage(currentSurveyPageId);
     }
   }, [currentSurveyPageId]);
+
+  // Reset the state when the modal opens
+  useEffect(() => {
+    if (isOpen) {
+      // Reset all input fields when modal is opened
+      setNewQuestion('');
+      setSelectedSurveyPage(currentSurveyPageId || '');
+      setQuestionType('1');
+      setNumOptions(2);
+      setOptionInputs(['', '']);
+      setSelectedOptions([]);
+      setSelectedQuestionTags([]);
+      setIsRequired(false);
+      setValidationErrors({});
+    }
+  }, [isOpen, currentSurveyPageId]);
 
   const handleQuestionInputChange = e => setNewQuestion(e.target.value);
   const handleSurveyPageChange = e => setSelectedSurveyPage(e.target.value);
@@ -66,7 +82,7 @@ const AddQuestionModal = ({
   };
 
   const handleTagChange = (e) => {
-    setSelectedQuestionTags(e.target.value.split(',')); 
+    setSelectedQuestionTags(e.target.value.split(','));
   };
 
   const handleSubmit = async (e) => {
@@ -75,7 +91,7 @@ const AddQuestionModal = ({
       title: newQuestion,
       survey_page_id: selectedSurveyPage,
       options: (questionType === '1' || questionType === '2')
-        ? optionInputs.slice(0, numOptions).filter(Boolean) 
+        ? optionInputs.slice(0, numOptions).filter(Boolean)
         : [],
       selectedOptions,
       question_tags: JSON.stringify(selectedQuestionTags),
@@ -93,7 +109,7 @@ const AddQuestionModal = ({
     try {
       const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
 
-      if (questionType === '1' || questionType === '2') { 
+      if (questionType === '1' || questionType === '2') {
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
@@ -106,7 +122,7 @@ const AddQuestionModal = ({
       setValidationErrors({});
     } catch (error) {
       console.error('Failed to create question or choices:', error);
-      if (error.response && error.response.status === 422) { 
+      if (error.response && error.response.status === 422) {
         setValidationErrors(error.response.data.errors);
       }
     }
@@ -119,6 +135,7 @@ const AddQuestionModal = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
+          {/* Question Type Selection */}
           <Form.Group controlId="formQuestionType">
             <Form.Label>Question Type</Form.Label>
             <Form.Control 
@@ -146,6 +163,7 @@ const AddQuestionModal = ({
             )}
           </Form.Group>
 
+          {/* Question Text Input */}
           <Form.Group controlId="formQuestionText">
             <Form.Label>Question</Form.Label>
             <Form.Control
@@ -162,6 +180,7 @@ const AddQuestionModal = ({
             )}
           </Form.Group>
 
+          {/* Survey Page Selection */}
           <Form.Group controlId="formSurveyPage">
             <Form.Label>Survey Page</Form.Label>
             <Form.Control 
@@ -183,16 +202,18 @@ const AddQuestionModal = ({
             )}
           </Form.Group>
 
+          {/* Tags Input */}
           <Form.Group controlId="formTags">
             <Form.Label>Tags</Form.Label>
             <Form.Control
               type="text"
-              value={selectedQuestionTags.join(',')} 
+              value={selectedQuestionTags.join(',')}
               onChange={handleTagChange}
               placeholder="Enter tags separated by commas"
             />
           </Form.Group>
 
+          {/* Is Required Checkbox */}
           <Form.Group controlId="formIsRequired">
             <Form.Check
               type="checkbox"
@@ -202,6 +223,7 @@ const AddQuestionModal = ({
             />
           </Form.Group>
 
+          {/* Options for Multiple Choice / Checkbox Questions */}
           {questionType === '1' || questionType === '2' ? (
             <div>
               <Form.Group controlId="formNumOptions">
@@ -227,6 +249,7 @@ const AddQuestionModal = ({
             </div>
           ) : null}
 
+          {/* Validation Errors Display */}
           {Object.keys(validationErrors).length > 0 && (
             <div className="validation-errors">
               {Object.keys(validationErrors).map(key => (
@@ -235,6 +258,7 @@ const AddQuestionModal = ({
             </div>
           )}
 
+          {/* Modal Footer with Buttons */}
           <Modal.Footer>
             <Button variant="secondary" onClick={onClose}>
               Cancel
