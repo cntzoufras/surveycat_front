@@ -8,7 +8,7 @@ import {
   Button as MuiButton,
   Grid as MuiGrid,
   IconButton as MuiIconButton,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,7 +20,7 @@ import {
   updateSurveyPageTitleAction,
   updateSurveyPageDescriptionAction,
   addSurveyPageAction,
-  deleteSurveyPageAction,  // Import delete action
+  deleteSurveyPageAction, // Import delete action
   deleteSurveyQuestionAction,
   fetchAllSurveyQuestionsWithChoices,
   fetchStockSurveysAction,
@@ -76,7 +76,7 @@ const SurveyPage = () => {
     if (surveyId) {
       dispatch(fetchSurveyAction(surveyId));
       dispatch(fetchStockSurveysAction());
-      if(surveyPageId) {
+      if (surveyPageId) {
         dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
       }
     }
@@ -92,7 +92,7 @@ const SurveyPage = () => {
     if (surveyQuestions.length > 0 && surveyPageId) {
       // Filter questions by the current survey page
       const filteredQuestions = surveyQuestions.filter(
-        question => question.survey_page_id === surveyPageId
+        question => question.survey_page_id === surveyPageId,
       );
       setCurrentPageQuestions(filteredQuestions);
     }
@@ -125,7 +125,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
       }
     }, 1500),
-    [dispatch, surveyId]
+    [dispatch, surveyId],
   );
 
   const debouncedUpdateSurveyDescription = useCallback(
@@ -134,7 +134,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
       }
     }, 1500),
-    [dispatch, surveyId]
+    [dispatch, surveyId],
   );
 
   const debouncedUpdateSurveyPageTitle = useCallback(
@@ -143,7 +143,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
       }
     }, 1500),
-    [dispatch, surveyPageId]
+    [dispatch, surveyPageId],
   );
 
   const debouncedUpdateSurveyPageDescription = useCallback(
@@ -152,7 +152,7 @@ const SurveyPage = () => {
         dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
       }
     }, 1500),
-    [dispatch, surveyPageId]
+    [dispatch, surveyPageId],
   );
 
   const handleStockSurveyChange = (e) => {
@@ -256,7 +256,7 @@ const SurveyPage = () => {
             await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
             const remainingPages = surveyPages.filter(page => page.id !== surveyPageId);
             if (remainingPages.length > 0) {
-                const nextPageId = remainingPages.reduce((minPage, page) => page.sort_index < minPage.sort_index ? page : minPage).id;
+                const nextPageId = remainingPages.reduce((minPage, page) => (page.sort_index < minPage.sort_index ? page : minPage)).id;
                 navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
             }
         } catch (error) {
@@ -319,7 +319,10 @@ const handlePublishSurvey = async () => {
   return (
     <MuiGrid container spacing={4}>
       <MuiGrid item xs={12} md={4}>
-        <MuiBox sx={{ paddingBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <MuiBox sx={{
+ paddingBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+}}
+        >
           <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>Select Stock Survey</MuiTypography>
           <MuiSelect
             fullWidth
@@ -354,24 +357,24 @@ const handlePublishSurvey = async () => {
             surveyPages={surveyPages}
             onPrev={handlePrevPage}
             onNext={handleNextPage}
-            onSelectPage={handleSurveyPageSelection}  // Correctly passing the function
+            onSelectPage={handleSurveyPageSelection} // Correctly passing the function
             onAddNewPage={handleAddNewPage}
           />
-          <Tooltip title={surveyPages.length === 1 ? "Cannot delete the last page" : "Delete this page"}>
+          <Tooltip title={surveyPages.length === 1 ? 'Cannot delete the last page' : 'Delete this page'}>
             <span>
-                <MuiIconButton
-                    color="secondary"
-                    onClick={handleDeletePage}
-                    disabled={surveyPages.length === 1}  // Disable button if it's the last page
-                >
-                    <Delete />
-                </MuiIconButton>
+              <MuiIconButton
+                color="secondary"
+                onClick={handleDeletePage}
+                disabled={surveyPages.length === 1}
+              >
+                <Delete />
+              </MuiIconButton>
             </span>
           </Tooltip>
         </MuiBox>
       </MuiGrid>
       <MuiGrid item xs={12} md={8}>
-        <MuiBox sx={{ marginBottom: 4, marginLeft: { xs: 0, md: 4 }  }}>
+        <MuiBox sx={{ marginBottom: 4, marginLeft: { xs: 0, md: 4 } }}>
           <MuiTypography fontWeight="300" variant="h3" align="left">
             {localSurveyTitle || 'Survey Title'}
           </MuiTypography>

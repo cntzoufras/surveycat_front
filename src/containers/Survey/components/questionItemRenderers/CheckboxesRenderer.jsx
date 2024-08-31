@@ -2,15 +2,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem, FormControlLabel, Checkbox } from '@mui/material';
+import {
+ List, ListItem, FormControlLabel, Checkbox, 
+} from '@mui/material';
 
 const CheckboxesRenderer = ({ question, onOptionSelection }) => {
   if (!question || !question.options) return null;
 
   const handleCheckboxChange = (option) => {
-    const newSelectedOptions =
-    question.selectedOptions.includes(option)
-      ? question.selectedOptions.filter((opt) => opt !== option)
+    const newSelectedOptions = question.selectedOptions.includes(option)
+      ? question.selectedOptions.filter(opt => opt !== option)
       : [...question.selectedOptions, option];
 
     onOptionSelection(question.id, newSelectedOptions);
@@ -21,14 +22,14 @@ const CheckboxesRenderer = ({ question, onOptionSelection }) => {
       {question.options.map((option, index) => (
         <ListItem key={`${question.id}-${index}`} disablePadding>
           <FormControlLabel
-            control={
+            control={(
               <Checkbox
                 checked={question.selectedOptions.includes(option)}
                 onChange={() => handleCheckboxChange(option)}
                 name={`question-${index}`}
                 value={option}
               />
-            }
+            )}
             label={option}
           />
         </ListItem>

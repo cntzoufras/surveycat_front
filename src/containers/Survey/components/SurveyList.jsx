@@ -24,8 +24,8 @@ const theme = createTheme({
 
 const SurveyList = () => {
   const dispatch = useDispatch();
-  const surveys = useSelector((state) => state.survey.surveys);
-  const themes = useSelector((state) => state.survey.surveyThemes);
+  const surveys = useSelector(state => state.survey.surveys);
+  const themes = useSelector(state => state.survey.surveyThemes);
 
   useEffect(() => {
     dispatch(fetchSurveyThemesAction());
@@ -39,15 +39,13 @@ const SurveyList = () => {
   }, [surveys, dispatch]);
 
   const getThemeTitle = (themeId) => {
-    const theme = themes.find((t) => t.id === themeId);
+    const theme = themes.find(t => t.id === themeId);
     return theme ? theme.title : '-';
   };
 
-  const getFirstSurveyPageId = (survey, surveyPage) => {
-    return survey.survey_pages && survey.survey_pages.length > 0
+  const getFirstSurveyPageId = (survey, surveyPage) => (survey.survey_pages && survey.survey_pages.length > 0
     ? survey.survey_pages[0].id
-    : '';
-  };
+    : '');
 
 
   return (
@@ -73,7 +71,7 @@ const SurveyList = () => {
           </MuiBox>
         ) : (
           <MuiGrid container spacing={3} justifyContent="center">
-            {surveys.map((survey) => (
+            {surveys.map(survey => (
               <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
                 <MuiPaper
                   elevation={24}
@@ -91,7 +89,7 @@ const SurveyList = () => {
                 >
                   <Link
                     to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
-                      survey
+                      survey,
                     )}`}
                     style={{ textDecoration: 'none', color: 'inherit' }}
                   >

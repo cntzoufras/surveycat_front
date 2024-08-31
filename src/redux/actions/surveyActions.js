@@ -1,4 +1,4 @@
-import api,{ publicApi } from '@/utils/api/survey-api';
+import api, { publicApi } from '@/utils/api/survey-api';
 
 export const CREATE_SURVEY_QUESTION_SUCCESS = 'CREATE_SURVEY_QUESTION_SUCCESS';
 export const CREATE_SURVEY_QUESTION_FAIL = 'CREATE_SURVEY_QUESTION_FAIL';
@@ -66,7 +66,7 @@ export const FETCH_PUBLIC_SURVEY_REQUEST = 'FETCH_PUBLIC_SURVEY_REQUEST';
 export const FETCH_PUBLIC_SURVEY_SUCCESS = 'FETCH_PUBLIC_SURVEY_SUCCESS';
 export const FETCH_PUBLIC_SURVEY_FAILURE = 'FETCH_PUBLIC_SURVEY_FAILURE';
 
-export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch) => {
+export const fetchAllSurveyQuestionsWithChoices = surveyId => async (dispatch) => {
   dispatch({ type: FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST });
   try {
     const response = await api.get(`/surveys/${surveyId}/questions-with-choices`);
@@ -76,7 +76,7 @@ export const fetchAllSurveyQuestionsWithChoices = (surveyId) => async (dispatch)
   }
 };
 
-export const fetchSingleSurveyQuestionChoices = (surveyQuestionId) => async (dispatch) => {
+export const fetchSingleSurveyQuestionChoices = surveyQuestionId => async (dispatch) => {
   dispatch({ type: FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST });
   try {
     const response = await api.get(`/survey-question-choices/question/${surveyQuestionId}`);
@@ -86,19 +86,19 @@ export const fetchSingleSurveyQuestionChoices = (surveyQuestionId) => async (dis
   }
 };
 
-export const fetchSurveyAction = (surveyId) => async(dispatch) => {
+export const fetchSurveyAction = surveyId => async (dispatch) => {
   try {
     const response = await api.get(`/surveys/${surveyId}/details`);
     dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
   }
-}
+};
 
 export const fetchSurveysAction = () => async (dispatch) => {
   try {
     const response = await api.get('/surveys/user');
-    console.log('user surveys are: ', response.data)
+    console.log('user surveys are: ', response.data);
     dispatch({ type: FETCH_SURVEYS_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_SURVEYS_FAIL, payload: error.message });
@@ -125,7 +125,7 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
 };
 
 
-export const fetchSurveyPagesAction = (surveyId) => async (dispatch) => {
+export const fetchSurveyPagesAction = surveyId => async (dispatch) => {
   try {
     const response = await api.get(`/surveys/${surveyId}/pages`);
     dispatch({
@@ -162,7 +162,7 @@ export const fetchStockSurveysAction = () => async (dispatch) => {
   }
 };
 
-export const fetchPublicSurveyBySlugAction = (surveySlug) => async (dispatch) => {
+export const fetchPublicSurveyBySlugAction = surveySlug => async (dispatch) => {
   try {
     const response = await publicApi.get(`/surveys/ps/${surveySlug}`);
     const survey = response.data;
@@ -192,7 +192,7 @@ export const fetchPublicSurveyBySlugAction = (surveySlug) => async (dispatch) =>
 // Action to add a new survey page
 export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) => {
   try {
-    const response = await api.post(`/survey-pages`, newPageData);
+    const response = await api.post('/survey-pages', newPageData);
     dispatch({ type: ADD_SURVEY_PAGE_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
@@ -201,7 +201,7 @@ export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) =
   }
 };
 
-export const createSurveyAction = (surveyData) => async (dispatch) => {
+export const createSurveyAction = surveyData => async (dispatch) => {
   try {
     const response = await api.post('/surveys', surveyData);
     dispatch({ type: CREATE_SURVEY_SUCCESS, payload: response.data });
@@ -212,7 +212,7 @@ export const createSurveyAction = (surveyData) => async (dispatch) => {
   }
 };
 
-export const createSurveyPageAction = (surveyPageData) => async (dispatch) => {
+export const createSurveyPageAction = surveyPageData => async (dispatch) => {
   try {
     const response = await api.post('/survey-pages', surveyPageData);
     dispatch({ type: CREATE_SURVEY_PAGE_SUCCESS, payload: response.data });
@@ -224,7 +224,7 @@ export const createSurveyPageAction = (surveyPageData) => async (dispatch) => {
 };
 
 // Action to create a new survey question
-export const createSurveyQuestionAction = (questionData) => async (dispatch) => {
+export const createSurveyQuestionAction = questionData => async (dispatch) => {
   try {
     const response = await api.post('/survey-questions', questionData);
     dispatch({ type: CREATE_SURVEY_QUESTION_SUCCESS, payload: response.data });
@@ -236,7 +236,7 @@ export const createSurveyQuestionAction = (questionData) => async (dispatch) => 
 };
 
 // Action to delete a survey question
-export const deleteSurveyQuestionAction = (surveyQuestionId) => async (dispatch) => {
+export const deleteSurveyQuestionAction = surveyQuestionId => async (dispatch) => {
   try {
     await api.delete(`/survey-questions/${surveyQuestionId}`);
     dispatch({ type: DELETE_SURVEY_QUESTION_SUCCESS, payload: surveyQuestionId });
@@ -247,7 +247,7 @@ export const deleteSurveyQuestionAction = (surveyQuestionId) => async (dispatch)
 };
 
 // Action to create survey question choices
-export const createSurveyQuestionChoicesAction = (choicesData) => async (dispatch) => {
+export const createSurveyQuestionChoicesAction = choicesData => async (dispatch) => {
   try {
     const response = await api.post('/survey-question-choices', choicesData);
     dispatch({ type: CREATE_SURVEY_QUESTION_CHOICES_SUCCESS, payload: response.data });
@@ -330,9 +330,7 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
 
     // Find the survey page with the least sort_index
     if (surveyPages.length > 0) {
-      const leastSortIndexPage = surveyPages.reduce((minPage, currentPage) => 
-        currentPage.sort_index < minPage.sort_index ? currentPage : minPage
-      );
+      const leastSortIndexPage = surveyPages.reduce((minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage));
 
       // Redirect to the survey page with the least sort index
       window.location.href = `/surveys/${surveyId}/survey-pages/${leastSortIndexPage.id}`;
@@ -353,8 +351,9 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
   }
 };
 
-export const publishSurveyAction = (surveyId) => async (dispatch) => {
-  try {2
+export const publishSurveyAction = surveyId => async (dispatch) => {
+  try {
+ 2;
     const response = await api.put(`/surveys/${surveyId}/publish`);
     dispatch({ type: PUBLISH_SURVEY_SUCCESS, payload: response.data });
     return response.data;
@@ -367,8 +366,10 @@ export const publishSurveyAction = (surveyId) => async (dispatch) => {
 export const submitSurveySubmissionAction = (surveyId, submission_data) => async (dispatch) => {
   const data = JSON.stringify(submission_data);
   try {
-    const response = await api.post(`/survey-submissions`, 
-    { survey_id: surveyId,  submission_data: data });
+    const response = await api.post(
+'/survey-submissions', 
+    { survey_id: surveyId, submission_data: data },
+);
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
   } catch (error) {

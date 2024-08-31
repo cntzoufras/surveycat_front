@@ -13,7 +13,8 @@ import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
 import AuthCheck from '../AuthCheck';
 import PrivateRoute from './PrivateRoute';
-import PublicSurveyPage from '../../Survey/components/PublicSurveyPage'
+import PublicSurveyPage from '../../Survey/components/PublicSurveyPage';
+
 const Router = () => (
   <MainWrapper>
     <main>

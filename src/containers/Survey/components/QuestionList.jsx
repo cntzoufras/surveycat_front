@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import QuestionItem from './QuestionItem';
 import { 
   Box as MuiBox, 
   Typography as MuiTypography, 
-  List as MuiList 
+  List as MuiList, 
 } from '@mui/material';
 import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions';
+import QuestionItem from './QuestionItem';
 
 
 const QuestionList = ({ questions, onDelete, onResponseChange }) => {
@@ -21,7 +21,7 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
     if (surveyId) {
       dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
     }
-  }, [ dispatch, surveyId ]);
+  }, [dispatch, surveyId]);
 
   if (!questions || questions.length === 0) {
     return (
@@ -33,25 +33,23 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
   }
 
     return (
-    <MuiBox sx={{ marginBottom: 4 }}>
-      <MuiTypography variant="h6" sx={{ fontWeight:300 }} gutterBottom>
-        Questions
-      </MuiTypography>
-      <MuiList>
-        {questions.map((question, index) => (
-          <QuestionItem
-            key={question.id}
-            question={question}
-            index={index}
-            onDelete={onDelete}
-            onResponseChange={onResponseChange}
-          />
+      <MuiBox sx={{ marginBottom: 4 }}>
+        <MuiTypography variant="h6" sx={{ fontWeight: 300 }} gutterBottom>
+          Questions
+        </MuiTypography>
+        <MuiList>
+          {questions.map((question, index) => (
+            <QuestionItem
+              key={question.id}
+              question={question}
+              index={index}
+              onDelete={onDelete}
+              onResponseChange={onResponseChange}
+            />
         ))}
-      </MuiList>
-    </MuiBox>
+        </MuiList>
+      </MuiBox>
   );
-
-
 };
 
 QuestionList.propTypes = {

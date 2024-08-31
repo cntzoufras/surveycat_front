@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Radio, FormControlLabel, Checkbox, List, ListItem } from '@mui/material';
+import {
+ Radio, FormControlLabel, Checkbox, List, ListItem, 
+} from '@mui/material';
 
 const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
   const [selectedValues, setSelectedValues] = useState([]);
 
   const handleRadioChange = (event) => {
-    const value = event.target.value;
+    const { value } = event.target;
     setSelectedValues([value]);
-    onAnswerChange(question.id, value);  // Pass the question ID and selected value
+    onAnswerChange(question.id, value); // Pass the question ID and selected value
   };
 
   const handleCheckboxChange = (event) => {
-    const value = event.target.value;
+    const { value } = event.target;
     const updatedValues = event.target.checked 
       ? [...selectedValues, value] 
-      : selectedValues.filter((v) => v !== value);
+      : selectedValues.filter(v => v !== value);
 
     setSelectedValues(updatedValues);
-    onAnswerChange(question.id, updatedValues);  // Pass the question ID and selected values
+    onAnswerChange(question.id, updatedValues); // Pass the question ID and selected values
   };
 
   return (
@@ -31,14 +33,14 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           {question.survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={
+                control={(
                   <Radio
                     name={`question-${question.id}`}
                     value={survey_question_choice.id}
                     checked={selectedValues.includes(survey_question_choice.id)}
                     onChange={handleRadioChange}
                   />
-                }
+                )}
                 label={survey_question_choice.content}
               />
             </ListItem>
@@ -52,14 +54,14 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           {question.survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     name={`question-${question.id}`}
                     value={survey_question_choice.id}
                     checked={selectedValues.includes(survey_question_choice.id)}
                     onChange={handleCheckboxChange}
                   />
-                }
+                )}
                 label={survey_question_choice.content}
               />
             </ListItem>

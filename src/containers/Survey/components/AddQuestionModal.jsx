@@ -32,12 +32,12 @@ const AddQuestionModal = ({
     }
   }, [currentSurveyPageId]);
 
-  const handleQuestionInputChange = (e) => setNewQuestion(e.target.value);
-  const handleSurveyPageChange = (e) => setSelectedSurveyPage(e.target.value);
+  const handleQuestionInputChange = e => setNewQuestion(e.target.value);
+  const handleSurveyPageChange = e => setSelectedSurveyPage(e.target.value);
   const handleIsRequiredChange = () => setIsRequired(!isRequired); 
 
   const handleQuestionTypeChange = (e) => {
-    console.log(`handleQuestionTypeChange e.target.value: $(e.target.value)`);
+    console.log('handleQuestionTypeChange e.target.value: $(e.target.value)');
     setQuestionType(e.target.value);
     if (e.target.value === '1' || e.target.value === '2') {
       setNumOptions(2);
@@ -113,8 +113,7 @@ const AddQuestionModal = ({
       }
 
       onClose();
-      setValidationErrors({}); 
-
+      setValidationErrors({});
     } catch (error) {
       console.error('Failed to create question or choices:', error);
       if (error.response && error.response.status === 422) { 
@@ -126,7 +125,7 @@ const AddQuestionModal = ({
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Add Question {isRequired && <span style={{color: 'red'}}>*</span>}</Modal.Title> 
+        <Modal.Title>Add Question {isRequired && <span style={{ color: 'red' }}>*</span>}</Modal.Title> 
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>

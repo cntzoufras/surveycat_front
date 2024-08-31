@@ -11,14 +11,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button
+  Button,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import questionTypeNames from '../../../utils/api/questionTypes';
 import QuestionRenderer from './QuestionRenderer';
 
 const QuestionItem = ({
-  question, index, onDelete, onResponseChange
+  question, index, onDelete, onResponseChange,
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   
@@ -42,7 +42,12 @@ const QuestionItem = ({
   };
 
   return (
-    <Box key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
+    <Box
+      key={question.id}
+      sx={{
+ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px', 
+}}
+    >
       <Typography variant="h6">
         {`${index + 1}. ${question.title} (${questionTypeName})`}
       </Typography>
@@ -63,7 +68,7 @@ const QuestionItem = ({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">Confirm Delete</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 Are you sure you want to delete this question?

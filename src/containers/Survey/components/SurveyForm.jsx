@@ -13,13 +13,13 @@ import {
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import FontSelector from './FontSelector';
 import {
   fetchSurveyCategoriesAction,
   fetchSurveyThemesAction,
   createSurveyAction,
   createSurveyPageAction,
 } from '@/redux/actions/surveyActions';
+import FontSelector from './FontSelector';
 
 const MuiStyledFormControl = styled(MuiFormControl)`
   margin-bottom: 1rem;
@@ -55,8 +55,8 @@ const SurveyForm = ({ userId }) => {
     dispatch(fetchSurveyThemesAction());
   }, [dispatch]);
   
-  const surveyCategories = useSelector((state) => state.survey.surveyCategories);
-  const surveyThemes = useSelector((state) => state.survey.surveyThemes);
+  const surveyCategories = useSelector(state => state.survey.surveyCategories);
+  const surveyThemes = useSelector(state => state.survey.surveyThemes);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,7 +104,7 @@ const SurveyForm = ({ userId }) => {
             variant="outlined"
             margin="normal"
             value={surveyTitle}
-            onChange={(e) => setSurveyTitle(e.target.value)}
+            onChange={e => setSurveyTitle(e.target.value)}
             required
           />
           <MuiTextField
@@ -115,7 +115,7 @@ const SurveyForm = ({ userId }) => {
             multiline
             rows={12}
             value={surveyDescription}
-            onChange={(e) => setSurveyDescription(e.target.value)}
+            onChange={e => setSurveyDescription(e.target.value)}
           />
           <MuiStyledFormControl fullWidth required>
             <CustomInputLabel id="category-label" shrink={Boolean(selectedCategoryId)}>
@@ -127,13 +127,13 @@ const SurveyForm = ({ userId }) => {
               id="category-select"
               value={selectedCategoryId}
               label="Category"
-              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              onChange={e => setSelectedCategoryId(e.target.value)}
               sx={{ width: '100%', maxWidth: 400 }}
             >
               <MuiMenuItem value="" disabled>
                 <em>Select Category</em>
               </MuiMenuItem>
-            {Array.isArray(surveyCategories) && surveyCategories.map((category) => (
+              {Array.isArray(surveyCategories) && surveyCategories.map(category => (
                 <MuiMenuItem key={category.id} value={category.id} sx={{ lineHeight: 1.5 }}>
                   {category.title}
                 </MuiMenuItem>
@@ -150,13 +150,13 @@ const SurveyForm = ({ userId }) => {
               id="theme-select"
               value={selectedThemeId}
               label="Theme"
-              onChange={(e) => setSelectedThemeId(e.target.value)}
+              onChange={e => setSelectedThemeId(e.target.value)}
               sx={{ maxWidth: 400 }}
             >
               <MuiMenuItem value="" disabled>
                 <em>Select Theme</em>
               </MuiMenuItem>
-              {Array.isArray(surveyThemes) && surveyThemes.map((theme) => (
+              {Array.isArray(surveyThemes) && surveyThemes.map(theme => (
                 <MuiMenuItem key={theme.id} value={theme.id} sx={{ lineHeight: 1.5 }}>
                   {theme.title}
                 </MuiMenuItem>
@@ -179,7 +179,7 @@ const SurveyForm = ({ userId }) => {
         </MuiBox>
         {Object.keys(validationErrors).length > 0 && (
           <MuiStyledErrorBox marginTop="1rem" bgcolor="#f44336" color="white" padding="1rem" borderRadius="4px">
-            {Object.keys(validationErrors).map((key) => (
+            {Object.keys(validationErrors).map(key => (
               <MuiTypography key={key}>{validationErrors[key]}</MuiTypography>
             ))}
           </MuiStyledErrorBox>

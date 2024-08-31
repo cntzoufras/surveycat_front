@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PublicQuestionItem from './PublicQuestionItem';  // Import the correct component
+import PublicQuestionItem from './PublicQuestionItem'; // Import the correct component
 
 const PublicQuestionList = ({ questions, onResponseChange }) => {
   if (!questions || questions.length === 0) {
@@ -14,7 +14,7 @@ const PublicQuestionList = ({ questions, onResponseChange }) => {
           key={question.id}
           question={question}
           index={index}
-          onResponseChange={onResponseChange}  // Pass the onResponseChange prop
+          onResponseChange={onResponseChange} // Pass the onResponseChange prop
         />
       ))}
     </div>

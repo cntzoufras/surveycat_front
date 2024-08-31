@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchPublicSurveyBySlugAction, submitSurveySubmissionAction } from '@/redux/actions/surveyActions';
+
 import PublicQuestionList from './public/PublicQuestionList';
-import { fetchPublicSurveyBySlugAction } from '@/redux/actions/surveyActions';
-import { submitSurveySubmissionAction } from '@/redux/actions/surveyActions';
 
 const PublicSurveyPage = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const PublicSurveyPage = () => {
   const handleResponseChange = (questionId, value) => {
     setResponses(prev => ({
       ...prev,
-      [questionId]: value
+      [questionId]: value,
     }));
   };
 

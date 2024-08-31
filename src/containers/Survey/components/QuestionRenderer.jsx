@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Radio, Checkbox, FormControlLabel, List, ListItem } from '@mui/material';
+import {
+ Radio, Checkbox, FormControlLabel, List, ListItem, 
+} from '@mui/material';
 
 const QuestionRenderer = ({ question }) => {
   if (!question) return null;
@@ -13,22 +15,22 @@ const QuestionRenderer = ({ question }) => {
 
 
     return (
-    <div>
-      <h4>{title}</h4>
+      <div>
+        <h4>{title}</h4>
 
-      {/* Render Radio buttons for question type 1 (Multiple Choice) */}
-      {question_type_id === 1 && Array.isArray(survey_question_choices) && (
+        {/* Render Radio buttons for question type 1 (Multiple Choice) */}
+        {question_type_id === 1 && Array.isArray(survey_question_choices) && (
         <List>
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={
+                control={(
                   <Radio
                     name={`question-${question.id}`}
                     value={survey_question_choice.content}
-                    onChange={handleChange}  // Trigger change when user selects an option
+                    onChange={handleChange} // Trigger change when user selects an option
                   />
-                }
+                )}
                 label={survey_question_choice.content}
               />
             </ListItem>
@@ -36,19 +38,19 @@ const QuestionRenderer = ({ question }) => {
         </List>
       )}
 
-      {/* Render Checkboxes for question type 2 or 10 */}
-      {(question_type_id === 2 || question_type_id === 10) && Array.isArray(survey_question_choices) && (
+        {/* Render Checkboxes for question type 2 or 10 */}
+        {(question_type_id === 2 || question_type_id === 10) && Array.isArray(survey_question_choices) && (
         <List>
           {survey_question_choices.map((survey_question_choice, index) => (
             <ListItem key={`${question.id}-${index}`} disablePadding>
               <FormControlLabel
-                control={
+                control={(
                   <Checkbox
                     name={`question-${question.id}`}
                     value={survey_question_choice.content}
-                    onChange={handleChange}  // Trigger change when user checks/unchecks an option
+                    onChange={handleChange} // Trigger change when user checks/unchecks an option
                   />
-                }
+                )}
                 label={survey_question_choice.content}
               />
             </ListItem>
@@ -56,8 +58,8 @@ const QuestionRenderer = ({ question }) => {
         </List>
       )}
 
-      {/* Add other question types here if needed */}
-    </div>
+        {/* Add other question types here if needed */}
+      </div>
   );
 };
 

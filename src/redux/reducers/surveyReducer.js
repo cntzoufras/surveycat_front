@@ -54,10 +54,10 @@ import {
 
 const initialState = {
   surveyQuestionChoices: [], // An array to hold choices for questions
-  surveyResponses:[],
+  surveyResponses: [],
   loading: false, // Indicates if any async operation is in progress
   submitError: null,
-  surveys:[],
+  surveys: [],
   survey: null, // Holds the current survey's main details like title, description, etc.
   surveyCategories: [],
   surveyThemes: [],
@@ -235,7 +235,9 @@ const surveyReducer = (state = initialState, action) => {
         error: null,
       };
     case FETCH_PUBLIC_SURVEY_SUCCESS:
-      const { survey, surveyPages, surveyQuestions, surveyQuestionChoices } = action.payload;
+      const {
+ survey, surveyPages, surveyQuestions, surveyQuestionChoices, 
+} = action.payload;
       const newState = {
         ...state,
         loading: false,

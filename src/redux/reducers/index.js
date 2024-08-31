@@ -21,5 +21,5 @@ export {
   todoReducer,
   authReducer,
   pokemonReducer,
-  surveyReducer
+  surveyReducer,
 };

@@ -79,9 +79,11 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }
 
   if (!surveyPage) {
-    return  <Typography variant="subtitle2" gutterBottom>
-              Error loading survey page: No survey page found.
-            </Typography>;
+    return (
+      <Typography variant="subtitle2" gutterBottom>
+        Error loading survey page: No survey page found.
+      </Typography>
+);
   }
 
   return <SurveyPage surveyPage={surveyPage} questions={questions} />;
