@@ -1,4 +1,4 @@
-name: Deploy Surveycat React front React with Nginx
+name: Deploy Surveycat React front with Nginx
 
 on:
   push:
@@ -9,14 +9,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.23
+      IMAGE_VERSION: 2.24
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Set up Docker
       uses: docker/setup-buildx-action@v1
-      
+
     - name: Set up SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -34,29 +34,35 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
 
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
     - name: Build and push Docker images to Dockerhub
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
         
-        # Build, tag push image to Dockerhub
-        docker-compose -f docker-compose.prod.yml build --build-arg IMAGE_VERSION=$IMAGE_VERSION
+        # Build, tag and push image to Dockerhub
+        docker-compose -f docker-compose.prod.yml build --build-arg IMAGE_VERSION=$IMAGE_VERSION --cache-from type=local,src=/tmp/.buildx-cache
           
         # Add version tag in built image
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
 
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
-      env:
-          IMAGE_VERSION: 2.23
-          
+
     - name: Create .env file (Post Build)
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env'
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env'
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env'
-    
+
     - name: Deploy to Production Server
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.23 && docker-compose -f docker-compose.prod.yml up -d'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.24 && docker-compose -f docker-compose.prod.yml up -d'
       env:
-          IMAGE_VERSION: 2.23
+          IMAGE_VERSION: 2.24
