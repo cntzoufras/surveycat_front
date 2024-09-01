@@ -54,6 +54,8 @@ jobs:
 
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
+      env:
+          IMAGE_VERSION: 2.24
 
     - name: Create .env file (Post Build)
       run: |
