@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.18
+      IMAGE_VERSION: 2.19
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -34,20 +34,6 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
 
-    - name: Cache Yarn dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.yarn/cache
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-
-    - name: Increase Yarn network timeout
-      run: yarn config set network-timeout 600000
-
-    - name: Install dependencies
-      run: yarn install
-
     - name: Build and push Docker images to Dockerhub
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -61,7 +47,7 @@ jobs:
         # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.18
+          IMAGE_VERSION: 2.19
           
     - name: Create .env file (Post Build)
       run: |
@@ -71,6 +57,6 @@ jobs:
     
     - name: Deploy to Production Server
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.18 && docker-compose -f docker-compose.prod.yml up -d'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.19 && docker-compose -f docker-compose.prod.yml up -d'
       env:
-          IMAGE_VERSION: 2.18
+          IMAGE_VERSION: 2.19
