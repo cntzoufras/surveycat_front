@@ -8,7 +8,6 @@ import ReactVis from '@/containers/Charts/ReactVis';
 import Recharts from '@/containers/Charts/Recharts';
 import Amcharts from '@/containers/Charts/Amcharts';
 import Layout from '../../../Layout/index';
-import Commerce from './Commerce';
 import OnLineMarketingDashboard from '../../../Dashboards/OnLineMarketing/index';
 import AppDashboard from '../../../Dashboards/App/index';
 import BookingDashboard from '../../../Dashboards/Booking/index';
@@ -43,7 +42,6 @@ const WrappedRoutes = () => (
     <Layout />
     <ContainerWrap>
       <Routes>
-        <Route path="/e_commerce_dashboard" element={<Commerce />} />
         <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard />} />
         <Route exact path="/app_dashboard" element={<AppDashboard />} />
         <Route path="/booking_dashboard" element={<BookingDashboard />} />

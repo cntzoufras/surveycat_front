@@ -25,7 +25,7 @@ const WelcomeNotification = (theme, rtl, setIsNotificationShown, isNotificationS
       top: 0,
       left: 'calc(100vw - 100%)',
     },
-    className: `right-up ltr-support`,
+    className: 'right-up ltr-support',
     onClose() {
       setIsNotificationShown(true);
     },
