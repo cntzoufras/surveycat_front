@@ -5,11 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppConfig } from '@/redux/actions/appConfigActions';
 import Loading from '@/shared/components/Loading';
 
-const direction = (location, rtl) => (location.pathname === '/' ? 'ltr' : rtl.direction);
-
 const MainWrapper = ({ children }) => {
-  const { rtl, isFetching } = useSelector(state => ({
-    rtl: state.rtl,
+  const { isFetching } = useSelector(state => ({
     isFetching: state.appConfig.isFetching,
   }));
 
@@ -23,10 +20,8 @@ const MainWrapper = ({ children }) => {
   return isFetching ? (
     <Loading loading={isFetching} />
   ) : (
-    <div className={`${direction(location.pathname, rtl)}-support`}>
-      <div className="wrapper">
-        {children}
-      </div>
+    <div className="wrapper">
+      {children}
     </div>
   );
 };

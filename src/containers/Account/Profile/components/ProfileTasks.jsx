@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { Card } from '@/shared/components/Card';
 import { colorAdditional, colorBorder, colorText } from '@/utils/palette';
 import { right } from '@/utils/directions';
-import { editTodoElement, fetchTodoListData } from '../../../Todo/redux/actions';
 import ProfileToDo from './ProfileTodo';
 import { ProfileCard } from '../ProfileBasicComponents';
 

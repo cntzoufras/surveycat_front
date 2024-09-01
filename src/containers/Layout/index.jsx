@@ -19,7 +19,6 @@ const Layout = () => {
     customizer: state.customizer,
     sidebar: state.sidebar,
     theme: state.theme,
-    rtl: state.rtl,
   }));
 
   const dispatch = useDispatch();

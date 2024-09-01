@@ -5,7 +5,6 @@ import NotFound404 from '../../DefaultPage/404/index';
 import LogIn from '../../Account/LogIn/index';
 import Register from '../../Account/Register/index';
 import ResetPassword from '../../Account/ResetPassword/index';
-import Todo from '../../Todo';
 import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
 import AuthCheck from '../AuthCheck';
@@ -24,17 +23,6 @@ const Router = () => (
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/surveys/ps/:surveySlug" element={<PublicSurveyPage />} />
         <Route path="/thank-you" element={<ThankYouSubmission />} />
-        <Route 
-          exact 
-          path="/todo" 
-          element={(
-            <AuthCheck>
-              <PrivateRoute>
-                <Todo />
-              </PrivateRoute>
-            </AuthCheck>
-          )}
-        />
         <Route 
           exact 
           path="/survey" 

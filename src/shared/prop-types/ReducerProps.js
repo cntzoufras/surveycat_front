@@ -17,10 +17,6 @@ export const ThemeProps = shape({
   className: string,
 });
 
-export const RTLProps = shape({
-  direction: string,
-});
-
 export const RoundBordersProps = shape({
   roundBorders: string,
 });

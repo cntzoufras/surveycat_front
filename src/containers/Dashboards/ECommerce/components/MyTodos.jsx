@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Panel from '@/shared/components/Panel';
-import todoCard from '../../../Todo/types';
-import ToDo from './ToDo';
 
 const editTodoElementData = ({ todoElements, editTodoElement }) => (e) => {
   const todoId = e.target.id;
@@ -55,7 +53,6 @@ const MyTodos = ({ todoElements, editTodoElement }) => {
 
 MyTodos.propTypes = {
   editTodoElement: PropTypes.func.isRequired,
-  todoElements: PropTypes.arrayOf(todoCard).isRequired,
 };
 
 export default MyTodos;

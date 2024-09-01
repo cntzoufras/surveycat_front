@@ -13,7 +13,6 @@ import OnLineMarketingDashboard from '../../../Dashboards/OnLineMarketing/index'
 import AppDashboard from '../../../Dashboards/App/index';
 import BookingDashboard from '../../../Dashboards/Booking/index';
 import FitnessDashboard from '../../../Dashboards/Fitness/index';
-import Todo from '../../../Todo/index';
 import SurveyDesign from '../../../Survey/index';
 import Tables from './Tables';
 import Charts from './Charts';
@@ -49,7 +48,6 @@ const WrappedRoutes = () => (
         <Route exact path="/app_dashboard" element={<AppDashboard />} />
         <Route path="/booking_dashboard" element={<BookingDashboard />} />
         <Route path="/fitness_dashboard" element={<FitnessDashboard />} />
-        <Route path="/todo" element={<Todo />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys" element={<SurveyList />} />
         <Route path="/surveys/:surveyId/pages/:surveyPageId" element={<SurveyDesign />} />  

@@ -66,9 +66,6 @@ const SidebarContent = ({
         </SidebarCategory>
       </SidebarCategory>
     </SidebarBlock>
-    <SidebarBlock collapse={collapse}> 
-      <SidebarLink title="Todo Application" icon="book" route="/todo" onClick={onClick} />
-    </SidebarBlock>
     <SidebarBlock collapse={collapse}>
       <SidebarLink 
         title="Documentation"

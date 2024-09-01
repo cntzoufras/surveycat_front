@@ -26,10 +26,9 @@ i18n.init(i18nextConfig);
 
 const ThemeComponent = ({ children }) => {
   const {
-   mode, direction, shadow, border, 
+   mode, shadow, border, 
    } = useSelector(state => ({
     mode: state.theme.className,
-    direction: state.rtl.direction,
     shadow: state.shadow.className,
     border: state.border.className,
   }));
@@ -52,7 +51,6 @@ const ThemeComponent = ({ children }) => {
         <StyledThemeProvider
           theme={{
             mode,
-            direction,
             shadow,
             border,
           }}
