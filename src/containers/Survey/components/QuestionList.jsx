@@ -11,11 +11,9 @@ import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyAction
 import QuestionItem from './QuestionItem';
 
 const QuestionList = ({ questions, onDelete, onResponseChange }) => {
-  console.log(`Questions in prop of QuestionList: ${questions}`);
-  
   const dispatch = useDispatch();
   const { surveyId } = useParams();
-  
+
   useEffect(() => {
     if (surveyId) {
       dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
@@ -61,7 +59,7 @@ QuestionList.propTypes = {
     selectedOption: PropTypes.string,
   })).isRequired,
   onDelete: PropTypes.func,
-  onResponseChange: PropTypes.func.isRequired, // Added validation for onResponseChange
+  onResponseChange: PropTypes.func.isRequired, 
 };
 
 QuestionList.defaultProps = {

@@ -11,6 +11,7 @@ import WrappedRoutes from './WrappedRoutes';
 import AuthCheck from '../AuthCheck';
 import PrivateRoute from './PrivateRoute';
 import PublicSurveyPage from '../../Survey/components/PublicSurveyPage';
+import ThankYouSubmission from '../../Survey/components/ThankYouSubmission';
 
 const Router = () => (
   <MainWrapper>
@@ -22,6 +23,7 @@ const Router = () => (
         <Route exact path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/surveys/ps/:surveySlug" element={<PublicSurveyPage />} />
+        <Route path="/thank-you" element={<ThankYouSubmission />} />
         <Route 
           exact 
           path="/todo" 

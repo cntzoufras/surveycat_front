@@ -124,7 +124,7 @@ const AddQuestionModal = ({
           payload: {
             ...newQuestionResponse,
             choices: choicesResponse, // Assuming choicesResponse contains the created choices
-          }
+          },
         });
       } else {
         // If no choices, just update with the question

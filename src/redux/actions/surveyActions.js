@@ -374,8 +374,15 @@ export const submitSurveySubmissionAction = (surveyId, submissionData) => async 
 );
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
+    return {
+      status: response.status,
+      payload: response.data,
+    };
   } catch (error) {
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_FAILURE, payload: error.message });
-    // Handle error - show an error message
+    return {
+      status: error.response ? error.response.status : 500,
+      payload: error.message,
+    };
   }
 };

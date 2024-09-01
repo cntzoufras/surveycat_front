@@ -22,8 +22,10 @@ const QuestionItem = ({
   
   const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
 
-  const handleAnswerChange = (value) => {
-    onResponseChange(question.id, value);
+  const handleAnswerChange = (questionId, value) => {
+    if (onResponseChange) {
+      onResponseChange(questionId, value);
+    }
   };
   
   const handleDeleteClick = () => {
@@ -31,7 +33,9 @@ const QuestionItem = ({
   };
 
   const handleConfirmDelete = () => {
-    onDelete(question.id);
+    if (onDelete) {
+      onDelete(question.id);
+    }
     setDialogOpen(false);
   };
 
@@ -43,17 +47,18 @@ const QuestionItem = ({
     <Box
       key={question.id}
       sx={{
- mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px', 
-}}
+        mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px',
+      }}
     >
       <Typography variant="h6">
         {`${index + 1}. ${question.title} (${questionTypeName})`}
       </Typography>
       
-      {/* Render the question using the QuestionRenderer, passing the handleAnswerChange function */}
-      <QuestionRenderer question={question} onAnswerChange={handleAnswerChange} />
+      <QuestionRenderer 
+        question={question} 
+        onAnswerChange={handleAnswerChange} 
+      />
 
-      {/* Conditionally render the delete button and dialog if onDelete is provided */}
       {onDelete && (
         <>
           <IconButton edge="end" aria-label="delete" onClick={handleDeleteClick}>
@@ -92,7 +97,7 @@ QuestionItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     question_type_id: PropTypes.number.isRequired,
-    survey_id: PropTypes.string.isRequired, // Add this line to pass survey_id
+    survey_id: PropTypes.string.isRequired, 
     options: PropTypes.arrayOf(PropTypes.string),
     selectedOptions: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
