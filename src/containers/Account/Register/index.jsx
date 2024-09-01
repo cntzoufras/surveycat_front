@@ -18,7 +18,7 @@ import { FullWideNotification } from '../../../shared/components/Notification';
 
 const Register = ({ error }) => {
   const [notification, setNotification] = useState({ show: false, message: '', color: '' });
-  const [setErrors] = useState({});
+  const [errors, setErrors] = useState({});
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,8 +39,6 @@ const Register = ({ error }) => {
         setTimeout(() => {
           navigate('/login');
         }, 5000);
-      } else {
-        handleShowNotification('Registration failed. Please try again.', 'danger');
       }
     } catch (err) {
       console.error('Registration error:', err);
