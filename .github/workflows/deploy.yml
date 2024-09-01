@@ -1,4 +1,4 @@
-name: Deploy Surveycat React front with Nginx
+name: Deploy Surveycat React front React with Nginx
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
 
     - name: Set up Docker
       uses: docker/setup-buildx-action@v1
-
+      
     - name: Set up SSH Key
       run: |
         mkdir -p ~/.ssh
@@ -60,7 +60,7 @@ jobs:
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env'
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env'
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env'
-
+    
     - name: Deploy to Production Server
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.24 && docker-compose -f docker-compose.prod.yml up -d'
