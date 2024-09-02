@@ -34,7 +34,7 @@ const AppDashboard = () => {
       <Row>
         <AppTileClicks />
         <WeeklyStatMobile />
-        <SocialMarketing />
+        {/* <SocialMarketing /> */}
       </Row>
     </Container>
   );
