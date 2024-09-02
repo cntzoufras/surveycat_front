@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_VERSION: 3.1
+      REACT_APP_API_URL: https://snf-893977.vm.okeanos.grnet.gr/api
+      REACT_APP_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr
+      REACT_APP_IMAGE_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr/images
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -51,7 +55,13 @@ jobs:
         docker-compose -f docker-compose.prod.yml push nginx
       env:
           IMAGE_VERSION: 3.1
-          
+    
+    # - name: Create .env file (Post Build)
+    #   run: |
+    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env'
+    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env'
+    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env'
+
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
@@ -59,9 +69,6 @@ jobs:
           cd /var/www/surveycat_front && \
           docker-compose -f docker-compose.prod.yml down --volumes && \
           docker-compose -f docker-compose.prod.yml pull nginx && \
-          echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env && \
-          echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env && \
-          echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env && \
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
