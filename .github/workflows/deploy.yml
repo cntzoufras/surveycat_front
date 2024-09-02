@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.5
+      IMAGE_VERSION: 2.6
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -50,7 +50,7 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.5
+          IMAGE_VERSION: 2.6
           
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
@@ -64,4 +64,4 @@ jobs:
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 2.5
+          IMAGE_VERSION: 2.6
