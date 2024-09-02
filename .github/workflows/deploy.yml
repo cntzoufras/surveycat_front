@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.6
+      IMAGE_VERSION: 2.7
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -50,18 +50,18 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.6
+          IMAGE_VERSION: 2.7
           
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
           cd /var/www/surveycat_front && \
-          docker-compose -f docker-compose.prod.yml down --volumes && \
-          docker-compose -f docker-compose.prod.yml pull nginx && \
+          IMAGE_VERSION=2.7 docker-compose -f docker-compose.prod.yml down --volumes && \
+          IMAGE_VERSION=2.7 docker-compose -f docker-compose.prod.yml pull nginx && \
           echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env && \
           echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env && \
           echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env && \
-          docker-compose -f docker-compose.prod.yml up -d
+          IMAGE_VERSION=2.7 docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 2.6
+          IMAGE_VERSION: 2.7
