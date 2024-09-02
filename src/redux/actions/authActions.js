@@ -97,7 +97,7 @@ export const handleLogin = credentials => async (dispatch) => {
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
     
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/login`, credentials, {
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, credentials, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
