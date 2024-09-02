@@ -6,10 +6,10 @@ on:
       - main
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.4
+      IMAGE_VERSION: 2.5
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -32,40 +32,30 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
-    
-    - name: Stop running & remove volumes
-      run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && docker-compose -f docker-compose.prod.yml down --volumes'   
-    
-    - name: Install Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        docker-compose --version
 
-    - name: Build and push Docker images to Dockerhub
+    - name: Build and push Docker images to Docker Hub
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
         
-        # Build, tag push image to Dockerhub
+        # Build the Docker image
         docker-compose -f docker-compose.prod.yml build --build-arg IMAGE_VERSION=$IMAGE_VERSION
           
-        # Add version tag in built image
+        # Tag and push the image to Docker Hub
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
-
-        # Push to Dockerhub
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.4
+          IMAGE_VERSION: 2.5
           
-    - name: Create .env file (Post Build)
+    - name: Deploy to Production Server Using Docker Hub Image
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env'
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env'
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env'
-    
-    - name: Deploy to Production Server
-      run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && git pull && export IMAGE_VERSION=2.4 && docker-compose -f docker-compose.prod.yml up -d'
+        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
+          cd /var/www/surveycat_front && \
+          docker-compose -f docker-compose.prod.yml down --volumes && \
+          docker-compose -f docker-compose.prod.yml pull nginx && \
+          echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env && \
+          echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env && \
+          echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env && \
+          docker-compose -f docker-compose.prod.yml up -d
+        '
       env:
-          IMAGE_VERSION: 2.4
+          IMAGE_VERSION: 2.5
