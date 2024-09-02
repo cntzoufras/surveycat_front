@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 2.8
+      IMAGE_VERSION: 2.9
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -25,13 +25,13 @@ jobs:
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
 
     # Cache Docker layers
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # - name: Cache Docker layers
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: /tmp/.buildx-cache
+    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-buildx-
     
     - name: Install Docker Compose
       run: |
@@ -50,18 +50,19 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 2.8
+          IMAGE_VERSION: 2.9
           
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
+          export IMAGE_VERSION=2.6 && \
           cd /var/www/surveycat_front && \
-          IMAGE_VERSION=2.8 docker-compose -f docker-compose.prod.yml down --volumes && \
-          IMAGE_VERSION=2.8 docker-compose -f docker-compose.prod.yml pull nginx && \
+          docker-compose -f docker-compose.prod.yml down --volumes && \
+          docker-compose -f docker-compose.prod.yml pull nginx && \
           echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env && \
           echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env && \
           echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env && \
-          IMAGE_VERSION=2.8 docker-compose -f docker-compose.prod.yml up -d
+          docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 2.8
+          IMAGE_VERSION: 2.9
