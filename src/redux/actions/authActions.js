@@ -131,7 +131,7 @@ export const handleLogin = credentials => async (dispatch) => {
 export const handleLogout = () => async (dispatch) => {
   try {
     // Make a POST request to your API's logout endpoint
-    await axios.post(`${process.env.REACT_APP_BASE_URL}/logout`, {}, {
+    await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/logout`, {}, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
