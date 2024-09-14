@@ -14,7 +14,7 @@ WORKDIR /surveycat
 COPY package.json yarn.lock ./
 # Set the yarn network timeout to 10 minutes
 RUN yarn config set network-timeout 600000
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --production=false
 COPY . .
 
 RUN yarn build
