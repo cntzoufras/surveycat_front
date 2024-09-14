@@ -3,8 +3,8 @@ import Cookies from 'js-cookie';
 
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://snf-893977.vm.okeanos.grnet.gr/api'  // Use HTTPS in production
-    : 'http://surveycat.test/api',  // Use HTTP in local Docker network
+    ? 'https://snf-893977.vm.okeanos.grnet.gr/api' // Use HTTPS in production
+    : 'http://surveycat.test/api', // Use HTTP in local Docker network
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
