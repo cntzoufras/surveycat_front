@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPublicSurveyBySlugAction, submitSurveySubmissionAction } from '@/redux/actions/surveyActions';
-
+import {
+ Container, Typography, Box, Button, 
+} from '@mui/material';
 import PublicQuestionList from './public/PublicQuestionList';
-import ThankYouSubmission from './ThankYouSubmission'; // Import the Thank You component
+import ThankYouSubmission from './ThankYouSubmission';
 
 const PublicSurveyPage = () => {
   const dispatch = useDispatch();
@@ -14,8 +16,8 @@ const PublicSurveyPage = () => {
   const surveyQuestions = useSelector(state => state.survey.publicSurveyQuestions);
 
   const [responses, setResponses] = useState({});
-  const [submissionComplete, setSubmissionComplete] = useState(false); // Track submission status
-  const [submissionTimestamp, setSubmissionTimestamp] = useState(null); // Track submission timestamp
+  const [submissionComplete, setSubmissionComplete] = useState(false);
+  const [submissionTimestamp, setSubmissionTimestamp] = useState(null);
 
   useEffect(() => {
     if (surveySlug) {
@@ -34,10 +36,9 @@ const PublicSurveyPage = () => {
     try {
       const response = await dispatch(submitSurveySubmissionAction(survey.id, responses));
       if (response && response.status === 201) {
-        setSubmissionTimestamp(new Date().toLocaleString()); // Set timestamp of submission
-        setSubmissionComplete(true); // Mark submission as complete
+        setSubmissionTimestamp(new Date().toLocaleString());
+        setSubmissionComplete(true);
       } else {
-        // Handle non-201 responses if necessary
         console.error('Failed to submit survey', response);
       }
     } catch (error) {
@@ -46,29 +47,39 @@ const PublicSurveyPage = () => {
   };
 
   if (!survey) {
-    return <div>Loading...</div>;
+    return <Typography>Loading...</Typography>;
   }
 
   const themeStyles = {
     fontFamily: survey?.theme?.theme_setting?.settings?.typography?.fontFamily || 'Arial, sans-serif',
     fontSize: survey?.theme?.theme_setting?.settings?.typography?.fontSize || '12px',
     color: survey?.theme?.theme_setting?.settings?.primaryColor || '#252525',
-    backgroundColor: survey?.theme?.theme_setting?.settings?.backgroundColor || '#909090',
+    backgroundColor: survey?.theme?.theme_setting?.settings?.backgroundColor || '#f5f5f5',
   };
 
   if (submissionComplete) {
-    return (
-      <ThankYouSubmission timestamp={submissionTimestamp} /> // Show Thank You message with timestamp
-    );
+    return <ThankYouSubmission timestamp={submissionTimestamp} />;
   }
 
   return (
-    <div style={themeStyles}>
-      <h1>{survey.title}</h1>
-      <p>{survey.description}</p>
-      <PublicQuestionList questions={surveyQuestions} onResponseChange={handleResponseChange} />
-      <button type="button" onClick={handleSubmit}>Submit</button>
-    </div>
+    <Container maxWidth="md" style={themeStyles}>
+      <Box sx={{ mt: 4, mb: 2 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          {survey.title}
+        </Typography>
+        <Typography variant="body1" paragraph>
+          {survey.description}
+        </Typography>
+      </Box>
+      <Box>
+        <PublicQuestionList questions={surveyQuestions} onResponseChange={handleResponseChange} />
+      </Box>
+      <Box sx={{ mt: 4 }}>
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

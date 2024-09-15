@@ -1,23 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PublicQuestionItem from './PublicQuestionItem'; // Import the correct component
+import { Box, Typography } from '@mui/material';
+import PublicQuestionItem from './PublicQuestionItem';
 
 const PublicQuestionList = ({ questions, onResponseChange }) => {
   if (!questions || questions.length === 0) {
-    return <div>No questions available.</div>;
+    return <Typography>No questions available.</Typography>;
   }
 
   return (
-    <div>
+    <Box>
       {questions.map((question, index) => (
-        <PublicQuestionItem
-          key={question.id}
-          question={question}
-          index={index}
-          onResponseChange={onResponseChange} // Pass the onResponseChange prop
-        />
+        <Box key={question.id} sx={{ mb: 2 }}>
+          <PublicQuestionItem
+            question={question}
+            index={index}
+            onResponseChange={onResponseChange}
+          />
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
 
