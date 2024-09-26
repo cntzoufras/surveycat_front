@@ -31,7 +31,7 @@
     "recent_orders": "Recent orders"
   },
   "app_dashboard": {
-    "page_title": "69 App Dashboard",
+    "page_title": "App Dashboard",
     "current_users": "Current Users",
     "active_users": "Active Users",
     "widget_sessions": "Sessions",
@@ -42,12 +42,19 @@
     "weekly_stat_mobile": "Weekly Stat",
     "social_marketing_mobile": "Social Marketing"
   },
-  "booking_dashboard": {
-    "page_title": "Booking dashboard",
-    "reservations": "Reservations",
+  "surveys_dashboard": {
+    "page_title": "Surveys Dashboard",
+    "survey_completion_rate": "Survey Completion Rate",
     "weekly_stat": "Weekly stat",
     "social_score": "Social score",
     "occupancy": "Occupancy"
+  },
+  "survey_submissions": {
+    "title": "Survey Submissions"
+  },
+  "respondents": {
+    "title": "Respondents",
+    "description":"See info about each respondent in your surveys."
   },
   "finance_dashboard": {
     "page_title": "Finance Dashboard",
