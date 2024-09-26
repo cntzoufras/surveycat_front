@@ -10,12 +10,14 @@ import Amcharts from '@/containers/Charts/Amcharts';
 import Layout from '../../../Layout/index';
 import OnLineMarketingDashboard from '../../../Dashboards/OnLineMarketing/index';
 import AppDashboard from '../../../Dashboards/App/index';
-import BookingDashboard from '../../../Dashboards/Booking/index';
+import SurveysDashboard from '../../../Dashboards/Surveys/index';
 import FitnessDashboard from '../../../Dashboards/Fitness/index';
 import SurveyDesign from '../../../Survey/index';
 import Tables from './Tables';
 import Charts from './Charts';
 import Account from './Account';
+import Profile from '../../../Account/Profile/index';
+import EmailConfirmation from '../../../Account/EmailConfimation/index';
 import DefaultPages from './DefaultPages';
 import Documentation from './Documentation';
 import BasicTables from '../../../Tables/BasicTables/index';
@@ -36,6 +38,8 @@ import Resources from '../../../Documentation/10_resources/index';
 import Changelog from '../../../Documentation/11_changelog/index';
 import FAQ from '../../../Documentation/12_faq/index';
 import SurveyList from '../../../Survey/components/SurveyList';
+import SurveySubmissions from '../../../Dashboards/Surveys/SurveySubmissions';
+import Respondents from '../../../Dashboards/Surveys/Respondents';
 
 const WrappedRoutes = () => (
   <div>
@@ -44,10 +48,12 @@ const WrappedRoutes = () => (
       <Routes>
         <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard />} />
         <Route exact path="/app_dashboard" element={<AppDashboard />} />
-        <Route path="/booking_dashboard" element={<BookingDashboard />} />
+        <Route path="/surveys_dashboard" element={<SurveysDashboard />} />
         <Route path="/fitness_dashboard" element={<FitnessDashboard />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys" element={<SurveyList />} />
+        <Route path="/survey-submissions" element={<SurveySubmissions />} />
+        <Route path="/respondents" element={<Respondents />} />
         <Route path="/surveys/:surveyId/pages/:surveyPageId" element={<SurveyDesign />} />  
         <Route path="/charts/*" element={<Charts />}>
           <Route path="charts_js" element={<ChartsJS />} />
@@ -55,7 +61,10 @@ const WrappedRoutes = () => (
           <Route path="recharts" element={<Recharts />} />
           <Route path="amcharts" element={<Amcharts />} />
         </Route>
-        <Route path="/account" element={<Account />} />
+        <Route path="/account/*" element={<Account />}> {/* Updated to use Outlet */}
+          <Route path="profile" element={<Profile />} />
+          <Route path="email_confirmation" element={<EmailConfirmation />} />
+        </Route>
         <Route path="/default_pages" element={<DefaultPages />} />
         <Route path="/tables/*" element={<Tables />}>
           <Route path="basic_tables" element={<BasicTables />} />
