@@ -13,7 +13,14 @@ const SidebarContent = ({
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Survey" icon="map" collapse={collapse}>
         <SidebarLink title="Create" route="/survey-design" icon="pencil" onClick={onClick} />
-        <SidebarLink title="List" route="/surveys" icon="database" />
+        <SidebarLink title="Surveys List" route="/surveys" icon="list" />
+        <SidebarLink 
+          title="Submissions" 
+          route="/survey-submissions" 
+          icon="envelope" 
+          onClick={onClick}
+        />
+        <SidebarLink title="Respondents" route="/respondents" icon="users" onClick={onClick} />
         <SidebarLink title="Survey Themes" route="/themes" icon="picture" />
       </SidebarCategory>
     </SidebarBlock>
@@ -30,7 +37,7 @@ const SidebarContent = ({
     </SidebarBlock>
     <SidebarBlock collapse={collapse}>
       <SidebarLink title="App Dashboard" icon="smartphone" route="/app_dashboard" onClick={onClick} />
-      <SidebarLink title="Surveys Dashboard" icon="apartment" route="/booking_dashboard" onClick={onClick} />
+      <SidebarLink title="Surveys Dashboard" icon="apartment" route="/surveys_dashboard" onClick={onClick} />
     </SidebarBlock>
     <SidebarBlock collapse={collapse}>
       <SidebarCategory icon="layers" title="Theme" collapse={collapse}>
