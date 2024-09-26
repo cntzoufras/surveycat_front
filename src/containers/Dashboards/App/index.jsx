@@ -27,7 +27,7 @@ const AppDashboard = () => {
       </Row>
       <Row>
         <SessionShort />
-        <ActiveUsersShort />
+        
         <NewUsersShort />
         <PageViewsShort />
       </Row>
