@@ -4,7 +4,7 @@ import ProfileMain from './components/ProfileMain';
 import ProfileCalendar from './components/ProfileCalendar';
 import ProfileTabs from './components/ProfileTabs';
 
-const Calendar = () => (
+const Profile = () => (
   <Container>
     <Row>
       <Col md={12} lg={12} xl={4}>
@@ -18,4 +18,4 @@ const Calendar = () => (
   </Container>
 );
 
-export default Calendar;
+export default Profile;
