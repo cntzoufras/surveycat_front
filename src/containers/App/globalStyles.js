@@ -7,6 +7,7 @@ import {
   colorAccent,
   colorWhite,
   colorRed,
+  colorOrange,
   colorBackgroundBody,
   scrollbarStyles,
 } from '@/utils/palette';
@@ -179,6 +180,10 @@ const GlobalStyles = createGlobalStyle`
 
   .red-text {
     color: ${colorRed};
+  }
+  
+  .orange-text {
+    color: ${colorOrange};
   }
 
   .page-title {

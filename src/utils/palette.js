@@ -117,6 +117,10 @@ export const colorYellow = '#f6da6e';
 export const colorLightYellow = '#f4dd87';
 export const colorYellowHover = darken(0.1, colorYellow);
 
+export const colorOrange = '#FFEA48';
+export const colorLightOrange = '#F3C775';
+export const colorOrangeHover = darken(0.1, colorOrange);
+
 export const colorViolet = '#c88ffa';
 
 export const colorRed = '#ff4861';
