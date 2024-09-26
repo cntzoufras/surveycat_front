@@ -20,7 +20,7 @@ const NavigationBottom = ({
       <DocumentationBottomNavLeft>
         {prevLink ? (
           <Link to={prevLink}>
-            {rtl.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}<p>{prevTitle}</p>
+            <ChevronLeftIcon /><p>{prevTitle}</p>
           </Link>
         ) : ''}
       </DocumentationBottomNavLeft>
@@ -28,7 +28,7 @@ const NavigationBottom = ({
         {nextLink ? (
           <Link to={nextLink}>
             <p>{nextTitle}</p>
-            {rtl.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            <ChevronRightIcon />
           </Link>
         ) : ''}
       </DocumentationBottomNavRight>
