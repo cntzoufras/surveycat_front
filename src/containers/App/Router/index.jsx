@@ -25,7 +25,7 @@ const Router = () => (
         <Route path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/surveys/ps/:surveySlug" element={<PublicSurveyPage />} />
-        <Route path="/thank-you" element={<ThankYouSubmission />} />
+        <Route path="/thank-you" element={<ThankYouSubmission timestamp={new Date().toISOString()} />} />
         <Route path="/verification-success" element={<VerificationSuccess />} />
         <Route path="/verification-error" element={<VerificationError />} />
         <Route path="/verification-already" element={<VerificationAlready />} />
