@@ -60,7 +60,8 @@ const Respondents = () => {
     }
   };
 
-  const data = respondents.data?.map((respondent, index) => {
+  // Map over respondents directly
+  const data = respondents?.map((respondent, index) => {
     const { age, gender, location } = parseDetails(respondent.details);
     return {
       id: index + 1,
@@ -68,11 +69,17 @@ const Respondents = () => {
       age,
       gender,
       location,
-      created_at: new Date(respondent.created_at).toLocaleDateString(),
+      created_at: respondent.created_at
+        ? new Date(respondent.created_at).toLocaleDateString()
+        : 'N/A',
     };
   }) || [];
 
   const reactTableData = { tableHeaderData: columns, tableRowsData: data };
+
+  console.log('react table data: ', reactTableData);
+  console.log('data: ', data);
+  console.log('respondents: ', respondents);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
