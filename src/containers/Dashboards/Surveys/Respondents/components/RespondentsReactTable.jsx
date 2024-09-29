@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import ReactTableBase from '@/shared/components/table/ReactTableBase';
@@ -9,6 +9,12 @@ import {
 
 const RespondentsReactTable = ({ reactTableData }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
+
+  // Update rows when reactTableData changes (i.e., when the API data comes in)
+  useEffect(() => {
+    setData(reactTableData.tableRowsData);
+  }, [reactTableData.tableRowsData]);
+
   const [withPagination, setWithPaginationTable] = useState(true);
   const [isSortable, setIsSortable] = useState(false);
   const [withSearchEngine, setWithSearchEngine] = useState(false);
@@ -44,7 +50,7 @@ const RespondentsReactTable = ({ reactTableData }) => {
     withPagination,
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search by First name...',
+    placeholder: 'Search by Email...',
   };
 
   return (
