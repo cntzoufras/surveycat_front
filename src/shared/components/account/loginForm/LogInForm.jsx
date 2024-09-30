@@ -57,9 +57,9 @@ const LogInForm = ({
               className="input-without-border-radius"
               keyIcon
             />
-            <AccountForgotPassword>
-              <NavLink to="/reset_password">Forgot a password?</NavLink>
-            </AccountForgotPassword>
+            {/* <AccountForgotPassword>
+                <NavLink to="/reset_password">Forgot a password?</NavLink>
+              </AccountForgotPassword> */}
           </FormGroupField>
         </FormGroup>
         <FormGroup>
