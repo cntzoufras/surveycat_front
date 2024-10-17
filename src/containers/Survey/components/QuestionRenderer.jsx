@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import {
   Radio, Checkbox, FormControlLabel, List, ListItem, 
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const QuestionRenderer = ({ question, onAnswerChange }) => {
+  const theme = useTheme();
+  const textColor = theme.palette.mode === 'dark' ? '#efefef' : '#252525'; // Set text color based on theme
+
   if (!question) return null;
 
   const { 
@@ -36,7 +40,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedOption === choice.content}
                   />
                 )}
-                label={choice.content}
+                label={<span style={{ color: textColor }}>{choice.content}</span>} // Apply text color
               />
             </ListItem>
           ))}
@@ -57,7 +61,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedOption?.includes(choice.id) || false}
                   />
                 )}
-                label={choice.content}
+                label={<span style={{ color: textColor }}>{choice.content}</span>} // Apply text color
               />
             </ListItem>
           ))}

@@ -1,25 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { 
   Box as MuiBox, 
   Typography as MuiTypography, 
   List as MuiList, 
 } from '@mui/material';
-import { fetchAllSurveyQuestionsWithChoices } from '@/redux/actions/surveyActions';
 import QuestionItem from './QuestionItem';
 
 const QuestionList = ({ questions, onDelete, onResponseChange }) => {
-  const dispatch = useDispatch();
-  const { surveyId } = useParams();
-
-  useEffect(() => {
-    if (surveyId) {
-      dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-    }
-  }, [dispatch, surveyId]);
-
   if (!questions || questions.length === 0) {
     return (
       <div>
