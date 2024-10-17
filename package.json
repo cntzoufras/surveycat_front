@@ -30,7 +30,7 @@
     "@mui/material": "^5.16.6",
     "@popperjs/core": "^2.11.6",
     "@react-google-maps/api": "^2.18.1",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "bootstrap": "^5.2.3",
     "chart.js": "^2.9.4",
     "customize-cra": "^1.0.0",
