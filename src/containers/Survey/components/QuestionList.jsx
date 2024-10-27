@@ -25,13 +25,13 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
       <MuiList>
         {questions.map((question, index) => (
           <QuestionItem
-            key={question.id}
+            key={question.id} // Ensure `id` is unique
             question={question}
             index={index}
             onDelete={onDelete}
             onResponseChange={onResponseChange}
           />
-        ))}
+        ))}      
       </MuiList>
     </MuiBox>
   );
