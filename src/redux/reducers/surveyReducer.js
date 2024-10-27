@@ -375,8 +375,7 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         questions: questionExists
-          ? state.questions.map(question => (question.id === action.payload.id ? action.payload : question),
-            )
+          ? state.questions.map(question => (question.id === action.payload.id ? action.payload : question))
           : [...state.questions, action.payload],
       };
     }    

@@ -283,6 +283,7 @@ AddQuestionModal.propTypes = {
     title: PropTypes.string,
   })).isRequired,
   currentSurveyPageId: PropTypes.string,
+  surveyId: PropTypes.string.isRequired,
 };
 
 AddQuestionModal.defaultProps = {

@@ -28,7 +28,7 @@ const show = (showNotification, position) => showNotification({
           color: textColor,
           padding: '15px',
           borderRadius: '10px',
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',  // Add subtle shadow
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.2)',
         }}
       />
     );
