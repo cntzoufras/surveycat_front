@@ -367,11 +367,6 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
       };
-    // case UPDATE_QUESTIONS: // in design, after question is added
-    //   return {
-    //     ...state,
-    //     questions: [...state.questions, action.payload], // Append the new question
-    //   };
     case UPDATE_QUESTIONS: {
       const questionExists = state.questions.some(
         question => question.id === action.payload.id,

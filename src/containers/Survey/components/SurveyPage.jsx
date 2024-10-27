@@ -98,7 +98,7 @@ const SurveyPage = () => {
   }, [surveyData?.survey_pages, surveyData?.layout]);
 
   useEffect(() => {
-    if (surveyQuestions.length > 0 && surveyPageId) {
+    if (surveyPageId) {
       const filteredQuestions = surveyQuestions.filter(
         question => question.survey_page_id === surveyPageId,
       );
@@ -446,6 +446,7 @@ const SurveyPage = () => {
           surveyPages={surveyPages}
           currentSurveyPageId={surveyPages[currentPageIndex]?.id}
           onAddNewPage={handleAddNewPage}
+          surveyId={surveyId}
         />
         <ConfirmPublishModal
           open={isPublishModalOpen}

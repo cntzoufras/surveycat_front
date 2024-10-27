@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { 
   createSurveyQuestionAction,
-  createSurveyQuestionChoicesAction, 
+  createSurveyQuestionChoicesAction,
+  fetchSurveyQuestionsAction,
+  fetchAllSurveyQuestionsWithChoices,
 } from '@/redux/actions/surveyActions';
 import OptionInputList from './OptionInputList';
 
@@ -13,6 +15,7 @@ const AddQuestionModal = ({
   onClose, 
   surveyPages = [], 
   currentSurveyPageId,
+  surveyId,
 }) => {
   const dispatch = useDispatch();
 
@@ -104,24 +107,17 @@ const AddQuestionModal = ({
       // Create the question
       const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
   
-      let choicesResponse = [];
       if (questionType === '1' || questionType === '2') {
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
           survey_question_id: newQuestionResponse.id,
         }));
-        choicesResponse = await dispatch(createSurveyQuestionChoicesAction(choicesData));
+        await dispatch(createSurveyQuestionChoicesAction(choicesData));
       }
   
-      // Dispatch a single action to update Redux with the question and choices
-      dispatch({
-        type: 'UPDATE_QUESTIONS',
-        payload: {
-          ...newQuestionResponse,
-          choices: choicesResponse,
-        },
-      });
+      // Refetch the updated list of questions
+      await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
   
       onClose();
       setValidationErrors({});
@@ -132,7 +128,7 @@ const AddQuestionModal = ({
       }
     }
   };
-
+  
 
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
