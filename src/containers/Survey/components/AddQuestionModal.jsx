@@ -97,43 +97,32 @@ const AddQuestionModal = ({
       question_tags: JSON.stringify(selectedQuestionTags),
       is_required: isRequired,
       question_type_id: questionType,
-      additional_settings: {
-        // color: '#7ec8e3',
-        // align: 'center',
-        // font_style: 'none',
-        // font_family: 'Calibri',
-        // font_size: '9',
-      },
+      additional_settings: {},
     };
-
+  
     try {
-      // Dispatching the action to create the question
+      // Create the question
       const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
-
-      if (questionType === '1' || questionType === '2') { 
+  
+      let choicesResponse = [];
+      if (questionType === '1' || questionType === '2') {
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
           survey_question_id: newQuestionResponse.id,
         }));
-        const choicesResponse = await dispatch(createSurveyQuestionChoicesAction(choicesData));
-        
-        // Updating Redux with the new question and choices
-        dispatch({
-          type: 'UPDATE_QUESTIONS',
-          payload: {
-            ...newQuestionResponse,
-            choices: choicesResponse, // Assuming choicesResponse contains the created choices
-          },
-        });
-      } else {
-        // If no choices, just update with the question
-        dispatch({
-          type: 'UPDATE_QUESTIONS',
-          payload: newQuestionResponse,
-        });
+        choicesResponse = await dispatch(createSurveyQuestionChoicesAction(choicesData));
       }
-
+  
+      // Dispatch a single action to update Redux with the question and choices
+      dispatch({
+        type: 'UPDATE_QUESTIONS',
+        payload: {
+          ...newQuestionResponse,
+          choices: choicesResponse,
+        },
+      });
+  
       onClose();
       setValidationErrors({});
     } catch (error) {
@@ -143,6 +132,7 @@ const AddQuestionModal = ({
       }
     }
   };
+
 
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
