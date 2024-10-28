@@ -28,7 +28,7 @@ const WeeklyStatMobile = () => {
       xl={3}
       xs={12}
       title={t('app_dashboard.weekly_stat_mobile')}
-      subhead="Top selling items statistic by last month"
+      subhead="Top participated surveys statistic by last month"
     >
       <DashboardWeeklyStatWrap>
         <DashboardWeeklyStatChart>

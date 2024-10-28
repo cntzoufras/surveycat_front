@@ -26,7 +26,7 @@ const SalesStatistic = () => {
       xl={3}
       xs={12}
       title={t('online_marketing_dashboard.sales_statistic')}
-      subhead="Top selling items statistic by last month"
+      subhead="Top participated surveys statistic by last month"
     >
       <DashboardStatWrap>
         <DashboardStatChartWrap>
@@ -36,9 +36,9 @@ const SalesStatistic = () => {
           <DashboardStatLabel style={{ color: '#4ce1b6' }}>80%</DashboardStatLabel>
         </DashboardStatChartWrap>
         <DashboardStatInfo>
-          <p>Top selling items statistic by last month</p>
+          <p>Top participated surveys statistic by last month</p>
           <DashboardStatNumber>
-            $23,747.00
+            23,747.00
           </DashboardStatNumber>
         </DashboardStatInfo>
       </DashboardStatWrap>
@@ -50,9 +50,9 @@ const SalesStatistic = () => {
           <DashboardStatLabel style={{ color: '#ff4861' }}>50%</DashboardStatLabel>
         </DashboardStatChartWrap>
         <DashboardStatInfo>
-          <p>Top selling items statistic by last month</p>
+          <p>Top participated surveys statistic by last month</p>
           <DashboardStatNumber>
-            $23,747.00
+            23,747.00
           </DashboardStatNumber>
         </DashboardStatInfo>
       </DashboardStatWrap>
