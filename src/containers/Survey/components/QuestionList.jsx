@@ -11,7 +11,7 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
   if (!questions || questions.length === 0) {
     return (
       <div>
-        <h2>Questions</h2>
+        <h2>Survey Questions</h2>
         <p>No questions available.</p>
       </div>
     );
@@ -20,7 +20,7 @@ const QuestionList = ({ questions, onDelete, onResponseChange }) => {
   return (
     <MuiBox sx={{ marginBottom: 4 }}>
       <MuiTypography variant="h6" sx={{ fontWeight: 300 }} gutterBottom>
-        Questions
+        Survey Questions
       </MuiTypography>
       <MuiList>
         {questions.map((question, index) => (
