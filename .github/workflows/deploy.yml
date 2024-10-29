@@ -1,4 +1,4 @@
-name: Deploy Surveycat React front React with Nginx
+name: Deploy Surveycat React front with Nginx
 
 on:
   push:
@@ -9,11 +9,11 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 3.24
+      IMAGE_VERSION: 3.25  # Update this version with each deploy to ensure a fresh image
       REACT_APP_API_URL: https://snf-893977.vm.okeanos.grnet.gr/api
       REACT_APP_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr
       REACT_APP_IMAGE_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr/images
-      NODE_ENV: production  # Add this line to specify production mode
+      NODE_ENV: production
 
     steps:
     - name: Checkout code
@@ -29,15 +29,6 @@ jobs:
         chmod 600 ~/.ssh/deploy_key
         ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
 
-    # Cache Docker layers
-    # - name: Cache Docker layers
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: /tmp/.buildx-cache
-    #     key: ${{ runner.os }}-buildx-${{ github.sha }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-buildx-
-    
     - name: Install Docker Compose
       run: |
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -48,29 +39,26 @@ jobs:
       run: |
         echo "${{ secrets.SURVEYCAT_FRONT_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
         
-        # Build the Docker image
-        docker-compose -f docker-compose.prod.yml build --no-cache --build-arg IMAGE_VERSION=$IMAGE_VERSION --build-arg REACT_APP_API_URL=$REACT_APP_API_URL --build-arg REACT_APP_BASE_URL=$REACT_APP_BASE_URL --build-arg REACT_APP_IMAGE_BASE_URL=$REACT_APP_IMAGE_BASE_URL --build-arg NODE_ENV=production
+        # Build the Docker image with updated version
+        docker-compose -f docker-compose.prod.yml build --no-cache \
+          --build-arg IMAGE_VERSION=$IMAGE_VERSION \
+          --build-arg REACT_APP_API_URL=$REACT_APP_API_URL \
+          --build-arg REACT_APP_BASE_URL=$REACT_APP_BASE_URL \
+          --build-arg REACT_APP_IMAGE_BASE_URL=$REACT_APP_IMAGE_BASE_URL \
+          --build-arg NODE_ENV=production
           
         # Tag and push the image to Docker Hub
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
-      env:
-          IMAGE_VERSION: 3.24
-    
-    # - name: Create .env file (Post Build)
-    #   run: |
-    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api" > .env'
-    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr" >> .env'
-    #     ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr 'cd /var/www/surveycat_front && echo "REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images" >> .env'
 
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
-          export IMAGE_VERSION=3.24 && \
+          export IMAGE_VERSION=$IMAGE_VERSION && \
           cd /var/www/surveycat_front && \
           docker-compose -f docker-compose.prod.yml down --volumes && \
           docker-compose -f docker-compose.prod.yml pull nginx && \
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 3.24
+          IMAGE_VERSION: 3.25
