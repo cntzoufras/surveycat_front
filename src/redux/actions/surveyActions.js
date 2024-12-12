@@ -322,7 +322,7 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
   dispatch({ type: DELETE_SURVEY_PAGE_REQUEST });
 
   try {
-    await api.delete(`/api/survey-pages/${surveyPageId}`);
+    await api.delete(`/survey-pages/${surveyPageId}`);
 
     // Fetch the updated survey to get the pages after deletion
     await dispatch(fetchSurveyAction(surveyId));
