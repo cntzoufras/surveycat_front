@@ -322,26 +322,28 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
   dispatch({ type: DELETE_SURVEY_PAGE_REQUEST });
 
   try {
+    // Delete the survey page
     await api.delete(`/survey-pages/${surveyPageId}`);
 
     // Fetch the updated survey to get the pages after deletion
     await dispatch(fetchSurveyAction(surveyId));
 
-    // Get the updated survey pages from state
+    // Access the surveyPages directly from Redux state after the fetch
     const { surveyPages } = getState().survey;
 
-    // Find the survey page with the least sort_index
-    if (surveyPages.length > 0) {
+    // Redirect to the page with the least sort_index if it exists
+    if (surveyPages && surveyPages.length > 0) {
+      console.log(`Survey pages fetched: ${JSON.stringify(surveyPages)}`);
+
       const leastSortIndexPage = surveyPages.reduce(
-(minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage),
-       surveyPages[0],
-);
-      
-      window.location.href = `/surveys/${surveyId}/survey-pages/${leastSortIndexPage.id}`;
-    } else {
-      window.location.href = `/surveys/${surveyId}`;
+        (minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage),
+        surveyPages[0],
+      );
+
+      window.location.href = `/surveys/${surveyId}/pages/${leastSortIndexPage.id}`;
     }
 
+    // Dispatch success action for deletion
     dispatch({
       type: DELETE_SURVEY_PAGE_SUCCESS,
       payload: surveyPageId,
@@ -353,6 +355,7 @@ export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatc
     });
   }
 };
+
 
 export const publishSurveyAction = surveyId => async (dispatch) => {
   try {
