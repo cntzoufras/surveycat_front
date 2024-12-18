@@ -8,6 +8,11 @@ services:
       dockerfile: Dockerfile.prod
       # args:
         # - IMAGE_VERSION=${IMAGE_VERSION}
+      args:
+        - REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api
+        - REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr
+        - REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images
+        - NODE_ENV=production
     ports:
       - "80:80"
       - "443:443"
@@ -16,6 +21,12 @@ services:
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
       - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
       - ./nginx_logs:/var/log/nginx
+    environment:
+      - REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api
+      - REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr
+      - REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images
+      - NODE_ENV=production
+
     networks:
       - webnet
 
