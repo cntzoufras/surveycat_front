@@ -84,6 +84,7 @@ const RegisterForm = ({ onSubmit, errorMessage }) => (
               required
               placeholder="Name"
               className="input-without-border-radius"
+              data-cy="username"
             />
           </FormGroupField>
         </FormGroup>
@@ -101,6 +102,7 @@ const RegisterForm = ({ onSubmit, errorMessage }) => (
               required
               validate={composeValidators(required, mustBeEmail)}
               className="input-without-border-radius"
+              data-cy="email"
             />
           </FormGroupField>
         </FormGroup>
@@ -115,6 +117,7 @@ const RegisterForm = ({ onSubmit, errorMessage }) => (
               validate={validatePassword}
               required
               keyIcon
+              data-cy="password"
             />
           </FormGroupField>
           <FormGroupLabel>Repeat password</FormGroupLabel>
@@ -127,6 +130,7 @@ const RegisterForm = ({ onSubmit, errorMessage }) => (
               required
               validate={validateConfirmPassword}
               keyIcon
+              data-cy="r_password"
             />
           </FormGroupField>
         </ForgotFormGroup>

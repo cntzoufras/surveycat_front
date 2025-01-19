@@ -56,6 +56,7 @@ const LogInForm = ({
               placeholder="Password"
               className="input-without-border-radius"
               keyIcon
+              data-cy="password"
             />
             {/* <AccountForgotPassword>
                 <NavLink to="/reset_password">Forgot a password?</NavLink>
