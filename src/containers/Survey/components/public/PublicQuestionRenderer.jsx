@@ -25,7 +25,6 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
 
   return (
     <div>
-      <h4>{question.title}</h4>
 
       {/* Render Radio buttons for question type 1 (Multiple Choice) */}
       {question.question_type_id === 1 && Array.isArray(question.survey_question_choices) && (
@@ -42,6 +41,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                   />
                 )}
                 label={surveyQuestionChoice.content}
+                sx={{ color: '#252525' }} // Set text color to black
               />
             </ListItem>
           ))}

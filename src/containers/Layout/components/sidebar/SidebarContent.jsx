@@ -24,6 +24,7 @@ const SidebarContent = ({
         <SidebarLink title="Survey Themes" route="/themes" icon="picture" />
       </SidebarCategory>
     </SidebarBlock>
+    {/*
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Analytics" icon="database" collapse={collapse}>
         <SidebarLink title="Users" route="/users" icon="users" onClick={onClick} />
@@ -35,6 +36,7 @@ const SidebarContent = ({
         <SidebarLink title="Amcharts" route="/charts/amcharts" onClick={onClick} />
       </SidebarCategory>
     </SidebarBlock>
+    */}
     <SidebarBlock collapse={collapse}>
       <SidebarLink title="App Dashboard" icon="smartphone" route="/app_dashboard" onClick={onClick} />
       <SidebarLink title="Surveys Dashboard" icon="apartment" route="/surveys_dashboard" onClick={onClick} />
@@ -49,6 +51,7 @@ const SidebarContent = ({
         </SidebarNavLink> 
       </SidebarCategory>
     </SidebarBlock>
+    {/* 
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Layout" icon="layers" collapse={collapse}>
         <SidebarCategory title="Tables" icon="list" collapse={collapse}>
@@ -72,7 +75,9 @@ const SidebarContent = ({
           <SidebarLink title="Text Editor" route="/default_pages/text_editor" onClick={onClick} />
         </SidebarCategory>
       </SidebarCategory>
+      
     </SidebarBlock>
+    */}
     <SidebarBlock collapse={collapse}>
       <SidebarLink 
         title="Documentation"

@@ -24,10 +24,10 @@ const data02 = [{ value: 25, fill: '#ff4861' },
   { value: 75, fill: '#eeeeee' }];
 
 const social = [
-  { id: 0, social: 'Booking.com', progress: '87' },
-  { id: 1, social: 'Airbnb', progress: '65' },
-  { id: 2, social: 'Tripadvisor', progress: '92' },
-  { id: 3, social: 'Tripadvisor', progress: '81' },
+  { id: 2, social: 'Blog', progress: '67' },
+  { id: 3, social: 'Linkedin', progress: '18' },
+  { id: 0, social: 'Facebook', progress: '10' },
+  { id: 1, social: 'X (Twitter)', progress: '5' },
 ];
 
 const SocialScore = ({ children, progress }) => (
@@ -77,7 +77,7 @@ const WeeklyStat = () => {
               <DashboardWeeklyStatLabel style={{ color: '#b8e986' }}>78%</DashboardWeeklyStatLabel>
             </DashboardWeeklyStatChartPie>
             <DashboardWeeklyStatInfo>
-              <p>Survey satisfaction rate</p>
+              <p>Customer feedback</p>
             </DashboardWeeklyStatInfo>
           </DashboardWeeklyStatChartItem>
           <DashboardWeeklyStatChartItem>
@@ -97,7 +97,7 @@ const WeeklyStat = () => {
               <DashboardWeeklyStatLabel style={{ color: '#ff4861' }}>25%</DashboardWeeklyStatLabel>
             </DashboardWeeklyStatChartPie>
             <DashboardWeeklyStatInfo>
-              <p>Negative <br />feedback</p>
+              <p>Market <br />research</p>
             </DashboardWeeklyStatInfo>
           </DashboardWeeklyStatChartItem>
         </DashboardWeeklyStatChart>

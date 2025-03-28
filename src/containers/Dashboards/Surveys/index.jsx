@@ -7,7 +7,8 @@ import TotalSurveyResponses from './components/TotalSurveyResponses';
 import TotalSurveyParticipants from './components/TotalSurveyParticipants';
 import SurveyCompletionRate from './components/SurveyCompletionRate';
 import WeeklyStat from './components/WeeklyStat';
-import Occupancy from './components/Occupancy';
+import SurveyTracking from './components/SurveyTracking';
+import SurveyEngagement from './components/SurveyEngagement';
 
 const SurveysDashboard = () => {
   const { t } = useTranslation('common');
@@ -28,7 +29,9 @@ const SurveysDashboard = () => {
       <Row>
         <SurveyCompletionRate />
         <WeeklyStat />
-        <Occupancy />
+        <SurveyTracking />
+        <SurveyEngagement />
+
       </Row>
     </Container>
   );

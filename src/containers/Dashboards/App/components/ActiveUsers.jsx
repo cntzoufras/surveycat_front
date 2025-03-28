@@ -38,7 +38,7 @@ const ActiveUsers = () => {
       xl={9}
       md={12}
       title={t('app_dashboard.active_users')}
-      subhead="See how users involve into app"
+      subhead="7‐day activity trend” or “User activity in the past 7 days."
     >
       <div>
         <ResponsiveContainer height={195} className="dashboard__active-users-chart">

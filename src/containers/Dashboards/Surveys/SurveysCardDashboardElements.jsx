@@ -31,7 +31,7 @@ export const DashboardBookingTotalWrap = styled.div`
   align-items: flex-end;
 `;
 
-export const DashboardBookingTitle = styled.h5`
+export const TotalSurveysCreatedTitle = styled.h5`
   direction: ltr;
   font-size: 28px;
   font-weight: 500;

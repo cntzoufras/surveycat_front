@@ -7,7 +7,7 @@ import { colorBlue, colorRed } from '@/utils/palette'; // Added colorRed for ina
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
-  DashboardBookingTitle,
+  TotalSurveysCreatedTitle,
   DashboardBookingTotalWrap,
 } from '../SurveysCardDashboardElements';
 
@@ -19,16 +19,16 @@ const SurveysStatus = () => (
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
-          <DashboardBookingTitle color={colorBlue}>
+          <TotalSurveysCreatedTitle color={colorBlue}>
             {totalActiveSurveys} Active
-          </DashboardBookingTitle>
+          </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
         
         <DashboardBookingTotalWrap>
-          <DashboardBookingTitle color={colorRed}>
+          <TotalSurveysCreatedTitle color={colorRed}>
             {totalInactiveSurveys} Inactive
-          </DashboardBookingTitle>
+          </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
 

@@ -32,22 +32,22 @@
   },
   "app_dashboard": {
     "page_title": "App Dashboard",
-    "current_users": "Current Users",
-    "active_users": "Active Users",
-    "widget_sessions": "Sessions",
+    "current_users": "Concurrent Users (Last 10 Min)",
+    "active_users": "Active Users Over Time",
+    "widget_sessions": "Sessions (This Week)",
     "widget_active_users": "Active Users",
-    "widget_new_users": "New Users",
-    "widget_pageviews": "Pageviews",
-    "app_tile_clicks": "App Tile Clicks",
-    "weekly_stat_mobile": "Weekly Stat",
+    "widget_new_users": "New Registrations",
+    "widget_pageviews": "Page Views",
+    "app_tile_clicks": "Feature Usage",
+    "weekly_stat_mobile": "Top Survey Topics",
     "social_marketing_mobile": "Social Marketing"
   },
   "surveys_dashboard": {
     "page_title": "Surveys Dashboard",
-    "survey_completion_rate": "Survey Completion Rate",
-    "weekly_stat": "Weekly stat",
-    "social_score": "Social score",
-    "occupancy": "Occupancy"
+    "survey_completion_rate": "Survey Completion Overview",
+    "weekly_stat": "Top Survey Topics",
+    "social_score": "Social Media Stats",
+    "survey_tracking": "SurveyTracking"
   },
   "survey_submissions": {
     "title": "Survey Submissions"

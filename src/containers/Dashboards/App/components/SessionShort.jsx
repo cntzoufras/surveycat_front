@@ -22,13 +22,13 @@ const SessionShort = () => {
         <DashboardWidgetCard>
           <div>
             <MobileAppWidgetLine>
-              <MobileAppWidgetStat color="#ff4861">17 148</MobileAppWidgetStat>
+              <MobileAppWidgetStat color="turquoise">17 148</MobileAppWidgetStat>
               <MobileWidgetIconDown />
             </MobileAppWidgetLine>
             <MobileAppWidgetTitle>
               <h5>{t('app_dashboard.widget_sessions')}</h5>
             </MobileAppWidgetTitle>
-            <ProgressBar now={87} label="87%" top size="small" gradient="pink" />
+            <ProgressBar now={87} label="87%" top size="small" gradient="turquoise" />
           </div>
         </DashboardWidgetCard>
       </Card>

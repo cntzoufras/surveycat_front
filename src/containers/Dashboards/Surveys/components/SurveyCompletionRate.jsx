@@ -17,9 +17,9 @@ import { DashboardChartLegend } from '../../BasicDashboardComponents';
 const data = [{
   id: 0, name: 'Completed', value: 2500, fill: '#b8e986',
 }, {
-  id: 1, name: 'Online check-in', value: 2500, fill: '#4ce1b6',
+  id: 1, name: 'Did not finish', value: 2500, fill: '#4ce1b6',
 }, {
-  id: 2, name: 'Remain', value: 5000, fill: '#f2f4f7',
+  id: 2, name: 'Did not start', value: 5000, fill: '#f2f4f7',
 }];
 
 const renderLegend = ({ payload }) => (
@@ -69,8 +69,8 @@ const SurveyCompletionRate = () => {
       xl={3}
       md={12}
       title={t('surveys_dashboard.survey_completion_rate')}
-      subhead="Survey Completion overview"
-      before={<OurMission />}
+      subhead="Total progress for all surveys"
+      
     >
       <DashboardReservationsWrap>
         <DashboardReservationsTitle>Total Surveys completed on {todayDate}</DashboardReservationsTitle>

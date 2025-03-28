@@ -7,7 +7,7 @@ import { colorGreen } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
-  DashboardBookingTitle,
+  TotalSurveysCreatedTitle,
   DashboardBookingTotalWrap,
 } from '../SurveysCardDashboardElements';
 
@@ -16,12 +16,12 @@ const TotalSurveyResponses = () => (
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
-          <DashboardBookingTitle color={colorGreen}>
+          <TotalSurveysCreatedTitle color={colorGreen}>
             1 472
-          </DashboardBookingTitle>
+          </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
-        <DashboardBookingDescription>Total Survey Responses</DashboardBookingDescription>
+        <DashboardBookingDescription>Monthly Submissions</DashboardBookingDescription>
         <ProgressBar now={32} label="32%" rounded size="small" gradient="lime" top />
       </DashboardBookingCard>
     </Card>

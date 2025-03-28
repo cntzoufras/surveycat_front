@@ -6,7 +6,7 @@ import { Card } from '@/shared/components/Card';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
-  DashboardBookingTitle,
+  TotalSurveysCreatedTitle,
   DashboardBookingTotalWrap,
 } from '../SurveysCardDashboardElements';
 
@@ -15,10 +15,10 @@ const TotalSurveyParticipants = () => (
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
-          <DashboardBookingTitle>34</DashboardBookingTitle>
+          <TotalSurveysCreatedTitle>34</TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
-        <DashboardBookingDescription>Total Survey Participants</DashboardBookingDescription>
+        <DashboardBookingDescription>Participants Overview<br />weekly progress</DashboardBookingDescription>
         <ProgressBar now={65} label="65%" rounded size="small" gradient="pink" top />
       </DashboardBookingCard>
     </Card>

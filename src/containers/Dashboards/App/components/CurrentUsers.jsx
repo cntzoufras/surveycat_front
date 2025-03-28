@@ -18,7 +18,7 @@ const CurrentUsers = () => {
       xl={3}
       md={12}
       title={t('app_dashboard.current_users')}
-      subhead="Last 10 minutes"
+      subhead="Real‐time usage in the last 10 minutes"
     >
       <DashboardUsersWrap>
         <DashboardUsersChartWrap>

@@ -10,7 +10,7 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
  mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px', 
 }}
     >
-      <Typography variant="h6">
+      <Typography color="#252525" variant="h6">
         {`${index + 1}. ${question.title}`}
       </Typography>
 
