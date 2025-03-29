@@ -10,11 +10,21 @@ import {
 import Panel from '@/shared/components/Panel';
 
 const engagementData = [
-  { name: 'Week 1', Viewed: 120, Started: 100, Completed: 80 },
-  { name: 'Week 2', Viewed: 150, Started: 130, Completed: 90 },
-  { name: 'Week 3', Viewed: 180, Started: 160, Completed: 110 },
-  { name: 'Week 4', Viewed: 200, Started: 170, Completed: 140 },
-  { name: 'Week 5', Viewed: 175, Started: 150, Completed: 120 },
+  { 
+    name: 'Week 1', Viewed: 120, Started: 100, Completed: 80,
+  },
+  { 
+    name: 'Week 2', Viewed: 150, Started: 130, Completed: 90,
+  },
+  {
+    name: 'Week 3', Viewed: 180, Started: 160, Completed: 110,
+  },
+  { 
+    name: 'Week 4', Viewed: 200, Started: 170, Completed: 140,
+  },
+  { 
+    name: 'Week 5', Viewed: 175, Started: 150, Completed: 120,
+  },
 ];
 
 const SurveyEngagement = ({ dir }) => {

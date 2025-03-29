@@ -171,20 +171,14 @@ const SurveyTracking = ({ dir }) => {
               orientation={dir === 'rtl' ? 'right' : 'left'}
             />
             <Tooltip
-              content={
+              content={(
                 <OccupancyTooltipContent
                   colorForKey={{ inProgress: '#555555' }}
                   theme={themeName}
                 />
-              }
+              )}
             />
             <CartesianGrid vertical={false} />
-            {/* 
-               Renamed chart lines:
-               "In-progress" (bar) => dataKey="inProgress"
-               "Drop-offs" (line) => dataKey="dropOffs"
-               "Views" (line) => dataKey="views"
-            */}
             <Bar dataKey="inProgress" name="In-progress" fill="#f2f4f7" barSize={20} />
             <Line type="linear" name="Drop-offs" dataKey="dropOffs" stroke="#b8e986" />
             <Line type="linear" name="Views" dataKey="views" stroke="#48b5ff" />
