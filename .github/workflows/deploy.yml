@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 3.40
+      IMAGE_VERSION: 3.41
       REACT_APP_API_URL: https://snf-893977.vm.okeanos.grnet.gr/api
       REACT_APP_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr
       REACT_APP_IMAGE_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr/images
