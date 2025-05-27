@@ -50,7 +50,8 @@
     "survey_tracking": "SurveyTracking"
   },
   "survey_submissions": {
-    "title": "Survey Submissions"
+    "title": "Survey Submissions",
+    "description": "View all submissions made by respondents"
   },
   "respondents": {
     "title": "Respondents",

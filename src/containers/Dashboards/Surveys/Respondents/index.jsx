@@ -51,7 +51,6 @@ const Respondents = () => {
     [],
   );
 
-  // Helper function to parse details JSON
   const parseDetails = (details) => {
     try {
       return JSON.parse(details);

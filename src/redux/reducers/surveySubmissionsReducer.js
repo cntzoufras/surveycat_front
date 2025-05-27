@@ -1,11 +1,11 @@
 import {
-  FETCH_RESPONDENTS_REQUEST,
-  FETCH_RESPONDENTS_SUCCESS,
-  FETCH_RESPONDENTS_FAILURE,
-} from '../actions/respondentsActions';
+  FETCH_SUBMISSIONS_REQUEST,
+  FETCH_SUBMISSIONS_SUCCESS,
+  FETCH_SUBMISSIONS_FAILURE,
+} from '../actions/surveySubmissionsActions';
 
 const initialState = {
-  respondents: [],
+  survey_submissions: [],
   loading: false,
   error: null,
   currentPage: 1,
@@ -15,26 +15,26 @@ const initialState = {
   perPage: 10,
 };
 
-const respondentsReducer = (state = initialState, action) => {
+const surveySubmissionsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_RESPONDENTS_REQUEST:
+    case FETCH_SUBMISSIONS_REQUEST:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case FETCH_RESPONDENTS_SUCCESS:
+    case FETCH_SUBMISSIONS_SUCCESS:
       return {
         ...state,
         loading: false,
-        respondents: action.payload.data,
+        survey_submissions: action.payload.data,
         currentPage: action.payload.current_page,
         totalPages: action.payload.last_page,
         nextPage: action.payload.next_page_url,
         prevPage: action.payload.prev_page_url,
-        perPage: action.payload.per_page || state.perPage, // Set per_page from payload
+        perPage: action.payload.per_page || state.perPage,
       };
-    case FETCH_RESPONDENTS_FAILURE:
+    case FETCH_SUBMISSIONS_FAILURE:
       return {
         ...state,
         loading: false,
@@ -45,4 +45,4 @@ const respondentsReducer = (state = initialState, action) => {
   }
 };
 
-export default respondentsReducer;
+export default surveySubmissionsReducer;
