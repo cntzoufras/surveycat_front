@@ -8,9 +8,22 @@ export const CREATE_SURVEY_SUCCESS = 'CREATE_SURVEY_SUCCESS';
 export const CREATE_SURVEY_FAIL = 'CREATE_SURVEY_FAIL';
 export const CREATE_SURVEY_PAGE_SUCCESS = 'CREATE_SURVEY_PAGE_SUCCESS';
 export const CREATE_SURVEY_PAGE_FAIL = 'CREATE_SURVEY_PAGE_FAIL';
+export const CREATE_SURVEY_RESPONSE_REQUEST = 'CREATE_SURVEY_RESPONSE_REQUEST';
+export const CREATE_SURVEY_RESPONSE_SUCCESS = 'CREATE_SURVEY_RESPONSE_SUCCESS';
+export const CREATE_SURVEY_RESPONSE_FAILURE = 'CREATE_SURVEY_RESPONSE_FAILURE';
+export const UPDATE_SURVEY_RESPONSE_REQUEST = 'UPDATE_SURVEY_RESPONSE_REQUEST';
+export const UPDATE_SURVEY_RESPONSE_SUCCESS = 'UPDATE_SURVEY_RESPONSE_SUCCESS';
+export const UPDATE_SURVEY_RESPONSE_FAILURE = 'UPDATE_SURVEY_RESPONSE_FAILURE';
+export const SAVE_FOLLOW_UP_REQUEST = 'SAVE_FOLLOW_UP_REQUEST';
+export const SAVE_FOLLOW_UP_SUCCESS = 'SAVE_FOLLOW_UP_SUCCESS';
+export const SAVE_FOLLOW_UP_FAILURE = 'SAVE_FOLLOW_UP_FAILURE';
 
 export const ADD_SURVEY_PAGE_SUCCESS = 'ADD_SURVEY_PAGE_SUCCESS';
 export const ADD_SURVEY_PAGE_FAIL = 'ADD_SURVEY_PAGE_FAIL';
+
+export const FETCH_QUESTION_TYPES_REQUEST = 'FETCH_QUESTION_TYPES_REQUEST';
+export const FETCH_QUESTION_TYPES_SUCCESS = 'FETCH_QUESTION_TYPES_SUCCESS';
+export const FETCH_QUESTION_TYPES_FAILURE = 'FETCH_QUESTION_TYPES_FAILURE';
 
 export const FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST = 'FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST';
 export const FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS = 'FETCH_SURVEY_QUESTIONS_WITH_CHOICES_SUCCESS';
@@ -67,6 +80,25 @@ export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 export const FETCH_PUBLIC_SURVEY_REQUEST = 'FETCH_PUBLIC_SURVEY_REQUEST';
 export const FETCH_PUBLIC_SURVEY_SUCCESS = 'FETCH_PUBLIC_SURVEY_SUCCESS';
 export const FETCH_PUBLIC_SURVEY_FAILURE = 'FETCH_PUBLIC_SURVEY_FAILURE';
+
+// Action to load all question types
+export const fetchQuestionTypesAction = () => async dispatch => {
+  dispatch({ type: FETCH_QUESTION_TYPES_REQUEST });
+  try {
+    // adjust endpoint to your real question‐types URL
+    const response = await api.get('/question-types');
+    // assume the array is in response.data.data
+    dispatch({
+      type: FETCH_QUESTION_TYPES_SUCCESS,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: FETCH_QUESTION_TYPES_FAILURE,
+      payload: error.message || 'Failed to load question types'
+    });
+  }
+};
 
 export const fetchAllSurveyQuestionsWithChoices = surveyId => async (dispatch) => {
   dispatch({ type: FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST });
@@ -187,6 +219,66 @@ export const fetchPublicSurveyBySlugAction = surveySlug => async (dispatch) => {
       type: FETCH_PUBLIC_SURVEY_FAILURE,
       payload: error.message,
     });
+  }
+};
+
+export const createSurveyResponseAction = (surveyId, meta) => async dispatch => {
+  dispatch({ type: CREATE_SURVEY_RESPONSE_REQUEST });
+  try {
+    const response = await api.post('/survey-responses', {
+      survey_id: surveyId,
+      started_at: meta.started_at,
+      device: meta.device,
+      session_id: meta.session_id,
+    });
+    dispatch({
+      type: CREATE_SURVEY_RESPONSE_SUCCESS,
+      payload: response.data.data
+    });
+    return response.data; // returns the created record
+  } catch (err) {
+    dispatch({
+      type: CREATE_SURVEY_RESPONSE_FAILURE,
+      payload: err.message,
+    });
+    throw err;
+  }
+};
+
+export const updateSurveyResponseAction = (responseId, updates) => async dispatch => {
+  dispatch({ type: UPDATE_SURVEY_RESPONSE_REQUEST });
+  try {
+    const resp = await api.patch(`/survey-responses/${responseId}`, updates);
+    dispatch({
+      type: UPDATE_SURVEY_RESPONSE_SUCCESS,
+      payload: resp.data,
+    });
+    return resp.data;
+  } catch (err) {
+    dispatch({
+      type: UPDATE_SURVEY_RESPONSE_FAILURE,
+      payload: err.message,
+    });
+    throw err;
+  }
+};
+
+export const saveFollowUpDetailsAction = (responseId, details) => async (dispatch) => {
+  dispatch({ type: SAVE_FOLLOW_UP_REQUEST });
+  try {
+    // we simply reuse your PUT endpoint to store email + gender
+    const resp = await api.put(`/survey-responses/${responseId}`, details);
+    dispatch({
+      type: SAVE_FOLLOW_UP_SUCCESS,
+      payload: resp.data,
+    });
+    return resp.data;
+  } catch (err) {
+    dispatch({
+      type: SAVE_FOLLOW_UP_FAILURE,
+      payload: err.message,
+    });
+    throw err;
   }
 };
 
@@ -369,12 +461,18 @@ export const publishSurveyAction = surveyId => async (dispatch) => {
 };
 
 export const submitSurveySubmissionAction = (surveyId, submissionData) => async (dispatch) => {
-  const data = JSON.stringify(submissionData);
+  // eslint-disable-next-line camelcase
+  const { survey_response_id, ...rest } = submissionData;
+  const data = JSON.stringify(rest);
+  
   try {
-    const response = await api.post(
-'/survey-submissions', 
-    { survey_id: surveyId, submission_data: data },
-);
+    const response = await api.post('/survey-submissions', { 
+      survey_id: surveyId, 
+      // survey_response_id: submissionData.survey_response_id, 
+      // eslint-disable-next-line camelcase
+      survey_response_id,
+      submission_data: data,
+    });
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
     return {

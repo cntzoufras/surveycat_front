@@ -1,3 +1,5 @@
+// src/containers/Survey/components/QuestionItem.jsx
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -11,31 +13,42 @@ import {
   DialogTitle,
   Button,
 } from '@mui/material';
+import { useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
-import questionTypeNames from '../../../utils/api/questionTypes';
+import questionTypeNames from '../../../utils/api/questionTypes'; // fallback map
 import QuestionRenderer from './QuestionRenderer';
 
 const QuestionItem = ({
-  question, index, onDelete, onResponseChange,
+  question,
+  index,
+  onDelete,
+  onResponseChange,
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  
-  const questionTypeName = questionTypeNames[question.question_type_id] || 'Unknown Type';
+
+  // Grab the array of question‐types from Redux
+  const questionTypes = useSelector(state => state.survey.questionTypes || []);
+
+  // Find the matching type object
+  const typeObj = questionTypes.find(qt => qt.id === question.question_type_id);
+
+  // If API hasn't loaded yet, fall back to your static map
+  const questionTypeName = typeObj
+    ? typeObj.title
+    : (questionTypeNames[question.question_type_id] || 'Unknown Type');
 
   const handleAnswerChange = (questionId, value) => {
     if (onResponseChange) {
       onResponseChange(questionId, value);
     }
   };
-  
+
   const handleDeleteClick = () => {
     setDialogOpen(true);
   };
 
   const handleConfirmDelete = () => {
-    if (onDelete) {
-      onDelete(question.id);
-    }
+    if (onDelete) onDelete(question.id);
     setDialogOpen(false);
   };
 
@@ -47,33 +60,44 @@ const QuestionItem = ({
     <Box
       key={question.id}
       sx={{
-        mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px',
+        mb: 2,
+        p: 2,
+        border: '1px solid #ccc',
+        borderRadius: 1,
       }}
     >
-      <Typography variant="h6">
-        {`${index + 1}. ${question.title} (${questionTypeName})`}
+      <Typography variant="h6" gutterBottom>
+        {`${index + 1}. ${question.title}`}
+        {questionTypeName && ` (${questionTypeName})`}
       </Typography>
-      
-      <QuestionRenderer 
-        question={question} 
-        onAnswerChange={handleAnswerChange} 
+
+      <QuestionRenderer
+        question={question}
+        onAnswerChange={handleAnswerChange}
       />
 
       {onDelete && (
         <>
-          <IconButton edge="end" aria-label="delete" onClick={handleDeleteClick}>
+          <IconButton
+            edge="end"
+            aria-label="delete"
+            onClick={handleDeleteClick}
+            sx={{ mt: 1 }}
+          >
             <DeleteIcon />
           </IconButton>
 
           <Dialog
             open={isDialogOpen}
             onClose={handleCancelDelete}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby="confirm-delete-title"
+            aria-describedby="confirm-delete-description"
           >
-            <DialogTitle id="alert-dialog-title">Confirm Delete</DialogTitle>
+            <DialogTitle id="confirm-delete-title">
+              Confirm Delete
+            </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContentText id="confirm-delete-description">
                 Are you sure you want to delete this question?
               </DialogContentText>
             </DialogContent>
@@ -97,9 +121,7 @@ QuestionItem.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     question_type_id: PropTypes.number.isRequired,
-    survey_id: PropTypes.string.isRequired, 
-    options: PropTypes.arrayOf(PropTypes.string),
-    selectedOptions: PropTypes.arrayOf(PropTypes.string),
+    survey_id: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,
   onDelete: PropTypes.func,

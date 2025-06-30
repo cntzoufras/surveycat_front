@@ -14,7 +14,9 @@ import {
   Grid as MuiGrid,
   IconButton as MuiIconButton,
   Tooltip,
+  Link as MuiLink,
 } from '@mui/material';
+import LaunchIcon from '@mui/icons-material/Link';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Delete } from '@mui/icons-material';
@@ -71,6 +73,7 @@ const SurveyPage = () => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const currentPageIndexRef = useRef(currentPageIndex);
   const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
+  const isPublished = Boolean(surveyData?.public_link);
 
   useEffect(() => {
     if (!user?.id) {
@@ -336,7 +339,7 @@ const SurveyPage = () => {
             alignItems: 'center',
           }}
         >
-          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>
+          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
             Select Stock Survey
           </MuiTypography>
           <MuiSelect 
@@ -395,7 +398,7 @@ const SurveyPage = () => {
             alignItems: 'center',
           }}
         >
-          <MuiTypography variant="h6" sx={{ fontWeight: 300 }}>
+          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
             Select Layout
           </MuiTypography>
           <MuiSelect
@@ -417,27 +420,78 @@ const SurveyPage = () => {
             fontWeight="300"
             variant="body1"
             align="justify"
-            sx={{ whiteSpace: 'pre-line', mt: 2 }}
+            sx={{ whiteSpace: 'pre-line', mt: 1 }}
           >
             {localSurveyDescription || 'Survey Description'}
           </MuiTypography>
         </MuiBox>
+        
+        <MuiBox
+          sx={{
+            mt: 2,
+            marginLeft: { xs: 0, md: 4 },
+            marginBottom: {xs: 0, md: 4 },
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          {!isPublished && (
+            <Tooltip title="Publish this survey">
+              <span>
+                <MuiButton
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  fullWidth
+                  onClick={openPublishModal}
+                  sx={{
+                    backgroundColor: 'success.main',
+                    py: 1,
+                    '&:hover': { backgroundColor: 'success.dark' },
+                    marginLeft: 'auto',
+                  }}
+                >
+                  Publish
+                </MuiButton>
+              </span>
+            </Tooltip>
+          )}
+
+          
+          {isPublished && surveyData.public_link && (
+            <MuiLink
+              href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+              target="_blank"
+              rel="noopener"
+              underline="always"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: '0.875rem',
+                color: 'primary.main',
+                wordBreak: 'break-all',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              <LaunchIcon fontSize="small" sx={{ mr: 0.5, color: 'text.primary' }} />
+                {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+            </MuiLink>
+          )}
+        </MuiBox>
+
         <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
           <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
-          <MuiButton variant="contained" color="primary" sx={{ marginTop: 0.1 }} onClick={openAddQuestionModal}>
-            Add Question
-          </MuiButton>
-          <MuiBox sx={{ marginTop: 20 }}>
-            <MuiButton
+          {!isPublished && (
+            <MuiButton 
               variant="contained"
-              color="success"
-              onClick={openPublishModal}
-              fullWidth
-              sx={{ backgroundColor: '252525', '&:hover': { backgroundColor: 'darkorange' } }}
+              color="primary"
+              sx={{ marginTop: 0.01 }}
+              onClick={openAddQuestionModal}
             >
-              Publish
+              Add Question
             </MuiButton>
-          </MuiBox>
+           )}
+          
         </MuiBox>
         <AddQuestionModal
           isOpen={isAddQuestionModalOpen}

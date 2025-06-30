@@ -48,7 +48,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
       )}
 
       {/* Render Checkboxes for question type 2 or 10 */}
-      {(questionTypeId === 2 || questionTypeId === 10) && Array.isArray(surveyQuestionChoices) && (
+      {(questionTypeId === 2) && Array.isArray(surveyQuestionChoices) && (
         <List>
           {surveyQuestionChoices.map(choice => (
             <ListItem key={choice.id} disablePadding>

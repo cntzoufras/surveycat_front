@@ -13,8 +13,6 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
       <Typography color="#252525" variant="h6">
         {`${index + 1}. ${question.title}`}
       </Typography>
-
-      {/* Use the PublicQuestionRenderer to render the question */}
       <PublicQuestionRenderer question={question} onAnswerChange={onResponseChange} />
     </Box>
   );

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { 
   createSurveyQuestionAction,
   createSurveyQuestionChoicesAction,
   fetchSurveyQuestionsAction,
+  fetchQuestionTypesAction,
   fetchAllSurveyQuestionsWithChoices,
 } from '@/redux/actions/surveyActions';
 import OptionInputList from './OptionInputList';
@@ -18,6 +19,13 @@ const AddQuestionModal = ({
   surveyId,
 }) => {
   const dispatch = useDispatch();
+  // grab question types from Redux
+  const questionTypes = useSelector(state => state.survey.questionTypes || []);
+  useEffect(() => {
+    if (questionTypes.length === 0) {
+      dispatch(fetchQuestionTypesAction());
+    }
+  }, [dispatch, questionTypes.length]);
 
   // State variables
   const [newQuestion, setNewQuestion] = useState('');
@@ -107,7 +115,7 @@ const AddQuestionModal = ({
       // Create the question
       const newQuestionResponse = await dispatch(createSurveyQuestionAction(questionData));
   
-      if (questionType === '1' || questionType === '2') {
+      if (questionType === '1' || questionType === '2' || questionType === '7') {
         const choicesData = optionInputs.map((content, index) => ({
           content,
           sort_index: index,
@@ -129,7 +137,6 @@ const AddQuestionModal = ({
     }
   };
   
-
   return (
     <Modal show={isOpen} onHide={onClose} backdrop="static" centered>
       <Modal.Header closeButton>
@@ -138,31 +145,30 @@ const AddQuestionModal = ({
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           {/* Question Type Selection */}
-          <Form.Group controlId="formQuestionType">
+          <Form.Group controlId="formQuestionType"> 
             <Form.Label>Question Type</Form.Label>
-            <Form.Control 
-              as="select" 
-              value={questionType} 
+            <Form.Control
+              as="select"
+              value={questionType}
               onChange={handleQuestionTypeChange}
-              isInvalid={!!validationErrors.question_type_id} 
+              isInvalid={!!validationErrors.question_type_id}
             >
-              <option value="1">Multiple Choice</option>
-              <option value="2">Checkboxes</option>
-              <option value="3">Star Rating</option>
-              <option value="4">Best worst scale</option>
-              <option value="5">Single Textbox</option>
-              <option value="6">Comment Box</option>
-              <option value="7">Dropdown</option>
-              <option value="8">Ranking</option>
-              <option value="9">Slider</option>
-              <option value="10">Multiple Checkboxes</option>
-              <option value="11">Date / Time</option>
+              {/* Map through API‐loaded types */}
+              {questionTypes.map(qt => (
+                <option key={qt.id} value={qt.id}>
+                  {qt.title}
+                </option>
+              ))}
             </Form.Control>
-            {validationErrors.question_type_id && (
-              <Form.Control.Feedback type="invalid">
-                {validationErrors.question_type_id}
-              </Form.Control.Feedback>
+            {/* Show description of the selected type */}
+            {questionTypes.find(qt => qt.id.toString() === questionType) && (
+              <Form.Text className="text-muted" style={{ fontStyle: 'italic' }}>
+                {questionTypes.find(qt => qt.id.toString() === questionType).description}
+              </Form.Text>
             )}
+            <Form.Control.Feedback type="invalid">
+              {validationErrors.question_type_id}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Question Text Input */}
@@ -226,7 +232,7 @@ const AddQuestionModal = ({
           </Form.Group>
 
           {/* Options for Multiple Choice / Checkbox Questions */}
-          {questionType === '1' || questionType === '2' ? (
+          {questionType === '1' || questionType === '2' || questionType === '7' ? (
             <div>
               <Form.Group controlId="formNumOptions">
                 <Form.Label>Number of Options</Form.Label>

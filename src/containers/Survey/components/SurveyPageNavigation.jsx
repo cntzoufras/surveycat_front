@@ -32,7 +32,7 @@ const SurveyPageNavigation = ({
     <MuiIconButton onClick={onNext} disabled={currentPageIndex >= surveyPages.length - 1}>
       <ArrowForwardIos />
     </MuiIconButton>
-    <MuiButton variant="contained" color="secondary" onClick={onAddNewPage}>
+    <MuiButton variant="contained" onClick={onAddNewPage}>
       Add New Page
     </MuiButton>
   </MuiBox>

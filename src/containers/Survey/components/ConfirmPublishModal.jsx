@@ -10,14 +10,25 @@ const ConfirmPublishModal = ({ open, onClose, onConfirm }) => (
       width: 300, padding: 2, backgroundColor: 'white', margin: 'auto', mt: '20%',
     }}
     >
-      <MuiTypography variant="h6" gutterBottom>
+      <MuiTypography variant="h6" sx={{ color: 'black' }} color="primary" gutterBottom>
         Confirm Publish
       </MuiTypography>
-      <MuiTypography variant="body1" gutterBottom>
+      <MuiTypography variant="body2" sx={{ color: 'black' }} color="primary" gutterBottom>
         Are you sure you want to publish this survey? Once published, it will be available for participants.
       </MuiTypography>
       <MuiBox sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-        <MuiButton variant="contained" color="secondary" onClick={onClose}>
+        <MuiButton
+          variant="text"
+          onClick={onClose}
+          sx={{
+            color: '#555',
+            fontWeight: 'bold',
+            '&:hover': {
+              color: '#000',
+              backgroundColor: 'transparent',
+            },
+          }}
+        >
           Cancel
         </MuiButton>
         <MuiButton variant="contained" color="primary" onClick={onConfirm}>

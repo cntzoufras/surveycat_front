@@ -6,6 +6,9 @@ import {
   FETCH_SURVEY_QUESTIONS,
   FETCH_SURVEY_PAGES_SUCCESS,
   FETCH_SURVEY_PAGES_FAIL,
+  FETCH_QUESTION_TYPES_REQUEST,
+  FETCH_QUESTION_TYPES_SUCCESS,
+  FETCH_QUESTION_TYPES_FAILURE,
   CREATE_SURVEY_QUESTION_SUCCESS,
   CREATE_SURVEY_QUESTION_FAIL,
   CREATE_SURVEY_QUESTION_CHOICES_SUCCESS,
@@ -16,6 +19,15 @@ import {
   CREATE_SURVEY_PAGE_FAIL,
   ADD_SURVEY_PAGE_SUCCESS,
   ADD_SURVEY_PAGE_FAIL,
+  CREATE_SURVEY_RESPONSE_REQUEST,
+  CREATE_SURVEY_RESPONSE_SUCCESS,
+  CREATE_SURVEY_RESPONSE_FAILURE,
+  UPDATE_SURVEY_RESPONSE_REQUEST,
+  UPDATE_SURVEY_RESPONSE_SUCCESS,
+  UPDATE_SURVEY_RESPONSE_FAILURE,
+  SAVE_FOLLOW_UP_REQUEST,
+  SAVE_FOLLOW_UP_SUCCESS,
+  SAVE_FOLLOW_UP_FAILURE,
   FETCH_SURVEY_CATEGORIES_SUCCESS,
   FETCH_SURVEY_CATEGORIES_FAIL,
   FETCH_SURVEY_THEMES_SUCCESS,
@@ -75,10 +87,63 @@ const initialState = {
   publicSurveyPages: [], // Holds all pages of the public survey
   publicSurveyQuestions: [], // Holds all questions of the public survey
   publicSurveyQuestionChoices: [], // Holds the choices related to public survey questions
+  questionTypes: [],
+  questionTypesLoading: false,
+  questionTypesError: null,
+  creatingSurveyResponse: false,
+  currentSurveyResponse: null,
+  createSurveyResponseError: null,
+  updatingSurveyResponse: false,
+  updateSurveyResponseError: null,
+  responseRecord: null,
+  loadingResponse: false,
+  responseError: null,
 };
 
 const surveyReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CREATE_SURVEY_RESPONSE_REQUEST:
+      return { ...state, creatingSurveyResponse: true, createSurveyResponseError: null };
+    case CREATE_SURVEY_RESPONSE_SUCCESS:
+      return { ...state, creatingSurveyResponse: false, currentSurveyResponse: action.payload };
+    case CREATE_SURVEY_RESPONSE_FAILURE:
+      return { ...state, creatingSurveyResponse: false, createSurveyResponseError: action.payload };    
+    case UPDATE_SURVEY_RESPONSE_REQUEST:
+      return { ...state, updatingSurveyResponse: true, updateSurveyResponseError: null };
+    case UPDATE_SURVEY_RESPONSE_SUCCESS:
+      return { 
+        ...state, 
+        updatingSurveyResponse: false, 
+        currentSurveyResponse: action.payload,
+      };
+    case UPDATE_SURVEY_RESPONSE_FAILURE:
+      return { 
+        ...state, 
+        updatingSurveyResponse: false, 
+        updateSurveyResponseError: action.payload 
+      };
+    case SAVE_FOLLOW_UP_REQUEST:
+      return {
+        ...state,
+        loadingResponse: true,
+        responseError: null,
+      };
+
+    case SAVE_FOLLOW_UP_SUCCESS:
+      return {
+        ...state,
+        loadingResponse: false,
+        // pull in the updated record (with email+gender)
+        responseRecord: action.payload,
+      };
+
+    case SAVE_FOLLOW_UP_FAILURE:
+      return {
+        ...state,
+        loadingResponse: false,
+        responseError: action.payload,
+      };
+
     case CREATE_SURVEY_SUCCESS:
       return {
         ...state,
@@ -111,6 +176,26 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case FETCH_QUESTION_TYPES_REQUEST:
+      return {
+        ...state,
+        questionTypesLoading: true,
+        questionTypesError: null,
+      };
+
+    case FETCH_QUESTION_TYPES_SUCCESS:
+      return {
+        ...state,
+        questionTypesLoading: false,
+        questionTypes: action.payload,
+      };
+
+    case FETCH_QUESTION_TYPES_FAILURE:
+      return {
+        ...state,
+        questionTypesLoading: false,
+        questionTypesError: action.payload,
       };
     case FETCH_SURVEYS_SUCCESS:
       return {

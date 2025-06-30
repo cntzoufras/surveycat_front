@@ -6,6 +6,7 @@ import {
   Grid as MuiGrid,
   Paper as MuiPaper,
   Link as MuiLink,
+  Chip as MuiChip,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -31,14 +32,14 @@ const SurveyList = () => {
     dispatch(fetchSurveysAction());
   }, [dispatch]);
 
-  const getThemeTitle = (themeId) => {
-    const foundTheme = themes.find(t => t.id === themeId);
-    return foundTheme ? foundTheme.title : '-';
+  const getThemeTitle = themeId => {
+    const found = themes.find(t => t.id === themeId);
+    return found ? found.title : '-';
   };
 
   const getFirstSurveyPageId = survey => (survey.survey_pages && survey.survey_pages.length > 0
-    ? survey.survey_pages[0].id
-    : '');
+      ? survey.survey_pages[0].id
+      : '');
 
   return (
     <ThemeProvider theme={customTheme}>
@@ -46,6 +47,7 @@ const SurveyList = () => {
         <MuiTypography textAlign="left" variant="h2" gutterBottom>
           Surveys
         </MuiTypography>
+
         {surveys.length === 0 ? (
           <MuiBox mt={4}>
             <MuiTypography variant="h6" gutterBottom>
@@ -63,73 +65,74 @@ const SurveyList = () => {
           </MuiBox>
         ) : (
           <MuiGrid container spacing={3} justifyContent="center">
-            {surveys.map(survey => (
-              <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
-                <MuiPaper
-                  elevation={24}
-                  sx={{
-                    padding: 2,
-                    minHeight: '150px',
-                    maxWidth: '100%',
-                    margin: '0 auto',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    textAlign: 'left',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Link
-                    to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
-                      survey,
-                    )}`}
-                    style={{ textDecoration: 'none', color: 'inherit' }}
+            {surveys.map((survey) => {
+              const isPublished = Boolean(survey.public_link);
+
+              return (
+                <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
+                  <MuiPaper
+                    elevation={24}
+                    sx={{
+                      position: 'relative',
+                      padding: 2,
+                      minHeight: '150px',
+                      maxWidth: '100%',
+                      margin: '0 auto',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      textAlign: 'left',
+                      justifyContent: 'space-between',
+                    }}
                   >
-                    <MuiTypography
-                      variant="h2"
-                      sx={{
-                        color: '#505050',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}
-                      gutterBottom
-                    >
-                      {survey.title}
-                    </MuiTypography>
-                    <MuiTypography
-                      variant="body2"
-                      sx={{
-                        color: '#505050',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}
-                      gutterBottom
-                    >
-                      Theme: {getThemeTitle(survey.theme_id)}
-                    </MuiTypography>
-                    <MuiBox mt={2}>
-                      <MuiTypography
-                        variant="subtitle2"
+                    {isPublished && (
+                      <MuiChip
+                        label="Published"
+                        size="small"
+                        color="success"
                         sx={{
-                          color: '#757575',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          fontWeight: 'bold',
                         }}
+                      />
+                    )}
+
+                    <Link
+                      to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
+                        survey
+                      )}`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      <MuiTypography
+                        variant="h2"
+                        sx={{ color: '#505050' }}
                         gutterBottom
                       >
-                        Pages: {survey.survey_pages ? survey.survey_pages.length : 0}
+                        {survey.title}
                       </MuiTypography>
-                    </MuiBox>
-                  </Link>
-                </MuiPaper>
-              </MuiGrid>
-            ))}
+                      <MuiTypography
+                        variant="body2"
+                        sx={{ color: '#505050' }}
+                        gutterBottom
+                      >
+                        Theme: {getThemeTitle(survey.theme_id)}
+                      </MuiTypography>
+                      <MuiBox mt={2}>
+                        <MuiTypography
+                          variant="subtitle2"
+                          sx={{ color: '#757575' }}
+                          gutterBottom
+                        >
+                          Pages: {survey.survey_pages?.length ?? 0}
+                        </MuiTypography>
+                      </MuiBox>
+                    </Link>
+                  </MuiPaper>
+                </MuiGrid>
+              );
+            })}
           </MuiGrid>
         )}
       </MuiBox>
