@@ -82,7 +82,7 @@ export const FETCH_PUBLIC_SURVEY_SUCCESS = 'FETCH_PUBLIC_SURVEY_SUCCESS';
 export const FETCH_PUBLIC_SURVEY_FAILURE = 'FETCH_PUBLIC_SURVEY_FAILURE';
 
 // Action to load all question types
-export const fetchQuestionTypesAction = () => async dispatch => {
+export const fetchQuestionTypesAction = () => async (dispatch) => {
   dispatch({ type: FETCH_QUESTION_TYPES_REQUEST });
   try {
     // adjust endpoint to your real question‐types URL
@@ -95,7 +95,7 @@ export const fetchQuestionTypesAction = () => async dispatch => {
   } catch (error) {
     dispatch({
       type: FETCH_QUESTION_TYPES_FAILURE,
-      payload: error.message || 'Failed to load question types'
+      payload: error.message || 'Failed to load question types',
     });
   }
 };
@@ -222,7 +222,7 @@ export const fetchPublicSurveyBySlugAction = surveySlug => async (dispatch) => {
   }
 };
 
-export const createSurveyResponseAction = (surveyId, meta) => async dispatch => {
+export const createSurveyResponseAction = (surveyId, meta) => async (dispatch) => {
   dispatch({ type: CREATE_SURVEY_RESPONSE_REQUEST });
   try {
     const response = await api.post('/survey-responses', {
@@ -233,7 +233,7 @@ export const createSurveyResponseAction = (surveyId, meta) => async dispatch => 
     });
     dispatch({
       type: CREATE_SURVEY_RESPONSE_SUCCESS,
-      payload: response.data.data
+      payload: response.data.data,
     });
     return response.data; // returns the created record
   } catch (err) {
@@ -245,7 +245,7 @@ export const createSurveyResponseAction = (surveyId, meta) => async dispatch => 
   }
 };
 
-export const updateSurveyResponseAction = (responseId, updates) => async dispatch => {
+export const updateSurveyResponseAction = (responseId, updates) => async (dispatch) => {
   dispatch({ type: UPDATE_SURVEY_RESPONSE_REQUEST });
   try {
     const resp = await api.patch(`/survey-responses/${responseId}`, updates);

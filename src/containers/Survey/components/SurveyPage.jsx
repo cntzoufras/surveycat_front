@@ -430,7 +430,7 @@ const SurveyPage = () => {
           sx={{
             mt: 2,
             marginLeft: { xs: 0, md: 4 },
-            marginBottom: {xs: 0, md: 4 },
+            marginBottom: { xs: 0, md: 4 },
             display: 'flex',
             alignItems: 'center',
           }}

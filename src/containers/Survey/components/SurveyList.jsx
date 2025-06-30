@@ -32,7 +32,7 @@ const SurveyList = () => {
     dispatch(fetchSurveysAction());
   }, [dispatch]);
 
-  const getThemeTitle = themeId => {
+  const getThemeTitle = (themeId) => {
     const found = themes.find(t => t.id === themeId);
     return found ? found.title : '-';
   };
@@ -101,7 +101,7 @@ const SurveyList = () => {
 
                     <Link
                       to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
-                        survey
+                        survey,
                       )}`}
                       style={{ textDecoration: 'none', color: 'inherit' }}
                     >

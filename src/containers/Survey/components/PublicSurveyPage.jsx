@@ -193,7 +193,7 @@ const PublicSurveyPage = () => {
             color: '#fff',
             '&:hover': {
               // Use a secondary or darker shade for hover, if defined in theme
-              backgroundColor: theme => theme.palette.primary.dark || theme.palette.secondary.main
+              backgroundColor: theme => theme.palette.primary.dark || theme.palette.secondary.main,
             },
           }}
         >

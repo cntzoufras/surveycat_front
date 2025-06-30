@@ -89,7 +89,13 @@ const FollowUpForm = ({ onSubmit }) => {
           }}
         />
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
+        <Box sx={{
+          display: 'flex', 
+          justifyContent: 'center', 
+          mt: 4, 
+          mb: 2, 
+          }}
+        >
           <RadioGroup
             row
             value={gender}

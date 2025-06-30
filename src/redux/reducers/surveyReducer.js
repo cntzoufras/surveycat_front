@@ -120,7 +120,7 @@ const surveyReducer = (state = initialState, action) => {
       return { 
         ...state, 
         updatingSurveyResponse: false, 
-        updateSurveyResponseError: action.payload 
+        updateSurveyResponseError: action.payload, 
       };
     case SAVE_FOLLOW_UP_REQUEST:
       return {
