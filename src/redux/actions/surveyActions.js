@@ -63,6 +63,8 @@ export const UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL = 'UPDATE_SURVEY_PAGE_DESCRIPTI
 
 export const UPDATE_SURVEY_LAYOUT_SUCCESS = 'UPDATE_SURVEY_LAYOUT_SUCCESS';
 export const UPDATE_SURVEY_LAYOUT_FAIL = 'UPDATE_SURVEY_LAYOUT_FAIL';
+export const UPDATE_SURVEY_THEME_SUCCESS = 'UPDATE_SURVEY_THEME_SUCCESS';
+export const UPDATE_SURVEY_THEME_FAIL = 'UPDATE_SURVEY_THEME_FAIL';
 
 export const UPDATE_QUESTIONS = 'UPDATE_QUESTIONS';
 
@@ -406,6 +408,18 @@ export const updateSurveyLayoutAction = (surveyId, layout, userId) => async (dis
     return response.data;
   } catch (error) {
     dispatch({ type: UPDATE_SURVEY_LAYOUT_FAIL, payload: error.message });
+    throw error;
+  }
+};
+
+// Action to update survey layout
+export const updateSurveyThemeAction = (surveyId, theme, userId) => async (dispatch) => {
+  try {
+    const response = await api.put(`/surveys/${surveyId}`, { theme_id: theme, user_id: userId });
+    dispatch({ type: UPDATE_SURVEY_THEME_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: UPDATE_SURVEY_THEME_FAIL, payload: error.message });
     throw error;
   }
 };

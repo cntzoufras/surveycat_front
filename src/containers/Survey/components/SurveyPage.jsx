@@ -1,20 +1,22 @@
 import React, {
-  useState, 
-  useEffect, 
-  useCallback, 
-  useRef, 
+ useState,
+ useEffect,
+ useCallback,
+ useRef,
 } from 'react';
 import debounce from 'lodash/debounce';
 import {
-  Box as MuiBox,
-  Typography as MuiTypography,
-  Select as MuiSelect,
-  MenuItem as MuiMenuItem,
-  Button as MuiButton,
-  Grid as MuiGrid,
-  IconButton as MuiIconButton,
-  Tooltip,
-  Link as MuiLink,
+ Box as MuiBox,
+ Typography as MuiTypography,
+ Select as MuiSelect,
+ MenuItem as MuiMenuItem,
+ Button as MuiButton,
+ Grid as MuiGrid,
+ IconButton as MuiIconButton,
+ Tooltip,
+ Link as MuiLink,
+ Snackbar,
+ Alert,
 } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Link';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -22,19 +24,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Delete } from '@mui/icons-material';
 
 import {
-  updateSurveyTitleAction,
-  updateSurveyDescriptionAction,
-  updateSurveyPageTitleAction,
-  updateSurveyPageDescriptionAction,
-  addSurveyPageAction,
-  deleteSurveyPageAction,
-  deleteSurveyQuestionAction,
-  fetchAllSurveyQuestionsWithChoices,
-  fetchStockSurveysAction,
-  fetchSurveyAction,
-  createSurveyQuestionAction,
-  publishSurveyAction,
-  updateSurveyLayoutAction,
+ updateSurveyTitleAction,
+ updateSurveyDescriptionAction,
+ updateSurveyPageTitleAction,
+ updateSurveyPageDescriptionAction,
+ addSurveyPageAction,
+ deleteSurveyPageAction,
+ deleteSurveyQuestionAction,
+ fetchAllSurveyQuestionsWithChoices,
+ fetchStockSurveysAction,
+ fetchSurveyAction,
+ createSurveyQuestionAction,
+ publishSurveyAction,
+ updateSurveyLayoutAction,
+ updateSurveyThemeAction,
+ fetchSurveyThemesAction,
 } from '@/redux/actions/surveyActions';
 
 import SurveyTitleField from './SurveyTitleField';
@@ -47,41 +51,46 @@ import AddQuestionModal from './AddQuestionModal';
 import QuestionList from './QuestionList';
 
 const SurveyPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { surveyId, surveyPageId } = useParams();
+ const navigate = useNavigate();
+ const dispatch = useDispatch();
+ const { surveyId, surveyPageId } = useParams();
 
-  const { user } = useSelector(state => state.auth);
+ const { user } = useSelector(state => state.auth);
 
-  const surveyData = useSelector(state => state.survey.survey);
-  const surveyTitle = surveyData?.title || '';
-  const surveyDescription = surveyData?.description || '';
-  const surveyQuestions = useSelector(state => state.survey.questions);
-  const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
+ const surveyData = useSelector(state => state.survey.survey);
+ const surveyTitle = surveyData?.title || '';
+ const surveyDescription = surveyData?.description || '';
+ const surveyQuestions = useSelector(state => state.survey.questions);
+ const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
+ const surveyThemes = useSelector(state => state.survey.surveyThemes);
 
-  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
-  const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
-  const [refreshKey, setRefreshKey] = useState(0); // key to force re-render
+ const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
+ const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
+ const [refreshKey, setRefreshKey] = useState(0);
 
-  const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
-  const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
-  const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState('');
-  const [localSurveyPageDescription, setLocalSurveyPageDescription] = useState('');
-  const [layout, setLayout] = useState('multiple');
-  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
-  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const currentPageIndexRef = useRef(currentPageIndex);
-  const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
-  const isPublished = Boolean(surveyData?.public_link);
+ const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
+ const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
+ const [localSurveyPageTitle, setLocalSurveyPageTitle] = useState('');
+ const [localSurveyPageDescription, setLocalSurveyPageDescription] = useState('');
+ const [layout, setLayout] = useState('multiple');
+ const [theme, setTheme] = useState(''); 
+ const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
+ const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+ const [currentPageIndex, setCurrentPageIndex] = useState(0);
+ const currentPageIndexRef = useRef(currentPageIndex);
+ const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
+ const isPublished = Boolean(surveyData?.public_link);
 
-  useEffect(() => {
-    if (!user?.id) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
+ const [notification, setNotification] = useState({
+  open: false,
+  message: '',
+  severity: 'success',
+ });
 
-  useEffect(() => {
+
+ useEffect(() => {
+    // 1. Fetch all necessary data
+    dispatch(fetchSurveyThemesAction());
     if (surveyId) {
       dispatch(fetchSurveyAction(surveyId));
       dispatch(fetchStockSurveysAction());
@@ -92,257 +101,482 @@ const SurveyPage = () => {
   }, [surveyId, surveyPageId, dispatch]);
 
   useEffect(() => {
-    if (surveyData?.survey_pages) {
-      setSurveyPages(surveyData.survey_pages);
+    // This effect is the single source of truth for syncing Redux to local state.
+    // It will run when the survey data or the list of themes changes.
+    if (surveyData) {
+      // 1. Set all non-theme state from the survey data.
+      setLocalSurveyTitle(surveyData.title || '');
+      setLocalSurveyDescription(surveyData.description || '');
+      setSurveyPages(surveyData.survey_pages || []);
+      setLayout(surveyData.layout || 'multiple');
+
+      // 2. Handle the theme with definitive logic.
+      // We only set the theme if the correct ID exists in both the survey
+      // data AND the list of available themes.
+      if (surveyData.theme_id && surveyThemes.length > 0) {
+        const themeExists = surveyThemes.some(t => t.id === surveyData.theme_id);
+
+        if (themeExists) {
+          // This will now correctly set the theme to the "Porch Lights" ID.
+          setTheme(surveyData.theme_id);
+        }
+      }
     }
-    if (surveyData?.layout) {
-      setLayout(surveyData.layout);
-    }
-  }, [surveyData?.survey_pages, surveyData?.layout]);
+  }, [surveyData, surveyThemes]); // This hook depends on BOTH data sources.
 
   useEffect(() => {
+    // 4. Set page-specific details when pages/pageId are available
+    if (surveyPages.length > 0 && surveyPageId) {
+      const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
+      if (pageIndex !== -1) {
+        setCurrentPageIndex(pageIndex);
+        currentPageIndexRef.current = pageIndex;
+        const currentPage = surveyPages[pageIndex];
+        if (currentPage) {
+          setLocalSurveyPageTitle(currentPage.title || '');
+          setLocalSurveyPageDescription(currentPage.description || '');
+        }
+      }
+    }
+  }, [surveyPages, surveyPageId]);
+
+  useEffect(() => {
+    // 5. Filter questions when they change or the page changes
     if (surveyPageId) {
       const filteredQuestions = surveyQuestions.filter(
         question => question.survey_page_id === surveyPageId,
       );
       setCurrentPageQuestions(filteredQuestions);
     }
-  }, [surveyQuestions, surveyPageId, refreshKey]); // added refreshKey
+  }, [surveyQuestions, surveyPageId, refreshKey]);
 
   useEffect(() => {
-    if (surveyPages.length > 0 && surveyPageId) {
-      const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
-      setCurrentPageIndex(pageIndex);
-      currentPageIndexRef.current = pageIndex;
-
-      const currentPage = surveyPages[pageIndex];
-      if (currentPage) {
-        setLocalSurveyPageTitle(currentPage.title || '');
-        setLocalSurveyPageDescription(currentPage.description || '');
-      }
+    // 6. Redirect if user is not logged in
+    if (!user?.id) {
+      navigate('/login');
     }
-  }, [surveyPages, surveyPageId]);
+  }, [user, navigate]);
 
-  useEffect(() => {
-    setLocalSurveyTitle(surveyTitle);
-  }, [surveyTitle]);
+//  useEffect(() => {
+//     dispatch(fetchSurveyThemesAction()); // Fetch themes on component mount
+//     if (surveyId) {
+//       dispatch(fetchSurveyAction(surveyId));
+//       dispatch(fetchStockSurveysAction());
+//       if (surveyPageId) {
+//         dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+//       }
+//     }
+//   }, [surveyId, surveyPageId, dispatch]);
 
-  useEffect(() => {
-    setLocalSurveyDescription(surveyDescription);
-  }, [surveyDescription]);
+//   useEffect(() => {
+//     if (surveyData && surveyThemes.length > 0) {
+//       const selectedTheme = surveyThemes.find(t => t.id === surveyData.theme_id);
+//       if (selectedTheme) {
+//         setTheme(selectedTheme.id);
+//       }
+//     }
+//   }, [surveyData, surveyThemes]);
 
-  const debouncedUpdateSurveyTitle = useCallback(
-    debounce((newSurveyTitle) => {
+//  useEffect(() => {
+//   if (!user?.id) {
+//    navigate('/login');
+//   }
+//  }, [user, navigate]);
+
+//  useEffect(() => {
+//   if (surveyId) {
+//    dispatch(fetchSurveyAction(surveyId));
+//    dispatch(fetchStockSurveysAction());
+//    if (surveyPageId) {
+//     dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+//    }
+//   }
+//  }, [surveyId, surveyPageId, dispatch]);
+
+//  useEffect(() => {
+//   if (surveyData?.survey_pages) {
+//    setSurveyPages(surveyData.survey_pages);
+//   }
+//   if (surveyData?.layout) {
+//    setLayout(surveyData.layout);
+//   }
+//   if (surveyData?.theme) {
+//    setTheme(surveyData.theme);
+//   }
+//  }, [surveyData]);
+
+//  useEffect(() => {
+//   if (surveyPageId) {
+//    const filteredQuestions = surveyQuestions.filter(
+//     question => question.survey_page_id === surveyPageId,
+//    );
+//    setCurrentPageQuestions(filteredQuestions);
+//   }
+//  }, [surveyQuestions, surveyPageId, refreshKey]);
+
+//  useEffect(() => {
+//   if (surveyPages.length > 0 && surveyPageId) {
+//    const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
+//    setCurrentPageIndex(pageIndex);
+//    currentPageIndexRef.current = pageIndex;
+
+//    const currentPage = surveyPages[pageIndex];
+//    if (currentPage) {
+//     setLocalSurveyPageTitle(currentPage.title || '');
+//     setLocalSurveyPageDescription(currentPage.description || '');
+//    }
+//   }
+//  }, [surveyPages, surveyPageId]);
+
+//  useEffect(() => {
+//   setLocalSurveyTitle(surveyTitle);
+//  }, [surveyTitle]);
+
+//  useEffect(() => {
+//   setLocalSurveyDescription(surveyDescription);
+//  }, [surveyDescription]);
+
+const debouncedUpdateSurveyTitle = useCallback(
+    debounce(async (newSurveyTitle) => {
       if (newSurveyTitle.trim()) {
-        dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+        try {
+          await dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+          setNotification({
+            open: true,
+            message: 'Survey title updated!',
+            severity: 'success',
+          });
+        } catch (error) {
+          console.error('Failed to update survey title:', error);
+          setNotification({
+            open: true,
+            message: 'Failed to update title.',
+            severity: 'error',
+          });
+        }
       }
     }, 1500),
     [dispatch, surveyId],
   );
 
   const debouncedUpdateSurveyDescription = useCallback(
-    debounce((newSurveyDescription) => {
+    debounce(async (newSurveyDescription) => {
       if (newSurveyDescription.trim()) {
-        dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+        try {
+          await dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+          setNotification({
+            open: true,
+            message: 'Survey description updated!',
+            severity: 'success',
+          });
+        } catch (error) {
+          console.error('Failed to update survey description:', error);
+           setNotification({
+            open: true,
+            message: 'Failed to update description.',
+            severity: 'error',
+          });
+        }
       }
     }, 1500),
     [dispatch, surveyId],
   );
 
   const debouncedUpdateSurveyPageTitle = useCallback(
-    debounce((newSurveyPageTitle) => {
+    debounce(async (newSurveyPageTitle) => {
       if (newSurveyPageTitle.trim()) {
-        dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
+        try {
+          await dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
+          setNotification({
+            open: true,
+            message: 'Page title updated!',
+            severity: 'success',
+          });
+        } catch (error) {
+          console.error('Failed to update page title:', error);
+          setNotification({
+            open: true,
+            message: 'Failed to update page title.',
+            severity: 'error',
+          });
+        }
       }
     }, 1500),
     [dispatch, surveyPageId],
   );
 
   const debouncedUpdateSurveyPageDescription = useCallback(
-    debounce((newSurveyPageDescription) => {
+    debounce(async (newSurveyPageDescription) => {
       if (newSurveyPageDescription.trim()) {
-        dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+        try {
+          await dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+          setNotification({
+            open: true,
+            message: 'Page description updated!',
+            severity: 'success',
+          });
+        } catch (error) {
+          console.error('Failed to update page description:', error);
+          setNotification({
+            open: true,
+            message: 'Failed to update page description.',
+            severity: 'error',
+          });
+        }
       }
     }, 1500),
     [dispatch, surveyPageId],
   );
+//  const debouncedUpdateSurveyTitle = useCallback(
+//   debounce((newSurveyTitle) => {
+//    if (newSurveyTitle.trim()) {
+//     dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
+//    }
+//   }, 1500),
+//   [dispatch, surveyId],
+//  );
 
-  const handleStockSurveyChange = (e) => {
-    const selectedSurveyId = e.target.value;
-    setSelectedStockSurvey(selectedSurveyId);
-  };
+//  const debouncedUpdateSurveyDescription = useCallback(
+//   debounce((newSurveyDescription) => {
+//    if (newSurveyDescription.trim()) {
+//     dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
+//    }
+//   }, 1500),
+//   [dispatch, surveyId],
+//  );
 
-  const handleSurveyTitleChange = (e) => {
-    const newSurveyTitle = e.target.value;
-    setLocalSurveyTitle(newSurveyTitle);
-    debouncedUpdateSurveyTitle(newSurveyTitle);
-  };
+//  const debouncedUpdateSurveyPageTitle = useCallback(
+//   debounce((newSurveyPageTitle) => {
+//    if (newSurveyPageTitle.trim()) {
+//     dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
+//    }
+//   }, 1500),
+//   [dispatch, surveyPageId],
+//  );
 
-  const handleSurveyDescriptionChange = (e) => {
-    const newSurveyDescription = e.target.value;
-    setLocalSurveyDescription(newSurveyDescription);
-    debouncedUpdateSurveyDescription(newSurveyDescription);
-  };
+//  const debouncedUpdateSurveyPageDescription = useCallback(
+//   debounce((newSurveyPageDescription) => {
+//    if (newSurveyPageDescription.trim()) {
+//     dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
+//    }
+//   }, 1500),
+//   [dispatch, surveyPageId],
+//  );
 
-  const handleSurveyPageTitleChange = (e) => {
-    const newSurveyPageTitle = e.target.value;
-    setLocalSurveyPageTitle(newSurveyPageTitle);
-    debouncedUpdateSurveyPageTitle(newSurveyPageTitle);
-  };
+ const handleStockSurveyChange = (e) => {
+  const selectedSurveyId = e.target.value;
+  setSelectedStockSurvey(selectedSurveyId);
+ };
 
-  const handleSurveyPageDescriptionChange = (e) => {
-    const newSurveyPageDescription = e.target.value;
-    setLocalSurveyPageDescription(newSurveyPageDescription);
-    debouncedUpdateSurveyPageDescription(newSurveyPageDescription);
-  };
+ const handleSurveyTitleChange = (e) => {
+  const newSurveyTitle = e.target.value;
+  setLocalSurveyTitle(newSurveyTitle);
+  debouncedUpdateSurveyTitle(newSurveyTitle);
+ };
 
-  const handleLayoutChange = async (e) => {
-    const newLayout = e.target.value;
-    const userId = user?.id;
-    setLayout(newLayout);
-    try {
-      await dispatch(updateSurveyLayoutAction(surveyId, newLayout, userId));
-    } catch (error) {
-      console.error('Failed to update layout:', error);
-    }
-  };
+ const handleSurveyDescriptionChange = (e) => {
+  const newSurveyDescription = e.target.value;
+  setLocalSurveyDescription(newSurveyDescription);
+  debouncedUpdateSurveyDescription(newSurveyDescription);
+ };
 
-  const handleAddNewPage = async () => {
-    try {
-      const newPageData = {
-        title: '',
-        description: '',
-        survey_id: surveyId,
-      };
-      const newPage = await dispatch(addSurveyPageAction(surveyId, newPageData));
+ const handleSurveyPageTitleChange = (e) => {
+  const newSurveyPageTitle = e.target.value;
+  setLocalSurveyPageTitle(newSurveyPageTitle);
+  debouncedUpdateSurveyPageTitle(newSurveyPageTitle);
+ };
 
-      const updatedSurveyPages = [...surveyPages, newPage];
-      setSurveyPages(updatedSurveyPages);
+ const handleSurveyPageDescriptionChange = (e) => {
+  const newSurveyPageDescription = e.target.value;
+  setLocalSurveyPageDescription(newSurveyPageDescription);
+  debouncedUpdateSurveyPageDescription(newSurveyPageDescription);
+ };
 
-      setCurrentPageIndex(updatedSurveyPages.length - 1);
-      currentPageIndexRef.current = updatedSurveyPages.length - 1;
-      setLocalSurveyPageTitle('');
-      setLocalSurveyPageDescription('');
-      navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
-    } catch (error) {
-      console.error('Error adding new page:', error);
-    }
-  };
+ const handleLayoutChange = async (e) => {
+  const newLayout = e.target.value;
+  const userId = user?.id;
+  setLayout(newLayout);
+  try {
+   await dispatch(updateSurveyLayoutAction(surveyId, newLayout, userId));
+   setNotification({
+    open: true,
+    message: 'Layout updated successfully!',
+    severity: 'success',
+   });
+  } catch (error) {
+   console.error('Failed to update layout:', error);
+   setNotification({
+    open: true,
+    message: 'Failed to update layout.',
+    severity: 'error',
+   });
+  }
+ };
+ 
+ const handleThemeChange = async (e) => {
+  const newTheme = e.target.value;
+  setTheme(newTheme);
+  try {
+   await dispatch(updateSurveyThemeAction(surveyId, newTheme));
+   setNotification({
+    open: true,
+    message: 'Theme updated successfully!',
+    severity: 'success',
+   });
+  } catch (error) {
+   console.error('Failed to update theme:', error);
+   setNotification({
+    open: true,
+    message: 'Failed to update theme.',
+    severity: 'error',
+   });
+  }
+ };
 
-  const handleNextPage = useCallback(() => {
-    if (currentPageIndexRef.current < surveyPages.length - 1) {
-      const nextPageId = surveyPages[currentPageIndexRef.current + 1]?.id;
-      if (nextPageId) {
-        setCurrentPageIndex(currentPageIndexRef.current + 1);
-        currentPageIndexRef.current += 1;
-        navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
-      }
-    }
-  }, [surveyPages, navigate, surveyId]);
+ const handleAddNewPage = async () => {
+  try {
+   const newPageData = {
+    title: '',
+    description: '',
+    survey_id: surveyId,
+   };
+   const newPage = await dispatch(addSurveyPageAction(surveyId, newPageData));
 
-  const handlePrevPage = useCallback(() => {
-    if (currentPageIndexRef.current > 0) {
-      const prevPageId = surveyPages[currentPageIndexRef.current - 1]?.id;
-      if (prevPageId) {
-        setCurrentPageIndex(currentPageIndexRef.current - 1);
-        currentPageIndexRef.current -= 1;
-        navigate(`/surveys/${surveyId}/pages/${prevPageId}`);
-      }
-    }
-  }, [surveyPages, navigate, surveyId]);
+   const updatedSurveyPages = [...surveyPages, newPage];
+   setSurveyPages(updatedSurveyPages);
 
-  const handleSurveyPageSelection = useCallback(
-    (selectedPageId) => {
-      if (selectedPageId) {
-        navigate(`/surveys/${surveyId}/pages/${selectedPageId}`);
-      }
-    },
-    [navigate, surveyId],
+   setCurrentPageIndex(updatedSurveyPages.length - 1);
+   currentPageIndexRef.current = updatedSurveyPages.length - 1;
+   setLocalSurveyPageTitle('');
+   setLocalSurveyPageDescription('');
+   navigate(`/surveys/${surveyId}/pages/${newPage.id}`);
+  } catch (error) {
+   console.error('Error adding new page:', error);
+  }
+ };
+
+ const handleNextPage = useCallback(() => {
+  if (currentPageIndexRef.current < surveyPages.length - 1) {
+   const nextPageId = surveyPages[currentPageIndexRef.current + 1]?.id;
+   if (nextPageId) {
+    setCurrentPageIndex(currentPageIndexRef.current + 1);
+    currentPageIndexRef.current += 1;
+    navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
+   }
+  }
+ }, [surveyPages, navigate, surveyId]);
+
+ const handlePrevPage = useCallback(() => {
+  if (currentPageIndexRef.current > 0) {
+   const prevPageId = surveyPages[currentPageIndexRef.current - 1]?.id;
+   if (prevPageId) {
+    setCurrentPageIndex(currentPageIndexRef.current - 1);
+    currentPageIndexRef.current -= 1;
+    navigate(`/surveys/${surveyId}/pages/${prevPageId}`);
+   }
+  }
+ }, [surveyPages, navigate, surveyId]);
+
+ const handleSurveyPageSelection = useCallback(
+  (selectedPageId) => {
+   if (selectedPageId) {
+    navigate(`/surveys/${surveyId}/pages/${selectedPageId}`);
+   }
+  },
+  [navigate, surveyId],
+ );
+
+ const handleDeletePage = async () => {
+  if (surveyPages.length === 1) {
+   alert('Cannot delete the last survey page.');
+   return;
+  }
+
+  const confirmation = window.confirm(
+   'Deleting this page will also delete all associated questions. Are you sure you want to continue?',
   );
-
-  const handleDeletePage = async () => {
-    if (surveyPages.length === 0) {
-      alert('Cannot delete the last survey page.');
-      return;
+  if (confirmation) {
+   try {
+    await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
+    const remainingPages = surveyPages.filter(page => page.id !== surveyPageId);
+    if (remainingPages.length > 0) {
+     const nextPageId = remainingPages.reduce(
+      (minPage, page) => (page.sort_index < minPage.sort_index ? page : minPage),
+      remainingPages[0],
+     ).id;
+     navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
     }
+   } catch (error) {
+    console.error('Error deleting page:', error);
+   }
+  }
+ };
 
-    const confirmation = window.confirm(
-      'Deleting this page will also delete all associated questions. Are you sure you want to continue?',
-    );
-    if (confirmation) {
-      try {
-        await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
-        const remainingPages = surveyPages.filter(page => page.id !== surveyPageId);
-        if (remainingPages.length > 0) {
-          const nextPageId = remainingPages.reduce(
-            (minPage, page) => (page.sort_index < minPage.sort_index ? page : minPage),
-            remainingPages[0],
-          ).id;
-          navigate(`/surveys/${surveyId}/pages/${nextPageId}`);
-        }
-      } catch (error) {
-        console.error('Error deleting page:', error);
-      }
-    }
-  };
+ const openAddQuestionModal = () => setIsAddQuestionModalOpen(true);
+ const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
 
-  const openAddQuestionModal = () => setIsAddQuestionModalOpen(true);
-  const closeAddQuestionModal = () => setIsAddQuestionModalOpen(false);
+ const openPublishModal = () => setIsPublishModalOpen(true);
+ const closePublishModal = () => setIsPublishModalOpen(false);
 
-  const openPublishModal = () => setIsPublishModalOpen(true);
-  const closePublishModal = () => setIsPublishModalOpen(false);
+ const handleAddQuestionSubmit = async (questionData) => {
+  try {
+   await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
+   await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+   setRefreshKey(prev => prev + 1);
+   closeAddQuestionModal();
+  } catch (error) {
+   console.error('Error adding question:', error);
+  }
+ };
 
-  const handleAddQuestionSubmit = async (questionData) => {
-    try {
-      await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
-      await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-      setRefreshKey(prev => prev + 1); // <-- Trigger re-render
-      closeAddQuestionModal();
-    } catch (error) {
-      console.error('Error adding question:', error);
-    }
-  };
+ const handleDeleteQuestion = async (questionId) => {
+  try {
+   await dispatch(deleteSurveyQuestionAction(questionId));
+   await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
+   setRefreshKey(prev => prev + 1);
+  } catch (error) {
+   console.error('Error deleting question:', error);
+  }
+ };
 
-  const handleDeleteQuestion = async (questionId) => {
-    try {
-      await dispatch(deleteSurveyQuestionAction(questionId));
-      await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-      setRefreshKey(prev => prev + 1); // <-- Trigger re-render
-    } catch (error) {
-      console.error('Error deleting question:', error);
-    }
-  };
+ const handlePublishSurvey = async () => {
+  try {
+   if (!localSurveyTitle.trim()) {
+    console.error('Title is required to create a public link.');
+    return;
+   }
 
-  const handlePublishSurvey = async () => {
-    try {
-      if (!localSurveyTitle.trim()) {
-        console.error('Title is required to create a public link.');
-        return;
-      }
-
-      const publishResponse = await dispatch(publishSurveyAction(surveyId));
-      const publicUrl = `/surveys/ps/${publishResponse.public_link}`;
-      navigate(publicUrl);
-    } catch (error) {
-      console.error('Error publishing survey:', error);
-    }
-  };
+   const publishResponse = await dispatch(publishSurveyAction(surveyId));
+   const publicUrl = `/surveys/ps/${publishResponse.public_link}`;
+   navigate(publicUrl);
+  } catch (error) {
+   console.error('Error publishing survey:', error);
+  }
+ };
+ 
+ const handleCloseNotification = (event, reason) => {
+  if (reason === 'clickaway') {
+   return;
+  }
+  setNotification({ ...notification, open: false });
+ };
 
   return (
+
     <MuiGrid container spacing={4}>
       <MuiGrid item xs={12} md={4}>
         <MuiBox
           sx={{
-            paddingBottom: 4,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+          paddingBottom: 4,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
         >
           <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
             Select Stock Survey
           </MuiTypography>
-          <MuiSelect 
+          <MuiSelect
             fullWidth
             value={selectedStockSurvey}
             onChange={handleStockSurveyChange}
@@ -410,6 +644,29 @@ const SurveyPage = () => {
             <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
           </MuiSelect>
         </MuiBox>
+        <MuiBox
+          sx={{
+            paddingBottom: 4,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
+            Select Theme
+          </MuiTypography>
+          <MuiSelect
+            fullWidth
+            value={theme}
+            onChange={handleThemeChange}
+          >
+            {Array.isArray(surveyThemes) && surveyThemes.map(themeOption => (
+              <MuiMenuItem key={themeOption.id} value={themeOption.id}>
+                {themeOption.title}
+              </MuiMenuItem>
+            ))}
+          </MuiSelect>
+        </MuiBox>
       </MuiGrid>
       <MuiGrid item xs={12} md={8}>
         <MuiBox sx={{ marginBottom: 4, marginLeft: { xs: 0, md: 4 } }}>
@@ -425,7 +682,6 @@ const SurveyPage = () => {
             {localSurveyDescription || 'Survey Description'}
           </MuiTypography>
         </MuiBox>
-        
         <MuiBox
           sx={{
             mt: 2,
@@ -436,53 +692,50 @@ const SurveyPage = () => {
           }}
         >
           {!isPublished && (
-            <Tooltip title="Publish this survey">
-              <span>
-                <MuiButton
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  fullWidth
-                  onClick={openPublishModal}
-                  sx={{
-                    backgroundColor: 'success.main',
-                    py: 1,
-                    '&:hover': { backgroundColor: 'success.dark' },
-                    marginLeft: 'auto',
-                  }}
-                >
-                  Publish
-                </MuiButton>
-              </span>
-            </Tooltip>
-          )}
-
-          
+          <Tooltip title="Publish this survey">
+            <span>
+              <MuiButton
+                variant="contained"
+                color="success"
+                size="small"
+                fullWidth
+                onClick={openPublishModal}
+                sx={{
+                  backgroundColor: 'success.main',
+                  py: 1,
+                  '&:hover': { backgroundColor: 'success.dark' },
+                  marginLeft: 'auto',
+                }}
+              >
+                Publish
+              </MuiButton>
+            </span>
+          </Tooltip>
+        )}
           {isPublished && surveyData.public_link && (
-            <MuiLink
-              href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
-              target="_blank"
-              rel="noopener"
-              underline="always"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                fontSize: '0.875rem',
-                color: 'primary.main',
-                wordBreak: 'break-all',
-                '&:hover': { textDecoration: 'underline' },
-              }}
-            >
-              <LaunchIcon fontSize="small" sx={{ mr: 0.5, color: 'text.primary' }} />
-                {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
-            </MuiLink>
-          )}
+          <MuiLink
+            href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+            target="_blank"
+            rel="noopener"
+            underline="always"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: '0.875rem',
+              color: 'primary.main',
+              wordBreak: 'break-all',
+              '&:hover': { textDecoration: 'underline' },
+            }}
+          >
+            <LaunchIcon fontSize="small" sx={{ mr: 0.5, color: 'text.primary' }} />
+            {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+          </MuiLink>
+        )}
         </MuiBox>
-
         <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
           <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
           {!isPublished && (
-            <MuiButton 
+            <MuiButton
               variant="contained"
               color="primary"
               sx={{ marginTop: 0.01 }}
@@ -490,8 +743,7 @@ const SurveyPage = () => {
             >
               Add Question
             </MuiButton>
-           )}
-          
+        )}
         </MuiBox>
         <AddQuestionModal
           isOpen={isAddQuestionModalOpen}
@@ -511,8 +763,18 @@ const SurveyPage = () => {
           }}
         />
       </MuiGrid>
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseNotification} severity={notification.severity} sx={{ width: '100%' }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </MuiGrid>
-  );
+ );
 };
 
 export default SurveyPage;
