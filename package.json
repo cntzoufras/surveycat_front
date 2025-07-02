@@ -2,7 +2,7 @@
   "name": "surveycat",
   "version": "5.0.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "/",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
