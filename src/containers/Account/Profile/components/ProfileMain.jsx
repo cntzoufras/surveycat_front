@@ -5,7 +5,9 @@ import { CircularProgress } from '@mui/material'; // For loading spinner
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '@/shared/components/Card';
 import { Button } from '@/shared/components/Button';
-import { colorAdditional, colorBlue, colorBorder, colorText } from '@/utils/palette';
+import {
+ colorAdditional, colorBlue, colorBorder, colorText, 
+} from '@/utils/palette';
 import { paddingLeft, left } from '@/utils/directions';
 import { 
   fetchUserProfileAction, 

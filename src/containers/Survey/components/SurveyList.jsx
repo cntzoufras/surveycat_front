@@ -84,8 +84,7 @@ const SurveyList = () => {
     return found ? found.title : '-';
   };
 
-  const getFirstSurveyPageId = survey =>
-    survey.survey_pages?.length > 0 ? survey.survey_pages[0].id : '';
+  const getFirstSurveyPageId = survey => (survey.survey_pages?.length > 0 ? survey.survey_pages[0].id : '');
 
   return (
     <>
@@ -139,7 +138,8 @@ const SurveyList = () => {
                       transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                       '&:hover': {
                         transform: 'translateY(-4px)',
-                        boxShadow: (theme) => `0 8px 16px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'}`,
+                        boxShadow: theme => `0 8px 16px ${theme.palette.mode === 'dark' 
+                        ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'}`,
                       },
                       display: 'flex',
                       flexDirection: 'column',
@@ -150,11 +150,11 @@ const SurveyList = () => {
                     <CardContent>
                       {categoryTitle && (
                         <Chip
-                           icon={<CategoryOutlinedIcon />}
-                           label={categoryTitle}
-                           variant="outlined"
-                           size="small"
-                           sx={{ mb: 1.5, color: 'text.secondary', borderColor: 'divider' }}
+                          icon={<CategoryOutlinedIcon />}
+                          label={categoryTitle}
+                          variant="outlined"
+                          size="small"
+                          sx={{ mb: 1.5, color: 'text.secondary', borderColor: 'divider' }}
                         />
                       )}
                       <Typography
@@ -203,7 +203,7 @@ const SurveyList = () => {
                         </Button>
                         <IconButton
                           size="small"
-                          onClick={(e) => handleMenuClick(e, survey.id)}
+                          onClick={e => handleMenuClick(e, survey.id)}
                           sx={{ color: 'text.secondary' }}
                         >
                           <MoreVertIcon />
