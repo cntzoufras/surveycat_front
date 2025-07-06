@@ -18,6 +18,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.prod.conf:/etc/nginx/nginx.conf
+      - shared_uploads:/var/www/images
       - /etc/ssl/certs/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt
       - /etc/ssl/private/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key
       - ./nginx_logs:/var/log/nginx
@@ -32,5 +33,9 @@ services:
 
 networks:
   webnet:
+    external: true
+
+volumes:
+  shared_uploads:
     external: true
 
