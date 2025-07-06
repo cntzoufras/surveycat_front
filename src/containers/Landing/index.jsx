@@ -14,7 +14,6 @@ import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
 import Applications from './components/Applications';
 import Menu from './components/Menu';
-import Updates from './components/Updates';
 import FAQ from './components/FAQ';
 import ContactUs from './components/ContactUs';
 import scrollAnimation, { splitText } from '../../utils/animateOnScroll';
@@ -48,7 +47,6 @@ const Landing = () => {
       <Header />
       <Technologies />
       <Features />
-      <Updates />
       <Demos theme={theme} changeToDark={changeToDark} changeToLight={changeToLight} />
       <Dashboards />
       <Applications />

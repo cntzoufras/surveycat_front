@@ -12,7 +12,6 @@ const TopbarNav = () => (
     <TopbarNavDashboards />
     <TopbarNavUIElements />
     <TopbarNavOtherPages />
-    <TopbarNavLink to="/documentation/introduction">Documentation</TopbarNavLink>
   </TopbarNavigation>
 );
 

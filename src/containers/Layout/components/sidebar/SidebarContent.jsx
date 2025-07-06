@@ -78,14 +78,6 @@ const SidebarContent = ({
       
     </SidebarBlock>
     */}
-    <SidebarBlock collapse={collapse}>
-      <SidebarLink 
-        title="Documentation"
-        icon="text-align-justify" 
-        route="/documentation/introduction"
-        onClick={onClick}
-      />
-    </SidebarBlock>
   </SidebarContentWrap>
 );
 
