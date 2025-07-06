@@ -17,11 +17,12 @@ import {
  Link as MuiLink,
  Snackbar,
  Alert,
+ Chip,
 } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Link';
+import { Delete, Category as CategoryIcon } from '@mui/icons-material'; // 2. IMPORT AN ICON (OPTIONAL)
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Delete } from '@mui/icons-material';
 
 import {
  updateSurveyTitleAction,
@@ -39,8 +40,10 @@ import {
  updateSurveyLayoutAction,
  updateSurveyThemeAction,
  fetchSurveyThemesAction,
+ deleteSurveyAction,
 } from '@/redux/actions/surveyActions';
 
+import ConfirmDeleteModal from '../../UI/Modals/components/ConfirmDeleteModal'; // Adjust path if needed
 import SurveyTitleField from './SurveyTitleField';
 import SurveyDescriptionField from './SurveyDescriptionField';
 import SurveyPageTitleField from './SurveyPageTitleField';
@@ -51,18 +54,21 @@ import AddQuestionModal from './AddQuestionModal';
 import QuestionList from './QuestionList';
 
 const SurveyPage = () => {
- const navigate = useNavigate();
- const dispatch = useDispatch();
- const { surveyId, surveyPageId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { surveyId, surveyPageId } = useParams();
 
- const { user } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.auth);
+
+  const [isDeletePageModalOpen, setDeletePageModalOpen] = useState(false);
 
  const surveyData = useSelector(state => state.survey.survey);
  const surveyTitle = surveyData?.title || '';
  const surveyDescription = surveyData?.description || '';
  const surveyQuestions = useSelector(state => state.survey.questions);
- const stockSurveys = useSelector(state => state.survey.stockSurveys || []);
  const surveyThemes = useSelector(state => state.survey.surveyThemes);
+ const surveyCategoryTitle = surveyData?.survey_category?.title;
+
 
  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
  const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
@@ -157,85 +163,6 @@ const SurveyPage = () => {
     }
   }, [user, navigate]);
 
-//  useEffect(() => {
-//     dispatch(fetchSurveyThemesAction()); // Fetch themes on component mount
-//     if (surveyId) {
-//       dispatch(fetchSurveyAction(surveyId));
-//       dispatch(fetchStockSurveysAction());
-//       if (surveyPageId) {
-//         dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-//       }
-//     }
-//   }, [surveyId, surveyPageId, dispatch]);
-
-//   useEffect(() => {
-//     if (surveyData && surveyThemes.length > 0) {
-//       const selectedTheme = surveyThemes.find(t => t.id === surveyData.theme_id);
-//       if (selectedTheme) {
-//         setTheme(selectedTheme.id);
-//       }
-//     }
-//   }, [surveyData, surveyThemes]);
-
-//  useEffect(() => {
-//   if (!user?.id) {
-//    navigate('/login');
-//   }
-//  }, [user, navigate]);
-
-//  useEffect(() => {
-//   if (surveyId) {
-//    dispatch(fetchSurveyAction(surveyId));
-//    dispatch(fetchStockSurveysAction());
-//    if (surveyPageId) {
-//     dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-//    }
-//   }
-//  }, [surveyId, surveyPageId, dispatch]);
-
-//  useEffect(() => {
-//   if (surveyData?.survey_pages) {
-//    setSurveyPages(surveyData.survey_pages);
-//   }
-//   if (surveyData?.layout) {
-//    setLayout(surveyData.layout);
-//   }
-//   if (surveyData?.theme) {
-//    setTheme(surveyData.theme);
-//   }
-//  }, [surveyData]);
-
-//  useEffect(() => {
-//   if (surveyPageId) {
-//    const filteredQuestions = surveyQuestions.filter(
-//     question => question.survey_page_id === surveyPageId,
-//    );
-//    setCurrentPageQuestions(filteredQuestions);
-//   }
-//  }, [surveyQuestions, surveyPageId, refreshKey]);
-
-//  useEffect(() => {
-//   if (surveyPages.length > 0 && surveyPageId) {
-//    const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
-//    setCurrentPageIndex(pageIndex);
-//    currentPageIndexRef.current = pageIndex;
-
-//    const currentPage = surveyPages[pageIndex];
-//    if (currentPage) {
-//     setLocalSurveyPageTitle(currentPage.title || '');
-//     setLocalSurveyPageDescription(currentPage.description || '');
-//    }
-//   }
-//  }, [surveyPages, surveyPageId]);
-
-//  useEffect(() => {
-//   setLocalSurveyTitle(surveyTitle);
-//  }, [surveyTitle]);
-
-//  useEffect(() => {
-//   setLocalSurveyDescription(surveyDescription);
-//  }, [surveyDescription]);
-
 const debouncedUpdateSurveyTitle = useCallback(
     debounce(async (newSurveyTitle) => {
       if (newSurveyTitle.trim()) {
@@ -327,46 +254,64 @@ const debouncedUpdateSurveyTitle = useCallback(
     }, 1500),
     [dispatch, surveyPageId],
   );
-//  const debouncedUpdateSurveyTitle = useCallback(
-//   debounce((newSurveyTitle) => {
-//    if (newSurveyTitle.trim()) {
-//     dispatch(updateSurveyTitleAction(surveyId, newSurveyTitle));
-//    }
-//   }, 1500),
-//   [dispatch, surveyId],
-//  );
 
-//  const debouncedUpdateSurveyDescription = useCallback(
-//   debounce((newSurveyDescription) => {
-//    if (newSurveyDescription.trim()) {
-//     dispatch(updateSurveyDescriptionAction(surveyId, newSurveyDescription));
-//    }
-//   }, 1500),
-//   [dispatch, surveyId],
-//  );
+  const openDeletePageModal = () => {
+    if (surveyPages.length === 1) {
+      alert('Cannot delete the last survey page.');
+      return;
+    }
+    setDeletePageModalOpen(true);
+  };
 
-//  const debouncedUpdateSurveyPageTitle = useCallback(
-//   debounce((newSurveyPageTitle) => {
-//    if (newSurveyPageTitle.trim()) {
-//     dispatch(updateSurveyPageTitleAction(surveyPageId, newSurveyPageTitle));
-//    }
-//   }, 1500),
-//   [dispatch, surveyPageId],
-//  );
+  const handleConfirmDeletePage = async () => {
+    // First, determine what the list of pages will be after deletion.
+    const remainingPages = surveyPages.filter(p => p.id !== surveyPageId);
 
-//  const debouncedUpdateSurveyPageDescription = useCallback(
-//   debounce((newSurveyPageDescription) => {
-//    if (newSurveyPageDescription.trim()) {
-//     dispatch(updateSurveyPageDescriptionAction(surveyPageId, newSurveyPageDescription));
-//    }
-//   }, 1500),
-//   [dispatch, surveyPageId],
-//  );
+    setDeletePageModalOpen(false); // Close the modal immediately
 
- const handleStockSurveyChange = (e) => {
-  const selectedSurveyId = e.target.value;
-  setSelectedStockSurvey(selectedSurveyId);
- };
+    try {
+      // Dispatch the action to delete the page AND re-fetch the survey data
+      await dispatch(deleteSurveyPageAction(surveyId, surveyPageId));
+
+      // After the action is complete, navigate to the new last page
+      if (remainingPages.length > 0) {
+        const lastPage = remainingPages.reduce(
+          (maxPage, currentPage) => (currentPage.sort_index > maxPage.sort_index ? currentPage : maxPage),
+          remainingPages[0],
+        );
+        navigate(`/surveys/${surveyId}/pages/${lastPage.id}`);
+      } else {
+        // Fallback if no pages are left
+        navigate('/surveys');
+      }
+    } catch (error) {
+      console.error('Error deleting page:', error);
+      setNotification({
+        open: true,
+        message: 'Failed to delete page.',
+        severity: 'error',
+      });
+    }
+  };
+
+const handleDeleteSurvey = async () => {
+    const confirmation = window.confirm(
+      'Are you sure you want to permanently delete this entire survey?',
+    );
+    if (confirmation) {
+      try {
+        await dispatch(deleteSurveyAction(surveyId));
+        navigate('/surveys'); // Navigate away after deletion
+      } catch (error) {
+        console.error('Failed to delete survey:', error);
+        setNotification({
+          open: true,
+          message: 'Failed to delete survey.',
+          severity: 'error',
+        });
+      }
+    }
+  };
 
  const handleSurveyTitleChange = (e) => {
   const newSurveyTitle = e.target.value;
@@ -562,219 +507,205 @@ const debouncedUpdateSurveyTitle = useCallback(
  };
 
   return (
+    <>
+      {surveyCategoryTitle && (
+      <Chip
+        icon={<CategoryIcon />}
+        label={surveyCategoryTitle}
+        variant="filled"
+        size="medium"
+        sx={{ mb: 4, color: 'text.secondary' }}
+      />
+      )}
 
-    <MuiGrid container spacing={4}>
-      <MuiGrid item xs={12} md={4}>
-        <MuiBox
-          sx={{
-          paddingBottom: 4,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-        >
-          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
-            Select Stock Survey
-          </MuiTypography>
-          <MuiSelect
-            fullWidth
-            value={selectedStockSurvey}
-            onChange={handleStockSurveyChange}
-          >
-            <MuiMenuItem value=""><em>None</em></MuiMenuItem>
-            {stockSurveys.map(survey => (
-              <MuiMenuItem key={survey.id} value={survey.id}>{survey.title}</MuiMenuItem>
-            ))}
-          </MuiSelect>
-        </MuiBox>
-        <MuiBox>
-          <SurveyTitleField
-            value={localSurveyTitle}
-            onChange={handleSurveyTitleChange}
-          />
-          <SurveyDescriptionField
-            value={localSurveyDescription}
-            onChange={handleSurveyDescriptionChange}
-          />
-          <SurveyPageTitleField
-            value={localSurveyPageTitle}
-            onChange={handleSurveyPageTitleChange}
-          />
-          <SurveyPageDescriptionField
-            value={localSurveyPageDescription}
-            onChange={handleSurveyPageDescriptionChange}
-          />
-          <SurveyPageNavigation
-            currentPageIndex={currentPageIndex}
-            surveyPages={surveyPages}
-            onPrev={handlePrevPage}
-            onNext={handleNextPage}
-            onSelectPage={handleSurveyPageSelection}
-            onAddNewPage={handleAddNewPage}
-          />
-          <Tooltip title={surveyPages.length === 1 ? 'Cannot delete the last page' : 'Delete this page'}>
-            <span>
-              <MuiIconButton
-                color="secondary"
-                onClick={handleDeletePage}
-                disabled={surveyPages.length === 1}
-              >
-                <Delete />
-              </MuiIconButton>
-            </span>
-          </Tooltip>
-        </MuiBox>
-        <MuiBox
-          sx={{
-            paddingBottom: 4,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
-            Select Layout
-          </MuiTypography>
-          <MuiSelect
-            fullWidth
-            value={layout}
-            onChange={handleLayoutChange}
-          >
-            <MuiMenuItem value="single">Single</MuiMenuItem>
-            <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
-          </MuiSelect>
-        </MuiBox>
-        <MuiBox
-          sx={{
-            paddingBottom: 4,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <MuiTypography variant="body2" sx={{ fontWeight: 300 }}>
-            Select Theme
-          </MuiTypography>
-          <MuiSelect
-            fullWidth
-            value={theme}
-            onChange={handleThemeChange}
-          >
-            {Array.isArray(surveyThemes) && surveyThemes.map(themeOption => (
-              <MuiMenuItem key={themeOption.id} value={themeOption.id}>
-                {themeOption.title}
-              </MuiMenuItem>
-            ))}
-          </MuiSelect>
-        </MuiBox>
-      </MuiGrid>
-      <MuiGrid item xs={12} md={8}>
-        <MuiBox sx={{ marginBottom: 4, marginLeft: { xs: 0, md: 4 } }}>
-          <MuiTypography fontWeight="300" variant="h3" align="left">
-            {localSurveyTitle || 'Survey Title'}
-          </MuiTypography>
-          <MuiTypography
-            fontWeight="300"
-            variant="body1"
-            align="justify"
-            sx={{ whiteSpace: 'pre-line', mt: 1 }}
-          >
-            {localSurveyDescription || 'Survey Description'}
-          </MuiTypography>
-        </MuiBox>
-        <MuiBox
-          sx={{
-            mt: 2,
-            marginLeft: { xs: 0, md: 4 },
-            marginBottom: { xs: 0, md: 4 },
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          {!isPublished && (
-          <Tooltip title="Publish this survey">
-            <span>
-              <MuiButton
-                variant="contained"
-                color="success"
-                size="small"
-                fullWidth
-                onClick={openPublishModal}
+      <MuiBox sx={{ mb: 1 }}>
+        <MuiTypography variant="h5" component="h2" sx={{ fontWeight: 300 }}>
+          {localSurveyTitle || 'Survey Title'}
+        </MuiTypography>
+      </MuiBox>
+      <MuiBox sx={{ mb: 4 }}>
+        <MuiTypography variant="body2" component="body2" sx={{ fontWeight: 300, color: 'text.secondary' }}>
+          {localSurveyDescription || 'Survey Description'}
+        </MuiTypography>
+      </MuiBox>
+
+      <MuiGrid container spacing={4}>
+        <MuiGrid item xs={12} md={4}>
+          {/* Left panel */}
+          <MuiBox>
+            <SurveyTitleField
+              value={localSurveyTitle}
+              onChange={handleSurveyTitleChange}
+            />
+            <SurveyDescriptionField
+              value={localSurveyDescription}
+              onChange={handleSurveyDescriptionChange}
+            />
+            <SurveyPageTitleField
+              value={localSurveyPageTitle}
+              onChange={handleSurveyPageTitleChange}
+            />
+            <SurveyPageDescriptionField
+              value={localSurveyPageDescription}
+              onChange={handleSurveyPageDescriptionChange}
+            />
+            <SurveyPageNavigation
+              currentPageIndex={currentPageIndex}
+              surveyPages={surveyPages}
+              onPrev={handlePrevPage}
+              onNext={handleNextPage}
+              onSelectPage={handleSurveyPageSelection}
+              onAddNewPage={handleAddNewPage}
+            />
+            <Tooltip title={surveyPages.length === 1 ? 'Cannot delete the last page' : 'Delete this page'}>
+              <span>
+                <MuiIconButton
+                  color="secondary"
+                  onClick={openDeletePageModal}
+                  disabled={surveyPages.length === 1}
+                >
+                  <Delete />
+                </MuiIconButton>
+              </span>
+            </Tooltip>
+          </MuiBox>
+          
+          <MuiBox sx={{ pt: 4 }}>
+            <MuiTypography variant="body2" sx={{ fontWeight: 300, mb: 1 }}>
+              Select Layout
+            </MuiTypography>
+            <MuiSelect
+              fullWidth
+              value={layout}
+              onChange={handleLayoutChange}
+            >
+              <MuiMenuItem value="single">Single</MuiMenuItem>
+              <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
+            </MuiSelect>
+          </MuiBox>
+
+          <MuiBox sx={{ pt: 2 }}>
+            <MuiTypography variant="body2" sx={{ fontWeight: 300, mb: 1 }}>
+              Select Theme
+            </MuiTypography>
+            <MuiSelect
+              fullWidth
+              value={theme}
+              onChange={handleThemeChange}
+            >
+              {Array.isArray(surveyThemes) && surveyThemes.map(themeOption => (
+                <MuiMenuItem key={themeOption.id} value={themeOption.id}>
+                  {themeOption.title}
+                </MuiMenuItem>
+              ))}
+            </MuiSelect>
+          </MuiBox>
+          <MuiBox sx={{ pt: 2 }}>
+            <MuiBox sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              {!isPublished && (
+                <MuiButton
+                  variant="contained"
+                  color="success"
+                  size="large" 
+                  onClick={openPublishModal}
+                >
+                  Publish
+                </MuiButton>
+              )}
+              {!isPublished && (
+                <MuiButton
+                  variant="contained"
+                  color="error"
+                  size="large"
+                  onClick={handleDeleteSurvey}
+                >
+                  Delete Survey
+                </MuiButton>
+              )}
+              {isPublished && surveyData.public_link && (
+              <MuiLink
+                href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+                target="_blank"
+                rel="noopener"
+                underline="always"
+                // Add a Tooltip to show the full URL on hover
+                title={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
                 sx={{
-                  backgroundColor: 'success.main',
-                  py: 1,
-                  '&:hover': { backgroundColor: 'success.dark' },
-                  marginLeft: 'auto',
+                  display: 'inline-block', // Use inline-block for better text handling
+                  verticalAlign: 'middle', // Helps align icon and text
+                  fontSize: '0.875rem', // Slightly larger for better readability
+                  color: 'primary.main',
+                  // ADDED: Truncation styles
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: '100%', // Crucial for making overflow work
+                  // REMOVED: wordBreak is not needed with this method
+                  '&:hover': { textDecoration: 'underline' },
                 }}
               >
-                Publish
+                <LaunchIcon fontSize="small" sx={{ mr: 0.5, verticalAlign: 'middle' }} />
+                {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
+              </MuiLink>
+            )}
+            </MuiBox>
+          </MuiBox>
+        </MuiGrid>
+        
+        {/* Right panel */}
+        <MuiGrid item xs={12} md={8}>
+          <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
+            <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
+            {!isPublished && (
+              <MuiButton
+                variant="contained"
+                color="primary"
+                sx={{ marginTop: 2 }}
+                onClick={openAddQuestionModal}
+              >
+                Add Question
               </MuiButton>
-            </span>
-          </Tooltip>
-        )}
-          {isPublished && surveyData.public_link && (
-          <MuiLink
-            href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
-            target="_blank"
-            rel="noopener"
-            underline="always"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: '0.875rem',
-              color: 'primary.main',
-              wordBreak: 'break-all',
-              '&:hover': { textDecoration: 'underline' },
+            )}
+          </MuiBox>
+          <AddQuestionModal
+            isOpen={isAddQuestionModalOpen}
+            onClose={closeAddQuestionModal}
+            onSubmit={handleAddQuestionSubmit}
+            surveyPages={surveyPages}
+            currentSurveyPageId={surveyPages[currentPageIndex]?.id}
+            onAddNewPage={handleAddNewPage}
+            surveyId={surveyId}
+          />
+          <ConfirmDeleteModal
+            open={isDeletePageModalOpen}
+            onClose={() => setDeletePageModalOpen(false)}
+            onConfirm={handleConfirmDeletePage}
+            title="Delete Survey Page"
+            message="Are you sure you want to delete this page? 
+            This action will also delete all associated questions and cannot be undone."
+          />
+          <ConfirmPublishModal
+            open={isPublishModalOpen}
+            onClose={closePublishModal}
+            onConfirm={() => {
+              handlePublishSurvey();
+              closePublishModal();
             }}
-          >
-            <LaunchIcon fontSize="small" sx={{ mr: 0.5, color: 'text.primary' }} />
-            {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
-          </MuiLink>
-        )}
-        </MuiBox>
-        <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
-          <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
-          {!isPublished && (
-            <MuiButton
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: 0.01 }}
-              onClick={openAddQuestionModal}
-            >
-              Add Question
-            </MuiButton>
-        )}
-        </MuiBox>
-        <AddQuestionModal
-          isOpen={isAddQuestionModalOpen}
-          onClose={closeAddQuestionModal}
-          onSubmit={handleAddQuestionSubmit}
-          surveyPages={surveyPages}
-          currentSurveyPageId={surveyPages[currentPageIndex]?.id}
-          onAddNewPage={handleAddNewPage}
-          surveyId={surveyId}
-        />
-        <ConfirmPublishModal
-          open={isPublishModalOpen}
-          onClose={closePublishModal}
-          onConfirm={() => {
-            handlePublishSurvey();
-            closePublishModal();
-          }}
-        />
+          />
+        </MuiGrid>
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={handleCloseNotification}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseNotification} severity={notification.severity} sx={{ width: '100%' }}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
       </MuiGrid>
-      <Snackbar
-        open={notification.open}
-        autoHideDuration={6000}
-        onClose={handleCloseNotification}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleCloseNotification} severity={notification.severity} sx={{ width: '100%' }}>
-          {notification.message}
-        </Alert>
-      </Snackbar>
-    </MuiGrid>
- );
+    </>
+  );
 };
 
 export default SurveyPage;

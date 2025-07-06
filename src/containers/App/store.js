@@ -15,6 +15,7 @@ import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import surveyReducer from '@/redux/reducers/surveyReducer';
 import respondentsReducer from '../../redux/reducers/respondentsReducer';
 import surveySubmissionsReducer from '../../redux/reducers/surveySubmissionsReducer';
+import userReducer from '../../redux/reducers/userReducer';
 
 const authFromSession = JSON.parse(localStorage.getItem('auth')) || { loggedIn: false, user: null };
 
@@ -38,6 +39,7 @@ const reducer = combineReducers({
   survey: surveyReducer,
   respondents: respondentsReducer,
   survey_submissions: surveySubmissionsReducer,
+  user: userReducer,
 });
 const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
 

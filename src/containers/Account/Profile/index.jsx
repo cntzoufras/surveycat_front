@@ -10,7 +10,6 @@ const Profile = () => (
       <Col md={12} lg={12} xl={4}>
         <Row>
           <ProfileMain />
-          <ProfileCalendar />
         </Row>
       </Col>
       <ProfileTabs />

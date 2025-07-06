@@ -74,6 +74,10 @@ export const DELETE_SURVEY_PAGE_REQUEST = 'DELETE_SURVEY_PAGE_REQUEST';
 export const DELETE_SURVEY_PAGE_SUCCESS = 'DELETE_SURVEY_PAGE_SUCCESS';
 export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
 
+export const DELETE_SURVEY_REQUEST = 'DELETE_SURVEY_REQUEST';
+export const DELETE_SURVEY_SUCCESS = 'DELETE_SURVEY_SUCCESS';
+export const DELETE_SURVEY_FAILURE = 'DELETE_SURVEY_FAILURE';
+
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
 export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
@@ -82,6 +86,10 @@ export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 export const FETCH_PUBLIC_SURVEY_REQUEST = 'FETCH_PUBLIC_SURVEY_REQUEST';
 export const FETCH_PUBLIC_SURVEY_SUCCESS = 'FETCH_PUBLIC_SURVEY_SUCCESS';
 export const FETCH_PUBLIC_SURVEY_FAILURE = 'FETCH_PUBLIC_SURVEY_FAILURE';
+
+export const FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST';
+export const FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS';
+export const FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE';
 
 // Action to load all question types
 export const fetchQuestionTypesAction = () => async (dispatch) => {
@@ -140,6 +148,28 @@ export const fetchSurveysAction = () => async (dispatch) => {
     dispatch({ type: FETCH_SURVEYS_FAIL, payload: error.message });
   }
 };
+
+export const fetchProfileSurveyWidgetDataAction = () => async (dispatch) => {
+  // 1. Dispatch REQUEST to set loading to true
+  dispatch({ type: FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST });
+
+  try {
+    const response = await api.get('/surveys/count');
+    // 2. On success, dispatch SUCCESS with the data
+    dispatch({
+      type: FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS,
+      payload: response.data,
+    });
+  } catch (error) {
+    // 3. On failure, dispatch FAILURE with the error
+    dispatch({
+      type: FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE,
+      payload: error.message,
+    });
+  }
+};
+
+
 
 export const fetchSurveyCategoriesAction = () => async (dispatch) => {
   try {
@@ -424,44 +454,50 @@ export const updateSurveyThemeAction = (surveyId, theme, userId) => async (dispa
   }
 };
 
-export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatch, getState) => {
+export const deleteSurveyAction = surveyId => async (dispatch) => {
+  dispatch({ type: DELETE_SURVEY_REQUEST });
+
+  try {
+    await api.delete(`/surveys/${surveyId}`);
+
+    dispatch({
+      type: DELETE_SURVEY_SUCCESS,
+      payload: surveyId,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_SURVEY_FAILURE,
+      payload: error.response?.data?.message || 'Failed to delete survey',
+    });
+    
+    throw error;
+  }
+};
+
+export const deleteSurveyPageAction = (surveyId, surveyPageId) => async (dispatch) => {
   dispatch({ type: DELETE_SURVEY_PAGE_REQUEST });
 
   try {
-    // Delete the survey page
+    // 1. Delete the survey page via the API
     await api.delete(`/survey-pages/${surveyPageId}`);
 
-    // Fetch the updated survey to get the pages after deletion
+    // 2. IMPORTANT: Re-fetch the entire survey to get the updated list of pages
     await dispatch(fetchSurveyAction(surveyId));
 
-    // Access the surveyPages directly from Redux state after the fetch
-    const { surveyPages } = getState().survey;
-
-    // Redirect to the page with the least sort_index if it exists
-    if (surveyPages && surveyPages.length > 0) {
-      console.log(`Survey pages fetched: ${JSON.stringify(surveyPages)}`);
-
-      const leastSortIndexPage = surveyPages.reduce(
-        (minPage, currentPage) => (currentPage.sort_index < minPage.sort_index ? currentPage : minPage),
-        surveyPages[0],
-      );
-
-      window.location.href = `/surveys/${surveyId}/pages/${leastSortIndexPage.id}`;
-    }
-
-    // Dispatch success action for deletion
+    // 3. Dispatch success for the page deletion itself
     dispatch({
-      type: DELETE_SURVEY_PAGE_SUCCESS,
-      payload: surveyPageId,
-    });
+        type: DELETE_SURVEY_PAGE_SUCCESS,
+        payload: surveyPageId,
+      });
   } catch (error) {
     dispatch({
       type: DELETE_SURVEY_PAGE_FAILURE,
       payload: error.response ? error.response.data : 'Network Error',
     });
+    // Let the component know the action failed
+    throw error;
   }
 };
-
 
 export const publishSurveyAction = surveyId => async (dispatch) => {
   try {

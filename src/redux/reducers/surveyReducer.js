@@ -47,6 +47,9 @@ import {
   UPDATE_QUESTIONS,
   DELETE_SURVEY_QUESTION_SUCCESS,
   DELETE_SURVEY_QUESTION_FAIL,
+  DELETE_SURVEY_REQUEST,
+  DELETE_SURVEY_SUCCESS,
+  DELETE_SURVEY_FAILURE,
   DELETE_SURVEY_PAGE_REQUEST,
   DELETE_SURVEY_PAGE_SUCCESS,
   DELETE_SURVEY_PAGE_FAILURE,
@@ -63,6 +66,9 @@ import {
   FETCH_PUBLIC_SURVEY_REQUEST,
   FETCH_PUBLIC_SURVEY_SUCCESS,
   FETCH_PUBLIC_SURVEY_FAILURE,
+  FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST,
+  FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS,
+  FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE,
 } from '../actions/surveyActions';
 
 const initialState = {
@@ -96,6 +102,14 @@ const initialState = {
   updatingSurveyResponse: false,
   updateSurveyResponseError: null,
   responseRecord: null,
+  profileSurveyWidget: {
+    loading: false,
+    data: {
+      surveys_count: 0,
+      submissions_count: 0,
+    },
+    error: null,
+  },
   loadingResponse: false,
   responseError: null,
 };
@@ -176,6 +190,34 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+    case FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST:
+      return {
+        ...state,
+        profileSurveyWidget: {
+          ...state.profileSurveyWidget,
+          loading: true,
+          error: null, // Clear previous errors
+        },
+      };
+    case FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS:
+      return {
+        ...state,
+        profileSurveyWidget: {
+          loading: false,
+          data: action.payload, // The payload is { surveys_count, submissions_count }
+          error: null,
+        },
+      };
+
+    case FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE:
+      return {
+        ...state,
+        profileSurveyWidget: {
+          ...state.profileSurveyWidget,
+          loading: false,
+          error: action.payload, // The payload is the error message
+        },
       };
     case FETCH_QUESTION_TYPES_REQUEST:
       return {
@@ -367,6 +409,27 @@ const surveyReducer = (state = initialState, action) => {
         surveyPages: state.surveyPages.filter(page => page.id !== action.payload),
       };
     case DELETE_SURVEY_PAGE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case DELETE_SURVEY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case DELETE_SURVEY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        // Set the currently viewed survey to null, as it no longer exists
+        survey: null,
+        // Also, filter the deleted survey out of the main surveys list, if it exists there
+        surveys: state.surveys.filter(s => s.id !== action.payload),
+      };
+    case DELETE_SURVEY_FAILURE:
       return {
         ...state,
         loading: false,

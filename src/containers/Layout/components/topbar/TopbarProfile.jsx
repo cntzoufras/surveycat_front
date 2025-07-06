@@ -10,16 +10,20 @@ import { marginLeft, right, left } from '@/utils/directions';
 import { TopbarBack, TopbarDownIcon } from './BasicTopbarComponents';
 import TopbarMenuLink, { TopbarLink } from './TopbarMenuLink';
 
-const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
+const DefaultAva = `${process.env.PUBLIC_URL}/img/ava.png`;
 
 const TopbarProfile = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  // const user = useSelector(state => state.user);
-  const { user } = useSelector(state => state.auth);
-  
-  const username = user?.username;
-  
   const dispatch = useDispatch(); // Use the useDispatch hook
+
+  const { user } = useSelector(state => state.auth);
+  const { profile } = useSelector(state => state.user);
+  const username = user?.username;
+
+  const backendUrl = process.env.REACT_APP_API_URL ? new URL(process.env.REACT_APP_API_URL).origin : '';
+  const avatarUrl = profile?.user?.avatar ? `${backendUrl}/storage/${profile.user.avatar}` : DefaultAva;
+
+  
 
   const toggleProfile = () => {
     setIsCollapsed(!isCollapsed);
@@ -33,8 +37,9 @@ const TopbarProfile = () => {
   return (
     <TopbarProfileWrap>
       <TopbarAvatarButton type="button" onClick={toggleProfile}>
+        {/* 3. Use the new avatarUrl and correct username path in the JSX */}
         <TopbarAvatarImage
-          src={(user && user.avatar) || Ava}
+          src={avatarUrl}
           alt="avatar"
         />
         <TopbarAvatarName>
@@ -58,19 +63,7 @@ const TopbarProfile = () => {
               path="/account/profile"
               onClick={toggleProfile}
             />
-            <TopbarMenuLink
-              title="Tasks"
-              icon="list"
-              path="/todo"
-              onClick={toggleProfile}
-            />
             <TopbarMenuDivider />
-            <TopbarMenuLink
-              title="Account Settings"
-              icon="cog"
-              path="/account/profile"
-              onClick={toggleProfile}
-            />
             <TopbarMenuLink
               title="Log Out"
               icon="exit"

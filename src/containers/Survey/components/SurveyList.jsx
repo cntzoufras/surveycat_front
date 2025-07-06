@@ -1,142 +1,247 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Button as MuiButton,
-  Box as MuiBox,
-  Typography as MuiTypography,
-  Grid as MuiGrid,
-  Paper as MuiPaper,
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  Chip,
+  IconButton,
+  Stack,
   Link as MuiLink,
-  Chip as MuiChip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchSurveyThemesAction,
   fetchSurveysAction,
+  deleteSurveyAction, // 1. IMPORT THE DELETE ACTION
 } from '@/redux/actions/surveyActions';
 
-const customTheme = createTheme({
-  typography: {
-    fontFamily: 'Roboto, sans-serif',
-  },
-});
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 
 const SurveyList = () => {
   const dispatch = useDispatch();
   const surveys = useSelector(state => state.survey.surveys);
   const themes = useSelector(state => state.survey.surveyThemes);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+
   useEffect(() => {
     dispatch(fetchSurveyThemesAction());
     dispatch(fetchSurveysAction());
   }, [dispatch]);
+
+  const handleMenuClick = (event, surveyId) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedSurveyId(surveyId);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedSurveyId(null);
+  };
+
+  // 2. EXTRACT AND ADAPT THE DELETE LOGIC
+  const handleDelete = async () => {
+    if (!selectedSurveyId) return;
+
+    const confirmation = window.confirm(
+      'Are you sure you want to permanently delete this entire survey?',
+    );
+
+    if (confirmation) {
+      try {
+        // Dispatch the same action used in SurveyPage
+        await dispatch(deleteSurveyAction(selectedSurveyId));
+        // After deletion, the fetchSurveysAction will be re-run by a parent component
+        // or a useEffect hook to update the list automatically.
+      } catch (error) {
+        console.error('Failed to delete survey:', error);
+        // You could add a snackbar notification here for errors
+      }
+    }
+    
+    // Close the menu regardless of the outcome
+    handleMenuClose();
+  };
+
 
   const getThemeTitle = (themeId) => {
     const found = themes.find(t => t.id === themeId);
     return found ? found.title : '-';
   };
 
-  const getFirstSurveyPageId = survey => (survey.survey_pages && survey.survey_pages.length > 0
-      ? survey.survey_pages[0].id
-      : '');
+  const getFirstSurveyPageId = survey =>
+    survey.survey_pages?.length > 0 ? survey.survey_pages[0].id : '';
 
   return (
-    <ThemeProvider theme={customTheme}>
-      <MuiBox p={2} textAlign="center">
-        <MuiTypography textAlign="left" variant="h2" gutterBottom>
-          Surveys
-        </MuiTypography>
+    <>
+      <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+            Surveys
+          </Typography>
+          <Button
+            component={RouterLink}
+            to="/survey-design"
+            variant="contained"
+            startIcon={<AddIcon />}
+            sx={{ textTransform: 'none', borderRadius: '8px', fontWeight: 'bold' }}
+          >
+            Create Survey
+          </Button>
+        </Stack>
 
         {surveys.length === 0 ? (
-          <MuiBox mt={4}>
-            <MuiTypography variant="h6" gutterBottom>
+          <Box textAlign="center" mt={8}>
+            <Typography variant="h6" gutterBottom>
               No surveys yet.
-            </MuiTypography>
+            </Typography>
             <MuiLink
-              component={Link}
+              component={RouterLink}
               to="/survey-design"
               sx={{ textDecoration: 'none' }}
             >
-              <MuiButton variant="contained" color="primary">
-                Create a new survey
-              </MuiButton>
+              <Button variant="outlined" sx={{ mt: 2 }}>
+                Create your first survey
+              </Button>
             </MuiLink>
-          </MuiBox>
+          </Box>
         ) : (
-          <MuiGrid container spacing={3} justifyContent="center">
+          <Grid container spacing={3}>
             {surveys.map((survey) => {
               const isPublished = Boolean(survey.public_link);
+              const firstPageId = getFirstSurveyPageId(survey);
+              const categoryTitle = survey.survey_category?.title;
 
               return (
-                <MuiGrid item xs={12} sm={8} md={6} lg={4} key={survey.id}>
-                  <MuiPaper
-                    elevation={24}
+                <Grid item xs={12} sm={6} md={4} key={survey.id}>
+                  <Card
                     sx={{
-                      position: 'relative',
-                      padding: 2,
-                      minHeight: '150px',
-                      maxWidth: '100%',
-                      margin: '0 auto',
-                      cursor: 'pointer',
+                      backgroundColor: 'action.hover',
+                      color: 'text.primary',
+                      borderRadius: '12px',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: (theme) => `0 8px 16px ${theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'}`,
+                      },
                       display: 'flex',
                       flexDirection: 'column',
-                      textAlign: 'left',
                       justifyContent: 'space-between',
+                      height: '100%',
                     }}
                   >
-                    {isPublished && (
-                      <MuiChip
-                        label="Published"
-                        size="small"
-                        color="success"
-                        sx={{
-                          position: 'absolute',
-                          top: 8,
-                          right: 8,
-                          fontWeight: 'bold',
-                        }}
-                      />
-                    )}
-
-                    <Link
-                      to={`/surveys/${survey.id}/pages/${getFirstSurveyPageId(
-                        survey,
-                      )}`}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <MuiTypography
-                        variant="h2"
-                        sx={{ color: '#505050' }}
+                    <CardContent>
+                      {categoryTitle && (
+                        <Chip
+                           icon={<CategoryOutlinedIcon />}
+                           label={categoryTitle}
+                           variant="outlined"
+                           size="small"
+                           sx={{ mb: 1.5, color: 'text.secondary', borderColor: 'divider' }}
+                        />
+                      )}
+                      <Typography
+                        variant="h4"
+                        component="div"
                         gutterBottom
+                        sx={{ fontWeight: 'bold', fontSize: '1.75rem' }}
                       >
                         {survey.title}
-                      </MuiTypography>
-                      <MuiTypography
-                        variant="body2"
-                        sx={{ color: '#505050' }}
-                        gutterBottom
-                      >
-                        Theme: {getThemeTitle(survey.theme_id)}
-                      </MuiTypography>
-                      <MuiBox mt={2}>
-                        <MuiTypography
-                          variant="subtitle2"
-                          sx={{ color: '#757575' }}
-                          gutterBottom
-                        >
+                      </Typography>
+                      <Stack direction="row" spacing={2} sx={{ color: 'text.secondary', mb: 2 }}>
+                        <Typography variant="body2">
+                          Theme: {getThemeTitle(survey.theme_id)}
+                        </Typography>
+                        <Typography variant="body2">
                           Pages: {survey.survey_pages?.length ?? 0}
-                        </MuiTypography>
-                      </MuiBox>
-                    </Link>
-                  </MuiPaper>
-                </MuiGrid>
+                        </Typography>
+                      </Stack>
+                      {isPublished && (
+                        <Chip
+                          label="Published"
+                          size="small"
+                          color="success"
+                        />
+                      )}
+                    </CardContent>
+                    <CardActions sx={{ backgroundColor: 'action.focus' }}>
+                      <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
+                        <Button
+                          size="small"
+                          startIcon={<EditOutlinedIcon />}
+                          component={RouterLink}
+                          to={`/surveys/${survey.id}/pages/${firstPageId}`}
+                          sx={{ color: 'text.primary' }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="small"
+                          startIcon={<VisibilityOutlinedIcon />}
+                          component={RouterLink}
+                          to={`/preview/${survey.id}`}
+                          sx={{ color: 'text.primary' }}
+                        >
+                          Preview
+                        </Button>
+                        <IconButton
+                          size="small"
+                          onClick={(e) => handleMenuClick(e, survey.id)}
+                          sx={{ color: 'text.secondary' }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </Stack>
+                    </CardActions>
+                  </Card>
+                </Grid>
               );
             })}
-          </MuiGrid>
+          </Grid>
         )}
-      </MuiBox>
-    </ThemeProvider>
+      </Box>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        {/* 3. The MenuItem now calls the updated handleDelete function */}
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+          <ListItemIcon>
+            <DeleteOutlineIcon fontSize="small" color="error" />
+          </ListItemIcon>
+          Delete
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
