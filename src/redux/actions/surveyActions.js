@@ -48,9 +48,6 @@ export const FETCH_SURVEY_FAIL = 'FETCH_SURVEY_FAIL';
 export const FETCH_SURVEYS_SUCCESS = 'FETCH_SURVEYS_SUCCESS';
 export const FETCH_SURVEYS_FAIL = 'FETCH_SURVEYS_FAIL';
 
-export const FETCH_STOCK_SURVEYS_SUCCESS = 'FETCH_STOCK_SURVEYS_SUCCESS';
-export const FETCH_STOCK_SURVEYS_FAIL = 'FETCH_STOCK_SURVEYS_FAIL';
-
 export const UPDATE_SURVEY_TITLE_SUCCESS = 'UPDATE_SURVEY_TITLE_SUCCESS';
 export const UPDATE_SURVEY_TITLE_FAIL = 'UPDATE_SURVEY_TITLE_FAIL';
 export const UPDATE_SURVEY_DESCRIPTION_SUCCESS = 'UPDATE_SURVEY_DESCRIPTION_SUCCESS';
@@ -215,16 +212,6 @@ export const fetchSurveyQuestionsAction = (surveyId, surveyPageId) => async (dis
     });
   } catch (error) {
     console.error('Error fetching survey questions:', error);
-  }
-};
-
-export const fetchStockSurveysAction = () => async (dispatch) => {
-  try {
-    const response = await api.get('/surveys/stock');
-    dispatch({ type: FETCH_STOCK_SURVEYS_SUCCESS, payload: response.data.data });
-  } catch (error) {
-    dispatch({ type: FETCH_STOCK_SURVEYS_FAIL, payload: error.message });
-    throw error;
   }
 };
 

@@ -33,7 +33,6 @@ import {
  deleteSurveyPageAction,
  deleteSurveyQuestionAction,
  fetchAllSurveyQuestionsWithChoices,
- fetchStockSurveysAction,
  fetchSurveyAction,
  createSurveyQuestionAction,
  publishSurveyAction,
@@ -84,7 +83,6 @@ const SurveyPage = () => {
  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
  const [currentPageIndex, setCurrentPageIndex] = useState(0);
  const currentPageIndexRef = useRef(currentPageIndex);
- const [selectedStockSurvey, setSelectedStockSurvey] = useState('');
  const isPublished = Boolean(surveyData?.public_link);
 
  const [notification, setNotification] = useState({
@@ -99,7 +97,6 @@ const SurveyPage = () => {
     dispatch(fetchSurveyThemesAction());
     if (surveyId) {
       dispatch(fetchSurveyAction(surveyId));
-      dispatch(fetchStockSurveysAction());
       if (surveyPageId) {
         dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
       }
@@ -532,23 +529,32 @@ const handleDeleteSurvey = async () => {
       <MuiGrid container spacing={4}>
         <MuiGrid item xs={12} md={4}>
           {/* Left panel */}
+          {/* START OF FIX */}
           <MuiBox>
-            <SurveyTitleField
-              value={localSurveyTitle}
-              onChange={handleSurveyTitleChange}
-            />
-            <SurveyDescriptionField
-              value={localSurveyDescription}
-              onChange={handleSurveyDescriptionChange}
-            />
-            <SurveyPageTitleField
-              value={localSurveyPageTitle}
-              onChange={handleSurveyPageTitleChange}
-            />
-            <SurveyPageDescriptionField
-              value={localSurveyPageDescription}
-              onChange={handleSurveyPageDescriptionChange}
-            />
+            <MuiBox sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: 2,
+              mb: 2,
+            }}
+            >
+              <SurveyTitleField
+                value={localSurveyTitle}
+                onChange={handleSurveyTitleChange}
+              />
+              <SurveyDescriptionField
+                value={localSurveyDescription}
+                onChange={handleSurveyDescriptionChange}
+              />
+              <SurveyPageTitleField
+                value={localSurveyPageTitle}
+                onChange={handleSurveyPageTitleChange}
+              />
+              <SurveyPageDescriptionField
+                value={localSurveyPageDescription}
+                onChange={handleSurveyPageDescriptionChange}
+              />
+            </MuiBox>
             <SurveyPageNavigation
               currentPageIndex={currentPageIndex}
               surveyPages={surveyPages}

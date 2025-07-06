@@ -32,8 +32,6 @@ import {
   FETCH_SURVEY_CATEGORIES_FAIL,
   FETCH_SURVEY_THEMES_SUCCESS,
   FETCH_SURVEY_THEMES_FAIL,
-  FETCH_STOCK_SURVEYS_SUCCESS,
-  FETCH_STOCK_SURVEYS_FAIL,
   UPDATE_SURVEY_TITLE_SUCCESS,
   UPDATE_SURVEY_TITLE_FAIL,
   UPDATE_SURVEY_DESCRIPTION_SUCCESS,
@@ -82,7 +80,6 @@ const initialState = {
   surveyThemes: [],
   surveyPage: null, // Holds the current survey page details like title, description, etc.
   surveyPages: [], // Holds all pages related to a survey
-  stockSurveys: [], // Holds stock surveys
   questions: [], // Holds questions related to the current survey page
   survey_question_choices: [], // Holds the choices related to the current questions
   layout: 'default', // Tracks layout settings for the survey
@@ -302,19 +299,6 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
-      };
-    case FETCH_STOCK_SURVEYS_SUCCESS:
-      return {
-        ...state,
-        stockSurveys: action.payload,
-        loading: false,
-        error: null,
-      };
-    case FETCH_STOCK_SURVEYS_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-        loading: false,
       };
     case FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST:
     case FETCH_SURVEY_QUESTIONS_WITH_CHOICES_REQUEST:
