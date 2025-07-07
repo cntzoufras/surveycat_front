@@ -5,8 +5,19 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import SearchIcon from 'mdi-react/SearchIcon';
 
 import { searchSurveys, clearSearchResults } from '@/redux/actions/searchActions';
-import { colorAccent, colorBackgroundBody, colorText, colorBackground, colorTextMuted } from '@/utils/palette';
-import { marginRight, marginLeft, paddingLeft, paddingRight, right } from '@/utils/directions';
+import {
+  colorAccent,
+  colorBackgroundBody,
+  colorText,
+  colorBackground,
+  colorTextMuted,
+} from '@/utils/palette';
+import {
+  marginLeft,
+  paddingLeft,
+  paddingRight,
+  right,
+} from '@/utils/directions';
 import { TopbarButton } from './BasicTopbarComponents';
 
 // A simple debounce hook
@@ -71,21 +82,23 @@ const TopbarSearch = () => {
         </TopbarSearchForm>
         {showResultsDropdown && (
           <SearchResults>
-              {loading && <SearchResultItem>Searching...</SearchResultItem>}
-              {!loading && !hasResults && (
-                <SearchResultItem>No results found for "{debouncedQuery}"</SearchResultItem>
-              )}
-              {!loading && hasResults && (
-                  results.filter(survey => survey.first_page_id).map(survey => (
-                    <SearchResultLink
-                      key={survey.id} 
-                      href={`/surveys/${survey.id}/pages/${survey.first_page_id}`}
-                    >
-                      <SurveyTitle>{survey.title}</SurveyTitle>
-                      <SurveyDescription>{survey.description}</SurveyDescription>
-                    </SearchResultLink>
-                  ))
-              )}
+            {loading && <SearchResultItem>Searching...</SearchResultItem>}
+            {!loading && !hasResults && (
+              <SearchResultItem>
+                No results found for &quot;{debouncedQuery}&quot;
+              </SearchResultItem>
+            )}
+            {!loading && hasResults && (
+                results.filter(survey => survey.first_page_id).map(survey => (
+                  <SearchResultLink
+                    key={survey.id}
+                    href={`/surveys/${survey.id}/pages/${survey.first_page_id}`}
+                  >
+                    <SurveyTitle>{survey.title}</SurveyTitle>
+                    <SurveyDescription>{survey.description}</SurveyDescription>
+                  </SearchResultLink>
+                ))
+            )}
           </SearchResults>
         )}
       </SearchWrapper>
