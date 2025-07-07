@@ -59,9 +59,8 @@ jobs:
           export IMAGE_VERSION=3.57 && \
         cd /var/www/surveycat_front && \
           git pull origin main && \
-          docker-compose -f docker-compose.prod.yml down --volumes && \
+          docker-compose -f docker-compose.prod.yml down && \
           docker-compose -f docker-compose.prod.yml pull nginx && \
-          docker-compose -f docker-compose.prod.yml build --no-cache && \
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
