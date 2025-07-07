@@ -106,6 +106,11 @@ export const sidebarColor = theme('mode', {
   dark: '#232329',
 });
 
+export const colorTextMuted = theme('mode', {
+  light: '#646777',
+  dark: '#999999',
+});
+
 
 export const colorAccent = '#D58D44';
 export const colorLightAccent = '#F3AD61';
