@@ -41,6 +41,7 @@ const SidebarContent = ({
       <SidebarLink title="App Dashboard" icon="smartphone" route="/app_dashboard" onClick={onClick} />
       <SidebarLink title="Surveys Dashboard" icon="apartment" route="/surveys_dashboard" onClick={onClick} />
     </SidebarBlock>
+    {/* 
     <SidebarBlock collapse={collapse}>
       <SidebarCategory icon="layers" title="Theme" collapse={collapse}>
         <SidebarNavLink title="Light Theme" as="button" type="button" onClick={changeToLight}>
@@ -51,7 +52,7 @@ const SidebarContent = ({
         </SidebarNavLink> 
       </SidebarCategory>
     </SidebarBlock>
-    {/* 
+    
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Layout" icon="layers" collapse={collapse}>
         <SidebarCategory title="Tables" icon="list" collapse={collapse}>
