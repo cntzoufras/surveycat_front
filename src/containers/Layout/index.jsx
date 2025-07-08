@@ -11,23 +11,26 @@ import Customizer from './customizer/Customizer';
 import WelcomeNotification from './components/WelcomeNotification';
 
 const Layout = () => {
-  const [isNotificationShown, setIsNotificationShown] = useState(false);
+  const [isNotificationShown, setIsNotificationShown] = useState(
+    () => localStorage.getItem('welcomeNotificationShown') === 'true',
+  );
 
-  const {
-    customizer, sidebar, theme, rtl,
-  } = useSelector(state => ({
+
+  const dispatch = useDispatch();
+  const { customizer, sidebar, theme } = useSelector(state => ({
     customizer: state.customizer,
     sidebar: state.sidebar,
     theme: state.theme,
   }));
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (!isNotificationShown) {
-      WelcomeNotification(theme, rtl, setIsNotificationShown, isNotificationShown);
+      WelcomeNotification(theme);
+  
+      setIsNotificationShown(true);
+      localStorage.setItem('welcomeNotificationShown', 'true');
     }
-  }, [theme, rtl, isNotificationShown]);
+  }, [isNotificationShown, theme]);
 
   const sidebarVisibility = () => {
     dispatch(changeSidebarVisibility());
