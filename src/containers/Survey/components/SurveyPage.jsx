@@ -483,7 +483,10 @@ const handleDeleteSurvey = async () => {
  };
 
  const handlePreviewSurvey = async () => {
-  if (!localSurveyTitle.trim()) return console.error('Title is required');
+  if (!localSurveyTitle.trim()) {
+    console.error('Title is required');
+    return;
+  }
   try {
     await dispatch(previewSurveyAction(surveyId));
     navigate(`/surveys/${surveyId}/preview`);

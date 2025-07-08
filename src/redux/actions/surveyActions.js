@@ -499,7 +499,7 @@ export const publishSurveyAction = surveyId => async (dispatch) => {
   }
 };
 
-export const previewSurveyAction = surveyId => async dispatch => {
+export const previewSurveyAction = surveyId => async (dispatch) => {
   const response = await api.put(`/surveys/${surveyId}/preview`);
   const survey = response.data;
   const surveyPages = survey.survey_pages || [];
