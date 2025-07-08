@@ -40,6 +40,16 @@ const Router = () => (
             </AuthCheck>
           )} 
         />
+        <Route
+          path="/surveys/:surveyId/preview"
+          element={(
+            <AuthCheck>
+              <PrivateRoute>
+                <PublicSurveyPage preview />
+              </PrivateRoute>
+            </AuthCheck>
+          )}
+        />
         <Route 
           path="/*" 
           element={(

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -7,6 +8,7 @@ import {
   submitSurveySubmissionAction, // use the proper submission action
   updateSurveyResponseAction, // ensure this is imported if we use it
   saveFollowUpDetailsAction,
+  previewSurveyAction,
 } from '@/redux/actions/surveyActions';
 import {
   Container,
@@ -18,9 +20,12 @@ import PublicQuestionList from './public/PublicQuestionList';
 import FollowUpForm from './public/FollowUpForm';
 import ThankYouSubmission from './ThankYouSubmission';
 
-const PublicSurveyPage = () => {
+const PublicSurveyPage = ({ preview = false }) => {
   const dispatch = useDispatch();
-  const { surveySlug } = useParams();
+  const { surveySlug, surveyId } = useParams();
+
+   // Choose which identifier to use based on preview flag
+  const idOrSlug = preview ? surveyId : surveySlug;
 
   // Redux state selectors
   const survey = useSelector(state => state.survey.publicSurvey);
@@ -39,13 +44,25 @@ const PublicSurveyPage = () => {
   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   const deviceType = isMobile ? 'mobile' : 'desktop';
   const sessionId = document.cookie.match(/laravel_session=([^;]+)/)?.[1] ?? '';
+
+  useEffect(() => {
+    if (!idOrSlug) return;
+    if (preview) {
+      dispatch(previewSurveyAction(surveyId))
+        .catch(err => console.error('Preview failed:', err));
+    } else {
+      dispatch(fetchPublicSurveyBySlugAction(surveySlug))
+        .catch(err => console.error('Load failed:', err));
+    }
+  }, [preview, idOrSlug, dispatch, surveyId, surveySlug]);
+
   
   // Fetch survey data when the component mounts or slug changes
-  useEffect(() => {
-    if (!surveySlug) return;
-    dispatch(fetchPublicSurveyBySlugAction(surveySlug))
-      .catch(err => console.error('Failed to load public survey:', err));
-  }, [surveySlug, dispatch]);
+  // useEffect(() => {
+  //   if (!surveySlug) return;
+  //   dispatch(fetchPublicSurveyBySlugAction(surveySlug))
+  //     .catch(err => console.error('Failed to load public survey:', err));
+  // }, [surveySlug, dispatch]);
 
   // Once the survey data is loaded, create a survey response record (if not already created)
   useEffect(() => {
@@ -139,10 +156,6 @@ const PublicSurveyPage = () => {
     return <Typography>Loading...</Typography>;
   }
 
-  // Render thank-you page upon successful submission
-  // if (submissionComplete) {
-  //   return <ThankYouSubmission timestamp={submissionTimestamp} />;
-  // }
   if (submissionComplete && !followUpDone) {
      return <FollowUpForm onSubmit={handleFollowUp} />;
    }
@@ -183,6 +196,7 @@ const PublicSurveyPage = () => {
       {/* Submit Button */}
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <Button
+          disabled={preview}
           variant="contained"
           onClick={handleSubmit}
           color="primary"
@@ -205,3 +219,11 @@ const PublicSurveyPage = () => {
 };
 
 export default PublicSurveyPage;
+
+PublicSurveyPage.propTypes = {
+  preview: PropTypes.bool,
+};
+
+PublicSurveyPage.defaultProps = {
+  preview: false,
+};

@@ -122,7 +122,7 @@ const SurveyList = () => {
         ) : (
           <Grid container spacing={3}>
             {surveys.map((survey) => {
-              const isPublished = Boolean(survey.public_link);
+              const isPublished = survey.survey_status_id === 2;
               const firstPageId = getFirstSurveyPageId(survey);
               const categoryTitle = survey.survey_category?.title;
 
@@ -196,7 +196,7 @@ const SurveyList = () => {
                           size="small"
                           startIcon={<VisibilityOutlinedIcon />}
                           component={RouterLink}
-                          to={`/preview/${survey.id}`}
+                          to={`/surveys/${survey.id}/preview`}
                           sx={{ color: 'text.primary' }}
                         >
                           Preview

@@ -53,6 +53,8 @@ import {
   DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
   PUBLISH_SURVEY_FAIL,
+  PREVIEW_SURVEY_SUCCESS,
+  PREVIEW_SURVEY_FAILURE,
   SUBMIT_SURVEY_RESPONSE_SUCCESS,
   SUBMIT_SURVEY_RESPONSE_FAILURE,
   FETCH_SINGLE_SURVEY_QUESTION_CHOICES_REQUEST,
@@ -518,6 +520,20 @@ const surveyReducer = (state = initialState, action) => {
         error: null,
       };
     case PUBLISH_SURVEY_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case PREVIEW_SURVEY_SUCCESS:
+      return {
+        ...state,
+        publicSurvey: action.payload.survey,
+        publicSurveyPages: action.payload.surveyPages,
+        publicSurveyQuestions: action.payload.surveyQuestions,
+        publicSurveyQuestionChoices: action.payload.surveyQuestionChoices,
+        error: null,
+      };
+    case PREVIEW_SURVEY_FAILURE:
       return {
         ...state,
         error: action.payload,

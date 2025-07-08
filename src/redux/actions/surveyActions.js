@@ -77,6 +77,8 @@ export const DELETE_SURVEY_FAILURE = 'DELETE_SURVEY_FAILURE';
 
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
 export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
+export const PREVIEW_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
+export const PREVIEW_SURVEY_FAILURE = 'PUBLISH_SURVEY_FAIL';
 export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
 export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 
@@ -496,6 +498,28 @@ export const publishSurveyAction = surveyId => async (dispatch) => {
     throw error;
   }
 };
+
+export const previewSurveyAction = surveyId => async dispatch => {
+  const response = await api.put(`/surveys/${surveyId}/preview`);
+  const survey = response.data;
+  const surveyPages = survey.survey_pages || [];
+  const surveyQuestions = surveyPages.flatMap(p => p.survey_questions || []);
+  const surveyQuestionChoices = surveyQuestions.flatMap(q => q.survey_question_choices || []);
+
+  dispatch({
+    type: FETCH_PUBLIC_SURVEY_SUCCESS,
+    payload: { 
+      survey, 
+      surveyPages, 
+      surveyQuestions, 
+      surveyQuestionChoices,
+    },
+  });
+
+  return response.data;
+};
+
+
 
 export const submitSurveySubmissionAction = (surveyId, submissionData) => async (dispatch) => {
   // eslint-disable-next-line camelcase

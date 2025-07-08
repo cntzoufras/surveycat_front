@@ -35,6 +35,7 @@ import {
  fetchAllSurveyQuestionsWithChoices,
  fetchSurveyAction,
  createSurveyQuestionAction,
+ previewSurveyAction,
  publishSurveyAction,
  updateSurveyLayoutAction,
  updateSurveyThemeAction,
@@ -481,6 +482,16 @@ const handleDeleteSurvey = async () => {
   }
  };
 
+ const handlePreviewSurvey = async () => {
+  if (!localSurveyTitle.trim()) return console.error('Title is required');
+  try {
+    await dispatch(previewSurveyAction(surveyId));
+    navigate(`/surveys/${surveyId}/preview`);
+  } catch (error) {
+    console.error('Error previewing survey:', error);
+  }
+};
+
  const handlePublishSurvey = async () => {
   try {
    if (!localSurveyTitle.trim()) {
@@ -618,6 +629,14 @@ const handleDeleteSurvey = async () => {
                   Publish
                 </MuiButton>
               )}
+              <MuiButton
+                variant="outlined" // Use a different style to distinguish from Publish
+                color="primary"
+                size="large"
+                onClick={handlePreviewSurvey}
+              >
+                Preview
+              </MuiButton>
               {!isPublished && (
                 <MuiButton
                   variant="contained"
