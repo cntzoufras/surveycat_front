@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 3.58
+      IMAGE_VERSION: 3.59
       REACT_APP_API_URL: https://snf-893977.vm.okeanos.grnet.gr/api
       REACT_APP_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr
       REACT_APP_IMAGE_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr/images
@@ -51,12 +51,12 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 3.58
+          IMAGE_VERSION: 3.59
 
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
-          export IMAGE_VERSION=3.58 && \
+          export IMAGE_VERSION=3.59 && \
         cd /var/www/surveycat_front && \
           git pull origin main && \
           docker-compose -f docker-compose.prod.yml down && \
@@ -64,4 +64,4 @@ jobs:
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 3.58
+          IMAGE_VERSION: 3.59
