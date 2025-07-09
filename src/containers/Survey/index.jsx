@@ -28,7 +28,6 @@ const SurveyPageWrapper = () => {
   console.log(`Survey/index Survey ID: ${surveyId}, surveyPageID: ${surveyPageId}`);
   
   const [pageData, setPageData] = useState(null);
-  const [showPreview, setShowPreview] = useState(true);
 
   useEffect(() => {
     if (!userId) {
@@ -49,45 +48,6 @@ const SurveyPageWrapper = () => {
       {!surveyId && !surveyPageId && <SurveyForm userId={userId} />}
       {surveyId && surveyPageId && (
         <SurveyPageLoader surveyId={surveyId} surveyPageId={surveyPageId} />
-      )}
-
-      {/* toggle to show/hide preview */}
-      <FormControlLabel
-        control={(
-          <Switch
-            checked={showPreview}
-            onChange={e => setShowPreview(e.target.checked)}
-          />
-        )}
-        label="Live Preview"
-        sx={{ mt: 3 }}
-      />
-
-      {/* live preview pane */}
-      {showPreview && pageData && (
-        <MuiBox
-          sx={{
-            width: '100%',
-            mt: 2,
-            p: 2,
-            border: '1px solid #eee',
-            borderRadius: 1,
-            overflow: 'auto',
-            maxHeight: '60vh',
-          }}
-        >
-          <PublicSurveyPreview
-            title={pageData.page_title}
-            questions={pageData.questions}
-            settings={{
-              showPageTitle: pageData.show_page_title,
-              showNumbers: pageData.show_question_numbers,
-              showProgress: pageData.show_progress_bar,
-              /* …etc… */
-            }}
-            theme={pageData.theme}
-          />
-        </MuiBox>
       )}
     </StyledBox>
   );
