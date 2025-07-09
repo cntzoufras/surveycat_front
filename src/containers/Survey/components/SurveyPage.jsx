@@ -555,18 +555,22 @@ const handleDeleteSurvey = async () => {
               <SurveyTitleField
                 value={localSurveyTitle}
                 onChange={handleSurveyTitleChange}
+                disabled={isPublished}
               />
               <SurveyDescriptionField
                 value={localSurveyDescription}
                 onChange={handleSurveyDescriptionChange}
+                disabled={isPublished}
               />
               <SurveyPageTitleField
                 value={localSurveyPageTitle}
                 onChange={handleSurveyPageTitleChange}
+                disabled={isPublished}
               />
               <SurveyPageDescriptionField
                 value={localSurveyPageDescription}
                 onChange={handleSurveyPageDescriptionChange}
+                disabled={isPublished}
               />
             </MuiBox>
             <SurveyPageNavigation
@@ -576,13 +580,14 @@ const handleDeleteSurvey = async () => {
               onNext={handleNextPage}
               onSelectPage={handleSurveyPageSelection}
               onAddNewPage={handleAddNewPage}
+              disabled={isPublished} 
             />
             <Tooltip title={surveyPages.length === 1 ? 'Cannot delete the last page' : 'Delete this page'}>
               <span>
                 <MuiIconButton
                   color="secondary"
                   onClick={openDeletePageModal}
-                  disabled={surveyPages.length === 1}
+                  disabled={surveyPages.length === 1 || isPublished}
                 >
                   <Delete />
                 </MuiIconButton>
@@ -598,6 +603,7 @@ const handleDeleteSurvey = async () => {
               fullWidth
               value={layout}
               onChange={handleLayoutChange}
+              disabled={isPublished}
             >
               <MuiMenuItem value="single">Single</MuiMenuItem>
               <MuiMenuItem value="multiple">Multiple</MuiMenuItem>
@@ -612,6 +618,7 @@ const handleDeleteSurvey = async () => {
               fullWidth
               value={theme}
               onChange={handleThemeChange}
+              disabled={isPublished}
             >
               {Array.isArray(surveyThemes) && surveyThemes.map(themeOption => (
                 <MuiMenuItem key={themeOption.id} value={themeOption.id}>

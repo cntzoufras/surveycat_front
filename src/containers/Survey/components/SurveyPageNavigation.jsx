@@ -10,7 +10,13 @@ import {
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 
 const SurveyPageNavigation = ({
- currentPageIndex, surveyPages, onPrev, onNext, onSelectPage, onAddNewPage, 
+  currentPageIndex, 
+  surveyPages, 
+  onPrev, 
+  onNext, 
+  onSelectPage, 
+  onAddNewPage, 
+  disabled,
 }) => (
   <MuiBox sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 2 }}>
     <MuiIconButton onClick={onPrev} disabled={currentPageIndex <= 0}>
@@ -32,7 +38,7 @@ const SurveyPageNavigation = ({
     <MuiIconButton onClick={onNext} disabled={currentPageIndex >= surveyPages.length - 1}>
       <ArrowForwardIos />
     </MuiIconButton>
-    <MuiButton variant="contained" onClick={onAddNewPage}>
+    <MuiButton variant="contained" onClick={onAddNewPage} disabled={disabled}>
       Add New Page
     </MuiButton>
   </MuiBox>
@@ -50,6 +56,11 @@ SurveyPageNavigation.propTypes = {
   onNext: PropTypes.func.isRequired,
   onSelectPage: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
+};
+
+SurveyPageNavigation.defaultProps = {
+  disabled: false,
 };
 
 export default SurveyPageNavigation;
