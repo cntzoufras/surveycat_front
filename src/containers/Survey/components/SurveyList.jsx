@@ -178,6 +178,7 @@ const SurveyList = () => {
                           label="Published"
                           size="small"
                           color="success"
+                          sx={{ mb: 1 }}
                         />
                       )}
                     </CardContent>
