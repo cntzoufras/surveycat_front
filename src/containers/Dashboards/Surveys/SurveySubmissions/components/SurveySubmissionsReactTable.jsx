@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import ReactTableBase from '@/shared/components/table/ReactTableBase';
@@ -6,6 +7,11 @@ import ReactTableCustomizer from '@/shared/components/table/components/ReactTabl
 import {
   Card, CardBody, CardTitleWrap, CardTitle, CardSubhead,
 } from '@/shared/components/Card';
+import { highlightColor } from '@/utils/palette';
+
+const Highlight = styled.span`
+    color: ${highlightColor};
+  `;
 
 const SurveySubmissionsReactTable = ({ reactTableData }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
@@ -56,7 +62,7 @@ const SurveySubmissionsReactTable = ({ reactTableData }) => {
               <CardTitle>Customize Survey Submissions table</CardTitle>
               <CardSubhead>
                 Use table with&nbsp;
-                <span className="orange-text">customizer</span>
+                <Highlight>customizer</Highlight>
               </CardSubhead>
             </CardTitleWrap>
             <ReactTableCustomizer

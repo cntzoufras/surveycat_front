@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import ReactTableBase from '@/shared/components/table/ReactTableBase';
 import ReactTableCustomizer from '@/shared/components/table/components/ReactTableCustomizer';
+import { highlightColor } from '@/utils/palette';
 import {
   Card, CardBody, CardTitleWrap, CardTitle, CardSubhead,
 } from '@/shared/components/Card';
+
+const Highlight = styled.span`
+    color: ${highlightColor};
+  `;
 
 const RespondentsReactTable = ({ reactTableData }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
@@ -62,7 +68,7 @@ const RespondentsReactTable = ({ reactTableData }) => {
               <CardTitle>Customize Respondents table</CardTitle>
               <CardSubhead>
                 Use table with&nbsp;
-                <span className="orange-text">customizer</span>
+                <Highlight>customizer</Highlight>
               </CardSubhead>
             </CardTitleWrap>
             <ReactTableCustomizer

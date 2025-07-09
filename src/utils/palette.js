@@ -111,6 +111,10 @@ export const colorTextMuted = theme('mode', {
   dark: '#999999',
 });
 
+export const highlightColor = theme('mode', {
+  light: '#E28743',
+  dark: '#FFD580',
+});
 
 export const colorAccent = '#D58D44';
 export const colorLightAccent = '#F3AD61';
