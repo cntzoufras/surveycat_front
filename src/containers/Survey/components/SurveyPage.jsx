@@ -84,7 +84,7 @@ const SurveyPage = () => {
  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
  const [currentPageIndex, setCurrentPageIndex] = useState(0);
  const currentPageIndexRef = useRef(currentPageIndex);
- const isPublished = Boolean(surveyData?.public_link);
+ const isPublished = surveyData?.survey_status_id === 2;
 
  const [notification, setNotification] = useState({
   open: false,
