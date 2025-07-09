@@ -9,6 +9,7 @@ import {
   InputLabel as MuiInputLabel,
   Select as MuiSelect,
   MenuItem as MuiMenuItem,
+  useTheme,
 } from '@mui/material';
 import styled from '@emotion/styled';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,6 +41,8 @@ const MuiStyledErrorBox = styled(MuiBox)`
 `;
 
 const SurveyForm = ({ userId }) => {
+  const theme = useTheme();
+  const textColor = theme.palette.text.primary;
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
@@ -117,48 +120,74 @@ const SurveyForm = ({ userId }) => {
             value={surveyDescription}
             onChange={e => setSurveyDescription(e.target.value)}
           />
-          <MuiStyledFormControl fullWidth required>
-            <CustomInputLabel id="category-label" shrink={Boolean(selectedCategoryId)}>
+          <MuiFormControl variant="outlined" fullWidth required sx={{ mb: 1 }}>
+            <MuiInputLabel
+              id="category-label"
+              shrink={Boolean(selectedCategoryId)}
+              sx={{ color: textColor }}
+            >
               Category
-            </CustomInputLabel>
+            </MuiInputLabel>
             <MuiSelect
               labelId="category-label"
-              name="Process"
               id="category-select"
               value={selectedCategoryId}
-              label="Category"
               onChange={e => setSelectedCategoryId(e.target.value)}
-              sx={{ width: '100%', maxWidth: 400 }}
+              label="Category"
+              sx={{
+                color: textColor,
+                '& .MuiSvgIcon-root': {
+                  color: textColor,
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: theme.palette.divider,
+                },
+              }}
             >
-              <MuiMenuItem value="" disabled>
+              <MuiMenuItem value="" disabled sx={{ color: textColor }}>
                 <em>Select Category</em>
               </MuiMenuItem>
-              {Array.isArray(surveyCategories) && surveyCategories.map(category => (
-                <MuiMenuItem key={category.id} value={category.id} sx={{ lineHeight: 1.5 }}>
-                  {category.title}
+              {surveyCategories.map(cat => (
+                <MuiMenuItem
+                  key={cat.id}
+                  value={cat.id}
+                  sx={{ color: textColor }}
+                >
+                  {cat.title}
                 </MuiMenuItem>
-              ))}
+            ))}
             </MuiSelect>
-          </MuiStyledFormControl>
-          <MuiStyledFormControl fullWidth>
-            <CustomInputLabel id="theme-label" shrink={Boolean(selectedThemeId)}>
+          </MuiFormControl>          
+          <MuiStyledFormControl fullWidth variant="outlined">
+            <MuiInputLabel
+              id="theme-label"
+              shrink={Boolean(selectedThemeId)}
+              sx={{ color: textColor }}
+            >
               Theme
-            </CustomInputLabel>
+            </MuiInputLabel>
             <MuiSelect
               labelId="theme-label"
-              name="Process-theme"
               id="theme-select"
               value={selectedThemeId}
-              label="Theme"
               onChange={e => setSelectedThemeId(e.target.value)}
-              sx={{ maxWidth: 400 }}
+              label="Theme"
+              sx={{
+                color: textColor,
+                '& .MuiSvgIcon-root': {
+                  color: textColor,
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: theme.palette.divider,
+                },
+              }}
             >
-              <MuiMenuItem value="" disabled>
+              <MuiMenuItem value="" disabled sx={{ color: textColor }}>
                 <em>Select Theme</em>
               </MuiMenuItem>
-              {Array.isArray(surveyThemes) && surveyThemes.map(theme => (
-                <MuiMenuItem key={theme.id} value={theme.id} sx={{ lineHeight: 1.5 }}>
-                  {theme.title}
+              {surveyThemes.map(t => (
+                <MuiMenuItem key={t.id} value={t.id} sx={{ color: textColor, lineHeight: 1.5 }}>
+                  {t.title}
                 </MuiMenuItem>
               ))}
             </MuiSelect>
