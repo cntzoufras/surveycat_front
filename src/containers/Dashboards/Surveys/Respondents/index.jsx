@@ -24,6 +24,11 @@ const Respondents = () => {
         width: 65,
       },
       {
+        Header: 'Survey',
+        accessor: 'survey',
+        disableGlobalFilter: true,
+      },
+      {
         Header: 'Email',
         accessor: 'email',
       },
@@ -35,11 +40,6 @@ const Respondents = () => {
       {
         Header: 'Gender',
         accessor: 'gender',
-        disableGlobalFilter: true,
-      },
-      {
-        Header: 'Location',
-        accessor: 'location',
         disableGlobalFilter: true,
       },
       {
@@ -55,19 +55,20 @@ const Respondents = () => {
     try {
       return JSON.parse(details);
     } catch (e) {
-      return { age: null, gender: null, location: null };
+      return { age: null, gender: null, country: null };
     }
   };
 
   // Map over respondents directly
   const data = respondents?.map((respondent, index) => {
-    const { age, gender, location } = parseDetails(respondent.details);
+    const { age, gender, country } = parseDetails(respondent.details);
     return {
       id: index + 1,
       email: respondent.email || 'N/A',
-      age,
-      gender,
-      location,
+      survey: respondent.survey_response?.survey?.title || 'N/A',
+      age: respondent.age || age || 'N/A',
+      gender: respondent.gender || gender || 'N/A',
+      country: respondent.country || country || 'N/A',
       created_at: respondent.created_at
         ? new Date(respondent.created_at).toLocaleDateString()
         : 'N/A',

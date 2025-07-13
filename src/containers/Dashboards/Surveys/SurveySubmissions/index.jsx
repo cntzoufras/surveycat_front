@@ -45,11 +45,6 @@ const SurveySubmissions = () => {
       disableGlobalFilter: true,
     },
     {
-      Header: 'Location',
-      accessor: 'respondent_location',
-      disableGlobalFilter: true,
-    },
-    {
       Header: 'Device',
       accessor: 'device',
       disableGlobalFilter: true,
@@ -69,30 +64,18 @@ const SurveySubmissions = () => {
 );
 
 
-  const parseDetails = (details) => {
-    try {
-      return JSON.parse(details);
-    } catch (e) {
-      return { survey: null, survey_response_id: null, respondent: null };
-    }
-  };
-
   // eslint-disable-next-line camelcase
   const data = survey_submissions?.map((submission, index) => {
     const response = submission.survey_response || {};
     const survey = response.survey || {};
     const respondent = response.respondent || {};
-    const respondentDetails = respondent.details ? JSON.parse(respondent.details) : {};
-    
 
-  
     return {
       id: index + 1,
       survey: survey.title || 'N/A',
       response: response.id || 'N/A',
       respondent_email: respondent.email || 'N/A',
       respondent_id: respondent.id || 'N/A',
-      respondent_location: respondentDetails.location || 'N/A',
       device: response.device || 'N/A',
       country: response.country || 'N/A',
       created_at: submission.created_at
