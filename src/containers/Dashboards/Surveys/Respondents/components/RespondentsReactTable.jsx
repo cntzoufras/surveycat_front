@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import ReactTableBase from '@/shared/components/table/ReactTableBase';

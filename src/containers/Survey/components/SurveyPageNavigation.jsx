@@ -56,7 +56,7 @@ SurveyPageNavigation.propTypes = {
   onNext: PropTypes.func.isRequired,
   onSelectPage: PropTypes.func.isRequired,
   onAddNewPage: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 SurveyPageNavigation.defaultProps = {

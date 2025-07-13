@@ -22,7 +22,7 @@ export const fetchRespondentsAction = (page = 1, perPage = 10) => async (dispatc
  * @param {number|string} respondentId
  * @param {{email?:string,gender?:string,age?:number}} data
  */
-export const updateRespondentAction = (respondentId, data) => async dispatch => {
+export const updateRespondentAction = (respondentId, data) => async (dispatch) => {
   dispatch({ type: UPDATE_RESPONDENT_REQUEST, meta: { respondentId } });
   try {
     const res = await api.put(`/respondents/${respondentId}`, data);
@@ -34,7 +34,7 @@ export const updateRespondentAction = (respondentId, data) => async dispatch => 
   } catch (err) {
     dispatch({
       type: UPDATE_RESPONDENT_FAILURE,
-      payload: err.message || 'Failed to update respondent'
+      payload: err.message || 'Failed to update respondent',
     });
     throw err;
   }
