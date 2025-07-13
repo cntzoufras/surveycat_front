@@ -50,7 +50,7 @@ const RespondentsReactTable = ({ reactTableData }) => {
   };
 
   const tableConfig = {
-    isEditable: true,
+    isEditable: false,
     isSortable,
     isResizable: false,
     withPagination,

@@ -44,7 +44,7 @@ const SurveySubmissionsReactTable = ({ reactTableData }) => {
   };
 
   const tableConfig = {
-    isEditable: true,
+    isEditable: false,
     isSortable,
     isResizable: false,
     withPagination,
