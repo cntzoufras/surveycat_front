@@ -27,7 +27,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
   return (
     <div>
       {/* Render Radio buttons for question type 1 (Multiple Choice) */}
-      {questionTypeId === 1 && Array.isArray(surveyQuestionChoices) && (
+      {(questionTypeId === 1 || questionTypeId === 7) && Array.isArray(surveyQuestionChoices) && (
         <List>
           {surveyQuestionChoices.map(choice => (
             <ListItem key={choice.id} disablePadding>
@@ -39,7 +39,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
                     onChange={handleChange}
                     checked={selectedOption === choice.content}
                   />
-                )}
+                )}  
                 label={<span style={{ color: textColor }}>{choice.content}</span>} // Apply text color
               />
             </ListItem>
