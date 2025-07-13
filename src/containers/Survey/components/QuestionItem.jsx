@@ -25,6 +25,8 @@ const QuestionItem = ({
   onResponseChange,
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
+  
+  const isPublished = useSelector(state => state.survey.survey.survey_status_id === 2);
 
   const questionTypes = useSelector(state => state.survey.questionTypes || []);
   const typeObj = questionTypes.find(qt => qt.id === question.question_type_id);
@@ -39,7 +41,7 @@ const QuestionItem = ({
   };
 
   const handleDeleteClick = () => {
-    setDialogOpen(true);
+    if (!isPublished) setDialogOpen(true);
   };
 
   const handleConfirmDelete = () => {
@@ -74,6 +76,7 @@ const QuestionItem = ({
           <IconButton
             aria-label="delete"
             onClick={handleDeleteClick}
+            disabled={isPublished}
           >
             <DeleteIcon />
           </IconButton>
