@@ -26,7 +26,7 @@ const QuestionItem = ({
 }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   
-  const isPublished = useSelector(state => state.survey.survey.survey_status_id === 2);
+  const isPublished = useSelector(state => state.survey.survey_status_id === 2);
 
   const questionTypes = useSelector(state => state.survey.questionTypes || []);
   const typeObj = questionTypes.find(qt => qt.id === question.question_type_id);
