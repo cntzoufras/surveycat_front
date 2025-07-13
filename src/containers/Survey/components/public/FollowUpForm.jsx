@@ -18,12 +18,20 @@ const FollowUpForm = ({ onSubmit }) => {
 
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('');
+  const [age, setAge] = useState('');
   const [errors, setErrors] = useState({});
 
   const handleFinish = () => {
     const newErrors = {};
     if (email && !/^\S+@\S+\.\S+$/.test(email)) {
       newErrors.email = 'Invalid email';
+    }
+    // Validate age if provided
+    if (age) {
+      const ageNum = parseInt(age, 10);
+      if (Number.isNaN(ageNum) || ageNum < 0) {
+        newErrors.age = 'Enter a valid age';
+      }
     }
     if (Object.keys(newErrors).length) {
       setErrors(newErrors);
@@ -32,6 +40,7 @@ const FollowUpForm = ({ onSubmit }) => {
     onSubmit({
       email: email.trim() || null,
       gender: gender || null,
+      age: age ? parseInt(age, 10) : null,
     });
   };
 
@@ -88,6 +97,38 @@ const FollowUpForm = ({ onSubmit }) => {
             },
           }}
         />
+
+        <TextField
+          label="Age"
+          placeholder="e.g. 30"
+          variant="outlined"
+          fullWidth
+          type="number"
+          value={age}
+          onChange={(e) => {
+            setAge(e.target.value);
+            setErrors(err => ({ ...err, age: null }));
+          }}
+          error={!!errors.age}
+          helperText={errors.age}
+          InputLabelProps={{ shrink: true }}
+          sx={{
+            mt: 2,
+            // explicitly color the label
+            '& .MuiInputLabel-root': {
+              color: '#424242',
+            },
+            // explicitly color the input text
+            '& .MuiOutlinedInput-input': {
+              color: '#424242',
+            },
+            // if you want the outline border a different shade on focus
+            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#424242',
+            },
+          }}
+        />
+        
 
         <Box sx={{
           display: 'flex', 

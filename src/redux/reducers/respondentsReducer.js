@@ -2,6 +2,9 @@ import {
   FETCH_RESPONDENTS_REQUEST,
   FETCH_RESPONDENTS_SUCCESS,
   FETCH_RESPONDENTS_FAILURE,
+  UPDATE_RESPONDENT_REQUEST,
+  UPDATE_RESPONDENT_SUCCESS,
+  UPDATE_RESPONDENT_FAILURE,
 } from '../actions/respondentsActions';
 
 const initialState = {
@@ -18,6 +21,12 @@ const initialState = {
 const respondentsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_RESPONDENTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case UPDATE_RESPONDENT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -40,6 +49,26 @@ const respondentsReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+    case UPDATE_RESPONDENT_SUCCESS: {
+      const updated = action.payload;
+      return {
+        ...state,
+        loading: false,
+        respondents: state.respondents.map((r) => {
+          if (r.id === updated.id) {
+            return updated;
+          }
+          return r;
+        }),
+      };
+    }
+    case UPDATE_RESPONDENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+      
     default:
       return state;
   }

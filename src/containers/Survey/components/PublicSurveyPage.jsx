@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchPublicSurveyBySlugAction,
   createSurveyResponseAction,
-  submitSurveySubmissionAction, // use the proper submission action
-  updateSurveyResponseAction, // ensure this is imported if we use it
-  saveFollowUpDetailsAction,
+  submitSurveySubmissionAction,
+  updateSurveyResponseAction,
   previewSurveyAction,
 } from '@/redux/actions/surveyActions';
+import { updateRespondentAction } from '@/redux/actions/respondentsActions';
+
 import {
   Container,
   Typography,
@@ -139,13 +140,17 @@ const PublicSurveyPage = ({ preview = false }) => {
   };
 
   const handleFollowUp = async ({ email, gender, age }) => {
+      const respondentId = responseRecord.respondent_id;
+      if (!respondentId) {
+        console.error('No respondent_id on the survey_response record');
+        return;
+      }
       try {
-        // TODO: dispatch an action to save these details if you have one:
-        // await dispatch(saveFollowUpDetails(responseRecord.id, { email, gender }));
-        await dispatch(saveFollowUpDetailsAction(
-          responseRecord.id,
+        await dispatch(updateRespondentAction(
+          respondentId,
           { email, gender, age },
         ));
+        setFollowUpDone(true);
       } catch (err) {
         console.error('Could not save follow-up info:', err);
       }
