@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -14,6 +14,9 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Select, 
+  FormControl, 
+  InputLabel,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +36,15 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 const SurveyList = () => {
   const dispatch = useDispatch();
   const surveys = useSelector(state => state.survey.surveys);
+  
+  const [sortBy, setSortBy] = useState(
+    () => localStorage.getItem('surveySortBy') || 'newest',
+  );
+  
+  useEffect(() => {
+    localStorage.setItem('surveySortBy', sortBy);
+  }, [sortBy]);
+
   const themes = useSelector(state => state.survey.surveyThemes);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,6 +56,17 @@ const SurveyList = () => {
     dispatch(fetchSurveysAction());
   }, [dispatch]);
 
+  const sortedSurveys = useMemo(
+    () => [...surveys].sort(
+      (a, b) => (
+        sortBy === 'alpha'
+          ? a.title.localeCompare(b.title)
+          : new Date(b.created_at) - new Date(a.created_at)
+      ),
+    ),
+    [surveys, sortBy],
+  );
+
   const handleMenuClick = (event, surveyId) => {
     setAnchorEl(event.currentTarget);
     setSelectedSurveyId(surveyId);
@@ -54,7 +77,6 @@ const SurveyList = () => {
     setSelectedSurveyId(null);
   };
 
-  // 2. EXTRACT AND ADAPT THE DELETE LOGIC
   const handleDelete = async () => {
     if (!selectedSurveyId) return;
 
@@ -104,7 +126,19 @@ const SurveyList = () => {
           </Button>
         </Stack>
 
-        {surveys.length === 0 ? (
+        <FormControl size="small" sx={{ mb: 2, minWidth: 150 }}>
+          <InputLabel>Sort by</InputLabel>
+          <Select
+            label="Sort by"
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+          >
+            <MenuItem value="newest">Newest first</MenuItem>
+            <MenuItem value="alpha">A → Z</MenuItem>
+          </Select>
+        </FormControl>
+
+        {sortedSurveys.length === 0 ? (
           <Box textAlign="center" mt={8}>
             <Typography variant="h6" gutterBottom>
               No surveys yet.
@@ -121,7 +155,7 @@ const SurveyList = () => {
           </Box>
         ) : (
           <Grid container spacing={3}>
-            {surveys.map((survey) => {
+            {sortedSurveys.map((survey) => {
               const isPublished = survey.survey_status_id === 2;
               const firstPageId = getFirstSurveyPageId(survey);
               const categoryTitle = survey.survey_category?.title;

@@ -21,6 +21,9 @@ import FollowUpForm from './public/FollowUpForm';
 import ThankYouSubmission from './ThankYouSubmission';
 
 const PublicSurveyPage = ({ preview = false }) => {
+  const user = useSelector(state => state.auth.user);
+  const isLoggedIn = Boolean(user?.id);
+
   const dispatch = useDispatch();
   const { surveySlug, surveyId } = useParams();
 
@@ -56,17 +59,13 @@ const PublicSurveyPage = ({ preview = false }) => {
     }
   }, [preview, idOrSlug, dispatch, surveyId, surveySlug]);
 
-  
-  // Fetch survey data when the component mounts or slug changes
-  // useEffect(() => {
-  //   if (!surveySlug) return;
-  //   dispatch(fetchPublicSurveyBySlugAction(surveySlug))
-  //     .catch(err => console.error('Failed to load public survey:', err));
-  // }, [surveySlug, dispatch]);
-
   // Once the survey data is loaded, create a survey response record (if not already created)
   useEffect(() => {
-    if (survey?.id) {
+    if (
+      survey?.id 
+      && !preview
+      && !isLoggedIn
+    ) {
       dispatch(createSurveyResponseAction(survey.id, {
         started_at: startTimeRef.current,
         device: deviceType,
@@ -77,7 +76,7 @@ const PublicSurveyPage = ({ preview = false }) => {
         })
         .catch(err => console.error('Failed to create survey response:', err));
     }
-  }, [survey?.id, dispatch, deviceType, sessionId]);
+  }, [survey?.id, preview, isLoggedIn, dispatch, deviceType, sessionId]);
 
   // Handle answer changes for each question
   const handleResponseChange = (questionId, value) => {
@@ -89,6 +88,9 @@ const PublicSurveyPage = ({ preview = false }) => {
 
   // Handle form submission
   const handleSubmit = async () => {
+    if (preview || isLoggedIn) {
+      return;
+    }
     if (!responseRecord?.id) {
       console.error('No survey response record exists to attach answers to.');
       return;
@@ -136,13 +138,13 @@ const PublicSurveyPage = ({ preview = false }) => {
     }
   };
 
-  const handleFollowUp = async ({ email, gender }) => {
+  const handleFollowUp = async ({ email, gender, age }) => {
       try {
         // TODO: dispatch an action to save these details if you have one:
         // await dispatch(saveFollowUpDetails(responseRecord.id, { email, gender }));
         await dispatch(saveFollowUpDetailsAction(
           responseRecord.id,
-          { email, gender },
+          { email, gender, age },
         ));
       } catch (err) {
         console.error('Could not save follow-up info:', err);
