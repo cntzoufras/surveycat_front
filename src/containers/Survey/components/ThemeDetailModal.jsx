@@ -22,7 +22,15 @@ import PropTypes from 'prop-types';
 
 const ColorSwatch = ({ name, color }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-    <Box sx={{ width: 24, height: 24, backgroundColor: color, border: '1px solid #ccc', mr: 2 }} />
+    <Box
+      sx={{ 
+        width: 24,
+        height: 24,
+        backgroundColor: color,
+        border: '1px solid #ccc',
+        mr: 2,
+      }} 
+    />
     <Typography variant="body2">{name}: {color}</Typography>
   </Box>
 );
@@ -57,7 +65,15 @@ const ThemeDetailModal = ({ open, onClose }) => {
                       primary={key}
                       secondary={
                         typeof value === 'object' && value !== null ? (
-                          <Box component="pre" sx={{ m: 0, p: 0, fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                          <Box 
+                            component="pre" 
+                            sx={{ 
+                              m: 0,
+                              p: 0, 
+                              fontFamily: 'monospace', 
+                              fontSize: '0.8rem',
+                            }}
+                          >
                             {JSON.stringify(value, null, 2)}
                           </Box>
                         ) : (

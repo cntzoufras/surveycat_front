@@ -13,7 +13,7 @@ import {
   Container,
   Grid,
   Typography,
-  Alert
+  Alert,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ThemeDetailModal from './ThemeDetailModal';
@@ -54,7 +54,14 @@ const SurveyThemeList = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box 
+        sx={{ 
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+        }}
+      >
         <Typography variant="h4" component="h1">
           Survey Themes
         </Typography>
