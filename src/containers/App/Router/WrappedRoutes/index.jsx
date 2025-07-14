@@ -29,6 +29,7 @@ import ApiTable from '../../../Tables/ApiTable';
 import SurveyList from '../../../Survey/components/SurveyList';
 import SurveySubmissions from '../../../Dashboards/Surveys/SurveySubmissions';
 import Respondents from '../../../Dashboards/Surveys/Respondents';
+import SurveyThemeList from '../../../Survey/components/SurveyThemeList';
 
 const WrappedRoutes = () => (
   <div>
@@ -44,6 +45,7 @@ const WrappedRoutes = () => (
         <Route path="/survey-submissions" element={<SurveySubmissions />} />
         <Route path="/respondents" element={<Respondents />} />
         <Route path="/surveys/:surveyId/pages/:surveyPageId" element={<SurveyDesign />} />  
+        <Route path="/themes" element={<SurveyThemeList />} />  
         <Route path="/charts/*" element={<Charts />}>
           <Route path="charts_js" element={<ChartsJS />} />
           <Route path="react_vis" element={<ReactVis />} />
