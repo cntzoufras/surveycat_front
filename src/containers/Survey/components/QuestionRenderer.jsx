@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-const QuestionRenderer = ({ question, onAnswerChange }) => {
+const QuestionRenderer = ({ question, onAnswerChange, isPublished }) => {
   const theme = useTheme();
   const textColor = theme.palette.mode === 'dark' ? '#efefef' : '#252525'; // Set text color based on theme
 
@@ -38,6 +38,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
                     value={choice.content}
                     onChange={handleChange}
                     checked={selectedOption === choice.content}
+                    disabled={isPublished} 
                   />
                 )}  
                 label={<span style={{ color: textColor }}>{choice.content}</span>} // Apply text color
@@ -59,6 +60,7 @@ const QuestionRenderer = ({ question, onAnswerChange }) => {
                     value={choice.id}
                     onChange={handleChange} 
                     checked={selectedOption?.includes(choice.id) || false}
+                    disabled={isPublished}
                   />
                 )}
                 label={<span style={{ color: textColor }}>{choice.content}</span>} // Apply text color
@@ -87,6 +89,11 @@ QuestionRenderer.propTypes = {
     ]),
   }).isRequired,
   onAnswerChange: PropTypes.func.isRequired,
+  isPublished: PropTypes.bool,
+};
+
+QuestionRenderer.defaultProps = {
+  isPublished: false, // Set default value
 };
 
 export default QuestionRenderer;
