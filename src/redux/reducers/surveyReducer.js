@@ -69,6 +69,10 @@ import {
   FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST,
   FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS,
   FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE,
+  SET_QUESTION_ORDER_LOCALLY,
+  SAVE_QUESTION_ORDER_REQUEST,
+  SAVE_QUESTION_ORDER_SUCCESS,
+  SAVE_QUESTION_ORDER_FAILURE,
 } from '../actions/surveyActions';
 
 const initialState = {
@@ -555,6 +559,31 @@ const surveyReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+      };
+    case SET_QUESTION_ORDER_LOCALLY:
+      return {
+        ...state,
+        questions: action.payload.questions,
+      };
+
+    case SAVE_QUESTION_ORDER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case SAVE_QUESTION_ORDER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+
+    case SAVE_QUESTION_ORDER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
     default:
       return state;

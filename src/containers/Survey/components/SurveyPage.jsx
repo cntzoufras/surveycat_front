@@ -3,6 +3,7 @@ import React, {
  useEffect,
  useCallback,
  useRef,
+ useMemo,
 } from 'react';
 import debounce from 'lodash/debounce';
 import {
@@ -41,6 +42,7 @@ import {
  updateSurveyThemeAction,
  fetchSurveyThemesAction,
  deleteSurveyAction,
+ reorderQuestionsAction,
 } from '@/redux/actions/surveyActions';
 
 import ConfirmDeleteModal from '../../UI/Modals/components/ConfirmDeleteModal'; // Adjust path if needed
@@ -71,8 +73,10 @@ const SurveyPage = () => {
 
 
  const [surveyPages, setSurveyPages] = useState(surveyData?.survey_pages || []);
- const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
- const [refreshKey, setRefreshKey] = useState(0);
+//  const [currentPageQuestions, setCurrentPageQuestions] = useState([]);
+ const allSurveyQuestions = useSelector(state => state.survey.questions); 
+
+//  const [refreshKey, setRefreshKey] = useState(0);
 
  const [localSurveyTitle, setLocalSurveyTitle] = useState(surveyTitle);
  const [localSurveyDescription, setLocalSurveyDescription] = useState(surveyDescription);
@@ -85,6 +89,27 @@ const SurveyPage = () => {
  const [currentPageIndex, setCurrentPageIndex] = useState(0);
  const currentPageIndexRef = useRef(currentPageIndex);
  const isPublished = surveyData?.survey_status_id === 2;
+
+ const currentPageQuestions = useMemo(() => {
+    if (!surveyPageId || !allSurveyQuestions) return [];
+    return allSurveyQuestions.filter(q => q.survey_page_id === surveyPageId);
+  }, [allSurveyQuestions, surveyPageId]);
+
+  // ✅ 4. The drag-end handler now correctly uses the filtered questions
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    // Use the derived list of questions for the current page
+    const items = Array.from(currentPageQuestions);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    if (surveyPageId) {
+      dispatch(reorderQuestionsAction(surveyPageId, items));
+    } else {
+      console.error('Cannot reorder questions: surveyPageId is missing.');
+    }
+  };
 
  const [notification, setNotification] = useState({
   open: false,
@@ -105,31 +130,24 @@ const SurveyPage = () => {
   }, [surveyId, surveyPageId, dispatch]);
 
   useEffect(() => {
-    // This effect is the single source of truth for syncing Redux to local state.
-    // It will run when the survey data or the list of themes changes.
     if (surveyData) {
       // 1. Set all non-theme state from the survey data.
       setLocalSurveyTitle(surveyData.title || '');
       setLocalSurveyDescription(surveyData.description || '');
       setSurveyPages(surveyData.survey_pages || []);
       setLayout(surveyData.layout || 'multiple');
-
-      // 2. Handle the theme with definitive logic.
-      // We only set the theme if the correct ID exists in both the survey
-      // data AND the list of available themes.
+ 
       if (surveyData.theme_id && surveyThemes.length > 0) {
         const themeExists = surveyThemes.some(t => t.id === surveyData.theme_id);
 
         if (themeExists) {
-          // This will now correctly set the theme to the "Porch Lights" ID.
           setTheme(surveyData.theme_id);
         }
       }
     }
-  }, [surveyData, surveyThemes]); // This hook depends on BOTH data sources.
+  }, [surveyData, surveyThemes]);
 
   useEffect(() => {
-    // 4. Set page-specific details when pages/pageId are available
     if (surveyPages.length > 0 && surveyPageId) {
       const pageIndex = surveyPages.findIndex(page => page.id === surveyPageId);
       if (pageIndex !== -1) {
@@ -144,15 +162,15 @@ const SurveyPage = () => {
     }
   }, [surveyPages, surveyPageId]);
 
-  useEffect(() => {
-    // 5. Filter questions when they change or the page changes
-    if (surveyPageId) {
-      const filteredQuestions = surveyQuestions.filter(
-        question => question.survey_page_id === surveyPageId,
-      );
-      setCurrentPageQuestions(filteredQuestions);
-    }
-  }, [surveyQuestions, surveyPageId, refreshKey]);
+  // useEffect(() => {
+  //   // 5. Filter questions when they change or the page changes
+  //   if (surveyPageId) {
+  //     const filteredQuestions = surveyQuestions.filter(
+  //       question => question.survey_page_id === surveyPageId,
+  //     );
+  //     setCurrentPageQuestions(filteredQuestions);
+  //   }
+  // }, [surveyQuestions, surveyPageId, refreshKey]);
 
   useEffect(() => {
     // 6. Redirect if user is not logged in
@@ -465,7 +483,7 @@ const handleDeleteSurvey = async () => {
   try {
    await dispatch(createSurveyQuestionAction({ ...questionData, survey_page_id: surveyPageId }));
    await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-   setRefreshKey(prev => prev + 1);
+  //  setRefreshKey(prev => prev + 1);
    closeAddQuestionModal();
   } catch (error) {
    console.error('Error adding question:', error);
@@ -476,7 +494,7 @@ const handleDeleteSurvey = async () => {
   try {
    await dispatch(deleteSurveyQuestionAction(questionId));
    await dispatch(fetchAllSurveyQuestionsWithChoices(surveyId));
-   setRefreshKey(prev => prev + 1);
+  //  setRefreshKey(prev => prev + 1);
   } catch (error) {
    console.error('Error deleting question:', error);
   }
@@ -690,7 +708,12 @@ const handleDeleteSurvey = async () => {
         {/* Right panel */}
         <MuiGrid item xs={12} md={8}>
           <MuiBox sx={{ marginLeft: { xs: 0, md: 4 } }}>
-            <QuestionList questions={currentPageQuestions} onDelete={handleDeleteQuestion} />
+            <QuestionList
+              questions={currentPageQuestions} 
+              onDelete={handleDeleteQuestion} 
+              onDragEnd={handleOnDragEnd}
+              onResponseChange={() => {}}
+            />
             {!isPublished && (
               <MuiButton
                 variant="contained"

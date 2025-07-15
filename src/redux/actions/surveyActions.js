@@ -90,6 +90,11 @@ export const FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST = 'FETCH_PROFILE_SURVEY_WI
 export const FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS';
 export const FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE';
 
+export const SET_QUESTION_ORDER_LOCALLY = 'SET_QUESTION_ORDER_LOCALLY';
+export const SAVE_QUESTION_ORDER_REQUEST = 'SAVE_QUESTION_ORDER_REQUEST';
+export const SAVE_QUESTION_ORDER_SUCCESS = 'SAVE_QUESTION_ORDER_SUCCESS';
+export const SAVE_QUESTION_ORDER_FAILURE = 'SAVE_QUESTION_ORDER_FAILURE';
+
 // Action to load all question types
 export const fetchQuestionTypesAction = () => async (dispatch) => {
   dispatch({ type: FETCH_QUESTION_TYPES_REQUEST });
@@ -168,8 +173,6 @@ export const fetchProfileSurveyWidgetDataAction = () => async (dispatch) => {
   }
 };
 
-
-
 export const fetchSurveyCategoriesAction = () => async (dispatch) => {
   try {
     const response = await api.get('/survey-categories');
@@ -188,7 +191,6 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
     dispatch({ type: FETCH_SURVEY_THEMES_FAIL, payload: error.message });
   }
 };
-
 
 export const fetchSurveyPagesAction = surveyId => async (dispatch) => {
   try {
@@ -548,3 +550,33 @@ export const submitSurveySubmissionAction = (surveyId, submissionData) => async 
     };
   }
 };
+
+export const reorderQuestionsAction = (surveyPageId, orderedQuestions) => async (dispatch) => {
+  dispatch({
+    type: SET_QUESTION_ORDER_LOCALLY,
+    payload: {
+      surveyPageId,
+      questions: orderedQuestions,
+    },
+  });
+
+  dispatch({ type: SAVE_QUESTION_ORDER_REQUEST });
+  try {
+    const payloadToServer = orderedQuestions.map((q, index) => ({
+      id: q.id,
+      sort_index: index,
+    }));
+
+    await api.post(`/survey-pages/${surveyPageId}/questions/reorder`, {
+      questions: payloadToServer,
+    });
+
+    dispatch({ type: SAVE_QUESTION_ORDER_SUCCESS });
+  } catch (err) {
+    dispatch({
+      type: SAVE_QUESTION_ORDER_FAILURE,
+      payload: err.message,
+    });
+  }
+};
+

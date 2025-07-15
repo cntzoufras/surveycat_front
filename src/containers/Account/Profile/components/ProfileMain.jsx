@@ -221,12 +221,12 @@ const ProfileData = styled.div`
 const ProfileUserName = styled.p`
   font-weight: 900;
   margin: 0;
-  font-size: 16px; /* Added this line */
-  line-height: 20px; /* Adjusted for new font size */
+  font-size: 16px;
+  line-height: 20px;
 `;
 
 const ProfileHandle = styled.p`
-  margin: 4px 0 8px 0; // Add some spacing
+  margin: 4px 0 8px 0;
   font-size: 14px;
   font-style: italic;
   color: ${colorAdditional};
