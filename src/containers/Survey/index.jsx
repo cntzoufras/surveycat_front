@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'; // Import useSelector hook
 
 import SurveyForm from './components/SurveyForm';
 import SurveyPageLoader from './components/SurveyPageLoader';
-import PublicSurveyPreview from './components/PublicSurveyPreview';
+
 
 const StyledBox = styled(MuiBox)`
   display: flex;
