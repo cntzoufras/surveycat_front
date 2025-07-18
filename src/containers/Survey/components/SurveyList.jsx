@@ -50,6 +50,7 @@ const SurveyList = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  const [selectedIsPublished, setSelectedIsPublished] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSurveyThemesAction());
@@ -67,9 +68,10 @@ const SurveyList = () => {
     [surveys, sortBy],
   );
 
-  const handleMenuClick = (event, surveyId) => {
+  const handleMenuClick = (event, surveyId, isPublished) => {
     setAnchorEl(event.currentTarget);
     setSelectedSurveyId(surveyId);
+    setSelectedIsPublished(isPublished);
   };
 
   const handleMenuClose = () => {
@@ -238,7 +240,7 @@ const SurveyList = () => {
                         </Button>
                         <IconButton
                           size="small"
-                          onClick={e => handleMenuClick(e, survey.id)}
+                          onClick={e => handleMenuClick(e, survey.id, isPublished)}
                           sx={{ color: 'text.secondary' }}
                         >
                           <MoreVertIcon />
@@ -268,8 +270,13 @@ const SurveyList = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {/* 3. The MenuItem now calls the updated handleDelete function */}
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+        <MenuItem 
+          onClick={handleDelete} 
+          disabled={selectedIsPublished}
+          sx={{ 
+            color: 'error.main',
+          }}
+        >
           <ListItemIcon>
             <DeleteOutlineIcon fontSize="small" color="error" />
           </ListItemIcon>
