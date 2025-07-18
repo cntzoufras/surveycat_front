@@ -25,7 +25,7 @@ const Layout = () => {
 
   useEffect(() => {
     if (!isNotificationShown) {
-      WelcomeNotification(theme);
+      WelcomeNotification(theme, setIsNotificationShown, isNotificationShown);
   
       setIsNotificationShown(true);
       localStorage.setItem('welcomeNotificationShown', 'true');

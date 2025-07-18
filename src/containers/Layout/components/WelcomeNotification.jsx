@@ -8,7 +8,7 @@ let welcomeNotification = null;
 // eslint-disable-next-line no-return-assign
 Notification.newInstance({ style: { top: 65 } }, n => welcomeNotification = n);
 
-const WelcomeNotification = (theme, rtl, setIsNotificationShown, isNotificationShown) => {
+const WelcomeNotification = (theme, setIsNotificationShown, isNotificationShown) => {
   const title = 'Welcome to the Surveycat!';
   const message = 'You have successfully logged in Surveycat. Now you can start exploring! ';
   const initialProps = {
