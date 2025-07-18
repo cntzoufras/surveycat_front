@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { handleLogout } from '@/redux/actions/authActions';
 import {
- colorBackground, colorHover, colorText, colorBorder, 
+  colorBackground, colorHover, colorText, colorBorder, 
 } from '@/utils/palette';
 import { marginLeft, right, left } from '@/utils/directions';
+import { fetchUserProfileAction } from '@/redux/actions/userActions';
 import { TopbarBack, TopbarDownIcon } from './BasicTopbarComponents';
 import TopbarMenuLink, { TopbarLink } from './TopbarMenuLink';
 
@@ -19,11 +20,15 @@ const TopbarProfile = () => {
   const { user } = useSelector(state => state.auth);
   const { profile } = useSelector(state => state.user);
   const username = user?.username;
+  
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchUserProfileAction());
+    }
+  }, [user, dispatch]);
 
   const backendUrl = process.env.REACT_APP_API_URL ? new URL(process.env.REACT_APP_API_URL).origin : '';
   const avatarUrl = profile?.user?.avatar ? `${backendUrl}/storage/${profile.user.avatar}` : DefaultAva;
-
-  
 
   const toggleProfile = () => {
     setIsCollapsed(!isCollapsed);
