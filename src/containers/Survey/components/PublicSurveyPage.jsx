@@ -228,7 +228,7 @@ const PublicSurveyPage = ({ preview = false }) => {
                 Next
               </Button>
             ) : (
-              <Button variant="contained" onClick={handleSubmit} disabled>
+              <Button variant="contained" onClick={handleSubmit} disabled={preview}>
                 Submit
               </Button>
             )}
