@@ -36,11 +36,11 @@ const PublicSurveyPage = ({ preview = false }) => {
   const surveyQuestions = useSelector(state => state.survey.publicSurveyQuestions);
 
   // Local component state
+  const [step, setStep] = useState(0);
   const [responseRecord, setResponseRecord] = useState(null);
   const [responses, setResponses] = useState({});
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const [followUpDone, setFollowUpDone] = useState(false);
-
   const [submissionTimestamp, setSubmissionTimestamp] = useState(null);
 
   // Capture start time and device info
@@ -79,12 +79,29 @@ const PublicSurveyPage = ({ preview = false }) => {
     }
   }, [survey?.id, preview, isLoggedIn, dispatch, deviceType, sessionId]);
 
+    // Reset step when pages change
+  useEffect(() => {
+    setStep(0);
+  }, [survey?.survey_pages]);
+
+  // Prepare pages array for single layout
+  const pages = React.useMemo(() => {
+    if (!survey?.survey_pages) return [];
+    return survey.survey_pages
+      .sort((a, b) => a.sort_index - b.sort_index)
+      .map(page => ({
+        ...page,
+        questions: page.survey_questions,
+      }));
+  }, [survey]);
+
+  const isSingle = survey?.layout === 'single';
+  const currentPage = pages[step] || {};
+  
   // Handle answer changes for each question
-  const handleResponseChange = (questionId, value) => {
-    setResponses(prev => ({
-      ...prev,
-      [questionId]: value,
-    }));
+  // Response change handler
+  const handleResponseChange = (qid, value) => {
+    setResponses(prev => ({ ...prev, [qid]: value }));
   };
 
   // Handle form submission
@@ -192,35 +209,59 @@ const PublicSurveyPage = ({ preview = false }) => {
         )}
       </Box>
 
-      {/* Questions List */}
-      <Box>
-        <PublicQuestionList 
-          questions={surveyQuestions} 
-          onResponseChange={handleResponseChange} 
-        />
-      </Box>
-
-      {/* Submit Button */}
-      <Box sx={{ textAlign: 'center', mt: 4 }}>
-        <Button
-          disabled={preview}
-          variant="contained"
-          onClick={handleSubmit}
-          color="primary"
-          size="large"
-          sx={{
-            px: 4,
-            backgroundColor: theme => theme.palette.primary.main,
-            color: '#fff',
-            '&:hover': {
-              // Use a secondary or darker shade for hover, if defined in theme
-              backgroundColor: theme => theme.palette.primary.dark || theme.palette.secondary.main,
-            },
-          }}
-        >
-          Submit
-        </Button>
-      </Box>
+      {/* Single vs Multiple logic */}
+      {isSingle ? (
+        <>  
+          <Typography variant="h5" gutterBottom>
+            {currentPage.title}
+          </Typography>
+          <PublicQuestionList
+            questions={currentPage.questions}
+            onResponseChange={handleResponseChange}
+          />
+          <Box sx={{ mt: 4, textAlign: 'center' }}>
+            <Button onClick={() => setStep(s => Math.max(s-1,0))} disabled={step === 0} sx={{ mr: 2 }}>
+              Back
+            </Button>
+            {step < pages.length - 1 ? (
+              <Button variant="contained" onClick={() => setStep(s => s+1)}>
+                Next
+              </Button>
+            ) : (
+              <Button variant="contained" onClick={handleSubmit} disabled>
+                Submit
+              </Button>
+            )}
+          </Box>
+        </>
+      ) : (
+        <>
+          <PublicQuestionList 
+            questions={surveyQuestions} 
+            onResponseChange={handleResponseChange} 
+          />
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Button
+              disabled={preview}
+              variant="contained"
+              onClick={handleSubmit}
+              color="primary"
+              size="large"
+              sx={{
+                px: 4,
+                backgroundColor: theme => theme.palette.primary.main,
+                color: '#fff',
+                '&:hover': {
+                  // Use a secondary or darker shade for hover, if defined in theme
+                  backgroundColor: theme => theme.palette.primary.dark || theme.palette.secondary.main,
+                },
+              }}
+            >
+              Submit
+            </Button>
+          </Box>
+        </>
+      )}
     </Container>
   );
 };
