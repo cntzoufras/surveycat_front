@@ -1,25 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Loading from '@/shared/components/account/auth/Loading';
 
-const PrivateRoute = ({ children }) => {
+const PublicRoute = ({ children }) => {
   const { user, loading } = useSelector(state => state.auth);
+
   if (loading) {
     return <Loading />;
   }
-
-  if (!user) {
-    // If no user is logged in, redirect to the login page
-    return <Navigate to="/login" replace />;
+  if (user) {
+    // already logged in → bounce to home (/)
+    return <Navigate to="/" replace />;
   }
-
   return children;
 };
 
-PrivateRoute.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default PrivateRoute;
+export default PublicRoute;

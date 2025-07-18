@@ -9,6 +9,7 @@ import Survey from '../../Survey';
 import WrappedRoutes from './WrappedRoutes';
 import AuthCheck from '../AuthCheck';
 import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
 import PublicSurveyPage from '../../Survey/components/PublicSurveyPage';
 import ThankYouSubmission from '../../Survey/components/ThankYouSubmission';
 import VerificationSuccess from '../../Survey/components/VerificationSuccess';
@@ -19,9 +20,30 @@ const Router = () => (
   <MainWrapper>
     <main>
       <Routes>
-        <Route path="/" element={<LogIn />} />
-        <Route path="/404" element={<NotFound404 />} />
-        <Route path="/login" element={<LogIn />} />
+        <Route
+          path="/login"
+          element={(
+            <PublicRoute>
+              <LogIn />
+            </PublicRoute>
+          )}
+        />
+        <Route
+          path="/auth/register"
+          element={(
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          )}
+        />
+        <Route
+          path="/reset_password"
+          element={(
+            <PublicRoute>
+              <ResetPassword />
+            </PublicRoute>
+          )}
+        />
         <Route path="/auth/register" element={<Register />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/surveys/ps/:surveySlug" element={<PublicSurveyPage />} />
@@ -29,6 +51,7 @@ const Router = () => (
         <Route path="/verification-success" element={<VerificationSuccess />} />
         <Route path="/verification-error" element={<VerificationError />} />
         <Route path="/verification-already" element={<VerificationAlready />} />
+        <Route path="/404" element={<NotFound404 />} />
         <Route 
           exact 
           path="/survey" 

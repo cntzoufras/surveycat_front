@@ -36,22 +36,15 @@ const WrappedRoutes = () => (
     <Layout />
     <ContainerWrap>
       <Routes>
-        <Route path="/online_marketing_dashboard" element={<OnLineMarketingDashboard />} />
+        <Route index element={<AppDashboard />} />
         <Route exact path="/app_dashboard" element={<AppDashboard />} />
         <Route path="/surveys_dashboard" element={<SurveysDashboard />} />
-        <Route path="/fitness_dashboard" element={<FitnessDashboard />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys" element={<SurveyList />} />
         <Route path="/survey-submissions" element={<SurveySubmissions />} />
         <Route path="/respondents" element={<Respondents />} />
         <Route path="/surveys/:surveyId/pages/:surveyPageId" element={<SurveyDesign />} />  
         <Route path="/themes" element={<SurveyThemeList />} />  
-        <Route path="/charts/*" element={<Charts />}>
-          <Route path="charts_js" element={<ChartsJS />} />
-          <Route path="react_vis" element={<ReactVis />} />
-          <Route path="recharts" element={<Recharts />} />
-          <Route path="amcharts" element={<Amcharts />} />
-        </Route>
         <Route path="/account/*" element={<Account />}> {/* Updated to use Outlet */}
           <Route path="profile" element={<Profile />} />
           <Route path="email_confirmation" element={<EmailConfirmation />} />
