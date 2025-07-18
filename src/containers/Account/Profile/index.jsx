@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import ProfileMain from './components/ProfileMain';
-import ProfileCalendar from './components/ProfileCalendar';
 import ProfileTabs from './components/ProfileTabs';
 
 const Profile = () => (
