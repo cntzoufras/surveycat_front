@@ -18,12 +18,13 @@ import {
   FormControl, 
   InputLabel,
 } from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchSurveyThemesAction,
   fetchSurveysAction,
-  deleteSurveyAction, // 1. IMPORT THE DELETE ACTION
+  deleteSurveyAction,
 } from '@/redux/actions/surveyActions';
 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -88,17 +89,12 @@ const SurveyList = () => {
 
     if (confirmation) {
       try {
-        // Dispatch the same action used in SurveyPage
         await dispatch(deleteSurveyAction(selectedSurveyId));
-        // After deletion, the fetchSurveysAction will be re-run by a parent component
-        // or a useEffect hook to update the list automatically.
       } catch (error) {
         console.error('Failed to delete survey:', error);
-        // You could add a snackbar notification here for errors
       }
     }
     
-    // Close the menu regardless of the outcome
     handleMenuClose();
   };
 
@@ -161,11 +157,13 @@ const SurveyList = () => {
               const isPublished = survey.survey_status_id === 2;
               const firstPageId = getFirstSurveyPageId(survey);
               const categoryTitle = survey.survey_category?.title;
+              const publicLinkUrl = `${window.location.origin}/surveys/ps/${survey.public_link}`;
 
               return (
                 <Grid item xs={12} sm={6} md={4} key={survey.id}>
                   <Card
                     sx={{
+                      position: 'relative',
                       backgroundColor: 'action.hover',
                       color: 'text.primary',
                       borderRadius: '12px',
@@ -183,6 +181,23 @@ const SurveyList = () => {
                       height: '100%',
                     }}
                   >
+                    {isPublished && (
+                      <Chip
+                        label="Published"
+                        color="success"
+                        sx={{
+                          position: 'absolute',
+                          top: 12,
+                          right: 12,
+                          height: '22px',
+                          fontSize: '0.7rem',
+                          '.MuiChip-label': {
+                            padding: '0 8px',
+                          },
+                        }}
+                      />
+                    )}
+
                     <CardContent>
                       {categoryTitle && (
                         <Chip
@@ -209,15 +224,36 @@ const SurveyList = () => {
                           Pages: {survey.survey_pages?.length ?? 0}
                         </Typography>
                       </Stack>
-                      {isPublished && (
-                        <Chip
-                          label="Published"
-                          size="small"
-                          color="success"
-                          sx={{ mb: 1 }}
-                        />
+                      
+                      {isPublished && survey.public_link && (
+                        <Box sx={{ mt: 1.5 }}>
+                          <MuiLink
+                            href={publicLinkUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={publicLinkUrl}
+                            sx={{
+                              display: 'inline-block',
+                              alignItems: 'center',
+                              fontSize: '0.8rem',
+                              color: 'text.secondary',
+                              textDecoration: 'underline',
+                              maxWidth: '100%',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              '&:hover': {
+                                color: 'primary.main',
+                              },
+                            }}
+                          >
+                            <LinkIcon sx={{ mr: 0.75, fontSize: '1rem', verticalAlign: 'middle' }} />
+                            <span style={{ verticalAlign: 'middle' }}>{publicLinkUrl}</span>
+                          </MuiLink>
+                        </Box>
                       )}
                     </CardContent>
+                    
                     <CardActions sx={{ backgroundColor: 'action.focus' }}>
                       <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
                         <Button
