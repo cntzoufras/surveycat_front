@@ -220,11 +220,11 @@ const PublicSurveyPage = ({ preview = false }) => {
             onResponseChange={handleResponseChange}
           />
           <Box sx={{ mt: 4, textAlign: 'center' }}>
-            <Button onClick={() => setStep(s => Math.max(s-1,0))} disabled={step === 0} sx={{ mr: 2 }}>
+            <Button onClick={() => setStep(s => Math.max(s - 1, 0))} disabled={step === 0} sx={{ mr: 2 }}>
               Back
             </Button>
             {step < pages.length - 1 ? (
-              <Button variant="contained" onClick={() => setStep(s => s+1)}>
+              <Button variant="contained" onClick={() => setStep(s => s + 1)}>
                 Next
               </Button>
             ) : (
