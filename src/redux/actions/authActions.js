@@ -161,6 +161,10 @@ export const handleLogout = () => async (dispatch) => {
       Cookies.remove('XSRF-TOKEN', { ...cookieOptions, secure: true });
     }
 
+    // Clear all session/local data
+    localStorage.removeItem('auth');
+    sessionStorage.removeItem('welcomeNotificationShown');
+
     // Dispatch logout action to Redux store
     dispatch(logout());
 

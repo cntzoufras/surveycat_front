@@ -12,7 +12,7 @@ import WelcomeNotification from './components/WelcomeNotification';
 
 const Layout = () => {
   const [isNotificationShown, setIsNotificationShown] = useState(
-    () => localStorage.getItem('welcomeNotificationShown') === 'true',
+    () => sessionStorage.getItem('welcomeNotificationShown') === 'true',
   );
 
 
@@ -28,7 +28,7 @@ const Layout = () => {
       WelcomeNotification(theme, setIsNotificationShown, isNotificationShown);
   
       setIsNotificationShown(true);
-      localStorage.setItem('welcomeNotificationShown', 'true');
+      sessionStorage.setItem('welcomeNotificationShown', 'true');
     }
   }, [isNotificationShown, theme]);
 

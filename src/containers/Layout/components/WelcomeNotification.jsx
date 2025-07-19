@@ -8,7 +8,7 @@ let welcomeNotification = null;
 // eslint-disable-next-line no-return-assign
 Notification.newInstance({ style: { top: 65 } }, n => welcomeNotification = n);
 
-const WelcomeNotification = (theme, setIsNotificationShown, isNotificationShown) => {
+const WelcomeNotification = (theme, setIsNotificationShown) => {
   const title = 'Welcome to the Surveycat!';
   const message = 'You have successfully logged in Surveycat. Now you can start exploring! ';
   const initialProps = {
@@ -29,19 +29,12 @@ const WelcomeNotification = (theme, setIsNotificationShown, isNotificationShown)
       setIsNotificationShown(true);
     },
   };
-  if (!isNotificationShown) {
-    welcomeNotification.notice(initialProps);
-  }
+  welcomeNotification.notice(initialProps);
 };
 
 WelcomeNotification.propTypes = {
   theme: ThemeProps.isRequired,
   setIsNotificationShown: PropTypes.func.isRequired,
-  isNotificationShown: PropTypes.bool,
-};
-
-WelcomeNotification.defaultProps = {
-  isNotificationShown: false,
 };
 
 export default WelcomeNotification;
