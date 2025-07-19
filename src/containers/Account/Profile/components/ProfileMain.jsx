@@ -64,16 +64,13 @@ const ProfileMain = () => {
     dispatch(fetchProfileSurveyWidgetDataAction());
   }, [dispatch]);
 
-  // --- CORRECTED URL LOGIC ---
-  // Take the full API URL and get just the base origin (e.g., http://surveycat.test)
+
   const baseUrl = new URL(process.env.REACT_APP_API_URL).origin;
   const avatarUrl = profile?.user?.avatar ? `${baseUrl}/storage/${profile.user.avatar}` : DefaultAva;
-  // -------------------------
 
   const hasFullName = profile?.user?.first_name && profile?.user?.last_name;
 
-  // Display a loading spinner if the essential data (profile or widget data) is not yet available.
-  // This prevents rendering with initial/stale values and fixes the "flash of 0" issue.
+  
   if (profileLoading || widgetLoading || !profile || !widgetData) {
     return (
       <Col md={12} lg={12} xl={12}>
