@@ -9,9 +9,7 @@ import i18n from 'i18next';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { createTheme as createMuiTheme, ThemeProvider as MuiV5ThemeProvider } from '@mui/material/styles';
 import { createTheme as createMaterialTheme, ThemeProvider as MaterialV4ThemeProvider } from '@material-ui/core/styles';
-import TimepickerStyles from '@/shared/components/form/date-pickers/timepickerStyles';
 import Loading from '@/shared/components/Loading';
-
 import Router from './Router';
 import store from './store';
 import ScrollToTop from './ScrollToTop';
@@ -58,7 +56,6 @@ const ThemeComponent = ({ children }) => {
           <GlobalStyles />
           <NotificationStyles />
           <RechartStyles />
-          <TimepickerStyles />
           <CalendarStyles />
           {children}
         </StyledThemeProvider>
