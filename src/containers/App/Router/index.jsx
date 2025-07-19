@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainWrapper from '../MainWrapper';
+import NotFound404 from '../../DefaultPage/404/index';
 import LogIn from '../../Account/LogIn/index';
 import Register from '../../Account/Register/index';
 import ResetPassword from '../../Account/ResetPassword/index';
@@ -50,6 +51,7 @@ const Router = () => (
         <Route path="/verification-success" element={<VerificationSuccess />} />
         <Route path="/verification-error" element={<VerificationError />} />
         <Route path="/verification-already" element={<VerificationAlready />} />
+        <Route path="/404" element={<NotFound404 />} />
         <Route 
           exact 
           path="/survey" 

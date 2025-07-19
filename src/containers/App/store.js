@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import {
   themeReducer,
   customizerReducer,
+  newOrderTableReducer,
   sidebarReducer,
   authReducer,
   roundBordersReducer,
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   shadow: blocksShadowsReducer,
   appConfig: appConfigReducer,
   customizer: customizerReducer,
+  newOrder: newOrderTableReducer,
   sidebar: sidebarReducer,
   auth: (state = initialAuthState, action) => authReducer(state, action),
   survey: surveyReducer,
