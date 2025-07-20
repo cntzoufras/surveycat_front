@@ -31,7 +31,11 @@ export const authenticateUser = () => async (dispatch) => {
 
   try {
     const auth = JSON.parse(localStorage.getItem('auth'));
-
+    if (!auth || !auth.token) {
+      // nothing to authenticate against; skip API call
+      dispatch({ type: AUTHENTICATE_ERROR_AUTH, payload: 'Not logged in' });
+      return;
+    }
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/user`, {
       headers: {
         Accept: 'application/json',
@@ -93,11 +97,15 @@ export const setupInterceptor = (navigate, dispatch) => {
   );
 };
 
-export const handleLogin = credentials => async (dispatch) => {
+export const handleLogin = ({ email, password, rememberMe = false }) => async (dispatch) => {
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
     
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, credentials, {
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { 
+      email, 
+      password, 
+      rememberMe,
+     }, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

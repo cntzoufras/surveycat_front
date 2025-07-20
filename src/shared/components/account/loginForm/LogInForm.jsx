@@ -64,14 +64,12 @@ const LogInForm = ({
           </FormGroupField>
         </FormGroup>
         <FormGroup>
-          <FormGroupField>
-            <Field
-              name="remember_me"
-              component={renderCheckBoxField}
-              label="Remember me"
-              type="checkbox"
-            />
-          </FormGroupField>
+          <Field
+            name="remember_me"
+            component={renderCheckBoxField}
+            label="Remember me"
+            type="checkbox"
+          />
         </FormGroup>
         <AccountButton variant="primary" type="submit">
           Sign In

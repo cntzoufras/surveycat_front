@@ -33,7 +33,11 @@ const LogIn = ({ error }) => {
     console.log('onSubmit called with values:', values);
     // event.preventDefault(); // Prevent default form submission
     
-    const credentials = { email: values.email, password: values.password };
+    const credentials = { 
+      email: values.email, 
+      password: values.password,
+      remember_me: values.remember_me || false,
+    };
     try {
       const response = await dispatch(reduxHandleLogin(credentials));
 
