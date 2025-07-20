@@ -54,7 +54,6 @@ const ProfileMain = () => {
 
 
   useEffect(() => {
-    
     if (!profile) {
       dispatch(fetchUserProfileAction());
     }
