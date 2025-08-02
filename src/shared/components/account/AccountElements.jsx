@@ -23,12 +23,18 @@ import {
 } from '../form/FormElements';
 
 export const AccountWrap = styled.div`
-  height: 100vh;
   width: 100%;
   min-height: 100vh;
-  display: flex;
   overflow-y: auto;
   background: ${colorBackgroundBody};
+  padding: 20px 0;
+
+  @media (min-width: 576px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
 `;
 
 export const AccountContent = styled.div`
@@ -59,7 +65,11 @@ export const AccountTitle = styled.h1`
   white-space: nowrap;
   font-weight: 200;
   color: ${colorLightAccent};
-  
+
+  @media screen and (max-width: 520px) {
+    font-size: 24px;
+    white-space: normal;
+  }
 `;
 
 export const AccountLogo = styled.span`
