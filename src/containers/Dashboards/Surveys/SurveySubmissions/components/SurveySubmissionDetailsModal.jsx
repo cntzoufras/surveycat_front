@@ -215,15 +215,26 @@ SurveySubmissionDetailsModal.propTypes = {
   submission: PropTypes.shape({
     submission_data: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     survey_response: PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      started_at: PropTypes.string,
+      completed_at: PropTypes.string,
+      device: PropTypes.string,
+      session_id: PropTypes.string,
+      ip_address: PropTypes.string,
+      country: PropTypes.string,
+      respondent: PropTypes.shape({
+        email: PropTypes.string,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      }),
       survey: PropTypes.shape({
         title: PropTypes.string,
         survey_pages: PropTypes.arrayOf(PropTypes.shape({
           survey_questions: PropTypes.arrayOf(PropTypes.shape({
-            id: PropTypes.string.isRequired,
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
             title: PropTypes.string.isRequired,
             question_type_id: PropTypes.number.isRequired,
             survey_question_choices: PropTypes.arrayOf(PropTypes.shape({
-              id: PropTypes.string.isRequired,
+              id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
               content: PropTypes.string.isRequired,
             })),
           })),
