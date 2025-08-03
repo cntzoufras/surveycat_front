@@ -50,7 +50,7 @@ const SurveySubmissionsReactTable = ({ reactTableData }) => {
     withPagination,
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search by First name...',
+    placeholder: 'Search by Survey title...',
   };
 
   return (

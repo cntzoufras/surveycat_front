@@ -1,14 +1,37 @@
-/* eslint-disable camelcase */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { fetchSurveySubmissionsAction, fetchSurveySubmissionAction, clearSubmissionDetailsAction } from '@/redux/actions/surveySubmissionsActions';
+import { 
+  fetchSurveySubmissionsAction, 
+  fetchSurveySubmissionAction, 
+  clearSubmissionDetailsAction, 
+} from '@/redux/actions/surveySubmissionsActions';
 import SurveySubmissionsReactTable from './components/SurveySubmissionsReactTable';
 import SurveySubmissionDetailsModal from './components/SurveySubmissionDetailsModal';
+
+// Cell component moved outside render
+const ViewButtonCell = ({ row, onView, disabled }) => (
+  <StyledIconButton
+    onClick={() => onView(row.original.submissionId)}
+    disabled={disabled}
+    size="small"
+  >
+    <VisibilityOutlinedIcon fontSize="small" />
+  </StyledIconButton>
+);
+ViewButtonCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({ submissionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired }),
+  }).isRequired,
+  onView: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+};
+ViewButtonCell.defaultProps = { disabled: false };
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
@@ -25,12 +48,11 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const SurveySubmissions = () => {
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
-  
-  // eslint-disable-next-line camelcase
-      const {
+
+  const {
     survey_submissions = [],
     loading,
     error,
@@ -39,16 +61,20 @@ const SurveySubmissions = () => {
     errorDetails,
   } = useSelector(state => state.survey_submissions || {});
 
-  const handleViewClick = (submissionId) => {
-    dispatch(fetchSurveySubmissionAction(submissionId));
-  };
+  // Memoize callbacks
+  const handleViewClick = useCallback(
+    (submissionId) => {
+      dispatch(fetchSurveySubmissionAction(submissionId));
+    },
+    [dispatch]
+  );
 
-  const toggleModal = () => {
-    setModalIsOpen(false);
-    if (modalIsOpen) { // only clear if modal was open
+  const toggleModal = useCallback(() => {
+    setModalIsOpen(prev => !prev);
+    if (modalIsOpen) {
       dispatch(clearSubmissionDetailsAction());
     }
-  };
+  }, [dispatch, modalIsOpen]);
 
   useEffect(() => {
     dispatch(fetchSurveySubmissionsAction());
@@ -61,93 +87,59 @@ const SurveySubmissions = () => {
   }, [selectedSubmission]);
 
   const columns = useMemo(
-  () => [
-    {
-      Header: '#',
-      accessor: 'id',
-      disableGlobalFilter: true,
-      width: 65,
-    },
-    {
-      Header: 'Survey',
-      accessor: 'survey',
-    },
-    {
-      Header: 'Response ID',
-      accessor: 'response',
-      disableGlobalFilter: true,
-    },
-    {
-      Header: 'Respondent Email',
-      accessor: 'respondent_email',
-      disableGlobalFilter: true,
-    },
-    {
-      Header: 'Respondent ID',
-      accessor: 'respondent_id',
-      disableGlobalFilter: true,
-    },
-    {
-      Header: 'Device',
-      accessor: 'device',
-      disableGlobalFilter: true,
-    },
-    {
-      Header: 'Country',
-      accessor: 'country',
-      disableGlobalFilter: true,
-    },
-    {
-      Header: 'Date Created',
-      accessor: 'created_at',
-            disableGlobalFilter: true,
-    },
-    {
-      Header: 'Actions',
-      accessor: 'actions',
-      disableGlobalFilter: true,
-      Cell: ({ row }) => (
-        <StyledIconButton
-          onClick={() => handleViewClick(row.original.submissionId)}
-          disabled={loadingDetails}
-          size="small"
-        >
-          <VisibilityOutlinedIcon fontSize="small" />
-        </StyledIconButton>
-      ),
-    },
-  ],
-  [loadingDetails],
-);
+    () => [
+      { Header: '#', accessor: 'id', disableGlobalFilter: true, width: 65 },
+      { Header: 'Survey', accessor: 'survey' },
+      { Header: 'Response ID', accessor: 'response', disableGlobalFilter: true },
+      { Header: 'Respondent Email', accessor: 'respondent_email', disableGlobalFilter: true },
+      { Header: 'Respondent ID', accessor: 'respondent_id', disableGlobalFilter: true },
+      { Header: 'Device', accessor: 'device', disableGlobalFilter: true },
+      { Header: 'Country', accessor: 'country', disableGlobalFilter: true },
+      { Header: 'Date Created', accessor: 'created_at', disableGlobalFilter: true },
+      {
+        Header: 'Actions',
+        accessor: 'actions',
+        disableGlobalFilter: true,
+        disableSortBy: true,
+        Cell: props => (
+          <ViewButtonCell
+            row={props.row}
+            onView={handleViewClick}
+            disabled={loadingDetails}
+          />
+        ),
+      },
+    ],
+    [handleViewClick, loadingDetails]
+  );
 
+  const data = useMemo(
+    () => survey_submissions.map((submission, index) => {
+      const response = submission.survey_response || {};
+      const survey = response.survey || {};
+      const respondent = response.respondent || {};
+      return {
+        id: index + 1,
+        submissionId: submission.id,
+        survey: survey.title || 'N/A',
+        response: response.id || 'N/A',
+        respondent_email: respondent.email || 'N/A',
+        respondent_id: respondent.id || 'N/A',
+        device: response.device || 'N/A',
+        country: response.country || 'N/A',
+        created_at: submission.created_at ? new Date(submission.created_at).toLocaleDateString() : 'N/A',
+      };
+    }),
+    [survey_submissions]
+  );
 
-  // eslint-disable-next-line camelcase
-  const data = survey_submissions?.map((submission, index) => {
-    const response = submission.survey_response || {};
-    const survey = response.survey || {};
-    const respondent = response.respondent || {};
-
-        return {
-      id: index + 1,
-      submissionId: submission.id,
-      survey: survey.title || 'N/A',
-      response: response.id || 'N/A',
-      respondent_email: respondent.email || 'N/A',
-      respondent_id: respondent.id || 'N/A',
-      device: response.device || 'N/A',
-      country: response.country || 'N/A',
-      created_at: submission.created_at
-        ? new Date(submission.created_at).toLocaleDateString()
-        : 'N/A',
-    };
-  });
-
-    const reactTableData = { tableHeaderData: columns, tableRowsData: data };
-
-  
+  const reactTableData = useMemo(
+    () => ({ tableHeaderData: columns, tableRowsData: data }),
+    [columns, data]
+  );
 
   if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+  if (error) return <p>Error: {error}</p>;
   if (errorDetails) return <p>Error loading details: {errorDetails}</p>;
 
   return (
