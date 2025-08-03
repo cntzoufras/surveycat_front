@@ -108,28 +108,101 @@ const SurveySubmissionDetailsModal = ({
       .filter(Boolean);
 
     if (answerList.length === 0) {
-      return <p>No answers were provided in this submission.</p>;
+      return (
+        <div className="alert alert-info">
+          <i className="fas fa-info-circle"></i> No answers were provided in this submission.
+        </div>
+      );
     }
 
     return (
-      <ul>
+      <div className="answers-list">
         {answerList.map(item => (
-          <li key={item.id}>
-            <strong>{item.title}:</strong> {item.answer}
-          </li>
+          <div key={item.id} className="mb-3 p-3 border rounded bg-light">
+            <strong className="d-block mb-2 text-dark">{item.title}</strong>
+            <span className="text-muted">{item.answer}</span>
+          </div>
         ))}
-      </ul>
+      </div>
     );
   };
 
   const surveyTitle = submission?.survey_response?.survey?.title || 'Submission Details';
 
+  const renderResponseData = () => {
+    if (!submission?.survey_response) {
+      return <p>No response data found.</p>;
+    }
+
+    const response = submission.survey_response;
+    const respondent = response.respondent || {};
+
+    return (
+      <div className="response-data mb-4">
+        <h5 className="mb-3 text-primary">Survey Response Details</h5>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="mb-2">
+              <strong className="text-muted">Response ID:</strong><br />
+              <span className="text-monospace">{response.id || 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Started At:</strong><br />
+              <span>{response.started_at ? new Date(response.started_at).toLocaleString() : 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Completed At:</strong><br />
+              <span>{response.completed_at ? new Date(response.completed_at).toLocaleString() : 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Device:</strong><br />
+              <span>{response.device || 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Session ID:</strong><br />
+              <span className="text-monospace">{response.session_id || 'N/A'}</span>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="mb-2">
+              <strong className="text-muted">IP Address:</strong><br />
+              <span className="text-monospace">{response.ip_address || 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Country:</strong><br />
+              <span>{response.country || 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Respondent Email:</strong><br />
+              <span>{respondent.email || 'N/A'}</span>
+            </div>
+            <div className="mb-2">
+              <strong className="text-muted">Respondent ID:</strong><br />
+              <span className="text-monospace">{respondent.id || 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+        <hr className="my-4" />
+      </div>
+    );
+  };
+
   return (
-    <Modal show={isOpen} onHide={toggle}>
-      <ModalHeader closeButton>{surveyTitle}</ModalHeader>
-      <ModalBody>{renderAnswers()}</ModalBody>
+    <Modal show={isOpen} onHide={toggle} size="lg" centered>
+      <ModalHeader closeButton>
+        <h4 className="mb-0">{surveyTitle}</h4>
+      </ModalHeader>
+      <ModalBody className="p-4">
+        {renderResponseData()}
+        <div className="submission-data">
+          <h5 className="mb-3 text-primary">Submission Answers</h5>
+          {renderAnswers()}
+        </div>
+      </ModalBody>
       <ModalFooter>
-        <Button variant="secondary" onClick={toggle}>Close</Button>
+        <Button variant="secondary" onClick={toggle}>
+          Close
+        </Button>
       </ModalFooter>
     </Modal>
   );
