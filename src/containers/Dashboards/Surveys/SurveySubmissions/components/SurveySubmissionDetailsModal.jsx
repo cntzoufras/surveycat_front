@@ -110,7 +110,7 @@ const SurveySubmissionDetailsModal = ({
     if (answerList.length === 0) {
       return (
         <div className="alert alert-info">
-          <i className="fas fa-info-circle"></i> No answers were provided in this submission.
+          <i className="fas fa-info-circle" /> No answers were provided in this submission.
         </div>
       );
     }
