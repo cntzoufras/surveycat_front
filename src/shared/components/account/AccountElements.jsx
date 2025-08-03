@@ -25,16 +25,12 @@ import {
 export const AccountWrap = styled.div`
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow-y: auto;
   background: ${colorBackgroundBody};
   padding: 20px 0;
-
-  @media (min-width: 576px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-  }
 `;
 
 export const AccountContent = styled.div`
