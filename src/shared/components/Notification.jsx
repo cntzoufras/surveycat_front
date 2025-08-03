@@ -156,12 +156,14 @@ const NotificationContent = styled.div`
   width: 100%;  // Full width of the parent
   max-width: 480px;  // Same as the form width or set according to your input width
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
-  background: ${props => getColor(props.color || props.theme)};
+  background: ${props => props.color ? getColor(props.color) : 'rgba(255, 255, 255, 0.1)'};
   position: relative;
   margin: 10px auto;  // Center within the form container
   padding: 10px;  // Adjust padding to fit content better
   display: flex;
   justify-content: center;  // Centers the content within the notification box
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
   ${props => props.fullWidth && `
     width: 100vw;
