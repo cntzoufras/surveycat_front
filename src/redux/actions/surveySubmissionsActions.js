@@ -5,6 +5,11 @@ export const FETCH_SUBMISSIONS_REQUEST = 'FETCH_SUBMISSIONS_REQUEST';
 export const FETCH_SUBMISSIONS_SUCCESS = 'FETCH_SUBMISSIONS_SUCCESS';
 export const FETCH_SUBMISSIONS_FAILURE = 'FETCH_SUBMISSIONS_FAILURE';
 
+export const FETCH_SURVEY_SUBMISSION_REQUEST = 'FETCH_SURVEY_SUBMISSION_REQUEST';
+export const FETCH_SURVEY_SUBMISSION_SUCCESS = 'FETCH_SURVEY_SUBMISSION_SUCCESS';
+export const FETCH_SURVEY_SUBMISSION_FAILURE = 'FETCH_SURVEY_SUBMISSION_FAILURE';
+export const CLEAR_SURVEY_SUBMISSION_DETAILS = 'CLEAR_SURVEY_SUBMISSION_DETAILS';
+
 export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (dispatch) => {
   dispatch({ type: FETCH_SUBMISSIONS_REQUEST });
   try {
@@ -31,7 +36,24 @@ export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (d
       },
     });
   } catch (error) {
-    dispatch({ type: FETCH_SUBMISSIONS_FAILURE, payload: error.message });
+        dispatch({ type: FETCH_SUBMISSIONS_FAILURE, payload: error.message });
+  }
+};
+
+export const clearSubmissionDetailsAction = () => ({
+  type: CLEAR_SURVEY_SUBMISSION_DETAILS,
+});
+
+export const fetchSurveySubmissionAction = id => async (dispatch) => {
+  dispatch({ type: FETCH_SURVEY_SUBMISSION_REQUEST });
+  try {
+    const response = await api.get(`/survey-submissions/${id}`);
+    dispatch({
+      type: FETCH_SURVEY_SUBMISSION_SUCCESS,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({ type: FETCH_SURVEY_SUBMISSION_FAILURE, payload: error.message });
   }
 };
 

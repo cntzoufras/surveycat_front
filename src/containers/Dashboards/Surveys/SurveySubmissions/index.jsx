@@ -1,21 +1,64 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { fetchSurveySubmissionsAction } from '@/redux/actions/surveySubmissionsActions';
+import { IconButton } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { fetchSurveySubmissionsAction, fetchSurveySubmissionAction, clearSubmissionDetailsAction } from '@/redux/actions/surveySubmissionsActions';
 import SurveySubmissionsReactTable from './components/SurveySubmissionsReactTable';
+import SurveySubmissionDetailsModal from './components/SurveySubmissionDetailsModal';
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
+  color: '#ffffff',
+  width: '32px',
+  height: '32px',
+  '&:hover': {
+    backgroundColor: theme.palette.mode === 'light' ? '#999999' : '#777777',
+  },
+  '&:disabled': {
+    backgroundColor: theme.palette.mode === 'light' ? '#cccccc' : '#444444',
+    color: theme.palette.mode === 'light' ? '#888888' : '#999999',
+  },
+}));
 
 const SurveySubmissions = () => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
   
   // eslint-disable-next-line camelcase
-  const { survey_submissions = [], loading, error } = useSelector(state => state.survey_submissions || {});
+      const {
+    survey_submissions = [],
+    loading,
+    error,
+    selectedSubmission,
+    loadingDetails,
+    errorDetails,
+  } = useSelector(state => state.survey_submissions || {});
+
+  const handleViewClick = (submissionId) => {
+    dispatch(fetchSurveySubmissionAction(submissionId));
+  };
+
+  const toggleModal = () => {
+    setModalIsOpen(false);
+    if (modalIsOpen) { // only clear if modal was open
+      dispatch(clearSubmissionDetailsAction());
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchSurveySubmissionsAction());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedSubmission) {
+      setModalIsOpen(true);
+    }
+  }, [selectedSubmission]);
 
   const columns = useMemo(
   () => [
@@ -57,10 +100,24 @@ const SurveySubmissions = () => {
     {
       Header: 'Date Created',
       accessor: 'created_at',
+            disableGlobalFilter: true,
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
       disableGlobalFilter: true,
+      Cell: ({ row }) => (
+        <StyledIconButton
+          onClick={() => handleViewClick(row.original.submissionId)}
+          disabled={loadingDetails}
+          size="small"
+        >
+          <VisibilityOutlinedIcon fontSize="small" />
+        </StyledIconButton>
+      ),
     },
   ],
-  [],
+  [loadingDetails],
 );
 
 
@@ -70,8 +127,9 @@ const SurveySubmissions = () => {
     const survey = response.survey || {};
     const respondent = response.respondent || {};
 
-    return {
+        return {
       id: index + 1,
+      submissionId: submission.id,
       survey: survey.title || 'N/A',
       response: response.id || 'N/A',
       respondent_email: respondent.email || 'N/A',
@@ -84,14 +142,13 @@ const SurveySubmissions = () => {
     };
   });
 
-  const reactTableData = { tableHeaderData: columns, tableRowsData: data };
+    const reactTableData = { tableHeaderData: columns, tableRowsData: data };
 
-  console.log('react table data: ', reactTableData);
-  console.log('data: ', data);
-  console.log('Survey submissions: ', survey_submissions);
+  
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+    if (error) return <p>Error: {error}</p>;
+  if (errorDetails) return <p>Error loading details: {errorDetails}</p>;
 
   return (
     <Container>
@@ -104,6 +161,12 @@ const SurveySubmissions = () => {
       <Row>
         <SurveySubmissionsReactTable reactTableData={reactTableData} />
       </Row>
+      <SurveySubmissionDetailsModal
+        isOpen={modalIsOpen}
+        toggle={toggleModal}
+        submission={selectedSubmission}
+        loading={loadingDetails}
+      />
     </Container>
   );
 };

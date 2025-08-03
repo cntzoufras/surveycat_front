@@ -526,7 +526,7 @@ export const previewSurveyAction = surveyId => async (dispatch) => {
 export const submitSurveySubmissionAction = (surveyId, submissionData) => async (dispatch) => {
   // eslint-disable-next-line camelcase
   const { survey_response_id, ...rest } = submissionData;
-  const data = JSON.stringify(rest);
+  
   
   try {
     const response = await api.post('/survey-submissions', { 
@@ -534,7 +534,7 @@ export const submitSurveySubmissionAction = (surveyId, submissionData) => async 
       // survey_response_id: submissionData.survey_response_id, 
       // eslint-disable-next-line camelcase
       survey_response_id,
-      submission_data: data,
+      submission_data: rest,
     });
     dispatch({ type: SUBMIT_SURVEY_RESPONSE_SUCCESS, payload: response.data });
     // Handle success - maybe navigate to a thank you page
