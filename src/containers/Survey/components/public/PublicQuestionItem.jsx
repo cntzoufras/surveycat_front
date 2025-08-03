@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Typography } from '@mui/material';
+import { useSurveyTheme } from '../../../../contexts/SurveyThemeContext';
 import PublicQuestionRenderer from './PublicQuestionRenderer'; // Import the new renderer
 
 const PublicQuestionItem = ({ question, index, onResponseChange }) => {
+  const themeStyles = useSurveyTheme();
   console.log('public question einai: ', question);
   return (
     <Box sx={{
  mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px', 
 }}
     >
-      <Typography color="#252525" variant="h6">
+      <Typography color={themeStyles?.colors?.question || '#252525'} variant="h6">
         {`${index + 1}. ${question.title}`}
       </Typography>
       <PublicQuestionRenderer question={question} onAnswerChange={onResponseChange} />

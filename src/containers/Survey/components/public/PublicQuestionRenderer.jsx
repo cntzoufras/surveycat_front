@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSurveyTheme } from '../../../../contexts/SurveyThemeContext';
 import {
   Radio,
   FormControlLabel,
@@ -79,8 +80,16 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
 
 
 
+  const themeStyles = useSurveyTheme();
+  
   return (
-    <div>
+    <div style={{ 
+      fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+      color: themeStyles?.colors?.text || '#252525',
+      backgroundColor: themeStyles?.colors?.background || 'transparent',
+      padding: '20px',
+      borderRadius: '8px'
+    }}>
       {/* Multiple Choice (Radio) */}
       {question.question_type_id === 1 && Array.isArray(question.survey_question_choices) && (
         <List>
@@ -94,13 +103,18 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedValues.includes(choice.id)}
                     onChange={handleRadioChange}
                     sx={{
-                      color: 'grey.400',
-                      '&.Mui-checked': { color: 'grey.700' },
+                      color: themeStyles?.colors?.choice || 'grey.400',
+                      '&.Mui-checked': { 
+                        color: themeStyles?.colors?.primary || 'grey.700' 
+                      },
                     }}
                   />
                 )}
                 label={choice.content}
-                sx={{ color: '#252525' }}
+                sx={{ 
+                  color: themeStyles?.colors?.text || '#252525',
+                  fontSize: themeStyles?.typography?.fontSize || '16px'
+                }}
               />
             </ListItem>
           ))}
@@ -122,13 +136,18 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedValues.includes(choice.id)}
                     onChange={handleCheckboxChange}
                     sx={{
-                      color: 'grey.400',
-                      '&.Mui-checked': { color: 'grey.700' },
+                      color: themeStyles?.colors?.choice || 'grey.400',
+                      '&.Mui-checked': { 
+                        color: themeStyles?.colors?.primary || 'grey.700' 
+                      },
                     }}
                   />
                 )}
                 label={choice.content}
-                sx={{ color: '#252525' }}
+                sx={{ 
+                  color: themeStyles?.colors?.text || '#252525',
+                  fontSize: themeStyles?.typography?.fontSize || '16px'
+                }}
               />
             </ListItem>
           ))}
@@ -147,18 +166,18 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           sx={{ 
             mt: 1,
             '& .MuiOutlinedInput-root': {
-             backgroundColor: 'grey.100',
-             borderRadius: 1,
+             backgroundColor: themeStyles?.colors?.background || 'grey.100',
+             borderRadius: themeStyles?.layout?.borderRadius || 1,
            },
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'grey.700',
+              borderColor: themeStyles?.colors?.primary || 'grey.700',
             },
             '& input::placeholder': {
-              color: 'grey.400',
+              color: themeStyles?.colors?.choice || 'grey.400',
               opacity: 1,
            },
            '& .MuiOutlinedInput-input': {
-              color: 'grey.900', 
+              color: themeStyles?.colors?.text || 'grey.900', 
             },
           }}
         />
@@ -174,14 +193,18 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           size="large"
           /* make the outline stars grey and filled stars orange */
           sx={{
-            '& .MuiRating-iconEmpty': { color: 'grey.400' },
-            '& .MuiRating-iconFilled': { color: 'warning.main' },
+            '& .MuiRating-iconEmpty': { 
+              color: themeStyles?.colors?.choice || 'grey.400' 
+            },
+            '& .MuiRating-iconFilled': { 
+              color: themeStyles?.colors?.primary || 'warning.main' 
+            },
           }}
           /* or if you prefer custom icons: */
           icon={<StarIcon sx={{ fontSize: '2rem' }} />}
           emptyIcon={<StarBorderIcon sx={{ fontSize: '2rem' }} />}
         />
-        <Typography sx={{ ml: 2, color: 'text.primary' }}>
+        <Typography sx={{ ml: 2, color: themeStyles?.colors?.text || 'text.primary' }}>
           {selectedValues[0] || ''}
         </Typography>
       </Box>
@@ -222,10 +245,20 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           onChange={handleTextChange}
           sx={{
             mt: 1,
-            '& .MuiOutlinedInput-root': { backgroundColor: 'grey.100', borderRadius: 1 },
-            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'grey.400' },
-            '& textarea::placeholder': { color: 'grey.600', opacity: 1 },
-            '& .MuiOutlinedInput-input': { color: '#252525' },
+            '& .MuiOutlinedInput-root': { 
+              backgroundColor: themeStyles?.colors?.background || 'grey.100', 
+              borderRadius: themeStyles?.layout?.borderRadius || 1 
+            },
+            '& .MuiOutlinedInput-notchedOutline': { 
+              borderColor: themeStyles?.colors?.primary || 'grey.400' 
+            },
+            '& textarea::placeholder': { 
+              color: themeStyles?.colors?.choice || 'grey.600', 
+              opacity: 1 
+            },
+            '& .MuiOutlinedInput-input': { 
+              color: themeStyles?.colors?.text || '#252525' 
+            },
           }}
         />
       )}
@@ -241,9 +274,16 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           onChange={handleDropdownChange}
           sx={{
             mt: 1,
-            '& .MuiOutlinedInput-root': { backgroundColor: 'grey.100', borderRadius: 1 },
-            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'grey.400' },
-            '& .MuiSelect-select': { color: '#252525' },
+            '& .MuiOutlinedInput-root': { 
+              backgroundColor: themeStyles?.colors?.background || 'grey.100', 
+              borderRadius: themeStyles?.layout?.borderRadius || 1 
+            },
+            '& .MuiOutlinedInput-notchedOutline': { 
+              borderColor: themeStyles?.colors?.primary || 'grey.400' 
+            },
+            '& .MuiSelect-select': { 
+              color: themeStyles?.colors?.text || '#252525' 
+            },
           }}
         >
           <MenuItem value=""><em>Select an option</em></MenuItem>

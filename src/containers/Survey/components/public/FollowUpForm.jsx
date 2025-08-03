@@ -12,9 +12,11 @@ import {
   Button,
   useTheme,
 } from '@mui/material';
+import { useSurveyTheme } from '../../../../contexts/SurveyThemeContext';
 
 const FollowUpForm = ({ onSubmit }) => {
   const theme = useTheme();
+  const themeStyles = useSurveyTheme();
 
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('');
@@ -60,15 +62,15 @@ const FollowUpForm = ({ onSubmit }) => {
           p: 4,
           maxWidth: 500,
           width: '100%',
-          bgcolor: '#F2F2F2',
+          bgcolor: themeStyles?.colors?.background || '#F2F2F2',
           borderRadius: 2,
         }}
       >
-        <Typography variant="h5" gutterBottom sx={{ color: '#1C1C1E' }}>
-          Just one more thing…
+        <Typography variant="h5" gutterBottom sx={{ color: themeStyles?.colors?.text || '#1C1C1E' }}>
+          Additional Information
         </Typography>
-        <Typography variant="body2" gutterBottom sx={{ color: '#3C3C43' }}>
-          <em>(optional)</em> Drop your email & tell us your gender:
+        <Typography variant="body2" gutterBottom sx={{ color: themeStyles?.colors?.choice || '#3C3C43' }}>
+          Help us understand our audience better. This information is optional and will be kept confidential.
         </Typography>
 
         <TextField
@@ -87,12 +89,12 @@ const FollowUpForm = ({ onSubmit }) => {
           sx={{
             mt: 2,
             // ensure label and text are dark
-            '& .MuiInputLabel-root': { color: '#424242' },
-            '& .MuiOutlinedInput-input': { color: '#424242' },
+            '& .MuiInputLabel-root': { color: themeStyles?.colors?.text || '#424242' },
+            '& .MuiOutlinedInput-input': { color: themeStyles?.colors?.text || '#424242' },
             '& .MuiOutlinedInput-root': {
               '& input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus': {
                 WebkitBoxShadow: '0 0 0px 1000px #fff8e1 inset !important',
-                WebkitTextFillColor: '#424242 !important',
+                WebkitTextFillColor: `${themeStyles?.colors?.text || '#424242'} !important`,
               },
             },
           }}
@@ -150,7 +152,7 @@ const FollowUpForm = ({ onSubmit }) => {
                   <Radio
                     sx={{
                       color: '#424242',
-                      '&.Mui-checked': { color: '#1C1C1E' },
+                      '&.Mui-checked': { color: themeStyles?.colors?.primary || '#1C1C1E' },
                     }}
                   />
                 )}
@@ -171,9 +173,9 @@ const FollowUpForm = ({ onSubmit }) => {
             variant="contained"
             onClick={handleFinish}
             sx={{
-              bgcolor: '#007ACC',
+              bgcolor: themeStyles?.colors?.primary || '#007ACC',
               color: '#fff',
-              '&:hover': { bgcolor: '#005A9E' },
+              '&:hover': { bgcolor: themeStyles?.colors?.secondary || '#005A9E' },
               px: 4,
             }}
           >

@@ -47,6 +47,8 @@ const SurveyForm = ({ userId }) => {
   const [surveyDescription, setSurveyDescription] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [selectedThemeId, setSelectedThemeId] = useState('');
+  const [showThemePreview, setShowThemePreview] = useState(false);
+  const [customThemeSettings, setCustomThemeSettings] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const [selectedFont, setSelectedFont] = useState('Roboto'); // Default font
 
@@ -60,6 +62,7 @@ const SurveyForm = ({ userId }) => {
   
   const surveyCategories = useSelector(state => state.survey.surveyCategories);
   const surveyThemes = useSelector(state => state.survey.surveyThemes);
+  const currentTheme = surveyThemes.find(t => t.id === selectedThemeId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -192,6 +195,24 @@ const SurveyForm = ({ userId }) => {
               ))}
             </MuiSelect>
           </MuiStyledFormControl>
+          {selectedThemeId && (
+            <MuiBox sx={{ mt: 2, display: 'flex', gap: 1 }}>
+              <MuiButton 
+                variant="outlined" 
+                onClick={() => setShowThemePreview(true)}
+                size="small"
+              >
+                Preview Theme
+              </MuiButton>
+              <MuiButton 
+                variant="outlined" 
+                onClick={() => setShowThemePreview(true)}
+                size="small"
+              >
+                Customize Theme
+              </MuiButton>
+            </MuiBox>
+          )}
         </MuiBox>
         <MuiBox display="flex" justifyContent="center" mt={2}>
           <MuiButton

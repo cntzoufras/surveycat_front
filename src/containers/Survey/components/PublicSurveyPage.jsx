@@ -20,10 +20,13 @@ import {
 import PublicQuestionList from './public/PublicQuestionList';
 import FollowUpForm from './public/FollowUpForm';
 import ThankYouSubmission from './ThankYouSubmission';
+import SurveyThemeWrapper from './SurveyThemeWrapper';
+import { useSurveyTheme } from '@/contexts/SurveyThemeContext';
 
 const PublicSurveyPage = ({ preview = false }) => {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = Boolean(user?.id);
+  const themeStyles = useSurveyTheme();
 
   const dispatch = useDispatch();
   const { surveySlug, surveyId } = useParams();
@@ -188,81 +191,82 @@ const PublicSurveyPage = ({ preview = false }) => {
      return <ThankYouSubmission timestamp={submissionTimestamp} />;
    }
 
-  // Dynamic theme styles (with fallbacks)
-  const themeStyles = {
-    fontFamily: survey.theme?.theme_setting?.settings?.typography?.fontFamily || 'Arial, sans-serif',
-    fontSize: survey.theme?.theme_setting?.settings?.typography?.fontSize || '12px',
-    backgroundColor: survey.theme?.theme_setting?.settings?.backgroundColor || '#f5f5f5',
-  };
+  // Theme styling is now handled by SurveyThemeWrapper
 
   return (
-    <Container maxWidth="md" sx={{ ...themeStyles, pt: 4, pb: 4 }}>
-      {/* Survey Title and Description */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" align="center" sx={{ color: '#4A4A4A', mb: 1 }}>
-          {survey.title}
-        </Typography>
-        {survey.description && (
-          <Typography variant="body2" align="center" sx={{ color: '#4A4A4A' }}>
-            {survey.description}
+    <SurveyThemeWrapper survey={survey}>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
+        {/* Survey Title and Description */}
+        <Box sx={{ mb: 4 }}>
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            align="center" 
+            sx={{ mb: 1 }}
+            color={themeStyles?.colors?.primary || 'inherit'}
+          >
+            {survey.title}
           </Typography>
-        )}
-      </Box>
+          {survey.description && (
+            <Typography 
+              variant="body2" 
+              align="center"
+              color={themeStyles?.colors?.secondary || 'inherit'}
+            >
+              {survey.description}
+            </Typography>
+          )}
+        </Box>
 
-      {/* Single vs Multiple logic */}
-      {isSingle ? (
-        <>  
-          <Typography variant="h5" gutterBottom>
-            {currentPage.title}
-          </Typography>
-          <PublicQuestionList
-            questions={currentPage.questions}
-            onResponseChange={handleResponseChange}
-          />
-          <Box sx={{ mt: 4, textAlign: 'center' }}>
-            <Button onClick={() => setStep(s => Math.max(s - 1, 0))} disabled={step === 0} sx={{ mr: 2 }}>
-              Back
-            </Button>
-            {step < pages.length - 1 ? (
-              <Button variant="contained" onClick={() => setStep(s => s + 1)}>
-                Next
+        {/* Single vs Multiple logic */}
+        {isSingle ? (
+          <>  
+            <Typography variant="h5" gutterBottom>
+              {currentPage.title}
+            </Typography>
+            <PublicQuestionList
+              questions={currentPage.questions}
+              onResponseChange={handleResponseChange}
+            />
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button onClick={() => setStep(s => Math.max(s - 1, 0))} disabled={step === 0} sx={{ mr: 2 }}>
+                Back
               </Button>
-            ) : (
-              <Button variant="contained" onClick={handleSubmit} disabled={preview}>
+              {step < pages.length - 1 ? (
+                <Button variant="contained" onClick={() => setStep(s => s + 1)}>
+                  Next
+                </Button>
+              ) : (
+                <Button variant="contained" onClick={handleSubmit} disabled={preview}>
+                  Submit
+                </Button>
+              )}
+            </Box>
+          </>
+        ) : (
+          <>
+            <PublicQuestionList 
+              questions={surveyQuestions} 
+              onResponseChange={handleResponseChange} 
+            />
+            <Box sx={{ textAlign: 'center', mt: 4 }}>
+              <Button
+                disabled={preview}
+                variant="contained"
+                onClick={handleSubmit}
+                color="primary"
+                size="large"
+                sx={{
+                  px: 4,
+                }}
+              >
                 Submit
               </Button>
-            )}
-          </Box>
-        </>
-      ) : (
-        <>
-          <PublicQuestionList 
-            questions={surveyQuestions} 
-            onResponseChange={handleResponseChange} 
-          />
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Button
-              disabled={preview}
-              variant="contained"
-              onClick={handleSubmit}
-              color="primary"
-              size="large"
-              sx={{
-                px: 4,
-                backgroundColor: theme => theme.palette.primary.main,
-                color: '#fff',
-                '&:hover': {
-                  // Use a secondary or darker shade for hover, if defined in theme
-                  backgroundColor: theme => theme.palette.primary.dark || theme.palette.secondary.main,
-                },
-              }}
-            >
-              Submit
-            </Button>
-          </Box>
-        </>
-      )}
-    </Container>
+            </Box>
+          </>
+        )}
+      </Container>
+    </SurveyThemeWrapper>
   );
 };
 
