@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, {
+ useEffect, useMemo, useState, useCallback, 
+} from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -6,44 +8,60 @@ import { useTranslation } from 'react-i18next';
 import { IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { 
-  fetchSurveySubmissionsAction, 
-  fetchSurveySubmissionAction, 
-  clearSubmissionDetailsAction, 
+import {
+  fetchSurveySubmissionsAction,
+  fetchSurveySubmissionAction,
+  clearSubmissionDetailsAction,
 } from '@/redux/actions/surveySubmissionsActions';
 import SurveySubmissionsReactTable from './components/SurveySubmissionsReactTable';
 import SurveySubmissionDetailsModal from './components/SurveySubmissionDetailsModal';
 
-// Cell component moved outside render
-const ViewButtonCell = ({ row, onView, disabled }) => (
-  <StyledIconButton
-    onClick={() => onView(row.original.submissionId)}
-    disabled={disabled}
-    size="small"
-  >
-    <VisibilityOutlinedIcon fontSize="small" />
-  </StyledIconButton>
-);
-ViewButtonCell.propTypes = {
-  row: PropTypes.shape({
-    original: PropTypes.shape({ submissionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired }),
-  }).isRequired,
-  onView: PropTypes.func.isRequired,
-  disabled: PropTypes.bool,
+// Action cell component defined at module scope
+const ActionCell = ({ row, column }) => {
+  const { onView, disabled } = column.meta;
+  return (
+    <StyledIconButton
+      onClick={() => onView(row.original.submissionId)}
+      disabled={disabled}
+      size="small"
+    >
+      <VisibilityOutlinedIcon fontSize="small" />
+    </StyledIconButton>
+  );
 };
-ViewButtonCell.defaultProps = { disabled: false };
+
+ActionCell.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      submissionId: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+    }).isRequired,
+  }).isRequired,
+  column: PropTypes.shape({
+    meta: PropTypes.shape({
+      onView: PropTypes.func.isRequired,
+      disabled: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
+  backgroundColor:
+    theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
   color: '#ffffff',
   width: '32px',
   height: '32px',
   '&:hover': {
-    backgroundColor: theme.palette.mode === 'light' ? '#999999' : '#777777',
+    backgroundColor:
+      theme.palette.mode === 'light' ? '#999999' : '#777777',
   },
   '&:disabled': {
-    backgroundColor: theme.palette.mode === 'light' ? '#cccccc' : '#444444',
-    color: theme.palette.mode === 'light' ? '#888888' : '#999999',
+    backgroundColor:
+      theme.palette.mode === 'light' ? '#cccccc' : '#444444',
+    color:
+      theme.palette.mode === 'light' ? '#888888' : '#999999',
   },
 }));
 
@@ -53,105 +71,150 @@ const SurveySubmissions = () => {
   const dispatch = useDispatch();
 
   const {
-    survey_submissions = [],
+    survey_submissions: surveySubmissions = [],
     loading,
     error,
     selectedSubmission,
     loadingDetails,
     errorDetails,
-  } = useSelector(state => state.survey_submissions || {});
+  } = useSelector(
+    state => state.survey_submissions || {},
+  );
 
-  // Memoize callbacks
   const handleViewClick = useCallback(
-    (submissionId) => {
-      dispatch(fetchSurveySubmissionAction(submissionId));
-    },
-    [dispatch]
+    id => dispatch(fetchSurveySubmissionAction(id)),
+    [dispatch],
   );
 
   const toggleModal = useCallback(() => {
-    setModalIsOpen(prev => !prev);
-    if (modalIsOpen) {
-      dispatch(clearSubmissionDetailsAction());
-    }
-  }, [dispatch, modalIsOpen]);
-
-  useEffect(() => {
-    dispatch(fetchSurveySubmissionsAction());
+    setModalIsOpen((open) => {
+      if (open) {
+        dispatch(clearSubmissionDetailsAction());
+      }
+      return !open;
+    });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (selectedSubmission) {
-      setModalIsOpen(true);
-    }
-  }, [selectedSubmission]);
+  useEffect(
+    () => {
+      dispatch(fetchSurveySubmissionsAction());
+    },
+    [dispatch],
+  );
+
+  useEffect(
+    () => {
+      if (selectedSubmission) {
+        setModalIsOpen(true);
+      }
+    },
+    [selectedSubmission],
+  );
 
   const columns = useMemo(
     () => [
-      { Header: '#', accessor: 'id', disableGlobalFilter: true, width: 65 },
+      {
+ Header: '#', accessor: 'id', disableGlobalFilter: true, width: 65, 
+},
       { Header: 'Survey', accessor: 'survey' },
-      { Header: 'Response ID', accessor: 'response', disableGlobalFilter: true },
-      { Header: 'Respondent Email', accessor: 'respondent_email', disableGlobalFilter: true },
-      { Header: 'Respondent ID', accessor: 'respondent_id', disableGlobalFilter: true },
+      {
+        Header: 'Response ID',
+        accessor: 'response',
+        disableGlobalFilter: true,
+      },
+      {
+        Header: 'Respondent Email',
+        accessor: 'respondent_email',
+        disableGlobalFilter: true,
+      },
+      {
+        Header: 'Respondent ID',
+        accessor: 'respondent_id',
+        disableGlobalFilter: true,
+      },
       { Header: 'Device', accessor: 'device', disableGlobalFilter: true },
-      { Header: 'Country', accessor: 'country', disableGlobalFilter: true },
-      { Header: 'Date Created', accessor: 'created_at', disableGlobalFilter: true },
+      {
+        Header: 'Country',
+        accessor: 'country',
+        disableGlobalFilter: true,
+      },
+      {
+        Header: 'Date Created',
+        accessor: 'created_at',
+        disableGlobalFilter: true,
+      },
       {
         Header: 'Actions',
         accessor: 'actions',
         disableGlobalFilter: true,
-        disableSortBy: true,
-        Cell: props => (
-          <ViewButtonCell
-            row={props.row}
-            onView={handleViewClick}
-            disabled={loadingDetails}
-          />
-        ),
+        Cell: ActionCell,
+        meta: {
+          onView: handleViewClick,
+          disabled: loadingDetails,
+        },
       },
     ],
-    [handleViewClick, loadingDetails]
+    [handleViewClick, loadingDetails],
   );
 
   const data = useMemo(
-    () => survey_submissions.map((submission, index) => {
-      const response = submission.survey_response || {};
-      const survey = response.survey || {};
-      const respondent = response.respondent || {};
-      return {
-        id: index + 1,
-        submissionId: submission.id,
-        survey: survey.title || 'N/A',
-        response: response.id || 'N/A',
-        respondent_email: respondent.email || 'N/A',
-        respondent_id: respondent.id || 'N/A',
-        device: response.device || 'N/A',
-        country: response.country || 'N/A',
-        created_at: submission.created_at ? new Date(submission.created_at).toLocaleDateString() : 'N/A',
-      };
-    }),
-    [survey_submissions]
+    () => surveySubmissions.map((submission, idx) => {
+        const response = submission.survey_response || {};
+        const survey = response.survey || {};
+        const respondent = response.respondent || {};
+
+        return {
+          id: idx + 1,
+          submissionId: submission.id,
+          survey: survey.title || 'N/A',
+          response: response.id || 'N/A',
+          respondent_email: respondent.email || 'N/A',
+          respondent_id: respondent.id || 'N/A',
+          device: response.device || 'N/A',
+          country: response.country || 'N/A',
+          created_at: submission.created_at
+            ? new Date(
+                submission.created_at,
+              ).toLocaleDateString()
+            : 'N/A',
+        };
+      }),
+    [surveySubmissions],
   );
 
   const reactTableData = useMemo(
     () => ({ tableHeaderData: columns, tableRowsData: data }),
-    [columns, data]
+    [columns, data],
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (errorDetails) return <p>Error loading details: {errorDetails}</p>;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (errorDetails) {
+    return <p>Error loading details: {errorDetails}</p>;
+  }
 
   return (
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">{t('survey_submissions.title')}</h3>
-          <h3 className="page-subhead subhead">{t('survey_submissions.description')}</h3>
+          <h3 className="page-title">
+            {t('survey_submissions.title')}
+          </h3>
+          <h3 className="page-subhead subhead">
+            {t('survey_submissions.description')}
+          </h3>
         </Col>
       </Row>
       <Row>
-        <SurveySubmissionsReactTable reactTableData={reactTableData} />
+        <SurveySubmissionsReactTable
+          reactTableData={reactTableData}
+        />
       </Row>
       <SurveySubmissionDetailsModal
         isOpen={modalIsOpen}
