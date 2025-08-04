@@ -1,24 +1,24 @@
 import {
   FETCH_SURVEY_SUCCESS,
-  FETCH_SURVEY_FAIL,
+  FETCH_SURVEY_FAILURE,
   FETCH_SURVEYS_SUCCESS,
-  FETCH_SURVEYS_FAIL,
+  FETCH_SURVEYS_FAILURE,
   FETCH_SURVEY_QUESTIONS,
   FETCH_SURVEY_PAGES_SUCCESS,
-  FETCH_SURVEY_PAGES_FAIL,
+  FETCH_SURVEY_PAGES_FAILURE,
   FETCH_QUESTION_TYPES_REQUEST,
   FETCH_QUESTION_TYPES_SUCCESS,
   FETCH_QUESTION_TYPES_FAILURE,
   CREATE_SURVEY_QUESTION_SUCCESS,
-  CREATE_SURVEY_QUESTION_FAIL,
+  CREATE_SURVEY_QUESTION_FAILURE,
   CREATE_SURVEY_QUESTION_CHOICES_SUCCESS,
-  CREATE_SURVEY_QUESTION_CHOICES_FAIL,
+  CREATE_SURVEY_QUESTION_CHOICES_FAILURE,
   CREATE_SURVEY_SUCCESS,
-  CREATE_SURVEY_FAIL,
+  CREATE_SURVEY_FAILURE,
   CREATE_SURVEY_PAGE_SUCCESS,
-  CREATE_SURVEY_PAGE_FAIL,
+  CREATE_SURVEY_PAGE_FAILURE,
   ADD_SURVEY_PAGE_SUCCESS,
-  ADD_SURVEY_PAGE_FAIL,
+  ADD_SURVEY_PAGE_FAILURE,
   CREATE_SURVEY_RESPONSE_REQUEST,
   CREATE_SURVEY_RESPONSE_SUCCESS,
   CREATE_SURVEY_RESPONSE_FAILURE,
@@ -29,22 +29,22 @@ import {
   SAVE_FOLLOW_UP_SUCCESS,
   SAVE_FOLLOW_UP_FAILURE,
   FETCH_SURVEY_CATEGORIES_SUCCESS,
-  FETCH_SURVEY_CATEGORIES_FAIL,
+  FETCH_SURVEY_CATEGORIES_FAILURE,
   FETCH_SURVEY_THEMES_SUCCESS,
-  FETCH_SURVEY_THEMES_FAIL,
+  FETCH_SURVEY_THEMES_FAILURE,
   UPDATE_SURVEY_TITLE_SUCCESS,
-  UPDATE_SURVEY_TITLE_FAIL,
+  UPDATE_SURVEY_TITLE_FAILURE,
   UPDATE_SURVEY_DESCRIPTION_SUCCESS,
-  UPDATE_SURVEY_DESCRIPTION_FAIL,
+  UPDATE_SURVEY_DESCRIPTION_FAILURE,
   UPDATE_SURVEY_PAGE_TITLE_SUCCESS,
-  UPDATE_SURVEY_PAGE_TITLE_FAIL,
+  UPDATE_SURVEY_PAGE_TITLE_FAILURE,
   UPDATE_SURVEY_PAGE_DESCRIPTION_SUCCESS,
-  UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL,
+  UPDATE_SURVEY_PAGE_DESCRIPTION_FAILURE,
   UPDATE_SURVEY_LAYOUT_SUCCESS,
-  UPDATE_SURVEY_LAYOUT_FAIL,
+  UPDATE_SURVEY_LAYOUT_FAILURE,
   UPDATE_QUESTIONS,
   DELETE_SURVEY_QUESTION_SUCCESS,
-  DELETE_SURVEY_QUESTION_FAIL,
+  DELETE_SURVEY_QUESTION_FAILURE,
   DELETE_SURVEY_REQUEST,
   DELETE_SURVEY_SUCCESS,
   DELETE_SURVEY_FAILURE,
@@ -52,7 +52,7 @@ import {
   DELETE_SURVEY_PAGE_SUCCESS,
   DELETE_SURVEY_PAGE_FAILURE,
   PUBLISH_SURVEY_SUCCESS,
-  PUBLISH_SURVEY_FAIL,
+  PUBLISH_SURVEY_FAILURE,
   PREVIEW_SURVEY_SUCCESS,
   PREVIEW_SURVEY_FAILURE,
   SUBMIT_SURVEY_RESPONSE_SUCCESS,
@@ -167,7 +167,7 @@ const surveyReducer = (state = initialState, action) => {
         survey: action.payload,
         error: null,
       };
-    case CREATE_SURVEY_FAIL:
+    case CREATE_SURVEY_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -178,7 +178,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyPages: [...state.surveyPages, action.payload],
         error: null,
       };
-    case CREATE_SURVEY_PAGE_FAIL:
+    case CREATE_SURVEY_PAGE_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -189,7 +189,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyPages: [...state.surveyPages, action.payload],
         error: null,
       };
-    case ADD_SURVEY_PAGE_FAIL:
+    case ADD_SURVEY_PAGE_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -249,7 +249,7 @@ const surveyReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-    case FETCH_SURVEYS_FAIL:
+    case FETCH_SURVEYS_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -262,7 +262,7 @@ const surveyReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-    case FETCH_SURVEY_FAIL:
+    case FETCH_SURVEY_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -274,7 +274,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyCategories: action.payload,
         error: null,
       };
-    case FETCH_SURVEY_CATEGORIES_FAIL:
+    case FETCH_SURVEY_CATEGORIES_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -285,7 +285,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyThemes: action.payload,
         error: null,
       };
-    case FETCH_SURVEY_THEMES_FAIL:
+    case FETCH_SURVEY_THEMES_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -301,7 +301,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyPages: action.payload,
         error: null,
       };
-    case FETCH_SURVEY_PAGES_FAIL:
+    case FETCH_SURVEY_PAGES_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -381,7 +381,7 @@ const surveyReducer = (state = initialState, action) => {
         questions: [...state.questions, action.payload],
         error: null,
       };
-    case CREATE_SURVEY_QUESTION_FAIL:
+    case CREATE_SURVEY_QUESTION_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -431,7 +431,7 @@ const surveyReducer = (state = initialState, action) => {
         questions: state.questions.filter(q => q.id !== action.payload),
         error: null,
       };
-    case DELETE_SURVEY_QUESTION_FAIL:
+    case DELETE_SURVEY_QUESTION_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -442,7 +442,7 @@ const surveyReducer = (state = initialState, action) => {
         survey_question_choices: [...state.survey_question_choices, ...action.payload],
         error: null,
       };
-    case CREATE_SURVEY_QUESTION_CHOICES_FAIL:
+    case CREATE_SURVEY_QUESTION_CHOICES_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -453,7 +453,7 @@ const surveyReducer = (state = initialState, action) => {
         survey: { ...state.survey, title: action.payload.title },
         error: null,
       };
-    case UPDATE_SURVEY_TITLE_FAIL:
+    case UPDATE_SURVEY_TITLE_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -464,7 +464,7 @@ const surveyReducer = (state = initialState, action) => {
         survey: { ...state.survey, description: action.payload.description },
         error: null,
       };
-    case UPDATE_SURVEY_DESCRIPTION_FAIL:
+    case UPDATE_SURVEY_DESCRIPTION_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -475,7 +475,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyPage: { ...state.surveyPage, title: action.payload.title },
         error: null,
       };
-    case UPDATE_SURVEY_PAGE_TITLE_FAIL:
+    case UPDATE_SURVEY_PAGE_TITLE_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -486,7 +486,7 @@ const surveyReducer = (state = initialState, action) => {
         surveyPage: { ...state.surveyPage, description: action.payload.description },
         error: null,
       };
-    case UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL:
+    case UPDATE_SURVEY_PAGE_DESCRIPTION_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -500,7 +500,7 @@ const surveyReducer = (state = initialState, action) => {
         },
         error: null,
       };
-    case UPDATE_SURVEY_LAYOUT_FAIL:
+    case UPDATE_SURVEY_LAYOUT_FAILURE:
       return {
         ...state,
         error: action.payload,
@@ -523,7 +523,7 @@ const surveyReducer = (state = initialState, action) => {
         isPublished: true,
         error: null,
       };
-    case PUBLISH_SURVEY_FAIL:
+    case PUBLISH_SURVEY_FAILURE:
       return {
         ...state,
         error: action.payload,

@@ -29,13 +29,28 @@ const ThankYouSubmission = ({ timestamp }) => {
           backgroundColor: themeStyles?.colors?.background || '#ffffff',
         }}
       >
-        <Typography variant="h4" sx={{ mb: 2, fontWeight: '700', color: themeStyles?.colors?.text || '#333' }}>
+        <Typography variant="h4" sx={{ 
+          mb: 2, 
+          fontWeight: '700', 
+          color: themeStyles?.colors?.text || '#333',
+          fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+          fontSize: themeStyles?.typography?.headingStyle?.H1 || '32px'
+        }}>
           Thank You for Your Submission!
         </Typography>
-        <Typography variant="body1" sx={{ mb: 2, color: themeStyles?.colors?.choice || '#555' }}>
+        <Typography variant="body1" sx={{ 
+          mb: 2, 
+          color: themeStyles?.colors?.choice || '#555',
+          fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+          fontSize: themeStyles?.typography?.fontSize || '16px'
+        }}>
           We appreciate your feedback. Your response has been recorded on {timestamp}.
         </Typography>
-        <Typography variant="body2" sx={{ color: themeStyles?.colors?.secondary || '#777' }}>
+        <Typography variant="body2" sx={{ 
+          color: themeStyles?.colors?.secondary || '#777',
+          fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+          fontSize: themeStyles?.typography?.fontSize || '14px'
+        }}>
           Thank you for participating in our survey.
         </Typography>
       </Paper>

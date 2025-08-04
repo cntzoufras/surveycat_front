@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { WEB_SAFE_FONTS } from '@/constants/fontConstants';
 import {
   Box,
   Typography,
@@ -15,7 +16,7 @@ import {
 } from '@mui/material';
 import { ChromePicker } from 'react-color';
 
-const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
+const ThemePreview = ({ theme, onThemeUpdate }) => {
   const [activeTab, setActiveTab] = useState('typography');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [activeColorField, setActiveColorField] = useState(null);
@@ -58,12 +59,21 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
   };
 
   const handleTypographyChange = (field, value) => {
-    onThemeUpdate({
-      typography: {
-        ...currentTheme.typography,
-        [field]: value,
-      },
-    });
+    if (field === 'headingStyle') {
+      onThemeUpdate({
+        typography: {
+          ...currentTheme.typography,
+          headingStyle: value,
+        },
+      });
+    } else {
+      onThemeUpdate({
+        typography: {
+          ...currentTheme.typography,
+          [field]: value,
+        },
+      });
+    }
   };
 
   const handleLayoutChange = (field, value) => {
@@ -78,40 +88,58 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
   const renderPreview = () => {
     const styles = {
       fontFamily: currentTheme.typography.fontFamily,
-      backgroundColor: currentTheme.colors.background,
       color: currentTheme.colors.text,
       borderRadius: `${currentTheme.layout.borderRadius}px`,
       padding: `${currentTheme.layout.padding}px`,
-      opacity: currentTheme.layout.backgroundAlpha / 100,
+      backgroundColor: `${currentTheme.colors.background}${Math.round(currentTheme.layout.backgroundAlpha * 2.55).toString(16).padStart(2, '0')}`,
     };
 
     return (
       <Paper elevation={3} sx={{ p: 3, ...styles }}>
-        <Typography variant="h4" sx={{ 
+        {/* Question Title - H1 Style */}
+        <Typography variant="h1" sx={{ 
           fontFamily: currentTheme.typography.fontFamily,
-          color: currentTheme.colors.primary,
-          fontSize: currentTheme.typography.headingStyle.H1,
+          color: currentTheme.colors.question,
+          fontSize: currentTheme.typography.headingStyle?.H1 || '24px',
+          fontWeight: 'bold',
+          marginBottom: '16px',
         }}>
-          Sample Survey Question
+          How would you rate our customer service?
         </Typography>
         
+        {/* Question Description */}
         <Typography variant="body1" sx={{ 
-          mt: 2, 
-          color: currentTheme.colors.text,
           fontFamily: currentTheme.typography.fontFamily,
+          color: currentTheme.colors.text,
+          fontSize: currentTheme.typography.fontSize || '16px',
+          marginBottom: '20px',
+          lineHeight: 1.5,
         }}>
-          This is how your survey questions will appear to respondents.
+          Please share your honest feedback about your experience with our service. 
+          Your response will help us improve our services.
         </Typography>
 
-        <Box sx={{ mt: 3 }}>
-          {['Option A', 'Option B', 'Option C'].map((option, index) => (
+        {/* Multiple Choice Options */}
+        <Box sx={{ mt: 3, mb: 3 }}>
+          {[
+            { label: 'Excellent' },
+            { label: 'Good' },
+            { label: 'Average' },
+            { label: 'Poor' }
+          ].map((option, index) => (
             <Box key={index} sx={{ 
               display: 'flex', 
               alignItems: 'center', 
               mb: 1,
-              p: 1,
+              p: 2,
               border: `1px solid ${currentTheme.colors.choice}`,
-              borderRadius: `${currentTheme.layout.borderRadius / 2}px`,
+              borderRadius: `${currentTheme.layout.borderRadius}px`,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                backgroundColor: currentTheme.colors.primary + '10',
+                borderColor: currentTheme.colors.primary,
+              },
             }}>
               <Box sx={{
                 width: 20,
@@ -119,12 +147,75 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
                 border: `2px solid ${currentTheme.colors.primary}`,
                 borderRadius: '50%',
                 mr: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }} />
-              <Typography sx={{ color: currentTheme.colors.choice }}>
-                {option}
+              <Typography sx={{ 
+                color: currentTheme.colors.choice,
+                fontFamily: currentTheme.typography.fontFamily,
+                fontSize: currentTheme.typography.fontSize || '16px',
+              }}>
+                {option.label}
               </Typography>
             </Box>
           ))}
+        </Box>
+
+        {/* Submit Button */}
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: currentTheme.colors.primary,
+            color: '#ffffff',
+            fontFamily: currentTheme.typography.fontFamily,
+            fontSize: currentTheme.typography.fontSize || '16px',
+            padding: '12px 24px',
+            borderRadius: `${currentTheme.layout.borderRadius}px`,
+            textTransform: 'none',
+          }}
+        >
+          Submit Response
+        </Button>
+
+        {/* Font Preview Section */}
+        <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid #e0e0e0' }}>
+          <Typography variant="h2" sx={{
+            fontFamily: currentTheme.typography.fontFamily,
+            color: currentTheme.colors.primary,
+            marginBottom: '12px',
+            fontSize: currentTheme.typography.headingStyle?.H2 || '18px',
+          }}>
+            Typography Preview
+          </Typography>
+          
+          <Box sx={{ display: 'grid', gap: 2 }}>
+            <Typography sx={{
+              fontFamily: currentTheme.typography.fontFamily,
+              color: currentTheme.colors.text,
+              fontSize: currentTheme.typography.fontSize || '16px',
+            }}>
+              Regular text: The quick brown fox jumps over the lazy dog.
+            </Typography>
+            
+            <Typography sx={{
+              fontFamily: currentTheme.typography.fontFamily,
+              color: currentTheme.colors.text,
+              fontSize: currentTheme.typography.fontSize || '16px',
+              fontWeight: 'bold',
+            }}>
+              Bold text: The quick brown fox jumps over the lazy dog.
+            </Typography>
+            
+            <Typography sx={{
+              fontFamily: currentTheme.typography.fontFamily,
+              color: currentTheme.colors.text,
+              fontSize: currentTheme.typography.fontSize || '16px',
+              fontStyle: 'italic',
+            }}>
+              Italic text: The quick brown fox jumps over the lazy dog.
+            </Typography>
+          </Box>
         </Box>
       </Paper>
     );
@@ -138,12 +229,20 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
       
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Font Family"
-            value={currentTheme.typography.fontFamily}
-            onChange={(e) => handleTypographyChange('fontFamily', e.target.value)}
-          />
+          <FormControl fullWidth>
+            <InputLabel>Font Family</InputLabel>
+            <Select
+              value={currentTheme.typography.fontFamily}
+              onChange={(e) => handleTypographyChange('fontFamily', e.target.value)}
+              label="Font Family"
+            >
+              {WEB_SAFE_FONTS.map((font) => (
+                <MenuItem key={font} value={font} sx={{ fontFamily: font }}>
+                  {font.split(',')[0]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
         
         <Grid item xs={12} sm={6}>
@@ -158,8 +257,8 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label="H1 Style"
-            value={currentTheme.typography.headingStyle.H1}
+            label="H1 Size"
+            value={currentTheme.typography.headingStyle?.H1 || '24px'}
             onChange={(e) => handleTypographyChange('headingStyle', {
               ...currentTheme.typography.headingStyle,
               H1: e.target.value
@@ -170,8 +269,8 @@ const ThemePreview = ({ theme, onThemeUpdate, surveyId }) => {
         <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
-            label="H2 Style"
-            value={currentTheme.typography.headingStyle.H2}
+            label="H2 Size"
+            value={currentTheme.typography.headingStyle?.H2 || '18px'}
             onChange={(e) => handleTypographyChange('headingStyle', {
               ...currentTheme.typography.headingStyle,
               H2: e.target.value

@@ -112,7 +112,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 )}
                 label={choice.content}
                 sx={{ 
-                  color: themeStyles?.colors?.text || '#252525',
+                  color: themeStyles?.colors?.choice || '#252525',
                   fontSize: themeStyles?.typography?.fontSize || '16px'
                 }}
               />
@@ -145,7 +145,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 )}
                 label={choice.content}
                 sx={{ 
-                  color: themeStyles?.colors?.text || '#252525',
+                  color: themeStyles?.colors?.choice || '#252525',
                   fontSize: themeStyles?.typography?.fontSize || '16px'
                 }}
               />

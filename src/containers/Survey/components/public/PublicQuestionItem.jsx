@@ -6,13 +6,20 @@ import PublicQuestionRenderer from './PublicQuestionRenderer'; // Import the new
 
 const PublicQuestionItem = ({ question, index, onResponseChange }) => {
   const themeStyles = useSurveyTheme();
-  console.log('public question einai: ', question);
   return (
     <Box sx={{
  mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px', 
 }}
     >
-      <Typography color={themeStyles?.colors?.question || '#252525'} variant="h6">
+      <Typography 
+        color={themeStyles?.colors?.question || '#252525'} 
+        variant="h6"
+        sx={{
+          fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+          fontSize: themeStyles?.typography?.headingStyle?.H1 || '24px',
+          fontWeight: 'bold'
+        }}
+      >
         {`${index + 1}. ${question.title}`}
       </Typography>
       <PublicQuestionRenderer question={question} onAnswerChange={onResponseChange} />

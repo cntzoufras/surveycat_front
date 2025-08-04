@@ -38,6 +38,20 @@ const ColorSwatch = ({ name, color }) => (
 const ThemeDetailModal = ({ open, onClose }) => {
   // Select the 'current' theme and its loading state from Redux
   const { current: theme, loading } = useSelector(state => state.surveyTheme);
+  
+  // Debug: log theme data structure
+  React.useEffect(() => {
+    if (theme) {
+      console.log('ThemeDetailModal: Received theme data:', theme);
+      console.log('Theme structure:', {
+        hasTheme: !!theme,
+        hasThemeSetting: !!theme.theme_setting,
+        hasVariablePalettes: !!(theme.theme_setting?.variable_palettes),
+        variablePalettes: theme.theme_setting?.variable_palettes,
+        themeKeys: theme ? Object.keys(theme) : []
+      });
+    }
+  }, [theme]);
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -50,14 +64,16 @@ const ThemeDetailModal = ({ open, onClose }) => {
         )}
         {!loading && theme && (
           <Box>
-            {/* Display General Theme Info */}
             <Typography variant="h6" gutterBottom>{theme.title}</Typography>
-            <Typography variant="body1" color="text.secondary">{theme.description}</Typography>
-            <Divider sx={{ my: 2 }} />
+            {theme.description && (
+              <Typography variant="body2" color="text.secondary" paragraph>
+                {theme.description}
+              </Typography>
+            )}
 
             {/* Display Theme Settings */}
             <Typography variant="h6" gutterBottom>Settings</Typography>
-            {theme.theme_setting ? (
+            {theme.theme_setting?.settings ? (
               <List dense>
                 {Object.entries(theme.theme_setting.settings).map(([key, value]) => (
                   <ListItem key={key} sx={{ alignItems: 'flex-start' }}>
@@ -77,9 +93,9 @@ const ThemeDetailModal = ({ open, onClose }) => {
                             {JSON.stringify(value, null, 2)}
                           </Box>
                         ) : (
-                            String(value)
+                          String(value)
                         )
-                        }
+                      }
                     />
                   </ListItem>
                 ))}
@@ -89,27 +105,48 @@ const ThemeDetailModal = ({ open, onClose }) => {
 
             {/* Display Variable Palettes */}
             <Typography variant="h6" gutterBottom>Color Palettes</Typography>
-            {theme.theme_setting?.variable_palettes?.map(palette => (
-              <Box
-                key={palette.id}
-                sx={{
-                  mb: 2, p: 2, border: '1px solid #ddd', borderRadius: 1,
-                }}
-              >
-                <Typography variant="subtitle1">{palette.name}</Typography>
-                <ColorSwatch name="Title Color" color={palette.title_color} />
-                <ColorSwatch name="Question Color" color={palette.question_color} />
-                <ColorSwatch name="Answer Color" color={palette.answer_color} />
-                <ColorSwatch name="Primary Accent" color={palette.primary_accent} />
-                <ColorSwatch name="Primary Background" color={palette.primary_background} />
-                <ColorSwatch name="Secondary Accent" color={palette.secondary_accent} />
-                <ColorSwatch name="Secondary Background" color={palette.secondary_background} />
+            {theme.theme_setting?.variable_palettes && theme.theme_setting.variable_palettes.length > 0 ? (
+              theme.theme_setting.variable_palettes.map(palette => (
+                <Box
+                  key={palette.id}
+                  sx={{
+                    mb: 2, p: 2, border: '1px solid #ddd', borderRadius: 1,
+                  }}
+                >
+                  <Typography variant="subtitle1">{palette.name || 'Default Palette'}</Typography>
+                  <ColorSwatch name="Title Color" color={palette.title_color} />
+                  <ColorSwatch name="Question Color" color={palette.question_color} />
+                  <ColorSwatch name="Answer Color" color={palette.answer_color} />
+                  <ColorSwatch name="Primary Accent" color={palette.primary_accent} />
+                  <ColorSwatch name="Primary Background" color={palette.primary_background} />
+                  <ColorSwatch name="Secondary Accent" color={palette.secondary_accent} />
+                  <ColorSwatch name="Secondary Background" color={palette.secondary_background} />
+                </Box>
+              ))
+            ) : (
+              <Box>
+                <Typography>No color palettes configured.</Typography>
+                {theme.theme_setting && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    Theme Setting ID: {theme.theme_setting.id}
+                  </Typography>
+                )}
               </Box>
-            ))}
+            )}
           </Box>
         )}
         {!loading && !theme && (
           <Typography>No theme data available.</Typography>
+        )}
+        {!loading && theme && !theme.theme_setting && (
+          <Box>
+            <Typography>This theme has no settings configured.</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              Theme ID: {theme.id}<br/>
+              Title: {theme.title}<br/>
+              Description: {theme.description}
+            </Typography>
+          </Box>
         )}
       </DialogContent>
       <DialogActions>

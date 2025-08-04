@@ -54,6 +54,7 @@ import SurveyPageNavigation from './SurveyPageNavigation';
 import ConfirmPublishModal from './ConfirmPublishModal';
 import AddQuestionModal from './AddQuestionModal';
 import QuestionList from './QuestionList';
+import ThemeEnhancementModal from './ThemeEnhancementModal';
 
 const SurveyPage = () => {
   const navigate = useNavigate();
@@ -86,6 +87,7 @@ const SurveyPage = () => {
  const [theme, setTheme] = useState(''); 
  const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+ const [isThemeEnhancementModalOpen, setIsThemeEnhancementModalOpen] = useState(false);
  const [currentPageIndex, setCurrentPageIndex] = useState(0);
  const currentPageIndexRef = useRef(currentPageIndex);
  const isPublished = surveyData?.survey_status_id === 2;
@@ -378,7 +380,7 @@ const handleDeleteSurvey = async () => {
   const newTheme = e.target.value;
   setTheme(newTheme);
   try {
-   await dispatch(updateSurveyThemeAction(surveyId, newTheme));
+   await dispatch(updateSurveyThemeAction(surveyId, newTheme, user.id));
    setNotification({
     open: true,
     message: 'Theme updated successfully!',
@@ -532,8 +534,16 @@ const handleDeleteSurvey = async () => {
   if (reason === 'clickaway') {
    return;
   }
-  setNotification({ ...notification, open: false });
+  setNotification(prev => ({ ...prev, open: false }));
  };
+
+  const handleOpenThemeEnhancement = () => {
+    setIsThemeEnhancementModalOpen(true);
+  };
+
+  const handleCloseThemeEnhancement = () => {
+    setIsThemeEnhancementModalOpen(false);
+  };
 
   return (
     <>
@@ -646,7 +656,7 @@ const handleDeleteSurvey = async () => {
             </MuiSelect>
           </MuiBox>
           <MuiBox sx={{ pt: 2 }}>
-            <MuiBox sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <MuiBox sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               {!isPublished && (
                 <MuiButton
                   variant="contained"
@@ -658,12 +668,20 @@ const handleDeleteSurvey = async () => {
                 </MuiButton>
               )}
               <MuiButton
-                variant="outlined" // Use a different style to distinguish from Publish
+                variant="outlined"
                 color="primary"
                 size="large"
                 onClick={handlePreviewSurvey}
               >
                 Preview
+              </MuiButton>
+              <MuiButton
+                variant="outlined"
+                color="secondary"
+                size="large"
+                onClick={handleOpenThemeEnhancement}
+              >
+                Customize Theme
               </MuiButton>
               {!isPublished && (
                 <MuiButton
@@ -749,6 +767,12 @@ const handleDeleteSurvey = async () => {
               handlePublishSurvey();
               closePublishModal();
             }}
+          />
+          <ThemeEnhancementModal
+            open={isThemeEnhancementModalOpen}
+            onClose={handleCloseThemeEnhancement}
+            survey={surveyData}
+            theme={surveyData?.theme}
           />
         </MuiGrid>
         <Snackbar

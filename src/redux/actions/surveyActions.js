@@ -1,13 +1,13 @@
 import api, { publicApi } from '@/utils/api/survey-api';
 
 export const CREATE_SURVEY_QUESTION_SUCCESS = 'CREATE_SURVEY_QUESTION_SUCCESS';
-export const CREATE_SURVEY_QUESTION_FAIL = 'CREATE_SURVEY_QUESTION_FAIL';
+export const CREATE_SURVEY_QUESTION_FAILURE = 'CREATE_SURVEY_QUESTION_FAILURE';
 export const CREATE_SURVEY_QUESTION_CHOICES_SUCCESS = 'CREATE_SURVEY_QUESTION_CHOICES_SUCCESS';
-export const CREATE_SURVEY_QUESTION_CHOICES_FAIL = 'CREATE_SURVEY_QUESTION_CHOICES_FAIL';
+export const CREATE_SURVEY_QUESTION_CHOICES_FAILURE = 'CREATE_SURVEY_QUESTION_CHOICES_FAILURE';
 export const CREATE_SURVEY_SUCCESS = 'CREATE_SURVEY_SUCCESS';
-export const CREATE_SURVEY_FAIL = 'CREATE_SURVEY_FAIL';
+export const CREATE_SURVEY_FAILURE = 'CREATE_SURVEY_FAILURE';
 export const CREATE_SURVEY_PAGE_SUCCESS = 'CREATE_SURVEY_PAGE_SUCCESS';
-export const CREATE_SURVEY_PAGE_FAIL = 'CREATE_SURVEY_PAGE_FAIL';
+export const CREATE_SURVEY_PAGE_FAILURE = 'CREATE_SURVEY_PAGE_FAILURE';
 export const CREATE_SURVEY_RESPONSE_REQUEST = 'CREATE_SURVEY_RESPONSE_REQUEST';
 export const CREATE_SURVEY_RESPONSE_SUCCESS = 'CREATE_SURVEY_RESPONSE_SUCCESS';
 export const CREATE_SURVEY_RESPONSE_FAILURE = 'CREATE_SURVEY_RESPONSE_FAILURE';
@@ -19,7 +19,7 @@ export const SAVE_FOLLOW_UP_SUCCESS = 'SAVE_FOLLOW_UP_SUCCESS';
 export const SAVE_FOLLOW_UP_FAILURE = 'SAVE_FOLLOW_UP_FAILURE';
 
 export const ADD_SURVEY_PAGE_SUCCESS = 'ADD_SURVEY_PAGE_SUCCESS';
-export const ADD_SURVEY_PAGE_FAIL = 'ADD_SURVEY_PAGE_FAIL';
+export const ADD_SURVEY_PAGE_FAILURE = 'ADD_SURVEY_PAGE_FAILURE';
 
 export const FETCH_QUESTION_TYPES_REQUEST = 'FETCH_QUESTION_TYPES_REQUEST';
 export const FETCH_QUESTION_TYPES_SUCCESS = 'FETCH_QUESTION_TYPES_SUCCESS';
@@ -34,39 +34,39 @@ export const FETCH_SINGLE_SURVEY_QUESTION_CHOICES_SUCCESS = 'FETCH_SINGLE_SURVEY
 export const FETCH_SINGLE_SURVEY_QUESTION_CHOICES_FAILURE = 'FETCH_SINGLE_SURVEY_QUESTION_CHOICES_FAILURE';
 
 export const FETCH_SURVEY_CATEGORIES_SUCCESS = 'FETCH_SURVEY_CATEGORIES_SUCCESS';
-export const FETCH_SURVEY_CATEGORIES_FAIL = 'FETCH_SURVEY_CATEGORIES_FAIL';
+export const FETCH_SURVEY_CATEGORIES_FAILURE = 'FETCH_SURVEY_CATEGORIES_FAILURE';
 export const FETCH_SURVEY_THEMES_SUCCESS = 'FETCH_SURVEY_THEMES_SUCCESS';
-export const FETCH_SURVEY_THEMES_FAIL = 'FETCH_SURVEY_THEMES_FAIL';
+export const FETCH_SURVEY_THEMES_FAILURE = 'FETCH_SURVEY_THEMES_FAILURE';
 
 export const FETCH_SURVEY_QUESTIONS = 'FETCH_SURVEY_QUESTIONS';
 
 export const FETCH_SURVEY_PAGES_SUCCESS = 'FETCH_SURVEY_PAGES_SUCCESS';
-export const FETCH_SURVEY_PAGES_FAIL = 'FETCH_SURVEY_PAGES_FAIL';
+export const FETCH_SURVEY_PAGES_FAILURE = 'FETCH_SURVEY_PAGES_FAILURE';
 
 export const FETCH_SURVEY_SUCCESS = 'FETCH_SURVEY_SUCCESS';
-export const FETCH_SURVEY_FAIL = 'FETCH_SURVEY_FAIL';
+export const FETCH_SURVEY_FAILURE = 'FETCH_SURVEY_FAILURE';
 export const FETCH_SURVEYS_SUCCESS = 'FETCH_SURVEYS_SUCCESS';
-export const FETCH_SURVEYS_FAIL = 'FETCH_SURVEYS_FAIL';
+export const FETCH_SURVEYS_FAILURE = 'FETCH_SURVEYS_FAILURE';
 
 export const UPDATE_SURVEY_TITLE_SUCCESS = 'UPDATE_SURVEY_TITLE_SUCCESS';
-export const UPDATE_SURVEY_TITLE_FAIL = 'UPDATE_SURVEY_TITLE_FAIL';
+export const UPDATE_SURVEY_TITLE_FAILURE = 'UPDATE_SURVEY_TITLE_FAILURE';
 export const UPDATE_SURVEY_DESCRIPTION_SUCCESS = 'UPDATE_SURVEY_DESCRIPTION_SUCCESS';
-export const UPDATE_SURVEY_DESCRIPTION_FAIL = 'UPDATE_SURVEY_DESCRIPTION_FAIL';
+export const UPDATE_SURVEY_DESCRIPTION_FAILURE = 'UPDATE_SURVEY_DESCRIPTION_FAILURE';
 
 export const UPDATE_SURVEY_PAGE_TITLE_SUCCESS = 'UPDATE_SURVEY_PAGE_TITLE_SUCCESS';
-export const UPDATE_SURVEY_PAGE_TITLE_FAIL = 'UPDATE_SURVEY_PAGE_TITLE_FAIL';
+export const UPDATE_SURVEY_PAGE_TITLE_FAILURE = 'UPDATE_SURVEY_PAGE_TITLE_FAILURE';
 export const UPDATE_SURVEY_PAGE_DESCRIPTION_SUCCESS = 'UPDATE_SURVEY_PAGE_DESCRIPTION_SUCCESS';
-export const UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL = 'UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL';
+export const UPDATE_SURVEY_PAGE_DESCRIPTION_FAILURE = 'UPDATE_SURVEY_PAGE_DESCRIPTION_FAILURE';
 
 export const UPDATE_SURVEY_LAYOUT_SUCCESS = 'UPDATE_SURVEY_LAYOUT_SUCCESS';
-export const UPDATE_SURVEY_LAYOUT_FAIL = 'UPDATE_SURVEY_LAYOUT_FAIL';
+export const UPDATE_SURVEY_LAYOUT_FAILURE = 'UPDATE_SURVEY_LAYOUT_FAILURE';
 export const UPDATE_SURVEY_THEME_SUCCESS = 'UPDATE_SURVEY_THEME_SUCCESS';
-export const UPDATE_SURVEY_THEME_FAIL = 'UPDATE_SURVEY_THEME_FAIL';
+export const UPDATE_SURVEY_THEME_FAILURE = 'UPDATE_SURVEY_THEME_FAILURE';
 
 export const UPDATE_QUESTIONS = 'UPDATE_QUESTIONS';
 
 export const DELETE_SURVEY_QUESTION_SUCCESS = 'DELETE_SURVEY_QUESTION_SUCCESS';
-export const DELETE_SURVEY_QUESTION_FAIL = 'DELETE_SURVEY_QUESTION_FAIL';
+export const DELETE_SURVEY_QUESTION_FAILURE = 'DELETE_SURVEY_QUESTION_FAILURE';
 export const DELETE_SURVEY_PAGE_REQUEST = 'DELETE_SURVEY_PAGE_REQUEST';
 export const DELETE_SURVEY_PAGE_SUCCESS = 'DELETE_SURVEY_PAGE_SUCCESS';
 export const DELETE_SURVEY_PAGE_FAILURE = 'DELETE_SURVEY_PAGE_FAILURE';
@@ -76,9 +76,9 @@ export const DELETE_SURVEY_SUCCESS = 'DELETE_SURVEY_SUCCESS';
 export const DELETE_SURVEY_FAILURE = 'DELETE_SURVEY_FAILURE';
 
 export const PUBLISH_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
-export const PUBLISH_SURVEY_FAIL = 'PUBLISH_SURVEY_FAIL';
-export const PREVIEW_SURVEY_SUCCESS = 'PUBLISH_SURVEY_SUCCESS';
-export const PREVIEW_SURVEY_FAILURE = 'PUBLISH_SURVEY_FAIL';
+export const PUBLISH_SURVEY_FAILURE = 'PUBLISH_SURVEY_FAILURE';
+export const PREVIEW_SURVEY_SUCCESS = 'PREVIEW_SURVEY_SUCCESS';
+export const PREVIEW_SURVEY_FAILURE = 'PREVIEW_SURVEY_FAILURE';
 export const SUBMIT_SURVEY_RESPONSE_SUCCESS = 'SUBMIT_SURVEY_RESPONSE_SUCCESS';
 export const SUBMIT_SURVEY_RESPONSE_FAILURE = 'SUBMIT_SURVEY_RESPONSE_FAILURE';
 
@@ -90,10 +90,28 @@ export const FETCH_PROFILE_SURVEY_WIDGET_DATA_REQUEST = 'FETCH_PROFILE_SURVEY_WI
 export const FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_SUCCESS';
 export const FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE = 'FETCH_PROFILE_SURVEY_WIDGET_DATA_FAILURE';
 
-export const SET_QUESTION_ORDER_LOCALLY = 'SET_QUESTION_ORDER_LOCALLY';
 export const SAVE_QUESTION_ORDER_REQUEST = 'SAVE_QUESTION_ORDER_REQUEST';
 export const SAVE_QUESTION_ORDER_SUCCESS = 'SAVE_QUESTION_ORDER_SUCCESS';
 export const SAVE_QUESTION_ORDER_FAILURE = 'SAVE_QUESTION_ORDER_FAILURE';
+
+export const SET_QUESTION_ORDER_LOCALLY = 'SET_QUESTION_ORDER_LOCALLY';
+
+// Custom theme management constants
+export const CREATE_CUSTOM_THEME_REQUEST = 'CREATE_CUSTOM_THEME_REQUEST';
+export const CREATE_CUSTOM_THEME_SUCCESS = 'CREATE_CUSTOM_THEME_SUCCESS';
+export const CREATE_CUSTOM_THEME_FAILURE = 'CREATE_CUSTOM_THEME_FAILURE';
+
+export const UPDATE_CUSTOM_THEME_REQUEST = 'UPDATE_CUSTOM_THEME_REQUEST';
+export const UPDATE_CUSTOM_THEME_SUCCESS = 'UPDATE_CUSTOM_THEME_SUCCESS';
+export const UPDATE_CUSTOM_THEME_FAILURE = 'UPDATE_CUSTOM_THEME_FAILURE';
+
+export const DELETE_CUSTOM_THEME_REQUEST = 'DELETE_CUSTOM_THEME_REQUEST';
+export const DELETE_CUSTOM_THEME_SUCCESS = 'DELETE_CUSTOM_THEME_SUCCESS';
+export const DELETE_CUSTOM_THEME_FAILURE = 'DELETE_CUSTOM_THEME_FAILURE';
+
+export const RESET_TO_BASE_THEME_REQUEST = 'RESET_TO_BASE_THEME_REQUEST';
+export const RESET_TO_BASE_THEME_SUCCESS = 'RESET_TO_BASE_THEME_SUCCESS';
+export const RESET_TO_BASE_THEME_FAILURE = 'RESET_TO_BASE_THEME_FAILURE';
 
 // Action to load all question types
 export const fetchQuestionTypesAction = () => async (dispatch) => {
@@ -139,7 +157,7 @@ export const fetchSurveyAction = surveyId => async (dispatch) => {
     const response = await api.get(`/surveys/${surveyId}/details`);
     dispatch({ type: FETCH_SURVEY_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_SURVEY_FAIL, payload: error.message });
+    dispatch({ type: FETCH_SURVEY_FAILURE, payload: error.message });
   }
 };
 
@@ -149,7 +167,7 @@ export const fetchSurveysAction = () => async (dispatch) => {
     console.log('user surveys are: ', response.data);
     dispatch({ type: FETCH_SURVEYS_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_SURVEYS_FAIL, payload: error.message });
+    dispatch({ type: FETCH_SURVEYS_FAILURE, payload: error.message });
   }
 };
 
@@ -179,7 +197,7 @@ export const fetchSurveyCategoriesAction = () => async (dispatch) => {
     console.log('katigories einai: ', response.data.data);
     dispatch({ type: FETCH_SURVEY_CATEGORIES_SUCCESS, payload: response.data.data });
   } catch (error) {
-    dispatch({ type: FETCH_SURVEY_CATEGORIES_FAIL, payload: error.message });
+    dispatch({ type: FETCH_SURVEY_CATEGORIES_FAILURE, payload: error.message });
   }
 };
 
@@ -188,7 +206,7 @@ export const fetchSurveyThemesAction = () => async (dispatch) => {
     const response = await api.get('/themes');
     dispatch({ type: FETCH_SURVEY_THEMES_SUCCESS, payload: response.data.data });
   } catch (error) {
-    dispatch({ type: FETCH_SURVEY_THEMES_FAIL, payload: error.message });
+    dispatch({ type: FETCH_SURVEY_THEMES_FAILURE, payload: error.message });
   }
 };
 
@@ -201,7 +219,7 @@ export const fetchSurveyPagesAction = surveyId => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: FETCH_SURVEY_PAGES_FAIL,
+      type: FETCH_SURVEY_PAGES_FAILURE,
       payload: error.message,
     });
   }
@@ -313,7 +331,7 @@ export const addSurveyPageAction = (surveyId, newPageData) => async (dispatch) =
     dispatch({ type: ADD_SURVEY_PAGE_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: ADD_SURVEY_PAGE_FAIL, payload: error.message });
+    dispatch({ type: ADD_SURVEY_PAGE_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -324,7 +342,7 @@ export const createSurveyAction = surveyData => async (dispatch) => {
     dispatch({ type: CREATE_SURVEY_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: CREATE_SURVEY_FAIL, payload: error.message });
+    dispatch({ type: CREATE_SURVEY_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -335,7 +353,7 @@ export const createSurveyPageAction = surveyPageData => async (dispatch) => {
     dispatch({ type: CREATE_SURVEY_PAGE_SUCCESS, payload: response.data });
     return response.data; // Return survey page data for chaining actions
   } catch (error) {
-    dispatch({ type: CREATE_SURVEY_PAGE_FAIL, payload: error.message });
+    dispatch({ type: CREATE_SURVEY_PAGE_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -347,7 +365,7 @@ export const createSurveyQuestionAction = questionData => async (dispatch) => {
     dispatch({ type: CREATE_SURVEY_QUESTION_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: CREATE_SURVEY_QUESTION_FAIL, payload: error.message });
+    dispatch({ type: CREATE_SURVEY_QUESTION_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -358,7 +376,7 @@ export const deleteSurveyQuestionAction = surveyQuestionId => async (dispatch) =
     await api.delete(`/survey-questions/${surveyQuestionId}`);
     dispatch({ type: DELETE_SURVEY_QUESTION_SUCCESS, payload: surveyQuestionId });
   } catch (error) {
-    dispatch({ type: DELETE_SURVEY_QUESTION_FAIL, payload: error.message });
+    dispatch({ type: DELETE_SURVEY_QUESTION_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -369,7 +387,7 @@ export const createSurveyQuestionChoicesAction = choicesData => async (dispatch)
     const response = await api.post('/survey-question-choices', choicesData);
     dispatch({ type: CREATE_SURVEY_QUESTION_CHOICES_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: CREATE_SURVEY_QUESTION_CHOICES_FAIL, payload: error.message });
+    dispatch({ type: CREATE_SURVEY_QUESTION_CHOICES_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -381,7 +399,7 @@ export const updateSurveyTitleAction = (surveyId, title) => async (dispatch) => 
     dispatch({ type: UPDATE_SURVEY_TITLE_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_TITLE_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_TITLE_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -393,7 +411,7 @@ export const updateSurveyDescriptionAction = (surveyId, description) => async (d
     dispatch({ type: UPDATE_SURVEY_DESCRIPTION_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_DESCRIPTION_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_DESCRIPTION_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -405,7 +423,7 @@ export const updateSurveyPageTitleAction = (surveyPageId, title) => async (dispa
     dispatch({ type: UPDATE_SURVEY_PAGE_TITLE_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_PAGE_TITLE_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_PAGE_TITLE_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -416,7 +434,7 @@ export const updateSurveyPageDescriptionAction = (surveyPageId, description) => 
     dispatch({ type: UPDATE_SURVEY_PAGE_DESCRIPTION_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_PAGE_DESCRIPTION_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_PAGE_DESCRIPTION_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -428,19 +446,82 @@ export const updateSurveyLayoutAction = (surveyId, layout, userId) => async (dis
     dispatch({ type: UPDATE_SURVEY_LAYOUT_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_LAYOUT_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_LAYOUT_FAILURE, payload: error.message });
     throw error;
   }
 };
 
-// Action to update survey layout
-export const updateSurveyThemeAction = (surveyId, theme, userId) => async (dispatch) => {
+// Action to update survey theme
+// Action to update survey's custom theme settings
+export const updateSurveyCustomThemeAction = (surveyId, customThemeSettings, userId) => async (dispatch) => {
   try {
-    const response = await api.put(`/surveys/${surveyId}`, { theme_id: theme, user_id: userId });
+    const response = await api.put(`/surveys/${surveyId}`, { 
+      custom_theme_settings: customThemeSettings,
+      user_id: userId 
+    });
     dispatch({ type: UPDATE_SURVEY_THEME_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: UPDATE_SURVEY_THEME_FAIL, payload: error.message });
+    dispatch({ type: UPDATE_SURVEY_THEME_FAILURE, payload: error.message });
+    throw error;
+  }
+};
+
+export const updateSurveyThemeAction = (surveyId, themeId, userId) => async (dispatch) => {
+  try {
+    const response = await api.put(`/surveys/${surveyId}`, { theme_id: themeId, user_id: userId });
+    dispatch({ type: UPDATE_SURVEY_THEME_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: UPDATE_SURVEY_THEME_FAILURE, payload: error.message });
+    throw error;
+  }
+};
+
+// Custom theme management actions
+export const createCustomThemeAction = (themeData) => async (dispatch) => {
+  try {
+    const response = await api.post('/themes', themeData);
+    dispatch({ type: CREATE_CUSTOM_THEME_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: CREATE_CUSTOM_THEME_FAILURE, payload: error.message });
+    throw error;
+  }
+};
+
+export const updateCustomThemeAction = (themeId, themeData) => async (dispatch) => {
+  try {
+    const response = await api.put(`/themes/${themeId}`, themeData);
+    dispatch({ type: UPDATE_CUSTOM_THEME_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: UPDATE_CUSTOM_THEME_FAILURE, payload: error.message });
+    throw error;
+  }
+};
+
+export const deleteCustomThemeAction = (themeId) => async (dispatch) => {
+  try {
+    await api.delete(`/themes/${themeId}`);
+    dispatch({ type: DELETE_CUSTOM_THEME_SUCCESS, payload: themeId });
+    return themeId;
+  } catch (error) {
+    dispatch({ type: DELETE_CUSTOM_THEME_FAILURE, payload: error.message });
+    throw error;
+  }
+};
+
+export const resetToBaseThemeAction = (surveyId, baseThemeId) => async (dispatch) => {
+  try {
+    const response = await api.put(`/surveys/${surveyId}`, {
+      theme_id: baseThemeId,
+      custom_theme_id: null,
+    });
+    dispatch({ type: RESET_TO_BASE_THEME_SUCCESS, payload: response.data });
+    return response.data;
+  } catch (error) {
+    dispatch({ type: RESET_TO_BASE_THEME_FAILURE, payload: error.message });
     throw error;
   }
 };
@@ -496,7 +577,7 @@ export const publishSurveyAction = surveyId => async (dispatch) => {
     dispatch({ type: PUBLISH_SURVEY_SUCCESS, payload: response.data });
     return response.data;
   } catch (error) {
-    dispatch({ type: PUBLISH_SURVEY_FAIL, payload: error.message });
+    dispatch({ type: PUBLISH_SURVEY_FAILURE, payload: error.message });
     throw error;
   }
 };

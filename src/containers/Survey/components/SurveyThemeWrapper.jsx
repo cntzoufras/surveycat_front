@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { WEB_SAFE_FONTS } from '../../../constants/fontConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchThemeAction } from '../../../redux/actions/surveyThemeActions';
 import { SurveyThemeProvider } from '../../../contexts/SurveyThemeContext';
@@ -42,6 +43,94 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
     }
   }, [currentTheme, survey?.theme_id, survey?.theme]);
 
+  // Define theme styles and variables at the top level
+  const baseThemeStyles = surveyTheme?.theme_setting?.settings || {};
+  const customThemeStyles = survey?.custom_theme_settings || {};
+
+  const variablePalettes = surveyTheme?.theme_setting?.variable_palettes || [];
+  const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
+
+  // Deep merge custom styles into base styles
+  const themeStyles = React.useMemo(() => {
+    const merge = (base, custom) => {
+      const result = { ...base };
+      for (const key in custom) {
+        if (custom.hasOwnProperty(key)) {
+          if (typeof custom[key] === 'object' && custom[key] !== null && !Array.isArray(custom[key]) && typeof result[key] === 'object' && result[key] !== null) {
+            result[key] = merge(result[key], custom[key]);
+          } else {
+            result[key] = custom[key];
+          }
+        }
+      }
+      return result;
+    };
+
+    // Start with base styles
+    let merged = merge({}, baseThemeStyles);
+    // Merge custom settings over the base
+    merged = merge(merged, customThemeStyles);
+    // Finally, merge palette colors into the colors object, giving them priority
+    if (merged.colors && activePalette) {
+      merged.colors = { ...merged.colors, ...activePalette };
+    }
+
+    return merged;
+  }, [baseThemeStyles, customThemeStyles, activePalette]);
+  const typography = themeStyles.typography || {};
+  const layout = themeStyles.layout || {};
+
+  // Hook for dynamically loading Google Fonts and applying to body
+  useEffect(() => {
+    if (!typography.fontFamily || typeof typography.fontFamily !== 'string' || typography.fontFamily.trim() === '') {
+      return; // Do not run if font family is not set
+    }
+
+    const isWebSafe = WEB_SAFE_FONTS.includes(typography.fontFamily);
+    const fontName = typography.fontFamily ? typography.fontFamily.split(',')[0].trim() : 'Roboto';
+
+    // Load Google Font if not web-safe
+    if (!isWebSafe) {
+      const fontId = `google-font-${fontName.replace(/ /g, '+')}`;
+      if (!document.getElementById(fontId)) {
+        const link = document.createElement('link');
+        link.id = fontId;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')}:wght@400;700&display=swap`;
+        document.head.appendChild(link);
+      }
+    }
+
+    // Apply font to body using a <style> tag for higher specificity
+    const styleId = 'survey-theme-font-style';
+    let styleElement = document.getElementById(styleId);
+    if (!styleElement) {
+      styleElement = document.createElement('style');
+      styleElement.id = styleId;
+      document.head.appendChild(styleElement);
+    }
+
+    // Use !important to ensure the theme font overrides other styles
+    const fontCss = `
+      body, 
+      body .MuiTypography-root, 
+      body .MuiButton-root, 
+      body .MuiTextField-root input, 
+      body .MuiFormControl-root .MuiInputBase-root {
+        font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
+      }
+    `;
+    styleElement.innerHTML = fontCss;
+
+    // Cleanup function to remove the style when the component unmounts
+    return () => {
+      const elementToRemove = document.getElementById(styleId);
+      if (elementToRemove) {
+        elementToRemove.remove();
+      }
+    };
+  }, [typography.fontFamily]);
+
   if (isLoading && survey?.theme_id) {
     return (
       <div style={{ 
@@ -56,13 +145,6 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
       </div>
     );
   }
-
-  // Apply theme styling via CSS variables and inline styles
-  const themeStyles = surveyTheme?.theme_setting?.settings || {};
-  const variablePalettes = surveyTheme?.theme_setting?.variable_palettes || [];
-  const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
-  const typography = themeStyles.typography || {};
-  const layout = themeStyles.layout || {};
 
   // Debug logging to verify theme data
   console.log('SurveyThemeWrapper - Theme Data:', {
@@ -84,7 +166,7 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
     '--theme-font-family': typography.fontFamily || 'Arial, sans-serif',
     '--theme-font-size': typography.fontSize || '16px',
     '--theme-border-radius': `${layout.borderRadius || 8}px`,
-    fontFamily: typography.fontFamily || 'Arial, sans-serif',
+    // fontFamily is now applied to the body directly
     backgroundColor: activePalette.primary_background || '#ffffff',
     color: activePalette.title_color || '#333333',
   };
@@ -92,7 +174,7 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
   console.log('SurveyThemeWrapper - Applied Styles:', themeStylesDebug);
 
   return (
-    <SurveyThemeProvider surveyId={survey?.id}>
+    <SurveyThemeProvider theme={themeStyles}>
       <div style={themeStylesDebug}>
         {children}
       </div>

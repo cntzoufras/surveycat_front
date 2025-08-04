@@ -21,7 +21,7 @@ import PublicQuestionList from './public/PublicQuestionList';
 import FollowUpForm from './public/FollowUpForm';
 import ThankYouSubmission from './ThankYouSubmission';
 import SurveyThemeWrapper from './SurveyThemeWrapper';
-import { useSurveyTheme } from '@/contexts/SurveyThemeContext';
+import { useSurveyTheme } from '../../../contexts/SurveyThemeContext';
 
 const PublicSurveyPage = ({ preview = false }) => {
   const user = useSelector(state => state.auth.user);
@@ -202,8 +202,13 @@ const PublicSurveyPage = ({ preview = false }) => {
             variant="h4" 
             component="h1" 
             align="center" 
-            sx={{ mb: 1 }}
-            color={themeStyles?.colors?.primary || 'inherit'}
+            sx={{ 
+              mb: 1,
+              fontFamily: themeStyles?.typography?.fontFamily,
+              fontSize: themeStyles?.typography?.headingStyle?.H1,
+              fontWeight: 'bold',
+              color: themeStyles?.colors?.title_color, // Use the specific title color key
+            }}
           >
             {survey.title}
           </Typography>
@@ -211,7 +216,11 @@ const PublicSurveyPage = ({ preview = false }) => {
             <Typography 
               variant="body2" 
               align="center"
-              color={themeStyles?.colors?.secondary || 'inherit'}
+              sx={{
+                fontFamily: themeStyles?.typography?.fontFamily,
+                fontSize: themeStyles?.typography?.fontSize,
+                color: themeStyles?.colors?.text, // Use the specific text color key
+              }}
             >
               {survey.description}
             </Typography>
@@ -221,7 +230,15 @@ const PublicSurveyPage = ({ preview = false }) => {
         {/* Single vs Multiple logic */}
         {isSingle ? (
           <>  
-            <Typography variant="h5" gutterBottom>
+            <Typography 
+              variant="h5" 
+              gutterBottom
+              sx={{
+                fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                fontSize: themeStyles?.typography?.headingStyle?.H2 || '24px',
+                fontWeight: 'bold'
+              }}
+            >
               {currentPage.title}
             </Typography>
             <PublicQuestionList
