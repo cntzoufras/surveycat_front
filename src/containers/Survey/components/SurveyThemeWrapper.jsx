@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import _ from 'lodash';
 import { WEB_SAFE_FONTS } from '../../../constants/fontConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchThemeAction } from '../../../redux/actions/surveyThemeActions';
@@ -43,42 +44,36 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
     }
   }, [currentTheme, survey?.theme_id, survey?.theme]);
 
-  // Define theme styles and variables at the top level
-  const baseThemeStyles = surveyTheme?.theme_setting?.settings || {};
-  const customThemeStyles = survey?.custom_theme_settings || {};
-
-  const variablePalettes = surveyTheme?.theme_setting?.variable_palettes || [];
-  const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
-
-  // Deep merge custom styles into base styles
-  const themeStyles = React.useMemo(() => {
-    const merge = (base, custom) => {
-      const result = { ...base };
-      for (const key in custom) {
-        if (custom.hasOwnProperty(key)) {
-          if (typeof custom[key] === 'object' && custom[key] !== null && !Array.isArray(custom[key]) && typeof result[key] === 'object' && result[key] !== null) {
-            result[key] = merge(result[key], custom[key]);
-          } else {
-            result[key] = custom[key];
-          }
-        }
-      }
-      return result;
-    };
-
-    // Start with base styles
-    let merged = merge({}, baseThemeStyles);
-    // Merge custom settings over the base
-    merged = merge(merged, customThemeStyles);
-    // Finally, merge palette colors into the colors object, giving them priority
-    if (merged.colors && activePalette) {
-      merged.colors = { ...merged.colors, ...activePalette };
+  const themeStyles = useMemo(() => {
+    if (!surveyTheme) {
+      return {};
     }
 
+    const baseSettings = surveyTheme.theme_setting?.settings || {};
+    const variablePalettes = surveyTheme.theme_setting?.variable_palettes || [];
+    const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
+    const customSettings = survey?.custom_theme_settings || {};
+
+    // Deep merge: custom settings override base settings and palette
+    const merged = _.merge(
+      {},
+      baseSettings,
+      { variable_palette: activePalette }, // Base palette becomes a property
+      customSettings
+    );
+
+    // For convenience, let's ensure colors object exists
+    if (!merged.colors) {
+      merged.colors = {};
+    }
+    
     return merged;
-  }, [baseThemeStyles, customThemeStyles, activePalette]);
+  }, [surveyTheme, survey?.custom_theme_settings]);
+
   const typography = themeStyles.typography || {};
   const layout = themeStyles.layout || {};
+  const finalPalette = themeStyles.variable_palette || {};
+  const finalColors = themeStyles.colors || {};
 
   // Hook for dynamically loading Google Fonts and applying to body
   useEffect(() => {
@@ -112,7 +107,10 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
 
     // Use !important to ensure the theme font overrides other styles
     const fontCss = `
-      body, 
+      body {
+        background-color: ${finalColors.background || 'transparent'};
+        font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
+      }
       body .MuiTypography-root, 
       body .MuiButton-root, 
       body .MuiTextField-root input, 
@@ -129,7 +127,7 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
         elementToRemove.remove();
       }
     };
-  }, [typography.fontFamily]);
+  }, [typography.fontFamily, finalColors.background]);
 
   if (isLoading && survey?.theme_id) {
     return (
@@ -147,28 +145,26 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
   }
 
   // Debug logging to verify theme data
-  console.log('SurveyThemeWrapper - Theme Data:', {
-    surveyTheme,
-    activePalette,
-    titleColor: activePalette.title_color,
-    backgroundColor: activePalette.primary_background,
+  console.log('SurveyThemeWrapper - Final Merged Theme:', {
+    settings: themeStyles,
+    palette: finalPalette,
+    colors: finalColors,
     surveyId: survey?.id,
-    themeName: surveyTheme?.title
   });
 
   const themeStylesDebug = {
-    '--theme-primary': activePalette.primary_accent || '#1976d2',
-    '--theme-secondary': activePalette.secondary_accent || '#dc004e',
-    '--theme-background': activePalette.primary_background || '#ffffff',
-    '--theme-text': activePalette.title_color || '#333333',
-    '--theme-question': activePalette.question_color || '#252525',
-    '--theme-choice': activePalette.answer_color || '#666666',
+    '--theme-primary': finalColors.primary || finalPalette.primary_accent || '#1976d2',
+    '--theme-secondary': finalColors.secondary || finalPalette.secondary_accent || '#dc004e',
+    '--theme-background': finalPalette.primary_background || '#ffffff', // Question box background
+    '--theme-text': finalColors.text || finalPalette.title_color || '#333333',
+    '--theme-question': finalColors.question || finalPalette.question_color || '#252525',
+    '--theme-choice': finalColors.choice || finalPalette.answer_color || '#666666',
     '--theme-font-family': typography.fontFamily || 'Arial, sans-serif',
     '--theme-font-size': typography.fontSize || '16px',
     '--theme-border-radius': `${layout.borderRadius || 8}px`,
-    // fontFamily is now applied to the body directly
-    backgroundColor: activePalette.primary_background || '#ffffff',
-    color: activePalette.title_color || '#333333',
+    // Page background is now on body, this is for the content box
+    backgroundColor: finalPalette.primary_background || 'transparent',
+    color: finalColors.text || finalPalette.title_color || '#333333',
   };
 
   console.log('SurveyThemeWrapper - Applied Styles:', themeStylesDebug);

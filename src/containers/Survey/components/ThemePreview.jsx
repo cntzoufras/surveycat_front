@@ -15,11 +15,14 @@ import {
   Chip,
 } from '@mui/material';
 import { ChromePicker } from 'react-color';
+import _ from 'lodash';
+import tinycolor from 'tinycolor2';
 
 const ThemePreview = ({ theme, onThemeUpdate }) => {
-  const [activeTab, setActiveTab] = useState('typography');
+  const [activeTab, setActiveTab] = useState('colors');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [activeColorField, setActiveColorField] = useState(null);
+  const [activeColorType, setActiveColorType] = useState('colors'); // 'colors' or 'palette'
 
   const defaultTheme = {
     typography: {
@@ -33,10 +36,13 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
     colors: {
       primary: '#1976d2',
       secondary: '#dc004e',
-      background: '#ffffff',
+      background: '#DE0000', // This is the question box background
       text: '#333333',
-      question: '#252525',
+      question: '#090606',   // This is the question text color
       choice: '#666666',
+    },
+    variable_palette: {
+      primary_background: '#f1ebf2',
     },
     layout: {
       backgroundAlpha: 100,
@@ -45,17 +51,26 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
     },
   };
 
-  const currentTheme = { ...defaultTheme, ...theme };
+  const currentTheme = _.merge({}, defaultTheme, theme);
 
   const handleColorChange = (color) => {
-    if (activeColorField) {
-      onThemeUpdate({
-        colors: {
-          ...currentTheme.colors,
-          [activeColorField]: color.hex,
-        },
-      });
+    if (!activeColorField) return;
+
+    const newTheme = _.cloneDeep(currentTheme);
+
+    if (activeColorType === 'palette') {
+      _.set(newTheme, `variable_palette.${activeColorField}`, color.hex);
+    } else {
+      _.set(newTheme, `colors.${activeColorField}`, color.hex);
     }
+
+    // We only need to pass the changed parts to the parent
+    const updatePayload = {
+      colors: newTheme.colors,
+      variable_palette: newTheme.variable_palette,
+    };
+
+    onThemeUpdate(updatePayload);
   };
 
   const handleTypographyChange = (field, value) => {
@@ -91,7 +106,8 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
       color: currentTheme.colors.text,
       borderRadius: `${currentTheme.layout.borderRadius}px`,
       padding: `${currentTheme.layout.padding}px`,
-      backgroundColor: `${currentTheme.colors.background}${Math.round(currentTheme.layout.backgroundAlpha * 2.55).toString(16).padStart(2, '0')}`,
+      // Use the 'background' color for the question box, with alpha.
+      backgroundColor: tinycolor(currentTheme.colors.background).setAlpha(currentTheme.layout.backgroundAlpha / 100).toRgbString(),
     };
 
     return (
@@ -288,7 +304,52 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
       </Typography>
       
       <Grid container spacing={3}>
-        {Object.entries(currentTheme.colors).map(([key, value]) => (
+        {/* Page Background from variable_palette */}
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
+              Page Background
+            </Typography>
+            <Chip
+              label={currentTheme.variable_palette.primary_background}
+              sx={{
+                backgroundColor: currentTheme.variable_palette.primary_background,
+                color: tinycolor(currentTheme.variable_palette.primary_background).isDark() ? '#fff' : '#000',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setActiveColorField('primary_background');
+                setActiveColorType('palette');
+                setColorPickerOpen(true);
+              }}
+            />
+          </Box>
+        </Grid>
+
+        {/* Question Box Background from colors.background */}
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
+              Question Box
+            </Typography>
+            <Chip
+              label={currentTheme.colors.background}
+              sx={{
+                backgroundColor: currentTheme.colors.background,
+                color: tinycolor(currentTheme.colors.background).isDark() ? '#fff' : '#000',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setActiveColorField('background');
+                setActiveColorType('colors');
+                setColorPickerOpen(true);
+              }}
+            />
+          </Box>
+        </Grid>
+
+        {/* Other colors */}
+        {Object.entries(currentTheme.colors).filter(([key]) => key !== 'background').map(([key, value]) => (
           <Grid item xs={12} sm={6} key={key}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Typography variant="body2" sx={{ minWidth: 80 }}>
@@ -303,6 +364,7 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
                 }}
                 onClick={() => {
                   setActiveColorField(key);
+                  setActiveColorType('colors');
                   setColorPickerOpen(true);
                 }}
               />
@@ -314,7 +376,7 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
       {colorPickerOpen && activeColorField && (
         <Box sx={{ mt: 2 }}>
           <ChromePicker
-            color={currentTheme.colors[activeColorField]}
+            color={activeColorType === 'palette' ? currentTheme.variable_palette[activeColorField] : currentTheme.colors[activeColorField]}
             onChange={handleColorChange}
             onChangeComplete={handleColorChange}
           />
@@ -377,7 +439,7 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
       </Typography>
       
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={6}>
           <Paper elevation={1} sx={{ p: 3 }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
               <Button 
@@ -408,8 +470,15 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
           </Paper>
         </Grid>
         
-        <Grid item xs={12} md={4}>
-          <Paper elevation={1} sx={{ p: 3 }}>
+        <Grid item xs={12} md={6}>
+          {/* This is the main preview area, so it gets the page background */}
+          <Paper 
+            elevation={1} 
+            sx={{
+              p: 3, 
+              backgroundColor: currentTheme.variable_palette.primary_background || defaultTheme.variable_palette.primary_background
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               Live Preview
             </Typography>
