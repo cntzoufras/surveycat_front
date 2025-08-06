@@ -38,8 +38,8 @@ const SidebarContent = ({
     </SidebarBlock>
     */}
     <SidebarBlock collapse={collapse}>
-      <SidebarLink title="App Dashboard" icon="smartphone" route="/app_dashboard" onClick={onClick} />
-      <SidebarLink title="Surveys Dashboard" icon="apartment" route="/surveys_dashboard" onClick={onClick} />
+      <SidebarLink title="App Dashboard" icon="smartphone" route="/app-dashboard" onClick={onClick} />
+      <SidebarLink title="Surveys Dashboard" icon="apartment" route="/surveys-dashboard" onClick={onClick} />
     </SidebarBlock>
     {/* 
     <SidebarBlock collapse={collapse}>

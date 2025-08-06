@@ -11,23 +11,30 @@ import {
   DashboardBookingTotalWrap,
 } from '../SurveysCardDashboardElements';
 
-const totalActiveSurveys = 12;
-const totalInactiveSurveys = 4; // Example number for inactive surveys (DRAFT/CLOSED)
+const SurveysStatus = ({ counts }) => {
+  // Default to 0 if counts is not available
+  const safeCounts = counts || {};
+  const activeSurveys = safeCounts.active || 0;
+  const inactiveSurveys = safeCounts.inactive || 0;
+  const total = activeSurveys + inactiveSurveys;
 
-const SurveysStatus = () => (
+  const activePercentage = total > 0 ? Math.round((activeSurveys / total) * 100) : 0;
+  const inactivePercentage = total > 0 ? Math.round((inactiveSurveys / total) * 100) : 0;
+
+  return (
   <Col md={12} xl={3} lg={6} xs={12}>
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
           <TotalSurveysCreatedTitle color={colorBlue}>
-            {totalActiveSurveys} Active
+            {activeSurveys} Active
           </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
         
         <DashboardBookingTotalWrap>
           <TotalSurveysCreatedTitle color={colorRed}>
-            {totalInactiveSurveys} Inactive
+            {inactiveSurveys} Inactive
           </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>
@@ -35,16 +42,16 @@ const SurveysStatus = () => (
         <DashboardBookingDescription>Surveys Status</DashboardBookingDescription>
         
         <ProgressBar 
-          now={(totalActiveSurveys / (totalActiveSurveys + totalInactiveSurveys)) * 100}
-          label={`${Math.round((totalActiveSurveys / (totalActiveSurveys + totalInactiveSurveys)) * 100)}% Active`}
+          now={activePercentage}
+          label={`${activePercentage}% Active`}
           rounded 
           size="middle" 
           gradient="blue" 
           top 
         />
         <ProgressBar 
-          now={(totalInactiveSurveys / (totalActiveSurveys + totalInactiveSurveys)) * 100}
-          label={`${Math.round((totalInactiveSurveys / (totalActiveSurveys + totalInactiveSurveys)) * 100)}% Inactive`}
+          now={inactivePercentage}
+          label={`${inactivePercentage}% Inactive`}
           rounded
           size="middle" 
           gradient="pink" 
@@ -53,6 +60,7 @@ const SurveysStatus = () => (
       </DashboardBookingCard>
     </Card>
   </Col>
-);
+  );
+};
 
 export default SurveysStatus;

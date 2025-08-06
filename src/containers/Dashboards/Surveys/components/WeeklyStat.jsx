@@ -17,36 +17,9 @@ import {
   DashboardSocialStatTitle,
 } from '../../BasicStatisticComponents';
 
-const data01 = [{ value: 78, fill: '#b8e986' },
-  { value: 23, fill: '#eeeeee' }];
+const topicColors = ['#b8e986', '#ff4861', '#4ce1b6', '#7edbff', '#ff7e9a'];
 
-const data02 = [{ value: 25, fill: '#ff4861' },
-  { value: 75, fill: '#eeeeee' }];
-
-const social = [
-  { id: 2, social: 'Blog', progress: '67' },
-  { id: 3, social: 'Linkedin', progress: '18' },
-  { id: 0, social: 'Facebook', progress: '10' },
-  { id: 1, social: 'X (Twitter)', progress: '5' },
-];
-
-const SocialScore = ({ children, progress }) => (
-  <DashboardSocialStatItem>
-    <DashboardSocialStatTitle>
-      {children}
-    </DashboardSocialStatTitle>
-    <DashboardSocialStatProgress>
-      <ProgressBar top now={progress} label={`${progress}%`} rounded size="small" gradient="blue" />
-    </DashboardSocialStatProgress>
-  </DashboardSocialStatItem>
-);
-
-SocialScore.propTypes = {
-  progress: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
-
-const WeeklyStat = () => {
+const WeeklyStat = ({ topics }) => {
   const { t } = useTranslation('common');
 
   return (
@@ -60,56 +33,37 @@ const WeeklyStat = () => {
     >
       <DashboardWeeklyStatWrap>
         <DashboardWeeklyStatChart>
-          <DashboardWeeklyStatChartItem>
-            <DashboardWeeklyStatChartPie>
-              <ResponsiveContainer>
-                <DashboardWeeklyStatPieChart>
-                  <Pie
-                    data={data01}
-                    dataKey="value"
-                    cx={50}
-                    cy={50}
-                    innerRadius={50}
-                    outerRadius={55}
-                  />
-                </DashboardWeeklyStatPieChart>
-              </ResponsiveContainer>
-              <DashboardWeeklyStatLabel style={{ color: '#b8e986' }}>78%</DashboardWeeklyStatLabel>
-            </DashboardWeeklyStatChartPie>
-            <DashboardWeeklyStatInfo>
-              <p>Customer feedback</p>
-            </DashboardWeeklyStatInfo>
-          </DashboardWeeklyStatChartItem>
-          <DashboardWeeklyStatChartItem>
-            <DashboardWeeklyStatChartPie>
-              <ResponsiveContainer>
-                <DashboardWeeklyStatPieChart>
-                  <Pie
-                    data={data02}
-                    dataKey="value"
-                    cx={50}
-                    cy={50}
-                    innerRadius={50}
-                    outerRadius={55}
-                  />
-                </DashboardWeeklyStatPieChart>
-              </ResponsiveContainer>
-              <DashboardWeeklyStatLabel style={{ color: '#ff4861' }}>25%</DashboardWeeklyStatLabel>
-            </DashboardWeeklyStatChartPie>
-            <DashboardWeeklyStatInfo>
-              <p>Market <br />research</p>
-            </DashboardWeeklyStatInfo>
-          </DashboardWeeklyStatChartItem>
+          {(topics && topics.length > 0) ? topics.map((topic, index) => {
+                        const chartData = [
+              { value: topic.percentage, fill: topicColors[index % topicColors.length] },
+              { value: 100 - topic.percentage, fill: '#eeeeee' },
+            ];
+            return (
+              <DashboardWeeklyStatChartItem key={topic.topic}>
+                <DashboardWeeklyStatChartPie>
+                  <ResponsiveContainer>
+                    <DashboardWeeklyStatPieChart>
+                      <Pie
+                        data={chartData}
+                        dataKey="value"
+                        cx={50}
+                        cy={50}
+                        innerRadius={50}
+                        outerRadius={55}
+                      />
+                    </DashboardWeeklyStatPieChart>
+                  </ResponsiveContainer>
+                  <DashboardWeeklyStatLabel style={{ color: topicColors[index % topicColors.length] }}>
+                    {`${topic.percentage}%`}
+                  </DashboardWeeklyStatLabel>
+                </DashboardWeeklyStatChartPie>
+                <DashboardWeeklyStatInfo>
+                  <p>{topic.topic}</p>
+                </DashboardWeeklyStatInfo>
+              </DashboardWeeklyStatChartItem>
+            );
+          }) : <p>No topic data available.</p>}
         </DashboardWeeklyStatChart>
-        <hr />
-        <PanelTitle title={t('surveys_dashboard.social_score')} />
-        <div>
-          {social.map(item => (
-            <SocialScore key={item.id} progress={item.progress}>
-              {item.social}
-            </SocialScore>
-          ))}
-        </div>
       </DashboardWeeklyStatWrap>
     </Panel>
   );

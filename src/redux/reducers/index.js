@@ -6,6 +6,7 @@ import customizerReducer from './customizerReducer';
 import authReducer from './authReducer';
 import surveyReducer from './surveyReducer';
 import userReducer from './userReducer';
+import dashboardReducer from './dashboardReducer';
 
 export {
   themeReducer,
@@ -16,4 +17,5 @@ export {
   authReducer,
   surveyReducer,
   userReducer,
+  dashboardReducer,
 };

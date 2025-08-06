@@ -113,11 +113,12 @@ const getGradient = (gradient) => {
     case 'pink': 
       return '#ff7e9a, #ff4861';
     case 'lime':
-      return '#d8efc1, #b8e986)';
+    case 'green':
+      return '#d8efc1, #b8e986';
     case 'blue':
       return '#7edbff, #48b5ff';
     case 'turquoise':
-      return ' #a6efda, #4ce1b6';
+      return '#a6efda, #4ce1b6';
     default: 
       return '';
   }

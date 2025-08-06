@@ -101,3 +101,11 @@ export const updateSurveyPageDescription = (surveyPageId, description, userId) =
 export const deleteSurveyQuestion = surveyQuestionId => (
   api.delete(`/survey-questions/${surveyQuestionId}`)
 );
+
+export const getSurveyDashboardStats = () => (
+  api.get('/surveys-dashboard')
+);
+
+export const getAppDashboardStats = () => (
+  api.get('/app-dashboard')
+);

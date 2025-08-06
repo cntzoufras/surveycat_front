@@ -22,7 +22,7 @@ const Topbar = ({
 
   const handleLogoClick = () => {
       if (auth && auth.loggedIn) {
-        navigate('/app_dashboard');
+        navigate('/app-dashboard');
       } else {
         navigate('/login');
       }
@@ -35,7 +35,7 @@ const Topbar = ({
           onClickMobile={changeMobileSidebarVisibility}
           onClickDesktop={changeSidebarVisibility}
         />
-        <TopbarLogo to={auth && auth.loggedIn ? '/app_dashboard' : '/'} onClick={handleLogoClick} />
+        <TopbarLogo to={auth && auth.loggedIn ? '/app-dashboard' : '/'} onClick={handleLogoClick} />
       </TopbarLeft>
       <TopbarRight>
         <TopbarSearchWrap>

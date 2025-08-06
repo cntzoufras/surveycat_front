@@ -11,13 +11,13 @@ import {
   DashboardBookingTotalWrap,
 } from '../SurveysCardDashboardElements';
 
-const TotalSurveyResponses = () => (
+const TotalSurveyResponses = ({ total }) => (
   <Col md={12} xl={3} lg={6} xs={12}>
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
           <TotalSurveysCreatedTitle color={colorGreen}>
-            1 472
+            {total || 0}
           </TotalSurveysCreatedTitle>
           <TrendingUpIcon />
         </DashboardBookingTotalWrap>

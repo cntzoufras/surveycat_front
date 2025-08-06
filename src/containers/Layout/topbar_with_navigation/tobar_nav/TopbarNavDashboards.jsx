@@ -31,14 +31,14 @@ const TopbarNavDashboards = () => (
         <TopbarNavLink
           title="App Dashboard"
           icon="smartphone"
-          route="/app_dashboard"
+          route="/app-dashboard"
         />
       </DropdownItem>
       <DropdownItem>
         <TopbarNavLink
           title="Surveys Dashboard"
           icon="apartment"
-          route="/surveys_dashboard"
+          route="/surveys-dashboard"
         />
       </DropdownItem>
       <DropdownItem>

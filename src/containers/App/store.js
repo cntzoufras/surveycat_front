@@ -14,7 +14,7 @@ import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import surveyReducer from '@/redux/reducers/surveyReducer';
 import respondentsReducer from '../../redux/reducers/respondentsReducer';
 import surveySubmissionsReducer from '../../redux/reducers/surveySubmissionsReducer';
-import userReducer from '../../redux/reducers/userReducer';
+import { userReducer, dashboardReducer } from '../../redux/reducers';
 import searchReducer from '../../redux/reducers/searchReducer';
 import surveyThemeReducer from '../../redux/reducers/surveyThemeReducer';
 
@@ -40,6 +40,7 @@ const reducer = combineReducers({
   respondents: respondentsReducer,
   survey_submissions: surveySubmissionsReducer,
   user: userReducer,
+  dashboard: dashboardReducer,
   search: searchReducer,
   surveyTheme: surveyThemeReducer,
 });

@@ -14,13 +14,7 @@ import { left } from '@/utils/directions';
 import OurMission from './OurMission';
 import { DashboardChartLegend } from '../../BasicDashboardComponents';
 
-const data = [{
-  id: 0, name: 'Completed', value: 2500, fill: '#b8e986',
-}, {
-  id: 1, name: 'Did not finish', value: 2500, fill: '#4ce1b6',
-}, {
-  id: 2, name: 'Did not start', value: 5000, fill: '#f2f4f7',
-}];
+
 
 const renderLegend = ({ payload }) => (
   <DashboardChartLegend>
@@ -52,6 +46,13 @@ const SurveyCompletionRate = () => {
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
 
   const themeName = useSelector(state => state.theme.className);
+  const { completionStats, surveysCompletedToday } = useSelector(state => state.dashboard.data) || { completionStats: {}, surveysCompletedToday: 0 };
+
+  const chartData = [
+    { id: 0, name: 'Completed', value: completionStats?.completed || 0, fill: '#b8e986' },
+    { id: 1, name: 'Did not finish', value: completionStats?.didNotFinish || 0, fill: '#4ce1b6' },
+    
+  ];
 
   const onMouseMove = (e) => {
     if (e.tooltipPosition) {
@@ -60,7 +61,7 @@ const SurveyCompletionRate = () => {
       });
     }
   };
-  
+
   const todayDate = formatDate(new Date());
 
   return (
@@ -70,17 +71,16 @@ const SurveyCompletionRate = () => {
       md={12}
       title={t('surveys_dashboard.survey_completion_rate')}
       subhead="Total progress for all surveys"
-      
     >
       <DashboardReservationsWrap>
         <DashboardReservationsTitle>Total Surveys completed on {todayDate}</DashboardReservationsTitle>
-        <DashboardReservationsNumber>345</DashboardReservationsNumber>
+        <DashboardReservationsNumber>{surveysCompletedToday || 0}</DashboardReservationsNumber>
         <DashboardReservationsChartWrap>
           <ResponsiveContainer>
             <DashboardReservationsChartContainer>
               <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />
               <Pie
-                data={data}
+                data={chartData}
                 dataKey="value"
                 cy={80}
                 innerRadius={47}

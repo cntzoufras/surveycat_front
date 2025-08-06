@@ -49,7 +49,7 @@ const LogIn = ({ error }) => {
         setShowModal(true);
         handleShowNotification('Logged in', 'success');
         setTimeout(() => {
-          navigate('/app_dashboard');
+          navigate('/app-dashboard');
         }, 1200);
       } else {
         throw new Error('Login failed. Check credentials and try again');
