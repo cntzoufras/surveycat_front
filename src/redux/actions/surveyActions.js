@@ -45,6 +45,7 @@ export const FETCH_SURVEY_PAGES_FAILURE = 'FETCH_SURVEY_PAGES_FAILURE';
 
 export const FETCH_SURVEY_SUCCESS = 'FETCH_SURVEY_SUCCESS';
 export const FETCH_SURVEY_FAILURE = 'FETCH_SURVEY_FAILURE';
+export const FETCH_SURVEYS_REQUEST = 'FETCH_SURVEYS_REQUEST';
 export const FETCH_SURVEYS_SUCCESS = 'FETCH_SURVEYS_SUCCESS';
 export const FETCH_SURVEYS_FAILURE = 'FETCH_SURVEYS_FAILURE';
 
@@ -162,6 +163,7 @@ export const fetchSurveyAction = surveyId => async (dispatch) => {
 };
 
 export const fetchSurveysAction = () => async (dispatch) => {
+  dispatch({ type: FETCH_SURVEYS_REQUEST });
   try {
     const response = await api.get('/surveys/user');
     console.log('user surveys are: ', response.data);

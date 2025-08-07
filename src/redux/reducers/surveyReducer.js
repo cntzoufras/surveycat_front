@@ -1,6 +1,7 @@
 import {
   FETCH_SURVEY_SUCCESS,
   FETCH_SURVEY_FAILURE,
+  FETCH_SURVEYS_REQUEST,
   FETCH_SURVEYS_SUCCESS,
   FETCH_SURVEYS_FAILURE,
   FETCH_SURVEY_QUESTIONS,
@@ -119,6 +120,27 @@ const initialState = {
 
 const surveyReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_SURVEYS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_SURVEYS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        surveys: Array.isArray(action.payload?.data)
+          ? action.payload.data
+          : (Array.isArray(action.payload) ? action.payload : state.surveys),
+        error: null,
+      };
+    case FETCH_SURVEYS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case CREATE_SURVEY_RESPONSE_REQUEST:
       return { ...state, creatingSurveyResponse: true, createSurveyResponseError: null };
     case CREATE_SURVEY_RESPONSE_SUCCESS:

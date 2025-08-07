@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import Spinner from '@/shared/components/Loader/Spinner';
 import {
   Box,
   Typography,
@@ -37,6 +38,7 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 const SurveyList = () => {
   const dispatch = useDispatch();
   const surveys = useSelector(state => state.survey.surveys);
+  const loading = useSelector(state => state.survey.loading);
   
   const [sortBy, setSortBy] = useState(
     () => localStorage.getItem('surveySortBy') || 'newest',
@@ -136,7 +138,11 @@ const SurveyList = () => {
           </Select>
         </FormControl>
 
-        {sortedSurveys.length === 0 ? (
+        {loading ? (
+          <Box textAlign="center" mt={8}>
+            <Spinner fullHeight={false} />
+          </Box>
+        ) : sortedSurveys.length === 0 ? (
           <Box textAlign="center" mt={8}>
             <Typography variant="h6" gutterBottom>
               No surveys yet.
