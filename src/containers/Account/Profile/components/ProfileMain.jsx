@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 import styled, { css } from 'styled-components'; // Import css helper
-import { CircularProgress } from '@mui/material'; // For loading spinner
+// Unified app spinner
+import Spinner from '@/shared/components/Loader/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '@/shared/components/Card';
 import { Button } from '@/shared/components/Button';
@@ -76,7 +77,7 @@ const ProfileMain = () => {
         <Card>
           <ProfileCard>
             <div style={{ textAlign: 'center', padding: '40px' }}>
-              <CircularProgress />
+              <Spinner fullHeight={false} />
             </div>
           </ProfileCard>
         </Card>
@@ -92,7 +93,7 @@ const ProfileMain = () => {
             {/* The interactive avatar element */}
             <ProfileAvatar onClick={handleAvatarClick} isUploading={isUploading}>
               {isUploading ? (
-                <CircularProgress color="inherit" />
+                <Spinner size={24} color="inherit" fullHeight={false} />
               ) : (
                 <img src={avatarUrl} alt="avatar" />
               )}

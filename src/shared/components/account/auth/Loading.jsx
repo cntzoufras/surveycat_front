@@ -1,16 +1,8 @@
 import React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import Spinner from '@/shared/components/Loader/Spinner';
 
 const Loading = () => (
-  <Box 
-    display="flex" 
-    justifyContent="center" 
-    alignItems="center" 
-    height="100vh"
-  >
-    <CircularProgress />
-  </Box>
+  <Spinner fullHeight />
 );
 
 export default Loading;

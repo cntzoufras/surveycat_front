@@ -9,12 +9,12 @@ import {
   Card,
   CardActions,
   CardContent,
-  CircularProgress,
   Container,
   Grid,
   Typography,
   Alert,
 } from '@mui/material';
+import Spinner from '@/shared/components/Loader/Spinner';
 import AddIcon from '@mui/icons-material/Add';
 import ThemeDetailModal from './ThemeDetailModal';
 
@@ -42,7 +42,7 @@ const SurveyThemeList = () => {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <CircularProgress />
+        <Spinner fullHeight={false} />
       </Box>
     );
   }

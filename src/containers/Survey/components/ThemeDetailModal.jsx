@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  CircularProgress,
   Typography,
   Box,
   List,
@@ -16,6 +15,7 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
+import Spinner from '@/shared/components/Loader/Spinner';
 
 // A small component to render color swatches
 import PropTypes from 'prop-types';
@@ -59,7 +59,7 @@ const ThemeDetailModal = ({ open, onClose }) => {
       <DialogContent>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-            <CircularProgress />
+            <Spinner fullHeight={false} />
           </Box>
         )}
         {!loading && theme && (

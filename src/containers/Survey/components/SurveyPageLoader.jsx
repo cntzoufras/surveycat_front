@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress as MuiCircularProgress, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import Spinner from '@/shared/components/Loader/Spinner';
+
 import SurveyPage from './SurveyPage';
 import { getSurveyPage, getSurveyQuestions } from '../../../utils/api/survey-api';
 
@@ -71,7 +73,7 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }, [surveyId, surveyPageId]);
 
   if (isLoading) {
-    return <MuiCircularProgress />;
+    return <Spinner />;
   }
 
   if (loadError) {

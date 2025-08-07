@@ -1,39 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const Spinner = ({ size, color, label, fullHeight }) => {
-  const dimension = typeof size === 'number' ? `${size}px` : size;
-  const spinner = (
-    <div
-      aria-label={label || 'Loading'}
-      role="status"
-      style={{
-        display: 'inline-block',
-        width: dimension,
-        height: dimension,
-        border: `3px solid ${color}33`,
-        borderTopColor: color,
-        borderRadius: '50%',
-        animation: 'sc-spin 0.8s linear infinite',
-      }}
-    />
-  );
+  const theme = useTheme();
+  const dimension = typeof size === 'number' ? size : parseInt(size, 10) || 28;
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      height: fullHeight ? '50vh' : 'auto',
-    }}>
-      {spinner}
-      <style>{`
-        @keyframes sc-spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </div>
+    <Box
+      role="status"
+      aria-label={label || 'Loading'}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: fullHeight ? '50vh' : 'auto',
+      }}
+    >
+      <CircularProgress size={dimension} sx={{ color: color || theme.palette.primary.main }} />
+      {label && (
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          {label}
+        </Typography>
+      )}
+    </Box>
   );
 };
 
@@ -46,7 +39,7 @@ Spinner.propTypes = {
 
 Spinner.defaultProps = {
   size: 28,
-  color: '#6c5ce7',
+  color: undefined,
   label: 'Loading',
   fullHeight: true,
 };
