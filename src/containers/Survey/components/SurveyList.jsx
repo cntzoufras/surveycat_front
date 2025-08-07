@@ -126,12 +126,23 @@ const SurveyList = () => {
           </Button>
         </Stack>
 
-        <FormControl size="small" sx={{ mb: 2, minWidth: 150 }}>
+        <FormControl size="medium" sx={{ mb: 2, minWidth: 170 }}>
           <InputLabel>Sort by</InputLabel>
           <Select
             label="Sort by"
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  '& .MuiMenuItem-root': {
+                    minHeight: 40,
+                    py: 0.75,
+                    fontSize: '0.95rem',
+                  },
+                },
+              },
+            }}
           >
             <MenuItem value="newest">Newest first</MenuItem>
             <MenuItem value="alpha">A → Z</MenuItem>
