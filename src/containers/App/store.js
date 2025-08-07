@@ -9,12 +9,12 @@ import {
   authReducer,
   roundBordersReducer,
   blocksShadowsReducer,
+ userReducer, dashboardReducer, 
 } from '@/redux/reducers/index';
 import appConfigReducer from '@/redux/reducers/appConfigReducer';
 import surveyReducer from '@/redux/reducers/surveyReducer';
 import respondentsReducer from '../../redux/reducers/respondentsReducer';
 import surveySubmissionsReducer from '../../redux/reducers/surveySubmissionsReducer';
-import { userReducer, dashboardReducer } from '../../redux/reducers';
 import searchReducer from '../../redux/reducers/searchReducer';
 import surveyThemeReducer from '../../redux/reducers/surveyThemeReducer';
 

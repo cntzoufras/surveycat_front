@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon'; // You can use different icons for each status if needed
 import ProgressBar from '@/shared/components/ProgressBar';
 import { Card } from '@/shared/components/Card';
@@ -22,45 +23,56 @@ const SurveysStatus = ({ counts }) => {
   const inactivePercentage = total > 0 ? Math.round((inactiveSurveys / total) * 100) : 0;
 
   return (
-  <Col md={12} xl={3} lg={6} xs={12}>
-    <Card>
-      <DashboardBookingCard>
-        <DashboardBookingTotalWrap>
-          <TotalSurveysCreatedTitle color={colorBlue}>
-            {activeSurveys} Active
-          </TotalSurveysCreatedTitle>
-          <TrendingUpIcon />
-        </DashboardBookingTotalWrap>
+    <Col md={12} xl={3} lg={6} xs={12}>
+      <Card>
+        <DashboardBookingCard>
+          <DashboardBookingTotalWrap>
+            <TotalSurveysCreatedTitle color={colorBlue}>
+              {activeSurveys} Active
+            </TotalSurveysCreatedTitle>
+            <TrendingUpIcon />
+          </DashboardBookingTotalWrap>
         
-        <DashboardBookingTotalWrap>
-          <TotalSurveysCreatedTitle color={colorRed}>
-            {inactiveSurveys} Inactive
-          </TotalSurveysCreatedTitle>
-          <TrendingUpIcon />
-        </DashboardBookingTotalWrap>
+          <DashboardBookingTotalWrap>
+            <TotalSurveysCreatedTitle color={colorRed}>
+              {inactiveSurveys} Inactive
+            </TotalSurveysCreatedTitle>
+            <TrendingUpIcon />
+          </DashboardBookingTotalWrap>
 
-        <DashboardBookingDescription>Surveys Status</DashboardBookingDescription>
+          <DashboardBookingDescription>Surveys Status</DashboardBookingDescription>
         
-        <ProgressBar 
-          now={activePercentage}
-          label={`${activePercentage}% Active`}
-          rounded 
-          size="middle" 
-          gradient="blue" 
-          top 
-        />
-        <ProgressBar 
-          now={inactivePercentage}
-          label={`${inactivePercentage}% Inactive`}
-          rounded
-          size="middle" 
-          gradient="pink" 
-          top 
-        />
-      </DashboardBookingCard>
-    </Card>
-  </Col>
+          <ProgressBar 
+            now={activePercentage}
+            label={`${activePercentage}% Active`}
+            rounded 
+            size="middle" 
+            gradient="blue" 
+            top
+          />
+          <ProgressBar 
+            now={inactivePercentage}
+            label={`${inactivePercentage}% Inactive`}
+            rounded
+            size="middle" 
+            gradient="pink" 
+            top
+          />
+        </DashboardBookingCard>
+      </Card>
+    </Col>
   );
+};
+
+SurveysStatus.propTypes = {
+  counts: PropTypes.shape({
+    active: PropTypes.number,
+    inactive: PropTypes.number,
+  }),
+};
+
+SurveysStatus.defaultProps = {
+  counts: { active: 0, inactive: 0 },
 };
 
 export default SurveysStatus;

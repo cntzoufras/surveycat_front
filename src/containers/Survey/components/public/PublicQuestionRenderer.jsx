@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSurveyTheme } from '../../../../contexts/SurveyThemeContext';
 import {
   Radio,
   FormControlLabel,
@@ -16,6 +15,7 @@ import {
 } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
+import { useSurveyTheme } from '../../../../contexts/SurveyThemeContext';
 
 const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
   const [selectedValues, setSelectedValues] = useState([]);
@@ -88,8 +88,9 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
       color: themeStyles?.colors?.text || '#252525',
       backgroundColor: themeStyles?.colors?.background || 'transparent',
       padding: '20px',
-      borderRadius: '8px'
-    }}>
+      borderRadius: '8px',
+    }}
+    >
       {/* Multiple Choice (Radio) */}
       {question.question_type_id === 1 && Array.isArray(question.survey_question_choices) && (
         <List>
@@ -105,7 +106,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     sx={{
                       color: themeStyles?.colors?.choice || 'grey.400',
                       '&.Mui-checked': { 
-                        color: themeStyles?.colors?.primary || 'grey.700' 
+                        color: themeStyles?.colors?.primary || 'grey.700', 
                       },
                     }}
                   />
@@ -113,7 +114,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 label={choice.content}
                 sx={{ 
                   color: themeStyles?.colors?.choice || '#252525',
-                  fontSize: themeStyles?.typography?.fontSize || '16px'
+                  fontSize: themeStyles?.typography?.fontSize || '16px',
                 }}
               />
             </ListItem>
@@ -138,7 +139,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     sx={{
                       color: themeStyles?.colors?.choice || 'grey.400',
                       '&.Mui-checked': { 
-                        color: themeStyles?.colors?.primary || 'grey.700' 
+                        color: themeStyles?.colors?.primary || 'grey.700', 
                       },
                     }}
                   />
@@ -146,7 +147,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 label={choice.content}
                 sx={{ 
                   color: themeStyles?.colors?.choice || '#252525',
-                  fontSize: themeStyles?.typography?.fontSize || '16px'
+                  fontSize: themeStyles?.typography?.fontSize || '16px',
                 }}
               />
             </ListItem>
@@ -194,10 +195,10 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           /* make the outline stars grey and filled stars orange */
           sx={{
             '& .MuiRating-iconEmpty': { 
-              color: themeStyles?.colors?.choice || 'grey.400' 
+              color: themeStyles?.colors?.choice || 'grey.400', 
             },
             '& .MuiRating-iconFilled': { 
-              color: themeStyles?.colors?.primary || 'warning.main' 
+              color: themeStyles?.colors?.primary || 'warning.main', 
             },
           }}
           /* or if you prefer custom icons: */
@@ -247,17 +248,17 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
             mt: 1,
             '& .MuiOutlinedInput-root': { 
               backgroundColor: themeStyles?.colors?.background || 'grey.100', 
-              borderRadius: themeStyles?.layout?.borderRadius || 1 
+              borderRadius: themeStyles?.layout?.borderRadius || 1, 
             },
             '& .MuiOutlinedInput-notchedOutline': { 
-              borderColor: themeStyles?.colors?.primary || 'grey.400' 
+              borderColor: themeStyles?.colors?.primary || 'grey.400', 
             },
             '& textarea::placeholder': { 
               color: themeStyles?.colors?.choice || 'grey.600', 
-              opacity: 1 
+              opacity: 1, 
             },
             '& .MuiOutlinedInput-input': { 
-              color: themeStyles?.colors?.text || '#252525' 
+              color: themeStyles?.colors?.text || '#252525', 
             },
           }}
         />
@@ -276,13 +277,13 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
             mt: 1,
             '& .MuiOutlinedInput-root': { 
               backgroundColor: themeStyles?.colors?.background || 'grey.100', 
-              borderRadius: themeStyles?.layout?.borderRadius || 1 
+              borderRadius: themeStyles?.layout?.borderRadius || 1, 
             },
             '& .MuiOutlinedInput-notchedOutline': { 
-              borderColor: themeStyles?.colors?.primary || 'grey.400' 
+              borderColor: themeStyles?.colors?.primary || 'grey.400', 
             },
             '& .MuiSelect-select': { 
-              color: themeStyles?.colors?.text || '#252525' 
+              color: themeStyles?.colors?.text || '#252525', 
             },
           }}
         >

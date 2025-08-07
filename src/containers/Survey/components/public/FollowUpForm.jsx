@@ -66,19 +66,27 @@ const FollowUpForm = ({ onSubmit }) => {
           borderRadius: 2,
         }}
       >
-        <Typography variant="h5" gutterBottom sx={{ 
+        <Typography
+          variant="h5"
+          gutterBottom
+          sx={{ 
           color: themeStyles?.colors?.text || '#1C1C1E',
           fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
           fontSize: themeStyles?.typography?.headingStyle?.H2 || '24px',
-          fontWeight: 'bold'
-        }}>
+          fontWeight: 'bold',
+        }}
+        >
           Additional Information
         </Typography>
-        <Typography variant="body2" gutterBottom sx={{ 
+        <Typography
+          variant="body2"
+          gutterBottom
+          sx={{ 
           color: themeStyles?.colors?.choice || '#3C3C43',
           fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-          fontSize: themeStyles?.typography?.fontSize || '16px'
-        }}>
+          fontSize: themeStyles?.typography?.fontSize || '16px',
+        }}
+        >
           Help us understand our audience better. This information is optional and will be kept confidential.
         </Typography>
 

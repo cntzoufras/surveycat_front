@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { WEB_SAFE_FONTS } from '../../../constants/fontConstants';
 import { useDispatch, useSelector } from 'react-redux';
+import WEB_SAFE_FONTS from '../../../constants/fontConstants';
 import { fetchThemeAction } from '../../../redux/actions/surveyThemeActions';
 import { SurveyThemeProvider } from '../../../contexts/SurveyThemeContext';
 
-const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
+const SurveyThemeWrapper = ({ survey, children }) => {
   const dispatch = useDispatch();
   const [surveyTheme, setSurveyTheme] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,11 +16,9 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
 
   useEffect(() => {
     if (survey?.theme) {
-      // If survey already includes full theme data, use it directly
       setSurveyTheme(survey.theme);
       setIsLoading(false);
     } else if (survey?.theme_id) {
-      // Only fetch if theme data is not included in survey
       const existingTheme = themes.find(t => t.id === survey.theme_id);
       if (existingTheme) {
         setSurveyTheme(existingTheme);
@@ -34,39 +33,24 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
 
   useEffect(() => {
     if (survey?.theme) {
-      // Use theme data from survey response
       setSurveyTheme(survey.theme);
       setIsLoading(false);
     } else if (currentTheme && survey?.theme_id === currentTheme.id) {
-      // Fallback to Redux theme if no survey.theme
       setSurveyTheme(currentTheme);
       setIsLoading(false);
     }
   }, [currentTheme, survey?.theme_id, survey?.theme]);
 
   const themeStyles = useMemo(() => {
-    if (!surveyTheme) {
-      return {};
-    }
+    if (!surveyTheme) return {};
 
     const baseSettings = surveyTheme.theme_setting?.settings || {};
     const variablePalettes = surveyTheme.theme_setting?.variable_palettes || [];
     const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
     const customSettings = survey?.custom_theme_settings || {};
 
-    // Deep merge: custom settings override base settings and palette
-    const merged = _.merge(
-      {},
-      baseSettings,
-      { variable_palette: activePalette }, // Base palette becomes a property
-      customSettings
-    );
-
-    // For convenience, let's ensure colors object exists
-    if (!merged.colors) {
-      merged.colors = {};
-    }
-    
+    const merged = _.merge({}, baseSettings, { variable_palette: activePalette }, customSettings);
+    if (!merged.colors) merged.colors = {};
     return merged;
   }, [surveyTheme, survey?.custom_theme_settings]);
 
@@ -75,28 +59,33 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
   const finalPalette = themeStyles.variable_palette || {};
   const finalColors = themeStyles.colors || {};
 
-  // Hook for dynamically loading Google Fonts and applying to body
+  // Dynamic font loader — always return a function (no-op or cleanup) to satisfy consistent-return
   useEffect(() => {
-    if (!typography.fontFamily || typeof typography.fontFamily !== 'string' || typography.fontFamily.trim() === '') {
-      return; // Do not run if font family is not set
+    if (
+      !typography.fontFamily
+      || typeof typography.fontFamily !== 'string'
+      || typography.fontFamily.trim() === ''
+    ) {
+      return () => {}; // no-op cleanup for early exit
     }
 
     const isWebSafe = WEB_SAFE_FONTS.includes(typography.fontFamily);
-    const fontName = typography.fontFamily ? typography.fontFamily.split(',')[0].trim() : 'Roboto';
+    const fontName = typography.fontFamily.split(',')[0].trim();
 
-    // Load Google Font if not web-safe
     if (!isWebSafe) {
       const fontId = `google-font-${fontName.replace(/ /g, '+')}`;
       if (!document.getElementById(fontId)) {
         const link = document.createElement('link');
         link.id = fontId;
         link.rel = 'stylesheet';
-        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')}:wght@400;700&display=swap`;
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
+          / /g,
+          '+',
+        )}:wght@400;700&display=swap`;
         document.head.appendChild(link);
       }
     }
 
-    // Apply font to body using a <style> tag for higher specificity
     const styleId = 'survey-theme-font-style';
     let styleElement = document.getElementById(styleId);
     if (!styleElement) {
@@ -105,8 +94,7 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
       document.head.appendChild(styleElement);
     }
 
-    // Use !important to ensure the theme font overrides other styles
-    const fontCss = `
+    styleElement.innerHTML = `
       body {
         background-color: ${finalColors.background || 'transparent'};
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
@@ -118,64 +106,118 @@ const SurveyThemeWrapper = ({ survey, children, fallback = true }) => {
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
     `;
-    styleElement.innerHTML = fontCss;
 
-    // Cleanup function to remove the style when the component unmounts
     return () => {
-      const elementToRemove = document.getElementById(styleId);
-      if (elementToRemove) {
-        elementToRemove.remove();
-      }
+      const el = document.getElementById(styleId);
+      if (el) el.remove();
     };
   }, [typography.fontFamily, finalColors.background]);
 
   if (isLoading && survey?.theme_id) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '200px',
-        fontFamily: 'Arial, sans-serif',
-        color: '#666'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '200px',
+          fontFamily: 'Arial, sans-serif',
+          color: '#666',
+        }}
+      >
         Loading theme...
       </div>
     );
   }
 
-  // Debug logging to verify theme data
-  console.log('SurveyThemeWrapper - Final Merged Theme:', {
-    settings: themeStyles,
-    palette: finalPalette,
-    colors: finalColors,
-    surveyId: survey?.id,
-  });
+  // Debug logs (optional)
+  console.log(
+'SurveyThemeWrapper - Final Merged Theme:', 
+    {
+       settings: themeStyles, palette: finalPalette, colors: finalColors, surveyId: survey?.id, 
+    },
+  );
 
   const themeStylesDebug = {
     '--theme-primary': finalColors.primary || finalPalette.primary_accent || '#1976d2',
-    '--theme-secondary': finalColors.secondary || finalPalette.secondary_accent || '#dc004e',
-    '--theme-background': finalPalette.primary_background || '#ffffff', // Question box background
+    '--theme-secondary':
+      finalColors.secondary || finalPalette.secondary_accent || '#dc004e',
+    '--theme-background': finalPalette.primary_background || '#ffffff',
     '--theme-text': finalColors.text || finalPalette.title_color || '#333333',
     '--theme-question': finalColors.question || finalPalette.question_color || '#252525',
     '--theme-choice': finalColors.choice || finalPalette.answer_color || '#666666',
     '--theme-font-family': typography.fontFamily || 'Arial, sans-serif',
     '--theme-font-size': typography.fontSize || '16px',
     '--theme-border-radius': `${layout.borderRadius || 8}px`,
-    // Page background is now on body, this is for the content box
     backgroundColor: finalPalette.primary_background || 'transparent',
     color: finalColors.text || finalPalette.title_color || '#333333',
   };
 
-  console.log('SurveyThemeWrapper - Applied Styles:', themeStylesDebug);
-
   return (
     <SurveyThemeProvider theme={themeStyles}>
-      <div style={themeStylesDebug}>
-        {children}
-      </div>
+      <div style={themeStylesDebug}>{children}</div>
     </SurveyThemeProvider>
   );
+};
+
+SurveyThemeWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+  survey: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    theme_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    theme: PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      theme_setting: PropTypes.shape({
+        settings: PropTypes.shape({
+          typography: PropTypes.shape({
+            fontFamily: PropTypes.string,
+            fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            headingStyle: PropTypes.shape({
+              H1: PropTypes.string,
+              H2: PropTypes.string,
+            }),
+          }),
+          colors: PropTypes.objectOf(PropTypes.string),
+          layout: PropTypes.shape({
+            backgroundAlpha: PropTypes.number,
+            borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+            padding: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+          }),
+        }),
+        variable_palettes: PropTypes.arrayOf(
+          PropTypes.shape({
+            is_active: PropTypes.bool,
+            primary_accent: PropTypes.string,
+            secondary_accent: PropTypes.string,
+            primary_background: PropTypes.string,
+            title_color: PropTypes.string,
+            question_color: PropTypes.string,
+            answer_color: PropTypes.string,
+          }),
+        ),
+      }),
+    }),
+    custom_theme_settings: PropTypes.shape({
+      colors: PropTypes.objectOf(PropTypes.string),
+      typography: PropTypes.shape({
+        fontFamily: PropTypes.string,
+        fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        headingStyle: PropTypes.shape({
+          H1: PropTypes.string,
+          H2: PropTypes.string,
+        }),
+      }),
+      layout: PropTypes.shape({
+        backgroundAlpha: PropTypes.number,
+        borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        padding: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      }),
+    }),
+  }),
+};
+
+SurveyThemeWrapper.defaultProps = {
+  survey: null,
 };
 
 export default SurveyThemeWrapper;

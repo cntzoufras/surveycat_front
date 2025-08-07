@@ -48,7 +48,7 @@ const ThemeDetailModal = ({ open, onClose }) => {
         hasThemeSetting: !!theme.theme_setting,
         hasVariablePalettes: !!(theme.theme_setting?.variable_palettes),
         variablePalettes: theme.theme_setting?.variable_palettes,
-        themeKeys: theme ? Object.keys(theme) : []
+        themeKeys: theme ? Object.keys(theme) : [],
       });
     }
   }, [theme]);
@@ -142,8 +142,8 @@ const ThemeDetailModal = ({ open, onClose }) => {
           <Box>
             <Typography>This theme has no settings configured.</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-              Theme ID: {theme.id}<br/>
-              Title: {theme.title}<br/>
+              Theme ID: {theme.id}<br />
+              Title: {theme.title}<br />
               Description: {theme.description}
             </Typography>
           </Box>

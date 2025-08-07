@@ -1,8 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchThemeAction } from '../redux/actions/surveyThemeActions';
+import React, {
+  createContext, useContext, useState, useEffect, useMemo, useCallback,
+} from 'react';
+import PropTypes from 'prop-types';
 
-const SurveyThemeContext = createContext();
+const SurveyThemeContext = createContext(null);
+
+const DEFAULT_THEME = {
+  typography: { fontFamily: 'Arial, sans-serif', fontSize: '16px' },
+  colors: { primary: '#1976d2', text: '#333' },
+  layout: { borderRadius: 8 },
+};
 
 export const SurveyThemeProvider = ({ theme, children }) => {
   const [customTheme, setCustomTheme] = useState(theme);
@@ -11,14 +18,14 @@ export const SurveyThemeProvider = ({ theme, children }) => {
     setCustomTheme(theme);
   }, [theme]);
 
-  const updateCustomTheme = (updates) => {
+  const updateCustomTheme = useCallback((updates) => {
     setCustomTheme(prev => ({ ...prev, ...updates }));
-  };
+  }, []);
 
-  const value = {
-    themeStyles: customTheme,
-    updateCustomTheme,
-  };
+  const value = useMemo(
+    () => ({ themeStyles: customTheme, updateCustomTheme }),
+    [customTheme, updateCustomTheme],
+  );
 
   return (
     <SurveyThemeContext.Provider value={value}>
@@ -27,15 +34,33 @@ export const SurveyThemeProvider = ({ theme, children }) => {
   );
 };
 
+SurveyThemeProvider.propTypes = {
+  theme: PropTypes.shape({
+    typography: PropTypes.shape({
+      fontFamily: PropTypes.string.isRequired,
+      fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    }).isRequired,
+    colors: PropTypes.shape({
+      primary: PropTypes.string,
+      text: PropTypes.string,
+    }).isRequired,
+    layout: PropTypes.shape({
+      borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    }).isRequired,
+  }),
+  children: PropTypes.node.isRequired,
+};
+
+SurveyThemeProvider.defaultProps = {
+  theme: DEFAULT_THEME,
+};
+
 export const useSurveyTheme = () => {
   const context = useContext(SurveyThemeContext);
-  if (!context || !context.themeStyles) {
-    // Return a fallback theme to prevent crashes if the context is not yet available
-    return {
-      typography: { fontFamily: 'Arial, sans-serif', fontSize: '16px' },
-      colors: { primary: '#1976d2', text: '#333' },
-      layout: { borderRadius: 8 },
-    };
-  }
-  return context.themeStyles;
+  return context?.themeStyles ?? DEFAULT_THEME;
+};
+
+export const useSurveyThemeContext = () => {
+  const context = useContext(SurveyThemeContext);
+  return context ?? { themeStyles: DEFAULT_THEME, updateCustomTheme: () => {} };
 };

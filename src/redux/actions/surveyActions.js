@@ -457,7 +457,7 @@ export const updateSurveyCustomThemeAction = (surveyId, customThemeSettings, use
   try {
     const response = await api.put(`/surveys/${surveyId}`, { 
       custom_theme_settings: customThemeSettings,
-      user_id: userId 
+      user_id: userId, 
     });
     dispatch({ type: UPDATE_SURVEY_THEME_SUCCESS, payload: response.data });
     return response.data;
@@ -479,7 +479,7 @@ export const updateSurveyThemeAction = (surveyId, themeId, userId) => async (dis
 };
 
 // Custom theme management actions
-export const createCustomThemeAction = (themeData) => async (dispatch) => {
+export const createCustomThemeAction = themeData => async (dispatch) => {
   try {
     const response = await api.post('/themes', themeData);
     dispatch({ type: CREATE_CUSTOM_THEME_SUCCESS, payload: response.data });
@@ -501,7 +501,7 @@ export const updateCustomThemeAction = (themeId, themeData) => async (dispatch) 
   }
 };
 
-export const deleteCustomThemeAction = (themeId) => async (dispatch) => {
+export const deleteCustomThemeAction = themeId => async (dispatch) => {
   try {
     await api.delete(`/themes/${themeId}`);
     dispatch({ type: DELETE_CUSTOM_THEME_SUCCESS, payload: themeId });

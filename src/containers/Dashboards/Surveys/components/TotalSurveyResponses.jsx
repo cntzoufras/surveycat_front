@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import ProgressBar from '@/shared/components/ProgressBar';
@@ -27,5 +28,13 @@ const TotalSurveyResponses = ({ total }) => (
     </Card>
   </Col>
 );
+
+TotalSurveyResponses.propTypes = {
+  total: PropTypes.number,
+};
+
+TotalSurveyResponses.defaultProps = {
+  total: 0,
+};
 
 export default TotalSurveyResponses;

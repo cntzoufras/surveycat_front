@@ -46,11 +46,18 @@ const SurveyCompletionRate = () => {
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
 
   const themeName = useSelector(state => state.theme.className);
-  const { completionStats, surveysCompletedToday } = useSelector(state => state.dashboard.surveyDashboard.data) || { completionStats: {}, surveysCompletedToday: 0 };
+  const { 
+    completionStats, 
+    surveysCompletedToday, 
+  } = useSelector(state => state.dashboard.surveyDashboard.data) || { completionStats: {}, surveysCompletedToday: 0 };
 
   const chartData = [
-    { id: 0, name: 'Completed', value: completionStats?.completed || 0, fill: '#b8e986' },
-    { id: 1, name: 'Did not finish', value: completionStats?.didNotFinish || 0, fill: '#4ce1b6' },
+    {
+ id: 0, name: 'Completed', value: completionStats?.completed || 0, fill: '#b8e986', 
+},
+    {
+ id: 1, name: 'Did not finish', value: completionStats?.didNotFinish || 0, fill: '#4ce1b6', 
+},
     
   ];
 

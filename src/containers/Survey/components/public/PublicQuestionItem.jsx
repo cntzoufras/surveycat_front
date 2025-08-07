@@ -17,7 +17,7 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
         sx={{
           fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
           fontSize: themeStyles?.typography?.headingStyle?.H1 || '24px',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
         }}
       >
         {`${index + 1}. ${question.title}`}

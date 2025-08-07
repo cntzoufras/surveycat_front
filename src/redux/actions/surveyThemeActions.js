@@ -30,7 +30,7 @@ export const fetchThemeAction = themeId => async (dispatch) => {
     // Ensure theme has proper structure with theme_setting
     const processedTheme = {
       ...themeData,
-      theme_setting: themeData.theme_setting || themeData.theme_setting || null
+      theme_setting: themeData.theme_setting || themeData.theme_setting || null,
     };
     
     dispatch({ type: FETCH_THEME_SUCCESS, payload: processedTheme });

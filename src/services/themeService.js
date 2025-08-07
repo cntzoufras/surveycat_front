@@ -5,7 +5,7 @@
 
 import api from '@/utils/api/survey-api';
 
-class ThemeService {
+const ThemeService = {
   /**
    * Update survey to use a specific theme
    * @param {String} surveyId - The survey ID
@@ -15,13 +15,13 @@ class ThemeService {
   async updateSurveyTheme(surveyId, themeId) {
     try {
       await api.put(`/surveys/${surveyId}`, {
-        theme_id: themeId
+        theme_id: themeId,
       });
     } catch (error) {
       console.error('Error updating survey theme:', error);
       throw error;
     }
-  }
-}
+  },
+};
 
-export default new ThemeService();
+export default ThemeService;

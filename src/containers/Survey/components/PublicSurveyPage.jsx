@@ -236,7 +236,7 @@ const PublicSurveyPage = ({ preview = false }) => {
               sx={{
                 fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
                 fontSize: themeStyles?.typography?.headingStyle?.H2 || '24px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}
             >
               {currentPage.title}

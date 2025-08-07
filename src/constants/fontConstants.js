@@ -1,4 +1,4 @@
-export const WEB_SAFE_FONTS = [
+const WEB_SAFE_FONTS = [
   // Sans-Serif
   'Arial, sans-serif',
   'Verdana, sans-serif',
@@ -23,3 +23,5 @@ export const WEB_SAFE_FONTS = [
   'Brush Script MT, cursive',
   'Comic Sans MS, cursive',
 ];
+
+export default WEB_SAFE_FONTS;

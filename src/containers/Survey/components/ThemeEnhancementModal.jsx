@@ -1,43 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Box,
-  Typography,
-  Alert,
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Button, Box, Alert,
 } from '@mui/material';
-import ThemePreview from './ThemePreview';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { 
-  createCustomThemeAction, 
-  updateCustomThemeAction, 
+import {
   deleteCustomThemeAction,
   resetToBaseThemeAction,
   updateSurveyCustomThemeAction,
-  fetchSurveysAction
+  fetchSurveysAction,
 } from '@/redux/actions/surveyActions';
+import ThemePreview from './ThemePreview';
 
-const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
+const ThemeEnhancementModal = ({
+   open, 
+   onClose, 
+   survey, 
+   theme, 
+  }) => {
   const [customTheme, setCustomTheme] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (survey && theme) {
-      // Initialize with current survey's custom theme or theme defaults
       const currentCustomTheme = survey.custom_theme_settings || {};
-      
-      // Get base theme from theme settings
       const baseTheme = theme.theme_setting?.settings || {};
-      
-      // Get variable palettes for color defaults
       const variablePalettes = theme.theme_setting?.variable_palettes || [];
       const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
-      
-      // Create proper theme structure with variable palette defaults
+
       const defaultTheme = {
         ...baseTheme,
         colors: {
@@ -51,39 +43,29 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
         typography: baseTheme.typography || {
           fontFamily: 'Arial, sans-serif',
           fontSize: '16px',
-          headingStyle: {
-            H1: 'bold 24px',
-            H2: 'bold 18px',
-          }
+          headingStyle: { H1: 'bold 24px', H2: 'bold 18px' },
         },
         layout: baseTheme.layout || {
           backgroundAlpha: 100,
           borderRadius: 8,
           padding: 20,
           alignment: 'left',
-        }
+        },
       };
-      
-      // Merge custom overrides with the properly structured default theme
+
       setCustomTheme({
         ...defaultTheme,
         ...currentCustomTheme,
-        colors: {
-          ...defaultTheme.colors,
-          ...currentCustomTheme.colors,
-        },
+        colors: { ...defaultTheme.colors, ...currentCustomTheme.colors },
         typography: {
           ...defaultTheme.typography,
           ...currentCustomTheme.typography,
           headingStyle: {
             ...defaultTheme.typography.headingStyle,
             ...currentCustomTheme.typography?.headingStyle,
-          }
+          },
         },
-        layout: {
-          ...defaultTheme.layout,
-          ...currentCustomTheme.layout,
-        }
+        layout: { ...defaultTheme.layout, ...currentCustomTheme.layout },
       });
     }
   }, [survey, theme]);
@@ -93,10 +75,13 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
       ...prev,
       ...updates,
       colors: { ...prev.colors, ...updates.colors },
-      typography: { 
-        ...prev.typography, 
+      typography: {
+        ...prev.typography,
         ...updates.typography,
-        headingStyle: { ...prev.typography?.headingStyle, ...updates.typography?.headingStyle }
+        headingStyle: {
+          ...prev.typography?.headingStyle,
+          ...updates.typography?.headingStyle,
+        },
       },
       layout: { ...prev.layout, ...updates.layout },
     }));
@@ -104,18 +89,13 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
 
   const handleSave = async () => {
     if (!survey) return;
-
     setIsSaving(true);
     try {
-      // Save the custom theme settings directly to the survey
       await dispatch(updateSurveyCustomThemeAction(survey.id, customTheme, survey.user_id));
-
-      // Re-fetch surveys to ensure the list is up-to-date with all relations
       await dispatch(fetchSurveysAction());
-      
       onClose();
-    } catch (error) {
-      console.error('Error saving custom theme:', error);
+    } catch (err) {
+      console.error('Error saving custom theme:', err);
     } finally {
       setIsSaving(false);
     }
@@ -124,26 +104,21 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
   const handleResetToDefault = async () => {
     setIsSaving(true);
     try {
-      // Reset to base theme
       await dispatch(resetToBaseThemeAction(survey.id));
-      
-      // Delete custom theme if it exists
       if (survey.custom_theme_id) {
         await dispatch(deleteCustomThemeAction(survey.custom_theme_id));
       }
-      
       onClose();
-    } catch (error) {
-      console.error('Error resetting theme:', error);
+    } catch (err) {
+      console.error('Error resetting theme:', err);
     } finally {
       setIsSaving(false);
     }
-    // Reset local state to default theme (including variable palettes)
+
     if (theme && theme.theme_setting) {
       const baseTheme = theme.theme_setting.settings || {};
       const variablePalettes = theme.theme_setting.variable_palettes || [];
       const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
-      
       const defaultTheme = {
         ...baseTheme,
         colors: {
@@ -157,24 +132,18 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
         typography: baseTheme.typography || {
           fontFamily: 'Arial, sans-serif',
           fontSize: '16px',
-          headingStyle: {
-            H1: 'bold 24px',
-            H2: 'bold 18px',
-          }
+          headingStyle: { H1: 'bold 24px', H2: 'bold 18px' },
         },
         layout: baseTheme.layout || {
           backgroundAlpha: 100,
           borderRadius: 8,
           padding: 20,
           alignment: 'left',
-        }
+        },
       };
-      
       setCustomTheme(defaultTheme);
     }
   };
-
-
 
   return (
     <Dialog
@@ -182,47 +151,103 @@ const ThemeEnhancementModal = ({ open, onClose, survey, theme }) => {
       onClose={onClose}
       maxWidth="xl"
       fullWidth
-      PaperProps={{
-        sx: { maxWidth: '1200px', height: '90vh' }
-      }}
+      PaperProps={{ sx: { maxWidth: '1200px', height: '90vh' } }}
     >
       <DialogTitle>
-        Customize Theme for "{survey?.title || 'Survey'}"
+        {/* removed quotes to avoid no-unescaped-entities */}
+        Customize Theme for {survey?.title || 'Survey'}
       </DialogTitle>
-      
+
       <DialogContent sx={{ p: 0 }}>
         <Box sx={{ p: 2 }}>
           <Alert severity="info" sx={{ mb: 2 }}>
-            Customize the theme styling for this specific survey. Your changes will only affect this survey and won't modify the original theme.
+            {/* split text to avoid max-len and unescaped apostrophes */}
+            Customize the theme styling for this specific survey.{' '}
+            Your changes will only affect this survey and will not modify the original theme.
           </Alert>
-          
+
           {theme && (
-            <ThemePreview
-              theme={customTheme}
-              onThemeUpdate={handleThemeUpdate}
-            />
+            <ThemePreview theme={customTheme} onThemeUpdate={handleThemeUpdate} />
           )}
         </Box>
       </DialogContent>
-      
+
       <DialogActions>
         <Button onClick={handleResetToDefault} color="secondary">
           Reset to Default
         </Button>
-        <Button onClick={onClose}>
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          variant="contained"
-          color="primary"
-          disabled={isSaving}
-        >
-          {isSaving ? 'Saving...' : 'Save Custom Theme'}
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSave} variant="contained" color="primary" disabled={isSaving}>
+          {isSaving ? 'Saving…' : 'Save Custom Theme'}
         </Button>
       </DialogActions>
     </Dialog>
   );
+};
+
+ThemeEnhancementModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  survey: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    user_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    custom_theme_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    custom_theme_settings: PropTypes.shape({
+      colors: PropTypes.objectOf(PropTypes.string),
+      typography: PropTypes.shape({
+        fontFamily: PropTypes.string,
+        fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        headingStyle: PropTypes.shape({
+          H1: PropTypes.string,
+          H2: PropTypes.string,
+        }),
+      }),
+      layout: PropTypes.shape({
+        backgroundAlpha: PropTypes.number,
+        borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        padding: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        alignment: PropTypes.string,
+      }),
+    }),
+  }),
+  theme: PropTypes.shape({
+    theme_setting: PropTypes.shape({
+      settings: PropTypes.shape({
+        colors: PropTypes.objectOf(PropTypes.string),
+        typography: PropTypes.shape({
+          fontFamily: PropTypes.string,
+          fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          headingStyle: PropTypes.shape({
+            H1: PropTypes.string,
+            H2: PropTypes.string,
+          }),
+        }),
+        layout: PropTypes.shape({
+          backgroundAlpha: PropTypes.number,
+          borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+          padding: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+          alignment: PropTypes.string,
+        }),
+      }),
+      variable_palettes: PropTypes.arrayOf(
+        PropTypes.shape({
+          is_active: PropTypes.bool,
+          primary_accent: PropTypes.string,
+          secondary_accent: PropTypes.string,
+          primary_background: PropTypes.string,
+          title_color: PropTypes.string,
+          question_color: PropTypes.string,
+          answer_color: PropTypes.string,
+        }),
+      ),
+    }),
+  }),
+};
+
+ThemeEnhancementModal.defaultProps = {
+  survey: null,
+  theme: null,
 };
 
 export default ThemeEnhancementModal;

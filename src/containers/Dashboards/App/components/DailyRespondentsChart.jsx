@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBody, Col } from 'react-bootstrap';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+ LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
+} from 'recharts';
 
 const DailyRespondentsChart = ({ data: activeUsers }) => (
   <Col md={12}>
@@ -21,5 +24,14 @@ const DailyRespondentsChart = ({ data: activeUsers }) => (
     </Card>
   </Col>
 );
+
+DailyRespondentsChart.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
+      count: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+};
 
 export default DailyRespondentsChart;
