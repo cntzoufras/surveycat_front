@@ -1,6 +1,7 @@
 import React, {
  useEffect, useMemo, useState, useCallback, 
 } from 'react';
+import Spinner from '@/shared/components/Loader/Spinner';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -206,7 +207,7 @@ const SurveySubmissions = () => {
   );
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (error) {
