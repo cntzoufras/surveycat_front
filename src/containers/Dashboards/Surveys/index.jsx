@@ -16,10 +16,7 @@ const SurveysDashboard = () => {
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
 
-  const { loading, data, error } = useSelector(state => state.dashboard);
-
-  // Log the state from Redux to debug
-  console.log('Dashboard state from Redux:', { loading, data, error });
+  const { loading, data, error } = useSelector(state => state.dashboard.surveyDashboard);
 
   useEffect(() => {
     dispatch(fetchSurveyDashboardData());
@@ -33,7 +30,6 @@ const SurveysDashboard = () => {
     return <p>Error loading dashboard data: {error.message || error}</p>;
   }
 
-  // Ensure data is not null or empty before rendering components that use it
   if (!data || Object.keys(data).length === 0) {
     return <p>No dashboard data available.</p>;
   }

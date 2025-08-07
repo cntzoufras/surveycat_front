@@ -40,7 +40,19 @@
     "widget_pageviews": "Page Views",
     "app_tile_clicks": "Feature Usage",
     "weekly_stat_mobile": "Top Survey Topics",
-    "social_marketing_mobile": "Social Marketing"
+    "social_marketing_mobile": "Social Marketing",
+    "total_users": "Total Users",
+    "total_surveys": "Total Surveys",
+    "new_users": "New Users",
+    "new_surveys": "New Surveys",
+    "total_submissions": "Total Submissions",
+    "weekly_submissions": "Weekly Submissions",
+    "overall_statistics": "Overall Statistics",
+    "avg_completion_rate": "Avg. Completion Rate",
+    "avg_time_to_complete": "Avg. Time to Complete",
+    "recent_performance": "Recent Performance",
+    "most_active_surveys": "Most Active Surveys (Last 7 Days)",
+    "surveys_needing_attention": "Surveys Needing Attention (High Drop-off)"
   },
   "surveys_dashboard": {
     "page_title": "Surveys Dashboard",
