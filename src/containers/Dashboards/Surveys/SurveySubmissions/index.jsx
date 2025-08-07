@@ -77,6 +77,10 @@ const SurveySubmissions = () => {
     selectedSubmission,
     loadingDetails,
     errorDetails,
+    currentPage,
+    totalPages,
+    perPage,
+    totalCount,
   } = useSelector(
     state => state.survey_submissions || {},
   );
@@ -98,6 +102,20 @@ const SurveySubmissions = () => {
   useEffect(
     () => {
       dispatch(fetchSurveySubmissionsAction());
+    },
+    [dispatch],
+  );
+
+  const handlePageChange = useCallback(
+    (page, pageSize) => {
+      dispatch(fetchSurveySubmissionsAction(page, pageSize || perPage));
+    },
+    [dispatch, perPage],
+  );
+
+  const handlePageSizeChange = useCallback(
+    (pageSize) => {
+      dispatch(fetchSurveySubmissionsAction(1, pageSize));
     },
     [dispatch],
   );
@@ -214,6 +232,15 @@ const SurveySubmissions = () => {
       <Row>
         <SurveySubmissionsReactTable
           reactTableData={reactTableData}
+          pagination={{
+            currentPage,
+            totalPages,
+            perPage,
+            onPageChange: handlePageChange,
+            onPageSizeChange: handlePageSizeChange,
+          }}
+          loading={loading}
+          totalCount={totalCount}
         />
       </Row>
       <SurveySubmissionDetailsModal

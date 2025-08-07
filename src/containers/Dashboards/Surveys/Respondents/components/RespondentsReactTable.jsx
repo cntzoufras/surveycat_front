@@ -13,7 +13,7 @@ const Highlight = styled.span`
     color: ${highlightColor};
   `;
 
-const RespondentsReactTable = ({ reactTableData }) => {
+const RespondentsReactTable = ({ reactTableData, pagination, loading, totalCount }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
 
   // Update rows when reactTableData changes (i.e., when the API data comes in)
@@ -57,6 +57,16 @@ const RespondentsReactTable = ({ reactTableData }) => {
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
     placeholder: 'Search by Email...',
+    // server-side pagination wiring
+    serverSide: true,
+    pageCount: pagination?.totalPages ?? 0,
+    pageIndex: (pagination?.currentPage ?? 1) - 1,
+    pageSize: pagination?.perPage ?? 10,
+    onPageChange: pagination?.onPageChange,
+    onPageSizeChange: pagination?.onPageSizeChange,
+    loading: !!loading,
+    totalCount: typeof totalCount === 'number' ? totalCount : undefined,
+    totalLabel: 'Total Respondents',
   };
 
   return (
@@ -101,6 +111,20 @@ RespondentsReactTable.propTypes = {
     })),
     tableRowsData: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
+  pagination: PropTypes.shape({
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    perPage: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    onPageSizeChange: PropTypes.func.isRequired,
+  }).isRequired,
+  loading: PropTypes.bool,
+  totalCount: PropTypes.number,
+};
+
+RespondentsReactTable.defaultProps = {
+  loading: false,
+  totalCount: 0,
 };
 
 export default RespondentsReactTable;

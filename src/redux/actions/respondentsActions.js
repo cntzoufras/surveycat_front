@@ -8,9 +8,10 @@ export const UPDATE_RESPONDENT_SUCCESS = 'UPDATE_RESPONDENT_SUCCESS';
 export const UPDATE_RESPONDENT_FAILURE = 'UPDATE_RESPONDENT_FAILURE';
 
 export const fetchRespondentsAction = (page = 1, perPage = 10) => async (dispatch) => {
-  dispatch({ type: FETCH_RESPONDENTS_REQUEST });
+  dispatch({ type: FETCH_RESPONDENTS_REQUEST, meta: { perPage } });
   try {
-    const response = await api.get(`/respondents?page=${page}&per_page=${perPage}`);
+    // Send both per_page and limit for compatibility with backends expecting 'limit'
+    const response = await api.get(`/respondents?page=${page}&per_page=${perPage}&limit=${perPage}`);
     dispatch({ type: FETCH_RESPONDENTS_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_RESPONDENTS_FAILURE, payload: error.message });

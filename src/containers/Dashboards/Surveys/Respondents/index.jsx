@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,15 @@ const Respondents = () => {
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
   
-  const { respondents = [], loading, error } = useSelector(state => state.respondents || {});
+  const {
+    respondents = [],
+    loading,
+    error,
+    currentPage,
+    totalPages,
+    perPage,
+    totalCount,
+  } = useSelector(state => state.respondents || {});
 
   useEffect(() => {
     dispatch(fetchRespondentsAction());
@@ -77,6 +85,23 @@ const Respondents = () => {
 
   const reactTableData = { tableHeaderData: columns, tableRowsData: data };
 
+  // Handlers for server-side pagination
+  const handlePageChange = useCallback(
+    (page, pageSize) => {
+      // page is 1-based coming from constructor effect
+      dispatch(fetchRespondentsAction(page, pageSize || perPage));
+    },
+    [dispatch, perPage],
+  );
+
+  const handlePageSizeChange = useCallback(
+    (pageSize) => {
+      // Reset to first page on page size change
+      dispatch(fetchRespondentsAction(1, pageSize));
+    },
+    [dispatch],
+  );
+
   console.log('react table data: ', reactTableData);
   console.log('data: ', data);
   console.log('respondents: ', respondents);
@@ -93,7 +118,18 @@ const Respondents = () => {
         </Col>
       </Row>
       <Row>
-        <RespondentsReactTable reactTableData={reactTableData} />
+        <RespondentsReactTable
+          reactTableData={reactTableData}
+          pagination={{
+            currentPage,
+            totalPages,
+            perPage,
+            onPageChange: handlePageChange,
+            onPageSizeChange: handlePageSizeChange,
+          }}
+          loading={loading}
+          totalCount={totalCount}
+        />
       </Row>
     </Container>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
@@ -13,11 +13,16 @@ const Highlight = styled.span`
     color: ${highlightColor};
   `;
 
-const SurveySubmissionsReactTable = ({ reactTableData }) => {
+const SurveySubmissionsReactTable = ({ reactTableData, pagination, loading, totalCount }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
   const [withPagination, setWithPaginationTable] = useState(true);
   const [isSortable, setIsSortable] = useState(false);
   const [withSearchEngine, setWithSearchEngine] = useState(false);
+
+  // Update rows when API data updates (new page/perPage)
+  useEffect(() => {
+    setData(reactTableData.tableRowsData);
+  }, [reactTableData.tableRowsData]);
 
   const updateEditableData = (rowIndex, columnId, value) => {
     setData(old => old.map((item, index) => {
@@ -51,6 +56,16 @@ const SurveySubmissionsReactTable = ({ reactTableData }) => {
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
     placeholder: 'Search by Survey title...',
+    // server-side pagination wiring
+    serverSide: true,
+    pageCount: pagination?.totalPages ?? 0,
+    pageIndex: (pagination?.currentPage ?? 1) - 1,
+    pageSize: pagination?.perPage ?? 10,
+    onPageChange: pagination?.onPageChange,
+    onPageSizeChange: pagination?.onPageSizeChange,
+    loading: !!loading,
+    totalCount: typeof totalCount === 'number' ? totalCount : undefined,
+    totalLabel: 'Total Submissions',
   };
 
   return (
@@ -95,6 +110,20 @@ SurveySubmissionsReactTable.propTypes = {
     })),
     tableRowsData: PropTypes.arrayOf(PropTypes.shape()),
   }).isRequired,
+  pagination: PropTypes.shape({
+    currentPage: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired,
+    perPage: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    onPageSizeChange: PropTypes.func.isRequired,
+  }).isRequired,
+  loading: PropTypes.bool,
+  totalCount: PropTypes.number,
+};
+
+SurveySubmissionsReactTable.defaultProps = {
+  loading: false,
+  totalCount: 0,
 };
 
 export default SurveySubmissionsReactTable;

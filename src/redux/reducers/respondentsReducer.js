@@ -13,6 +13,7 @@ const initialState = {
   error: null,
   currentPage: 1,
   totalPages: 1,
+  totalCount: 0,
   nextPage: null,
   prevPage: null,
   perPage: 10,
@@ -24,6 +25,9 @@ const respondentsReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        perPage: (action.meta && typeof action.meta.perPage === 'number')
+          ? action.meta.perPage
+          : state.perPage,
         error: null,
       };
     case UPDATE_RESPONDENT_REQUEST:
@@ -39,9 +43,11 @@ const respondentsReducer = (state = initialState, action) => {
         respondents: action.payload.data,
         currentPage: action.payload.current_page,
         totalPages: action.payload.last_page,
+        totalCount: action.payload.total ?? state.totalCount,
         nextPage: action.payload.next_page_url,
         prevPage: action.payload.prev_page_url,
-        perPage: action.payload.per_page || state.perPage, // Set per_page from payload
+        // Keep UI-selected perPage; do not override from payload to avoid backend defaults (e.g., 100000)
+        perPage: state.perPage,
       };
     case FETCH_RESPONDENTS_FAILURE:
       return {

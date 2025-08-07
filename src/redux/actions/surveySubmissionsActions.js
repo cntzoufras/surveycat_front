@@ -11,9 +11,9 @@ export const FETCH_SURVEY_SUBMISSION_FAILURE = 'FETCH_SURVEY_SUBMISSION_FAILURE'
 export const CLEAR_SURVEY_SUBMISSION_DETAILS = 'CLEAR_SURVEY_SUBMISSION_DETAILS';
 
 export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (dispatch) => {
-  dispatch({ type: FETCH_SUBMISSIONS_REQUEST });
+  dispatch({ type: FETCH_SUBMISSIONS_REQUEST, meta: { perPage } });
   try {
-    const response = await api.get(`/survey-submissions?page=${page}&per_page=${perPage}`);
+    const response = await api.get(`/survey-submissions?page=${page}&per_page=${perPage}&limit=${perPage}`);
 
     const {
       data,
@@ -22,6 +22,7 @@ export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (d
       next_page_url,
       prev_page_url,
       per_page,
+      total,
     } = response.data;
 
     dispatch({
@@ -33,6 +34,7 @@ export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (d
         next_page_url,
         prev_page_url,
         per_page,
+        total,
       },
     });
   } catch (error) {
@@ -56,4 +58,3 @@ export const fetchSurveySubmissionAction = id => async (dispatch) => {
     dispatch({ type: FETCH_SURVEY_SUBMISSION_FAILURE, payload: error.message });
   }
 };
-

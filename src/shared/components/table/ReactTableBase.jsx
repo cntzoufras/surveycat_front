@@ -20,6 +20,13 @@ const ReactTableBase = ({
     withPagination,
     withSearchEngine,
     manualPageSize,
+    // server-side pagination support
+    serverSide,
+    pageCount: serverPageCount,
+    pageIndex: serverPageIndex,
+    pageSize: serverPageSize,
+    onPageChange,
+    onPageSizeChange,
   } = tableConfig;
   const [filterValue, setFilterValue] = useState(null);
   const tableOptions = {
@@ -36,10 +43,18 @@ const ReactTableBase = ({
     disableSortBy: !isSortable,
     manualSortBy: !isSortable,
     manualGlobalFilter: !withSearchEngine,
-    manualPagination: !withPagination,
+    // If serverSide is true, we enable manualPagination regardless of withPagination
+    manualPagination: !!serverSide || !withPagination,
+    // react-table expects pageCount when manualPagination is true
+    pageCount: serverSide ? (serverPageCount ?? 0) : undefined,
+    // expose callbacks so constructor can trigger Redux actions
+    onPageChange,
+    onPageSizeChange,
     initialState: {
-      pageIndex: 0,
-      pageSize: manualPageSize ? manualPageSize[0] : 10,
+      pageIndex: serverSide && typeof serverPageIndex === 'number' ? serverPageIndex : 0,
+      pageSize: serverSide && typeof serverPageSize === 'number'
+        ? serverPageSize
+        : (manualPageSize ? manualPageSize[0] : 10),
       globalFilter: withSearchEngine && filterValue ? filterValue : undefined,
     },
   };

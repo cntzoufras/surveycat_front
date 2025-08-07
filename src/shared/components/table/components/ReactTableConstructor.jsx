@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   useTable, useGlobalFilter, usePagination, useSortBy, useResizeColumns, useRowSelect,
@@ -23,6 +23,10 @@ const ReactTableConstructor = ({
     withSearchEngine,
     manualPageSize,
     placeholder,
+    // server-side pagination flag lives in tableConfig
+    serverSide,
+    // loading state to disable pagination while fetching
+    loading,
   } = tableConfig;
   const {
     getTableProps,
@@ -56,6 +60,60 @@ const ReactTableConstructor = ({
     useRowSelect,
     ...tableOptionalHook,
   );
+
+  // Prefer totalCount from tableConfig for server-side pagination counts
+  const effectiveDataLength = (tableConfig && typeof tableConfig.totalCount === 'number')
+    ? tableConfig.totalCount
+    : (typeof tableOptions.dataLength === 'number' ? tableOptions.dataLength : rows.length);
+
+  // Track if page size change is user-initiated (via dropdown) vs state update from Redux
+  const userPageSizeChangeRef = useRef(false);
+  const wrappedSetPageSize = (size) => {
+    userPageSizeChangeRef.current = true;
+    setPageSize(size);
+  };
+
+  // When in server-side mode, inform parent (Redux) on page changes
+  const firstPageEffectRef = useRef(true);
+  useEffect(() => {
+    // skip first effect call on mount to avoid double fetch
+    if (firstPageEffectRef.current) {
+      firstPageEffectRef.current = false;
+      return;
+    }
+    if (serverSide && typeof tableOptions.onPageChange === 'function') {
+      // react-table pageIndex is 0-based; API expects 1-based
+      tableOptions.onPageChange(pageIndex + 1, pageSize);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverSide, pageIndex]);
+
+  // When page size changes, inform parent so it can refetch with new per_page
+  const firstSizeEffectRef = useRef(true);
+  useEffect(() => {
+    if (firstSizeEffectRef.current) {
+      firstSizeEffectRef.current = false;
+      return;
+    }
+    if (serverSide && userPageSizeChangeRef.current && typeof tableOptions.onPageSizeChange === 'function') {
+      // debounce page size change to avoid rapid refetches
+      const t = setTimeout(() => {
+        tableOptions.onPageSizeChange(pageSize);
+        userPageSizeChangeRef.current = false;
+      }, 300);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverSide, pageSize]);
+
+  // Keep react-table's internal pageSize in sync with external (Redux) tableConfig.pageSize
+  useEffect(() => {
+    if (serverSide && typeof tableConfig?.pageSize === 'number' && tableConfig.pageSize !== pageSize) {
+      // Update without marking as user-initiated to avoid dispatch loops
+      setPageSize(tableConfig.pageSize);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverSide, tableConfig?.pageSize]);
 
   return (
     <div>
@@ -107,9 +165,11 @@ const ReactTableConstructor = ({
           pageSize={pageSize}
           pageIndex={pageIndex}
           pageCount={pageCount}
-          setPageSize={setPageSize}
+          setPageSize={wrappedSetPageSize}
           manualPageSize={manualPageSize}
-          dataLength={dataLength}
+          dataLength={effectiveDataLength}
+          disabled={!!loading}
+          totalLabel={tableConfig && tableConfig.totalLabel}
         />
       )}
     </div>
@@ -126,6 +186,10 @@ ReactTableConstructor.propTypes = {
     withSearchEngine: PropTypes.bool,
     manualPageSize: PropTypes.arrayOf(PropTypes.number),
     placeholder: PropTypes.string,
+    serverSide: PropTypes.bool,
+    loading: PropTypes.bool,
+    totalCount: PropTypes.number,
+    totalLabel: PropTypes.string,
   }),
   tableOptions: PropTypes.shape({
     columns: PropTypes.arrayOf(PropTypes.shape({

@@ -32,6 +32,8 @@ const ReactTablePagination = ({
   canNextPage,
   setPageSize,
   manualPageSize,
+  disabled,
+  totalLabel,
 }) => {
   const arrayPageIndex = (pageIndex - 2) < 0
     ? pageOptions.slice(0, pageIndex + 3)
@@ -41,14 +43,14 @@ const ReactTablePagination = ({
     <PaginationWrap>
       <Pagination>
         <Pagination.First
-          disabled={!canPreviousPage}
+          disabled={disabled || !canPreviousPage}
           className="pagination__item--arrow"
           onClick={() => gotoPage(0)}
         >
           <ChevronDoubleLeftIcon />
         </Pagination.First>
         <Pagination.Prev
-          disabled={!canPreviousPage}
+          disabled={disabled || !canPreviousPage}
           className="pagination__item--arrow"
           onClick={previousPage}
         >
@@ -58,20 +60,21 @@ const ReactTablePagination = ({
           <Pagination.Item
             key={i}
             active={pageIndex === i}
-            onClick={() => gotoPage(i)}
+            onClick={() => !disabled && gotoPage(i)}
+            disabled={disabled}
           >
             {i + 1}
           </Pagination.Item>
          ))}
         <Pagination.Next
-          disabled={!canNextPage}
+          disabled={disabled || !canNextPage}
           className="pagination__item--arrow"
           onClick={nextPage}
         >
           <ChevronRightIcon />
         </Pagination.Next>
         <Pagination.Last
-          disabled={!canNextPage}
+          disabled={disabled || !canNextPage}
           className="pagination__item--arrow"
           onClick={() => gotoPage(pageOptions.length - 1)}
         >
@@ -79,7 +82,7 @@ const ReactTablePagination = ({
         </Pagination.Last>
       </Pagination>
       <PaginationInfo>
-        Showing {pageSize * pageIndex + 1} to {pageSize * pageIndex + page.length} of {dataLength}
+        Showing {pageSize * pageIndex + 1} to {pageSize * pageIndex + page.length} of {dataLength} {totalLabel}
       </PaginationInfo>
       {manualPageSize.length > 1 && (
         <PaginationSelectWrap as={Form.Group}>
@@ -87,6 +90,7 @@ const ReactTablePagination = ({
             name="select"
             id="exampleSelect"
             value={pageSize}
+            disabled={disabled}
             onChange={(event) => {
               setPageSize(Number(event.target.value));
             }}
@@ -116,10 +120,14 @@ ReactTablePagination.propTypes = {
   nextPage: PropTypes.func.isRequired,
   setPageSize: PropTypes.func.isRequired,
   manualPageSize: PropTypes.arrayOf(PropTypes.number),
+  disabled: PropTypes.bool,
+  totalLabel: PropTypes.string,
 };
 
 ReactTablePagination.defaultProps = {
   manualPageSize: [10, 20, 30, 40],
+  disabled: false,
+  totalLabel: '',
 };
 
 export default ReactTablePagination;
