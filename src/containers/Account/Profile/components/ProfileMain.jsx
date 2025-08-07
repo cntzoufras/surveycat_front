@@ -93,7 +93,7 @@ const ProfileMain = () => {
             {/* The interactive avatar element */}
             <ProfileAvatar onClick={handleAvatarClick} isUploading={isUploading}>
               {isUploading ? (
-                <Spinner size={24} color="inherit" fullHeight={false} />
+                <Spinner size={24} fullHeight={false} />
               ) : (
                 <img src={avatarUrl} alt="avatar" />
               )}
@@ -114,7 +114,9 @@ const ProfileMain = () => {
             />            
           
             <ProfileData>
-              {profileLoading ? <p>Loading...</p> : (
+              {profileLoading ? (
+                <Spinner size={18} fullHeight={false} />
+              ) : (
                 <>
                   <ProfileUserName>
                     {/* If full name exists, show it. Otherwise, show username. */}
@@ -134,13 +136,13 @@ const ProfileMain = () => {
           <ProfileStats>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? '...' : formatStatNumber(widgetData.surveys_count)}
+                {widgetLoading ? <Spinner size={16} fullHeight={false} /> : formatStatNumber(widgetData.surveys_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Surveys</ProfileStatTitle>
             </ProfileStat>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? '...' : formatStatNumber(widgetData.submissions_count)}
+                {widgetLoading ? <Spinner size={16} fullHeight={false} /> : formatStatNumber(widgetData.submissions_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Received Submissions</ProfileStatTitle>
             </ProfileStat>

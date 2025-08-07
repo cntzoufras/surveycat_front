@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 const Spinner = ({ size, color, label, fullHeight }) => {
-  const theme = useTheme();
   const dimension = typeof size === 'number' ? size : parseInt(size, 10) || 28;
 
   return (
@@ -20,7 +18,7 @@ const Spinner = ({ size, color, label, fullHeight }) => {
         height: fullHeight ? '50vh' : 'auto',
       }}
     >
-      <CircularProgress size={dimension} sx={{ color: color || theme.palette.primary.main }} />
+      <CircularProgress size={dimension} sx={{ color: color || '#1976d2' }} />
       {label && (
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {label}
