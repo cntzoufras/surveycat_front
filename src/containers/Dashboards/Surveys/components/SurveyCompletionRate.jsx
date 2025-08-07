@@ -7,11 +7,9 @@ import {
   Legend, Pie, PieChart, ResponsiveContainer, Tooltip,
 } from 'recharts';
 import getTooltipStyles from '@/shared/helpers';
-import ArrowDownwardIcon from 'mdi-react/ArrowDownwardIcon';
 import Panel from '@/shared/components/Panel';
-import { colorBlue, colorDustyWhite, colorGray } from '@/utils/palette';
+import { colorDustyWhite, colorGray } from '@/utils/palette';
 import { left } from '@/utils/directions';
-import OurMission from './OurMission';
 import { DashboardChartLegend } from '../../BasicDashboardComponents';
 
 
@@ -101,9 +99,6 @@ const SurveyCompletionRate = () => {
               />
             </DashboardReservationsChartContainer>
           </ResponsiveContainer>
-          <DashboardReservationsLink>
-            Download report <DashboardReservationsLinkIcon />
-          </DashboardReservationsLink>
         </DashboardReservationsChartWrap>
       </DashboardReservationsWrap>
     </DashboardReservationPanel>
@@ -218,25 +213,6 @@ const DashboardReservationsChartContainer = styled(PieChart)`
   }
 `;
 
-const DashboardReservationsLink = styled.span`
-  color: ${colorBlue};
-  font-size: 12px;
-  line-height: 1.5;
-  position: absolute;
-  bottom: 0;
-  cursor: pointer;
-  ${left}: 0;
-
-  @media screen and (min-width: 1400px) {
-    margin-top: 10px;
-    display: inline-block;
-    position: static;
-  }
-`;
-
-const DashboardReservationsLinkIcon = styled(ArrowDownwardIcon)`
-  width: 12px;
-  height: 12px;
-`;
+ 
 
 // endregion
