@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useCallback } from 'react';
 import Loading from '@/shared/components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row, Alert } from 'react-bootstrap';
+import { Box } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { fetchRespondentsAction } from '@/redux/actions/respondentsActions';
 import RespondentsReactTable from './components/RespondentsReactTable';
@@ -111,8 +113,7 @@ const Respondents = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">{t('respondents.title')}</h3>
-          <h3 className="page-subhead subhead">{t('respondents.description')}</h3>
+          <PageHeader title={t('respondents.title')} subtitle={t('respondents.description')} />
         </Col>
       </Row>
       {error && (

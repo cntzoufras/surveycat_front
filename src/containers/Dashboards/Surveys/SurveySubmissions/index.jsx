@@ -5,6 +5,8 @@ import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row, Alert } from 'react-bootstrap';
+import { Box } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -210,12 +212,7 @@ const SurveySubmissions = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">
-            {t('survey_submissions.title')}
-          </h3>
-          <h3 className="page-subhead subhead">
-            {t('survey_submissions.description')}
-          </h3>
+          <PageHeader title={t('survey_submissions.title')} subtitle={t('survey_submissions.description')} />
         </Col>
       </Row>
       {error && (

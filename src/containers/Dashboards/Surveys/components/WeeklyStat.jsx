@@ -18,19 +18,23 @@ const topicColors = ['#b8e986', '#ff4861', '#4ce1b6', '#7edbff', '#ff7e9a'];
 const WeeklyStat = ({ topics }) => {
   const { t } = useTranslation('common');
 
+  const sortedTopics = topics && topics.length > 0
+    ? [...topics].sort((a, b) => b.percentage - a.percentage)
+    : [];
+
   return (
     <Panel
       md={12}
       lg={6}
-      xl={3}
+      xl={9}
       xs={12}
       title={t('surveys_dashboard.weekly_stat')}
       subhead="Top participated Surveys statistic by last month"
     >
       <DashboardWeeklyStatWrap>
         <DashboardWeeklyStatChart>
-          {(topics && topics.length > 0)
-            ? topics.map((topic, index) => {
+          {(sortedTopics && sortedTopics.length > 0)
+            ? sortedTopics.map((topic, index) => {
                 const chartData = [
                   { value: topic.percentage, fill: topicColors[index % topicColors.length] },
                   { value: 100 - topic.percentage, fill: '#eeeeee' },
@@ -47,6 +51,8 @@ const WeeklyStat = ({ topics }) => {
                             cy={50}
                             innerRadius={50}
                             outerRadius={55}
+                            startAngle={90}
+                            endAngle={-270}
                           />
                         </DashboardWeeklyStatPieChart>
                       </ResponsiveContainer>

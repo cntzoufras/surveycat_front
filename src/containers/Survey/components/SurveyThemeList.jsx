@@ -14,6 +14,7 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import Loading from '@/shared/components/Loading';
 import AddIcon from '@mui/icons-material/Add';
 import ThemeDetailModal from './ThemeDetailModal';
@@ -40,18 +41,7 @@ const SurveyThemeList = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, pb: 8 }}>
-      <Box 
-        sx={{ 
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mb: 4,
-        }}
-      >
-        <Typography variant="h4" component="h1">
-          Survey Themes
-        </Typography>
-      </Box>
+      <PageHeader title="Survey Themes" mb={4} />
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>

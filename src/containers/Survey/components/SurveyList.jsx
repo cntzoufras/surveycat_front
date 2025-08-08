@@ -19,6 +19,7 @@ import {
   FormControl, 
   InputLabel,
 } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import LinkIcon from '@mui/icons-material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -111,20 +112,21 @@ const SurveyList = () => {
   return (
     <>
       <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
-            Surveys
-          </Typography>
-          <Button
-            component={RouterLink}
-            to="/survey-design"
-            variant="contained"
-            startIcon={<AddIcon />}
-            sx={{ textTransform: 'none', borderRadius: '8px', fontWeight: 'bold' }}
-          >
-            Create Survey
-          </Button>
-        </Stack>
+        <PageHeader
+          title="Surveys"
+          actions={(
+            <Button
+              component={RouterLink}
+              to="/survey-design"
+              variant="contained"
+              startIcon={<AddIcon />}
+              sx={{ textTransform: 'none', borderRadius: '8px' }}
+            >
+              Create Survey
+            </Button>
+          )}
+          mb={4}
+        />
 
         <FormControl size="medium" sx={{ mb: 2, minWidth: 170 }}>
           <InputLabel>Sort by</InputLabel>

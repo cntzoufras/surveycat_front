@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row, Alert } from 'react-bootstrap';
+import { Box } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import { fetchAppDashboardData } from '../../../redux/actions/dashboardActions';
 import TotalUsers from './components/TotalUsers';
 import TotalSurveys from './components/TotalSurveys';
@@ -29,7 +31,7 @@ const AppDashboard = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">{t('app_dashboard.page_title')}</h3>
+          <PageHeader title={t('app_dashboard.page_title')} />
         </Col>
       </Row>
       {error && (

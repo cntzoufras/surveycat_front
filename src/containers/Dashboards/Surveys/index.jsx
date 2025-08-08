@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Col, Container, Row, Alert } from 'react-bootstrap';
+import { Box } from '@mui/material';
+import PageHeader from '@/shared/components/PageHeader';
 import WeeklySubmissionsProgress from './components/WeeklySubmissionsProgress';
 import SurveysStatus from './components/SurveysStatus';
 import TotalRespondents from './components/TotalRespondents';
@@ -24,7 +26,7 @@ const SurveysDashboard = () => {
   }, [dispatch]);
 
   const hasData = !!(data && Object.keys(data).length > 0);
-
+  const dashboardData = data || {};
   const {
     weeklySubmissions,
     monthlySubmissions,
@@ -34,13 +36,13 @@ const SurveysDashboard = () => {
     topSurveys,
     yearlySubmissions,
     topSurveyTopics,
-  } = data;
+  } = dashboardData;
 
   return (
     <Container>
       <Row>
         <Col md={12}>
-          <h3 className="page-title">{t('surveys_dashboard.page_title')}</h3>
+          <PageHeader title={t('surveys_dashboard.page_title')} />
         </Col>
       </Row>
       {error && (
@@ -68,11 +70,11 @@ const SurveysDashboard = () => {
           </Row>
           <Row className="align-items-start">
             <SurveyCompletionRate />
-            <SurveyTracking surveys={topSurveys} />
+            <WeeklyStat topics={topSurveyTopics} />
           </Row>
           <Row className="align-items-start">
+            <SurveyTracking surveys={topSurveys} />
             <SurveyEngagement submissions={yearlySubmissions} />
-            <WeeklyStat topics={topSurveyTopics} />
           </Row>
         </>
       ) : (

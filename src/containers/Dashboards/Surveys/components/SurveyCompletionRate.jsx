@@ -62,8 +62,13 @@ const SurveyCompletionRate = () => {
 
   const onMouseMove = (e) => {
     if (e.tooltipPosition) {
+      // When hovering the 'Completed' slice (on the right), apply a larger negative offset
+      // to pull the tooltip to the left of the cursor.
+      const xOffset = e.name === 'Completed' ? -2 : -20;
+      const yOffset = e.name === 'Completed' ? -30 : -10;
       setCoordinates({
-        x: e.tooltipPosition.x - 130, y: e.tooltipPosition.y - 40,
+        x: e.tooltipPosition.x + xOffset,
+        y: e.tooltipPosition.y + yOffset,
       });
     }
   };
