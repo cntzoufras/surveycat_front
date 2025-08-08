@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert } from 'react-bootstrap';
 import { fetchAppDashboardData } from '../../../redux/actions/dashboardActions';
 import TotalUsers from './components/TotalUsers';
 import TotalSurveys from './components/TotalSurveys';
@@ -25,14 +25,6 @@ const AppDashboard = () => {
     dispatch(fetchAppDashboardData());
   }, [dispatch]);
 
-  if (loading) {
-    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
   return (
     <Container>
       <Row>
@@ -40,6 +32,23 @@ const AppDashboard = () => {
           <h3 className="page-title">{t('app_dashboard.page_title')}</h3>
         </Col>
       </Row>
+      {error && (
+        <Row className="mb-3">
+          <Col md={12}>
+            <Alert variant="danger">Error: {error.message || String(error)}</Alert>
+          </Col>
+        </Row>
+      )}
+      {loading ? (
+        <Row className="mt-3" style={{ justifyContent: 'center' }}>
+          <Col md={12} style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ maxWidth: 360, width: '100%' }}>
+              <Loading loading fullScreen={false} label="Loading" minHeight={120} />
+            </div>
+          </Col>
+        </Row>
+      ) : (
+        <>
       <Row>
         <TotalUsers totalUsers={data?.totalUsers} />
         <NewUsers newUsers={data?.newUsers} />
@@ -55,6 +64,8 @@ const AppDashboard = () => {
           <RecentPerformance performance={data?.recentPerformance} />
         </Col>
       </Row>
+        </>
+      )}
     </Container>
   );
 };

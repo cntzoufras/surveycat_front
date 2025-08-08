@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import Loading from '@/shared/components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { fetchRespondentsAction } from '@/redux/actions/respondentsActions';
 import RespondentsReactTable from './components/RespondentsReactTable';
@@ -107,9 +107,6 @@ const Respondents = () => {
   console.log('data: ', data);
   console.log('respondents: ', respondents);
 
-  if (loading) return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <Container>
       <Row>
@@ -118,20 +115,38 @@ const Respondents = () => {
           <h3 className="page-subhead subhead">{t('respondents.description')}</h3>
         </Col>
       </Row>
-      <Row>
-        <RespondentsReactTable
-          reactTableData={reactTableData}
-          pagination={{
-            currentPage,
-            totalPages,
-            perPage,
-            onPageChange: handlePageChange,
-            onPageSizeChange: handlePageSizeChange,
-          }}
-          loading={loading}
-          totalCount={totalCount}
-        />
-      </Row>
+      {error && (
+        <Row className="mb-3">
+          <Col md={12}>
+            <Alert variant="danger">Error: {error}</Alert>
+          </Col>
+        </Row>
+      )}
+
+      {loading ? (
+        <Row className="mt-3" style={{ justifyContent: 'center' }}>
+          <Col md={12} style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ maxWidth: 360, width: '100%' }}>
+              <Loading loading fullScreen={false} label="Loading" minHeight={120} />
+            </div>
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <RespondentsReactTable
+            reactTableData={reactTableData}
+            pagination={{
+              currentPage,
+              totalPages,
+              perPage,
+              onPageChange: handlePageChange,
+              onPageSizeChange: handlePageSizeChange,
+            }}
+            loading={loading}
+            totalCount={totalCount}
+          />
+        </Row>
+      )}
     </Container>
   );
 };

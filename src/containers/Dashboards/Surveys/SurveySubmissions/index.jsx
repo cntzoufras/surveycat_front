@@ -4,7 +4,7 @@ import React, {
 import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -206,18 +206,6 @@ const SurveySubmissions = () => {
     [columns, data],
   );
 
-  if (loading) {
-    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  if (errorDetails) {
-    return <p>Error loading details: {errorDetails}</p>;
-  }
-
   return (
     <Container>
       <Row>
@@ -230,20 +218,45 @@ const SurveySubmissions = () => {
           </h3>
         </Col>
       </Row>
-      <Row>
-        <SurveySubmissionsReactTable
-          reactTableData={reactTableData}
-          pagination={{
-            currentPage,
-            totalPages,
-            perPage,
-            onPageChange: handlePageChange,
-            onPageSizeChange: handlePageSizeChange,
-          }}
-          loading={loading}
-          totalCount={totalCount}
-        />
-      </Row>
+      {error && (
+        <Row className="mb-3">
+          <Col md={12}>
+            <Alert variant="danger">Error: {error}</Alert>
+          </Col>
+        </Row>
+      )}
+      {errorDetails && (
+        <Row className="mb-3">
+          <Col md={12}>
+            <Alert variant="warning">Error loading details: {errorDetails}</Alert>
+          </Col>
+        </Row>
+      )}
+
+      {loading ? (
+        <Row className="mt-3" style={{ justifyContent: 'center' }}>
+          <Col md={12} style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ maxWidth: 360, width: '100%' }}>
+              <Loading loading fullScreen={false} label="Loading" minHeight={120} />
+            </div>
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <SurveySubmissionsReactTable
+            reactTableData={reactTableData}
+            pagination={{
+              currentPage,
+              totalPages,
+              perPage,
+              onPageChange: handlePageChange,
+              onPageSizeChange: handlePageSizeChange,
+            }}
+            loading={loading}
+            totalCount={totalCount}
+          />
+        </Row>
+      )}
       <SurveySubmissionDetailsModal
         isOpen={modalIsOpen}
         toggle={toggleModal}
