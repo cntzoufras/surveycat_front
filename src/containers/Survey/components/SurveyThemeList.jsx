@@ -53,7 +53,7 @@ const SurveyThemeList = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
+    <Container maxWidth="lg" sx={{ mt: 4, pb: 8 }}>
       <Box 
         sx={{ 
           display: 'flex',
