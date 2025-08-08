@@ -1,8 +1,8 @@
 import React from 'react';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 
-const Loading = () => (
-  <Spinner fullHeight />
+const AuthLoading = () => (
+  <Loading loading fullScreen={false} label="Loading" minHeight="50vh" />
 );
 
-export default Loading;
+export default AuthLoading;

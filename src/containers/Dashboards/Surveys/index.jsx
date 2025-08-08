@@ -11,7 +11,7 @@ import WeeklyStat from './components/WeeklyStat';
 import SurveyTracking from './components/SurveyTracking';
 import SurveyEngagement from './components/SurveyEngagement';
 import { fetchSurveyDashboardData } from '../../../redux/actions/dashboardActions';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 
 const SurveysDashboard = () => {
   const { t } = useTranslation('common');
@@ -24,7 +24,7 @@ const SurveysDashboard = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <Spinner fullHeight />;
+    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
   }
 
   if (error) {

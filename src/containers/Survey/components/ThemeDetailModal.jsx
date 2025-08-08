@@ -15,7 +15,7 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 
 // A small component to render color swatches
 import PropTypes from 'prop-types';
@@ -59,7 +59,7 @@ const ThemeDetailModal = ({ open, onClose }) => {
       <DialogContent>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-            <Spinner fullHeight={false} />
+            <Loading loading fullScreen={false} minHeight={80} />
           </Box>
         )}
         {!loading && theme && (

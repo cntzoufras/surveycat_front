@@ -14,7 +14,7 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import AddIcon from '@mui/icons-material/Add';
 import ThemeDetailModal from './ThemeDetailModal';
 
@@ -42,7 +42,7 @@ const SurveyThemeList = () => {
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <Spinner fullHeight={false} />
+        <Loading loading fullScreen={false} label="Loading" minHeight={120} />
       </Box>
     );
   }

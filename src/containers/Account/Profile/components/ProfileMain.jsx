@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 import styled, { css } from 'styled-components'; // Import css helper
-// Unified app spinner
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '@/shared/components/Card';
 import { Button } from '@/shared/components/Button';
@@ -77,7 +76,7 @@ const ProfileMain = () => {
         <Card>
           <ProfileCard>
             <div style={{ textAlign: 'center', padding: '40px' }}>
-              <Spinner fullHeight={false} />
+              <Loading loading fullScreen={false} minHeight={80} />
             </div>
           </ProfileCard>
         </Card>
@@ -93,7 +92,7 @@ const ProfileMain = () => {
             {/* The interactive avatar element */}
             <ProfileAvatar onClick={handleAvatarClick} isUploading={isUploading}>
               {isUploading ? (
-                <Spinner size={24} fullHeight={false} />
+                <Loading loading fullScreen={false} minHeight={0} />
               ) : (
                 <img src={avatarUrl} alt="avatar" />
               )}
@@ -115,7 +114,7 @@ const ProfileMain = () => {
           
             <ProfileData>
               {profileLoading ? (
-                <Spinner size={18} fullHeight={false} />
+                <Loading loading fullScreen={false} minHeight={0} />
               ) : (
                 <>
                   <ProfileUserName>
@@ -136,13 +135,13 @@ const ProfileMain = () => {
           <ProfileStats>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? <Spinner size={16} fullHeight={false} /> : formatStatNumber(widgetData.surveys_count)}
+                {widgetLoading ? <Loading loading fullScreen={false} minHeight={0} /> : formatStatNumber(widgetData.surveys_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Surveys</ProfileStatTitle>
             </ProfileStat>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? <Spinner size={16} fullHeight={false} /> : formatStatNumber(widgetData.submissions_count)}
+                {widgetLoading ? <Loading loading fullScreen={false} minHeight={0} /> : formatStatNumber(widgetData.submissions_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Received Submissions</ProfileStatTitle>
             </ProfileStat>

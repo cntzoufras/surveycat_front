@@ -1,7 +1,7 @@
 import React, {
  useEffect, useMemo, useState, useCallback, 
 } from 'react';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
@@ -207,7 +207,7 @@ const SurveySubmissions = () => {
   );
 
   if (loading) {
-    return <Spinner />;
+    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
   }
 
   if (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Typography } from '@mui/material';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 
 import SurveyPage from './SurveyPage';
 import { getSurveyPage, getSurveyQuestions } from '../../../utils/api/survey-api';
@@ -73,7 +73,7 @@ const SurveyPageLoader = ({ surveyId, surveyPageId }) => {
   }, [surveyId, surveyPageId]);
 
   if (isLoading) {
-    return <Spinner />;
+    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
   }
 
   if (loadError) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter, Button,
@@ -14,7 +14,7 @@ const SurveySubmissionDetailsModal = ({
 
   const renderAnswers = () => {
     if (loading) {
-      return <Spinner fullHeight={false} size={24} />;
+      return <Loading loading fullScreen={false} minHeight={24} />;
     }
 
     if (!submission || !submission.submission_data || !submission.survey_response) {

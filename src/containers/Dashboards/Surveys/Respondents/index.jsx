@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -107,7 +107,7 @@ const Respondents = () => {
   console.log('data: ', data);
   console.log('respondents: ', respondents);
 
-  if (loading) return <Spinner />;
+  if (loading) return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
   if (error) return <p>Error: {error}</p>;
 
   return (

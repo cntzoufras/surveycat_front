@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 import {
   Box,
   Typography,
@@ -150,9 +150,7 @@ const SurveyList = () => {
         </FormControl>
 
         {loading ? (
-          <Box textAlign="center" mt={8}>
-            <Spinner fullHeight={false} />
-          </Box>
+          <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />
         ) : sortedSurveys.length === 0 ? (
           <Box textAlign="center" mt={8}>
             <Typography variant="h6" gutterBottom>

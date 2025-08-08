@@ -12,7 +12,7 @@ import TotalSubmissions from './components/TotalSubmissions';
 import WeeklySubmissions from './components/WeeklySubmissions';
 import OverallStats from './components/OverallStats';
 import RecentPerformance from './components/RecentPerformance';
-import Spinner from '@/shared/components/Loader/Spinner';
+import Loading from '@/shared/components/Loading';
 
 const AppDashboard = () => {
   const { t } = useTranslation('common');
@@ -26,7 +26,7 @@ const AppDashboard = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <Spinner fullHeight />;
+    return <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
   }
 
   if (error) {
