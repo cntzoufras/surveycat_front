@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +42,7 @@ const formatDate = (date) => {
 const SurveyCompletionRate = () => {
   const { t } = useTranslation('common');
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   const themeName = useSelector(state => state.theme.className);
   const { 
@@ -69,6 +70,14 @@ const SurveyCompletionRate = () => {
 
   const todayDate = formatDate(new Date());
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 575px)');
+    const apply = e => setIsMobile(e.matches);
+    apply(mq);
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
+
   return (
     <DashboardReservationPanel
       lg={6}
@@ -81,24 +90,30 @@ const SurveyCompletionRate = () => {
         <DashboardReservationsTitle>Total Surveys completed on {todayDate}</DashboardReservationsTitle>
         <DashboardReservationsNumber>{surveysCompletedToday || 0}</DashboardReservationsNumber>
         <DashboardReservationsChartWrap>
-          <ResponsiveContainer>
-            <DashboardReservationsChartContainer>
-              <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />
-              <Pie
-                data={chartData}
-                dataKey="value"
-                cy={80}
-                innerRadius={47}
-                outerRadius={65}
-                onMouseMove={onMouseMove}
-              />
-              <Legend
-                layout="vertical"
-                verticalAlign="middle"
-                content={renderLegend}
-              />
-            </DashboardReservationsChartContainer>
-          </ResponsiveContainer>
+          {(chartData[0].value + chartData[1].value) > 0 ? (
+            <ResponsiveContainer>
+              <DashboardReservationsChartContainer>
+                <Tooltip position={coordinates} {...getTooltipStyles(themeName)} />
+                <Pie
+                  data={chartData}
+                  dataKey="value"
+                  cy={isMobile ? 70 : 80}
+                  innerRadius={isMobile ? 40 : 47}
+                  outerRadius={isMobile ? 56 : 65}
+                  onMouseMove={onMouseMove}
+                />
+                <Legend
+                  layout="vertical"
+                  verticalAlign="middle"
+                  content={renderLegend}
+                />
+              </DashboardReservationsChartContainer>
+            </ResponsiveContainer>
+          ) : (
+            <EmptyState>
+              No completion data for today
+            </EmptyState>
+          )}
         </DashboardReservationsChartWrap>
       </DashboardReservationsWrap>
     </DashboardReservationPanel>
@@ -114,11 +129,30 @@ export default SurveyCompletionRate;
 // region STYLES
 
 const DashboardReservationPanel = styled(Panel)`
+  /* Slightly reduce reserved height to avoid excess blank space */
   &:not(.panel--collapse) {
-    height: calc(100% - 138px);
+    height: calc(100% - 110px);
+  }
+
+  /* On small screens let the panel grow with content so background covers everything */
+  @media screen and (max-width: 991px) {
+    &:not(.panel--collapse) {
+      height: auto;
+      overflow: visible;
+    }
   }
 `;
 
+const EmptyState = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => (props.theme === 'dark' ? colorDustyWhite : colorGray)};
+  font-size: 14px;
+`;
+ 
 const DashboardReservationsWrap = styled.div`
   text-align: ${left};
   margin-top: -10px;
@@ -138,10 +172,11 @@ const DashboardReservationsNumber = styled.p`
 `;
 
 const DashboardReservationsChartWrap = styled.div`
-  height: 180px;
+  height: 210px;
   position: relative;
 
-  @media screen and (min-width: 1400px) and (max-width: 1599px) {
+  /* Ensure enough vertical space on small screens for chart + legend */
+  @media screen and (max-width: 991px) {
     height: 230px;
   }
 
@@ -154,10 +189,12 @@ const DashboardReservationsChartWrap = styled.div`
     width: 100% !important;
     display: block;
     position: static !important;
+    margin-top: 4px;
 
     li {
       display: flex;
-      align-items: baseline;
+      align-items: center;
+      margin-bottom: 2px;
     }
 
     p {
@@ -208,8 +245,15 @@ const DashboardReservationsChartContainer = styled(PieChart)`
   }
   
   @media screen and (min-width: 1400px) and (max-width: 1599px) {
+    /* Keep row on desktop to reduce vertical usage */
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  /* Stack vertically on mobile */
+  @media screen and (max-width: 991px) {
     flex-direction: column;
-    align-items: baseline;
+    align-items: center;
   }
 `;
 

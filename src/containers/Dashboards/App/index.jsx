@@ -42,19 +42,17 @@ const AppDashboard = () => {
       </Row>
       <Row>
         <TotalUsers totalUsers={data?.totalUsers} />
-        <TotalSurveys totalSurveys={data?.totalSurveys} />
         <NewUsers newUsers={data?.newUsers} />
+        <TotalSurveys totalSurveys={data?.totalSurveys} />
         <NewSurveys newSurveys={data?.newSurveys} />
         <TotalSubmissions totalSubmissions={data?.totalSubmissions} />
         <WeeklySubmissions weeklySubmissions={data?.submissions?.last7days} />
-      </Row>
-      <Row>
         <OverallStats stats={data?.overallStats} />
-        <RecentPerformance performance={data?.recentPerformance} />
       </Row>
       <Row>
         <Col md={12}>
           <DailyRespondentsChart data={data?.activeUsers} />
+          <RecentPerformance performance={data?.recentPerformance} />
         </Col>
       </Row>
     </Container>

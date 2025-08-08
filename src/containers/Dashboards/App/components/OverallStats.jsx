@@ -15,33 +15,32 @@ const OverallStats = ({ stats }) => {
 
   return (
     <Col md={12} lg={6}>
-      <Card>
-        <Card.Body>
-          <h5 className="card__title">{t('app_dashboard.overall_statistics')}</h5>
-          <Row>
-            <Col xs={6}>
-              <DashboardBookingCard>
-                <DashboardBookingTotalWrap>
-                  <TotalSurveysCreatedTitle>
-                    {stats.averageCompletionRate}%
-                  </TotalSurveysCreatedTitle>
-                </DashboardBookingTotalWrap>
-                <DashboardBookingDescription>{t('app_dashboard.avg_completion_rate')}</DashboardBookingDescription>
-              </DashboardBookingCard>
-            </Col>
-            <Col xs={6}>
-              <DashboardBookingCard>
-                <DashboardBookingTotalWrap>
-                  <TotalSurveysCreatedTitle>
-                    {stats.averageTimeToComplete}s
-                  </TotalSurveysCreatedTitle>
-                </DashboardBookingTotalWrap>
-                <DashboardBookingDescription>{t('app_dashboard.avg_time_to_complete')}</DashboardBookingDescription>
-              </DashboardBookingCard>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+      <Row>
+        <Col xs={6}>
+          <Card>
+            <DashboardBookingCard>
+              <DashboardBookingTotalWrap>
+                <TotalSurveysCreatedTitle>
+                  {stats.averageCompletionRate}%
+                </TotalSurveysCreatedTitle>
+              </DashboardBookingTotalWrap>
+              <DashboardBookingDescription>{t('app_dashboard.avg_completion_rate')}</DashboardBookingDescription>
+            </DashboardBookingCard>
+          </Card>
+        </Col>
+        <Col xs={6}>
+          <Card>
+            <DashboardBookingCard>
+              <DashboardBookingTotalWrap>
+                <TotalSurveysCreatedTitle>
+                  {stats.averageTimeToComplete}s
+                </TotalSurveysCreatedTitle>
+              </DashboardBookingTotalWrap>
+              <DashboardBookingDescription>{t('app_dashboard.avg_time_to_complete')}</DashboardBookingDescription>
+            </DashboardBookingCard>
+          </Card>
+        </Col>
+      </Row>
     </Col>
   );
 };

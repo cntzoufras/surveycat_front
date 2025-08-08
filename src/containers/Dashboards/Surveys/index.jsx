@@ -53,17 +53,19 @@ const SurveysDashboard = () => {
           <h3 className="page-title">{t('surveys_dashboard.page_title')}</h3>
         </Col>
       </Row>
-      <Row>
+      <Row className="align-items-start">
         <WeeklySubmissionsProgress weeklySubmissions={weeklySubmissions} />
         <TotalRespondents total={totalRespondents} />
         <SurveysStatus counts={surveyStatusCounts} />
         <WeeklyRespondents weeklyRespondents={respondentsWeekly} />
       </Row>
-      <Row>
+      <Row className="align-items-start">
         <SurveyCompletionRate />
-        <WeeklyStat topics={topSurveyTopics} />
         <SurveyTracking surveys={topSurveys} />
+      </Row>
+      <Row className="align-items-start">
         <SurveyEngagement submissions={yearlySubmissions} />
+        <WeeklyStat topics={topSurveyTopics} />
       </Row>
     </Container>
   );
