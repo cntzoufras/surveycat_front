@@ -117,7 +117,7 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
             { label: 'Poor' },
           ].map(option => (
             <Box
-              key={option.label} // ✅ no index key
+              key={option.label}
               sx={{
                 display: 'flex',
                 alignItems: 'center',

@@ -1,11 +1,4 @@
 // Mock alias-based API module so imports in actions don't break under Jest
-jest.mock('@/utils/api/survey-api', () => ({
-  get: jest.fn(),
-  post: jest.fn(),
-  put: jest.fn(),
-  delete: jest.fn(),
-}), { virtual: true });
-
 import reducer from '../surveySubmissionsReducer';
 import {
   FETCH_SUBMISSIONS_REQUEST,
@@ -16,6 +9,13 @@ import {
   FETCH_SURVEY_SUBMISSION_FAILURE,
   CLEAR_SURVEY_SUBMISSION_DETAILS,
 } from '../../actions/surveySubmissionsActions';
+
+jest.mock('@/utils/api/survey-api', () => ({
+  get: jest.fn(),
+  post: jest.fn(),
+  put: jest.fn(),
+  delete: jest.fn(),
+}), { virtual: true });
 
 describe('surveySubmissionsReducer', () => {
   const initialState = {
@@ -101,7 +101,9 @@ describe('surveySubmissionsReducer', () => {
   });
 
   it('should handle CLEAR_SURVEY_SUBMISSION_DETAILS', () => {
-    const prev = { ...initialState, selectedSubmission: { id: 1 }, loadingDetails: true, errorDetails: 'x' };
+    const prev = {
+ ...initialState, selectedSubmission: { id: 1 }, loadingDetails: true, errorDetails: 'x', 
+};
     const action = { type: CLEAR_SURVEY_SUBMISSION_DETAILS };
     const state = reducer(prev, action);
     expect(state.selectedSubmission).toBeNull();

@@ -96,12 +96,10 @@ const SurveyPage = () => {
     if (!surveyPageId || !allSurveyQuestions) return [];
     return allSurveyQuestions.filter(q => q.survey_page_id === surveyPageId);
   }, [allSurveyQuestions, surveyPageId]);
-
-  // ✅ 4. The drag-end handler now correctly uses the filtered questions
+  
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
 
-    // Use the derived list of questions for the current page
     const items = Array.from(currentPageQuestions);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);

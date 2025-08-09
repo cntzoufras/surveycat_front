@@ -28,7 +28,18 @@ const ReactTableBase = ({
     onPageChange,
     onPageSizeChange,
   } = tableConfig;
+
   const [filterValue, setFilterValue] = useState(null);
+
+  // ---- precompute values to avoid nested ternaries ----
+  let initialPageSize = 10;
+  if (serverSide && typeof serverPageSize === 'number') {
+    initialPageSize = serverPageSize;
+  } else if (Array.isArray(manualPageSize) && manualPageSize.length) {
+    const [firstPageSize] = manualPageSize; // prefer-destructuring fix
+    initialPageSize = firstPageSize;
+  }
+
   const tableOptions = {
     columns,
     data,
@@ -52,9 +63,7 @@ const ReactTableBase = ({
     onPageSizeChange,
     initialState: {
       pageIndex: serverSide && typeof serverPageIndex === 'number' ? serverPageIndex : 0,
-      pageSize: serverSide && typeof serverPageSize === 'number'
-        ? serverPageSize
-        : (manualPageSize ? manualPageSize[0] : 10),
+      pageSize: initialPageSize,
       globalFilter: withSearchEngine && filterValue ? filterValue : undefined,
     },
   };
@@ -91,6 +100,13 @@ ReactTableBase.propTypes = {
     withPagination: PropTypes.bool,
     withSearchEngine: PropTypes.bool,
     manualPageSize: PropTypes.arrayOf(PropTypes.number),
+
+    serverSide: PropTypes.bool,
+    pageCount: PropTypes.number,
+    pageIndex: PropTypes.number,
+    pageSize: PropTypes.number,
+    onPageChange: PropTypes.func,
+    onPageSizeChange: PropTypes.func,
   }),
   columns: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
@@ -110,6 +126,13 @@ ReactTableBase.defaultProps = {
     withPagination: false,
     withSearchEngine: false,
     manualPageSize: [],
+    // optional sane defaults for new props
+    serverSide: false,
+    pageCount: 0,
+    pageIndex: 0,
+    pageSize: 10,
+    onPageChange: undefined,
+    onPageSizeChange: undefined,
   },
   columns: [
     { Header: '#', accessor: 'id' },

@@ -13,7 +13,9 @@ const Highlight = styled.span`
     color: ${highlightColor};
   `;
 
-const SurveySubmissionsReactTable = ({ reactTableData, pagination, loading, totalCount }) => {
+const SurveySubmissionsReactTable = ({
+ reactTableData, pagination, loading, totalCount, 
+}) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
   const [withPagination, setWithPaginationTable] = useState(true);
   const [isSortable, setIsSortable] = useState(false);

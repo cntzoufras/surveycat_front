@@ -101,13 +101,181 @@ const SurveyList = () => {
     handleMenuClose();
   };
 
-
   const getThemeTitle = (themeId) => {
     const found = themes.find(t => t.id === themeId);
     return found ? found.title : '-';
   };
 
   const getFirstSurveyPageId = survey => (survey.survey_pages?.length > 0 ? survey.survey_pages[0].id : '');
+
+  // helper to avoid nested ternary inside template literal
+  const getCardHoverShadow = (theme) => {
+    const shadowColor = theme.palette.mode === 'dark'
+      ? 'rgba(0,0,0,0.3)'
+      : 'rgba(0,0,0,0.1)';
+    return `0 8px 16px ${shadowColor}`;
+  };
+
+  // avoid nested ternary in render
+  let content;
+  if (loading) {
+    content = <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />;
+  } else if (sortedSurveys.length === 0) {
+    content = (
+      <Box textAlign="center" mt={8}>
+        <Typography variant="h6" gutterBottom>
+          No surveys yet.
+        </Typography>
+        <MuiLink
+          component={RouterLink}
+          to="/survey-design"
+          sx={{ textDecoration: 'none' }}
+        >
+          <Button variant="outlined" sx={{ mt: 2 }}>
+            Create your first survey
+          </Button>
+        </MuiLink>
+      </Box>
+    );
+  } else {
+    content = (
+      <Grid container spacing={3}>
+        {sortedSurveys.map((survey) => {
+          const isPublished = survey.survey_status_id === 2;
+          const firstPageId = getFirstSurveyPageId(survey);
+          const categoryTitle = survey.survey_category?.title;
+          const publicLinkUrl = `${window.location.origin}/surveys/ps/${survey.public_link}`;
+
+          return (
+            <Grid item xs={12} sm={6} md={4} key={survey.id}>
+              <Card
+                sx={{
+                  position: 'relative',
+                  backgroundColor: 'action.hover',
+                  color: 'text.primary',
+                  borderRadius: '12px',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: theme => getCardHoverShadow(theme),
+                  },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '100%',
+                }}
+              >
+                {isPublished && (
+                  <Chip
+                    label="Published"
+                    color="success"
+                    sx={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      height: '22px',
+                      fontSize: '0.7rem',
+                      '.MuiChip-label': {
+                        padding: '0 8px',
+                      },
+                    }}
+                  />
+                )}
+
+                <CardContent>
+                  {categoryTitle && (
+                    <Chip
+                      icon={<CategoryOutlinedIcon />}
+                      label={categoryTitle}
+                      variant="outlined"
+                      size="small"
+                      sx={{ mb: 1.5, color: 'text.secondary', borderColor: 'divider' }}
+                    />
+                  )}
+                  <Typography
+                    variant="h4"
+                    component="div"
+                    gutterBottom
+                    sx={{ fontWeight: 'bold', fontSize: '1.75rem' }}
+                  >
+                    {survey.title}
+                  </Typography>
+                  <Stack direction="row" spacing={2} sx={{ color: 'text.secondary', mb: 2 }}>
+                    <Typography variant="body2">
+                      Theme: {getThemeTitle(survey.theme_id)}
+                    </Typography>
+                    <Typography variant="body2">
+                      Pages: {survey.survey_pages?.length ?? 0}
+                    </Typography>
+                  </Stack>
+                  
+                  {isPublished && survey.public_link && (
+                    <Box sx={{ mt: 1.5 }}>
+                      <MuiLink
+                        href={publicLinkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={publicLinkUrl}
+                        sx={{
+                          display: 'inline-block',
+                          alignItems: 'center',
+                          fontSize: '0.8rem',
+                          color: 'text.secondary',
+                          textDecoration: 'underline',
+                          maxWidth: '100%',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          '&:hover': {
+                            color: 'primary.main',
+                          },
+                        }}
+                      >
+                        <LinkIcon sx={{ mr: 0.75, fontSize: '1rem', verticalAlign: 'middle' }} />
+                        <span style={{ verticalAlign: 'middle' }}>{publicLinkUrl}</span>
+                      </MuiLink>
+                    </Box>
+                  )}
+                </CardContent>
+                
+                <CardActions sx={{ backgroundColor: 'action.focus' }}>
+                  <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
+                    <Button
+                      size="small"
+                      startIcon={<EditOutlinedIcon />}
+                      component={RouterLink}
+                      to={`/surveys/${survey.id}/pages/${firstPageId}`}
+                      sx={{ color: 'text.primary' }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      startIcon={<VisibilityOutlinedIcon />}
+                      component={RouterLink}
+                      to={`/surveys/${survey.id}/preview`}
+                      sx={{ color: 'text.primary' }}
+                    >
+                      Preview
+                    </Button>
+                    <IconButton
+                      size="small"
+                      onClick={e => handleMenuClick(e, survey.id, isPublished)}
+                      sx={{ color: 'text.secondary' }}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Stack>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+    );
+  }
 
   return (
     <>
@@ -151,161 +319,7 @@ const SurveyList = () => {
           </Select>
         </FormControl>
 
-        {loading ? (
-          <Loading loading fullScreen={false} label="Loading" minHeight="40vh" />
-        ) : sortedSurveys.length === 0 ? (
-          <Box textAlign="center" mt={8}>
-            <Typography variant="h6" gutterBottom>
-              No surveys yet.
-            </Typography>
-            <MuiLink
-              component={RouterLink}
-              to="/survey-design"
-              sx={{ textDecoration: 'none' }}
-            >
-              <Button variant="outlined" sx={{ mt: 2 }}>
-                Create your first survey
-              </Button>
-            </MuiLink>
-          </Box>
-        ) : (
-          <Grid container spacing={3}>
-            {sortedSurveys.map((survey) => {
-              const isPublished = survey.survey_status_id === 2;
-              const firstPageId = getFirstSurveyPageId(survey);
-              const categoryTitle = survey.survey_category?.title;
-              const publicLinkUrl = `${window.location.origin}/surveys/ps/${survey.public_link}`;
-
-              return (
-                <Grid item xs={12} sm={6} md={4} key={survey.id}>
-                  <Card
-                    sx={{
-                      position: 'relative',
-                      backgroundColor: 'action.hover',
-                      color: 'text.primary',
-                      borderRadius: '12px',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: theme => `0 8px 16px ${theme.palette.mode === 'dark' 
-                        ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'}`,
-                      },
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '100%',
-                    }}
-                  >
-                    {isPublished && (
-                      <Chip
-                        label="Published"
-                        color="success"
-                        sx={{
-                          position: 'absolute',
-                          top: 12,
-                          right: 12,
-                          height: '22px',
-                          fontSize: '0.7rem',
-                          '.MuiChip-label': {
-                            padding: '0 8px',
-                          },
-                        }}
-                      />
-                    )}
-
-                    <CardContent>
-                      {categoryTitle && (
-                        <Chip
-                          icon={<CategoryOutlinedIcon />}
-                          label={categoryTitle}
-                          variant="outlined"
-                          size="small"
-                          sx={{ mb: 1.5, color: 'text.secondary', borderColor: 'divider' }}
-                        />
-                      )}
-                      <Typography
-                        variant="h4"
-                        component="div"
-                        gutterBottom
-                        sx={{ fontWeight: 'bold', fontSize: '1.75rem' }}
-                      >
-                        {survey.title}
-                      </Typography>
-                      <Stack direction="row" spacing={2} sx={{ color: 'text.secondary', mb: 2 }}>
-                        <Typography variant="body2">
-                          Theme: {getThemeTitle(survey.theme_id)}
-                        </Typography>
-                        <Typography variant="body2">
-                          Pages: {survey.survey_pages?.length ?? 0}
-                        </Typography>
-                      </Stack>
-                      
-                      {isPublished && survey.public_link && (
-                        <Box sx={{ mt: 1.5 }}>
-                          <MuiLink
-                            href={publicLinkUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={publicLinkUrl}
-                            sx={{
-                              display: 'inline-block',
-                              alignItems: 'center',
-                              fontSize: '0.8rem',
-                              color: 'text.secondary',
-                              textDecoration: 'underline',
-                              maxWidth: '100%',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              '&:hover': {
-                                color: 'primary.main',
-                              },
-                            }}
-                          >
-                            <LinkIcon sx={{ mr: 0.75, fontSize: '1rem', verticalAlign: 'middle' }} />
-                            <span style={{ verticalAlign: 'middle' }}>{publicLinkUrl}</span>
-                          </MuiLink>
-                        </Box>
-                      )}
-                    </CardContent>
-                    
-                    <CardActions sx={{ backgroundColor: 'action.focus' }}>
-                      <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
-                        <Button
-                          size="small"
-                          startIcon={<EditOutlinedIcon />}
-                          component={RouterLink}
-                          to={`/surveys/${survey.id}/pages/${firstPageId}`}
-                          sx={{ color: 'text.primary' }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="small"
-                          startIcon={<VisibilityOutlinedIcon />}
-                          component={RouterLink}
-                          to={`/surveys/${survey.id}/preview`}
-                          sx={{ color: 'text.primary' }}
-                        >
-                          Preview
-                        </Button>
-                        <IconButton
-                          size="small"
-                          onClick={e => handleMenuClick(e, survey.id, isPublished)}
-                          sx={{ color: 'text.secondary' }}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                      </Stack>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        )}
+        {content}
       </Box>
 
       <Menu

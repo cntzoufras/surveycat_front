@@ -28,6 +28,7 @@ const ReactTableConstructor = ({
     // loading state to disable pagination while fetching
     loading,
   } = tableConfig;
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -61,10 +62,15 @@ const ReactTableConstructor = ({
     ...tableOptionalHook,
   );
 
-  // Prefer totalCount from tableConfig for server-side pagination counts
-  const effectiveDataLength = (tableConfig && typeof tableConfig.totalCount === 'number')
-    ? tableConfig.totalCount
-    : (typeof tableOptions.dataLength === 'number' ? tableOptions.dataLength : rows.length);
+  // Prefer totalCount from tableConfig for server-side pagination counts (no nested ternary)
+  let effectiveDataLength;
+  if (tableConfig && typeof tableConfig.totalCount === 'number') {
+    effectiveDataLength = tableConfig.totalCount;
+  } else if (typeof tableOptions.dataLength === 'number') {
+    effectiveDataLength = tableOptions.dataLength;
+  } else {
+    effectiveDataLength = rows.length;
+  }
 
   // Track if page size change is user-initiated (via dropdown) vs state update from Redux
   const userPageSizeChangeRef = useRef(false);
@@ -79,12 +85,13 @@ const ReactTableConstructor = ({
     // skip first effect call on mount to avoid double fetch
     if (firstPageEffectRef.current) {
       firstPageEffectRef.current = false;
-      return;
+      return undefined;
     }
     if (serverSide && typeof tableOptions.onPageChange === 'function') {
       // react-table pageIndex is 0-based; API expects 1-based
       tableOptions.onPageChange(pageIndex + 1, pageSize);
     }
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSide, pageIndex]);
 
@@ -93,7 +100,7 @@ const ReactTableConstructor = ({
   useEffect(() => {
     if (firstSizeEffectRef.current) {
       firstSizeEffectRef.current = false;
-      return;
+      return undefined;
     }
     if (serverSide && userPageSizeChangeRef.current && typeof tableOptions.onPageSizeChange === 'function') {
       // debounce page size change to avoid rapid refetches
@@ -103,6 +110,7 @@ const ReactTableConstructor = ({
       }, 300);
       return () => clearTimeout(t);
     }
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSide, pageSize]);
 
@@ -112,6 +120,7 @@ const ReactTableConstructor = ({
       // Update without marking as user-initiated to avoid dispatch loops
       setPageSize(tableConfig.pageSize);
     }
+    return undefined;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverSide, tableConfig?.pageSize]);
 
@@ -190,6 +199,7 @@ ReactTableConstructor.propTypes = {
     loading: PropTypes.bool,
     totalCount: PropTypes.number,
     totalLabel: PropTypes.string,
+    pageSize: PropTypes.number, // used in effect
   }),
   tableOptions: PropTypes.shape({
     columns: PropTypes.arrayOf(PropTypes.shape({
@@ -209,6 +219,8 @@ ReactTableConstructor.propTypes = {
     isEditable: PropTypes.bool,
     withDragAndDrop: PropTypes.bool,
     dataLength: PropTypes.number,
+    onPageChange: PropTypes.func, // used in effect
+    onPageSizeChange: PropTypes.func, // used in effect
   }),
   tableOptionalHook: PropTypes.arrayOf(PropTypes.func).isRequired,
 };
@@ -223,6 +235,7 @@ ReactTableConstructor.defaultProps = {
     withSearchEngine: false,
     manualPageSize: [10, 20, 30, 40],
     placeholder: 'Search...',
+    pageSize: 10,
   },
   tableOptions: [{
     columns: [],
@@ -259,5 +272,3 @@ const TableWrap = styled.div`
     }
   `)}
 `;
-
-// endregion

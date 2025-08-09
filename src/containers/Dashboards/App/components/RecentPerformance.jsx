@@ -47,7 +47,7 @@ const RecentPerformance = ({ performance }) => {
           </Row>
         </StyledCardBody>
       </Card>
-      </Col>
+    </Col>
   );
 };
 

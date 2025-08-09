@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Col, Container, Row, Alert } from 'react-bootstrap';
-import { Box } from '@mui/material';
+import {
+  Col, Container, Row, Alert,
+} from 'react-bootstrap';
 import PageHeader from '@/shared/components/PageHeader';
+import Loading from '@/shared/components/Loading';
 import WeeklySubmissionsProgress from './components/WeeklySubmissionsProgress';
 import SurveysStatus from './components/SurveysStatus';
 import TotalRespondents from './components/TotalRespondents';
@@ -13,7 +15,6 @@ import WeeklyStat from './components/WeeklyStat';
 import SurveyTracking from './components/SurveyTracking';
 import SurveyEngagement from './components/SurveyEngagement';
 import { fetchSurveyDashboardData } from '../../../redux/actions/dashboardActions';
-import Loading from '@/shared/components/Loading';
 
 const SurveysDashboard = () => {
   const { t } = useTranslation('common');
@@ -29,7 +30,7 @@ const SurveysDashboard = () => {
   const dashboardData = data || {};
   const {
     weeklySubmissions,
-    monthlySubmissions,
+    // monthlySubmissions, // removed: unused
     surveyStatusCounts,
     totalRespondents,
     respondentsWeekly,
@@ -38,6 +39,46 @@ const SurveysDashboard = () => {
     topSurveyTopics,
   } = dashboardData;
 
+  let content;
+  if (loading) {
+    content = (
+      <Row className="mt-3" style={{ justifyContent: 'center' }}>
+        <Col md={12} style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ maxWidth: 360, width: '100%' }}>
+            <Loading loading fullScreen={false} label="Loading" minHeight={120} />
+          </div>
+        </Col>
+      </Row>
+    );
+  } else if (hasData) {
+    content = (
+      <>
+        <Row className="align-items-start">
+          <WeeklySubmissionsProgress weeklySubmissions={weeklySubmissions} />
+          <TotalRespondents total={totalRespondents} />
+          <SurveysStatus counts={surveyStatusCounts} />
+          <WeeklyRespondents weeklyRespondents={respondentsWeekly} />
+        </Row>
+        <Row className="align-items-start">
+          <SurveyCompletionRate />
+          <WeeklyStat topics={topSurveyTopics} />
+        </Row>
+        <Row className="align-items-start">
+          <SurveyTracking surveys={topSurveys} />
+          <SurveyEngagement submissions={yearlySubmissions} />
+        </Row>
+      </>
+    );
+  } else {
+    content = (
+      <Row className="mt-3">
+        <Col md={12}>
+          <Alert variant="info">No dashboard data available.</Alert>
+        </Col>
+      </Row>
+    );
+  }
+
   return (
     <Container>
       <Row>
@@ -45,45 +86,18 @@ const SurveysDashboard = () => {
           <PageHeader title={t('surveys_dashboard.page_title')} />
         </Col>
       </Row>
+
       {error && (
         <Row className="mb-3">
           <Col md={12}>
-            <Alert variant="danger">Error loading dashboard data: {error.message || String(error)}</Alert>
+            <Alert variant="danger">
+              Error loading dashboard data: {error.message || String(error)}
+            </Alert>
           </Col>
         </Row>
       )}
-      {loading ? (
-        <Row className="mt-3" style={{ justifyContent: 'center' }}>
-          <Col md={12} style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ maxWidth: 360, width: '100%' }}>
-              <Loading loading fullScreen={false} label="Loading" minHeight={120} />
-            </div>
-          </Col>
-        </Row>
-      ) : hasData ? (
-        <>
-          <Row className="align-items-start">
-            <WeeklySubmissionsProgress weeklySubmissions={weeklySubmissions} />
-            <TotalRespondents total={totalRespondents} />
-            <SurveysStatus counts={surveyStatusCounts} />
-            <WeeklyRespondents weeklyRespondents={respondentsWeekly} />
-          </Row>
-          <Row className="align-items-start">
-            <SurveyCompletionRate />
-            <WeeklyStat topics={topSurveyTopics} />
-          </Row>
-          <Row className="align-items-start">
-            <SurveyTracking surveys={topSurveys} />
-            <SurveyEngagement submissions={yearlySubmissions} />
-          </Row>
-        </>
-      ) : (
-        <Row className="mt-3">
-          <Col md={12}>
-            <Alert variant="info">No dashboard data available.</Alert>
-          </Col>
-        </Row>
-      )}
+
+      {content}
     </Container>
   );
 };

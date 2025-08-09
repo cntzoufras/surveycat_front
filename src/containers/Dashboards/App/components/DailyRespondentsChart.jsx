@@ -29,7 +29,9 @@ const DailyRespondentsChart = ({ data: activeUsers }) => {
           <ResponsiveContainer height={300} style={{ background: 'transparent' }}>
             <LineChart
               data={activeUsers}
-              margin={{ top: 8, right: 16, left: 0, bottom: 14 }}
+              margin={{
+ top: 8, right: 16, left: 0, bottom: 14, 
+}}
               style={{ background: 'transparent' }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />

@@ -135,13 +135,17 @@ const ProfileMain = () => {
           <ProfileStats>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? <Loading loading fullScreen={false} minHeight={0} /> : formatStatNumber(widgetData.surveys_count)}
+                {widgetLoading 
+                  ? <Loading loading fullScreen={false} minHeight={0} /> 
+                  : formatStatNumber(widgetData.surveys_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Surveys</ProfileStatTitle>
             </ProfileStat>
             <ProfileStat>
               <ProfileStatNumber>
-                {widgetLoading ? <Loading loading fullScreen={false} minHeight={0} /> : formatStatNumber(widgetData.submissions_count)}
+                {widgetLoading 
+                  ? <Loading loading fullScreen={false} minHeight={0} /> 
+                  : formatStatNumber(widgetData.submissions_count)}
               </ProfileStatNumber>
               <ProfileStatTitle>Received Submissions</ProfileStatTitle>
             </ProfileStat>

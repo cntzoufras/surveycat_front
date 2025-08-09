@@ -13,7 +13,9 @@ const Highlight = styled.span`
     color: ${highlightColor};
   `;
 
-const RespondentsReactTable = ({ reactTableData, pagination, loading, totalCount }) => {
+const RespondentsReactTable = ({
+ reactTableData, pagination, loading, totalCount, 
+}) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
 
   // Update rows when reactTableData changes (i.e., when the API data comes in)

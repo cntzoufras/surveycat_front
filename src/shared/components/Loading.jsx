@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { colorBackground } from '@/utils/palette';
 
 
-const Loading = ({ loading, fullScreen, label, minHeight }) => (
+const Loading = ({
+ loading, fullScreen, label, minHeight, 
+}) => (
   fullScreen ? (
     <Load loading={loading} className={loading ? '' : 'loaded'}>
       <LoadIconWrap>
@@ -15,7 +17,7 @@ const Loading = ({ loading, fullScreen, label, minHeight }) => (
       </LoadIconWrap>
     </Load>
   ) : (
-    <InlineLoad loading={loading} style={{ minHeight: minHeight }}>
+    <InlineLoad loading={loading} style={{ minHeight }}>
       <LoadIconWrap>
         <LoadIcon>
           <path fill="#4ce1b6" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />

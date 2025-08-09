@@ -126,15 +126,23 @@ const surveyReducer = (state = initialState, action) => {
         loading: true,
         error: null,
       };
-    case FETCH_SURVEYS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        surveys: Array.isArray(action.payload?.data)
-          ? action.payload.data
-          : (Array.isArray(action.payload) ? action.payload : state.surveys),
-        error: null,
-      };
+      case FETCH_SURVEYS_SUCCESS: {
+        let surveysData;
+        if (Array.isArray(action.payload?.data)) {
+          surveysData = action.payload.data;
+        } else if (Array.isArray(action.payload)) {
+          surveysData = action.payload;
+        } else {
+          surveysData = state.surveys;
+        }
+      
+        return {
+          ...state,
+          loading: false,
+          surveys: surveysData,
+          error: null,
+        };
+      }          
     case FETCH_SURVEYS_FAILURE:
       return {
         ...state,
@@ -263,19 +271,6 @@ const surveyReducer = (state = initialState, action) => {
         ...state,
         questionTypesLoading: false,
         questionTypesError: action.payload,
-      };
-    case FETCH_SURVEYS_SUCCESS:
-      return {
-        ...state,
-        surveys: action.payload,
-        loading: false,
-        error: null,
-      };
-    case FETCH_SURVEYS_FAILURE:
-      return {
-        ...state,
-        error: action.payload,
-        loading: false,
       };
     case FETCH_SURVEY_SUCCESS:
       return {

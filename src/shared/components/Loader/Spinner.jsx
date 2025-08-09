@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-const Spinner = ({ size, color, label, fullHeight }) => {
+const Spinner = ({
+ size, color, label, fullHeight, 
+}) => {
   const dimension = typeof size === 'number' ? size : parseInt(size, 10) || 28;
 
   return (
