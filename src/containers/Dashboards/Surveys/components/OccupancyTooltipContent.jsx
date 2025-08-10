@@ -50,10 +50,10 @@ const finalLabelStyle = {
 };
 
 const OccupancyTooltipContent = ({
-  label, theme, itemSorter, colorForKey, payload,
+  label, theme, itemSorter, colorForKey, payload, formatLabel,
 }) => (
   <div className="recharts-default-tooltip" style={finalStyle(theme)}>
-    <p className="recharts-tooltip-label" style={finalLabelStyle}>{label}</p>
+    <p className="recharts-tooltip-label" style={finalLabelStyle}>{formatLabel ? formatLabel(label) : label}</p>
     {renderContent(itemSorter, colorForKey, payload)}
   </div>
 );
@@ -70,6 +70,7 @@ OccupancyTooltipContent.propTypes = {
     value: PropTypes.number,
     unit: PropTypes.string,
   })),
+  formatLabel: PropTypes.func,
 };
 
 OccupancyTooltipContent.defaultProps = {
@@ -77,6 +78,7 @@ OccupancyTooltipContent.defaultProps = {
   label: '',
   itemSorter: () => {},
   payload: [],
+  formatLabel: undefined,
 };
 
 export default OccupancyTooltipContent;

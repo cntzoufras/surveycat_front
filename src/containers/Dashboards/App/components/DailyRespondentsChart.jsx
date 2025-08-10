@@ -21,6 +21,18 @@ const DailyRespondentsChart = ({ data: activeUsers }) => {
   const tooltipText = isDark ? '#e3f2fd' : '#263238';
   const cursorFill = isDark ? 'rgba(144, 202, 249, 0.08)' : 'rgba(25, 118, 210, 0.06)';
 
+  // Keep only one baseline at 0: baseline comes from XAxis, so we omit the bottom-most horizontal grid line
+  const omitBottomHorizontal = (props) => {
+    const { yAxis } = props || {};
+    const scale = yAxis && yAxis.scale;
+    if (!scale || typeof scale.ticks !== 'function') return undefined; // default behavior
+    const coords = scale.ticks().map(t => scale(t)).filter(v => typeof v === 'number');
+    if (!coords.length) return undefined;
+    const range = typeof scale.range === 'function' ? scale.range() : [];
+    const bottom = range.length ? Math.max(...range) : Math.max(...coords);
+    return coords.filter(c => Math.abs(c - bottom) > 0.5);
+  };
+
   return (
     <Col md={12}>
       <Card>
@@ -34,7 +46,11 @@ const DailyRespondentsChart = ({ data: activeUsers }) => {
 }}
               style={{ background: 'transparent' }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke={isDark ? undefined : '#3C4043'}
+                horizontalCoordinatesGenerator={omitBottomHorizontal}
+              />
               <XAxis
                 dataKey="date"
                 tick={{ fill: axisColor }}
@@ -43,7 +59,7 @@ const DailyRespondentsChart = ({ data: activeUsers }) => {
               />
               <YAxis
                 tick={{ fill: axisColor }}
-                axisLine={{ stroke: axisColor }}
+                axisLine={false}
                 tickLine={{ stroke: axisColor }}
                 padding={{ bottom: 6 }}
               />

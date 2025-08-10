@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'react-bootstrap';
+import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import { Card } from '@/shared/components/Card';
 import {
   DashboardBookingCard,
@@ -23,6 +24,7 @@ const OverallStats = ({ stats }) => {
                 <TotalSurveysCreatedTitle>
                   {stats.averageCompletionRate}%
                 </TotalSurveysCreatedTitle>
+                <TrendingUpIcon />
               </DashboardBookingTotalWrap>
               <DashboardBookingDescription>{t('app_dashboard.avg_completion_rate')}</DashboardBookingDescription>
             </DashboardBookingCard>
@@ -35,6 +37,7 @@ const OverallStats = ({ stats }) => {
                 <TotalSurveysCreatedTitle>
                   {stats.averageTimeToComplete}s
                 </TotalSurveysCreatedTitle>
+                <TrendingUpIcon />
               </DashboardBookingTotalWrap>
               <DashboardBookingDescription>{t('app_dashboard.avg_time_to_complete')}</DashboardBookingDescription>
             </DashboardBookingCard>

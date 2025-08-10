@@ -14,6 +14,10 @@ import SurveyCompletionRate from './components/SurveyCompletionRate';
 import WeeklyStat from './components/WeeklyStat';
 import SurveyTracking from './components/SurveyTracking';
 import SurveyEngagement from './components/SurveyEngagement';
+import BounceRate from './components/BounceRate';
+import VisitorSessions from './components/VisitorSessions';
+import AudienceByCountry from './components/AudienceByCountry';
+import Occupancy from './components/Occupancy';
 import { fetchSurveyDashboardData } from '../../../redux/actions/dashboardActions';
 
 const SurveysDashboard = () => {
@@ -66,6 +70,16 @@ const SurveysDashboard = () => {
         <Row className="align-items-start">
           <SurveyTracking surveys={topSurveys} />
           <SurveyEngagement submissions={yearlySubmissions} />
+        </Row>
+        <Row className="align-items-start mt-3">
+          <BounceRate />
+        </Row>
+        <Row className="align-items-start">
+          <VisitorSessions />
+          <AudienceByCountry />
+        </Row>
+        <Row className="align-items-start">
+          <Occupancy />
         </Row>
       </>
     );

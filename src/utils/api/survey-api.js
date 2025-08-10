@@ -103,9 +103,9 @@ export const deleteSurveyQuestion = surveyQuestionId => (
 );
 
 export const getSurveyDashboardStats = () => (
-  api.get('/surveys-dashboard')
+  api.get('/dashboards/surveys')
 );
 
 export const getAppDashboardStats = () => (
-  api.get('/app-dashboard')
+  api.get('/dashboards/app')
 );

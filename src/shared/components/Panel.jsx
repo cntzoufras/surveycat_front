@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import CloseIcon from 'mdi-react/CloseIcon';
 import MinusIcon from 'mdi-react/MinusIcon';
-import AutorenewIcon from 'mdi-react/AutorenewIcon';
+// Removed refresh icon
 import {
   Card, CardBody, CardTitleWrap, CardTitle, CardSubhead,
 } from '@/shared/components/Card';
@@ -32,11 +32,11 @@ import {
 
 const Panel = ({
   md, lg, xl, sm, xs, color, divider, icon, title, label, subhead, before,
-  className, children, isLoading, refreshRequest,
+  className, children, isLoading,
 }) => {
   const [visible, setVisible] = useState(true);
   const [collapse, setCollapse] = useState(true);
-  const [refresh, setRefresh] = useState(false);
+  // Removed refresh state
 
   const onDismiss = () => {
     setVisible(false);
@@ -46,10 +46,7 @@ const Panel = ({
     setCollapse(prevState => !prevState);
   };
 
-  const fakeRefresh = () => {
-    setRefresh(true);
-    setTimeout(() => setRefresh(false), 5000);
-  };
+  // Removed fakeRefresh
 
   if (visible) {
     return (
@@ -61,7 +58,7 @@ const Panel = ({
           className={className}
         >
           <PanelCardBody>
-            {refresh || isLoading ? <PanelRefresh><SimpleLoader /></PanelRefresh> : ''}
+            {isLoading ? <PanelRefresh><SimpleLoader /></PanelRefresh> : ''}
             <PanelButtons>
               <PanelButton
                 type="button"
@@ -69,12 +66,7 @@ const Panel = ({
               >
                 <MinusIcon />
               </PanelButton>
-              <PanelButton
-                type="button"
-                onClick={refreshRequest || fakeRefresh}
-              >
-                <AutorenewIcon />
-              </PanelButton>
+              {/* Refresh button removed */}
               <PanelButton
                 type="button"
                 onClick={onDismiss}
@@ -120,7 +112,7 @@ Panel.propTypes = {
   before: PropTypes.element,
   className: PropTypes.string,
   isLoading: PropTypes.bool,
-  refreshRequest: PropTypes.func,
+  // refreshRequest removed
   children: PropTypes.node.isRequired,
 };
 
@@ -139,7 +131,7 @@ Panel.defaultProps = {
   before: null,
   className: '',
   isLoading: false,
-  refreshRequest: null,
+  // refreshRequest removed
 };
 
 export default Panel;

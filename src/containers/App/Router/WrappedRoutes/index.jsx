@@ -21,8 +21,8 @@ const WrappedRoutes = () => (
     <ContainerWrap>
       <Routes>
         <Route index element={<SurveysDashboard />} />
-        <Route exact path="/app-dashboard" element={<AppDashboard />} />
-        <Route path="/surveys-dashboard" element={<SurveysDashboard />} />
+        <Route exact path="/dashboards/app" element={<AppDashboard />} />
+        <Route path="/dashboards/surveys" element={<SurveysDashboard />} />
         <Route path="/survey-design" element={<SurveyDesign />} />
         <Route path="/surveys" element={<SurveyList />} />
         <Route path="/survey-submissions" element={<SurveySubmissions />} />

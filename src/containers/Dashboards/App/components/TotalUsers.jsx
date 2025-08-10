@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
+import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import { Card } from '@/shared/components/Card';
 import {
   DashboardBookingCard,
@@ -21,6 +22,7 @@ const TotalUsers = ({ totalUsers }) => {
             <TotalSurveysCreatedTitle>
               {totalUsers || 0}
             </TotalSurveysCreatedTitle>
+            <TrendingUpIcon />
           </DashboardBookingTotalWrap>
           <DashboardBookingDescription>{t('app_dashboard.total_users')}</DashboardBookingDescription>
         </DashboardBookingCard>
