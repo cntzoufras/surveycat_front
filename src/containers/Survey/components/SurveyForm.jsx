@@ -21,6 +21,8 @@ import {
   createSurveyPageAction,
 } from '@/redux/actions/surveyActions';
 import FontSelector from './FontSelector';
+import CategorySelector from './CategorySelector';
+import ThemeSelector from './ThemeSelector';
 
 const MuiStyledFormControl = styled(MuiFormControl)`
   margin-bottom: 1rem;
@@ -100,15 +102,22 @@ const SurveyForm = ({ userId }) => {
   };
 
   return (
-    <MuiBox mb={3} sx={{ fontFamily: 'Roboto, Arial, sans-serif', width: 800, maxWidth: 800 }}>
+    <MuiBox
+      mb={3}
+      sx={{
+        fontFamily: 'Roboto, Arial, sans-serif',
+        width: '100%',                   // Fill parent width
+        boxSizing: 'border-box',         // Prevent overflow from any padding
+      }}
+    >
       <form onSubmit={handleSubmit}>
-        <FontSelector selectedFont={selectedFont} setSelectedFont={setSelectedFont} />
         <MuiBox style={{ fontFamily: selectedFont }}>
           <MuiTextField
             fullWidth
             label="Survey Title"
             variant="outlined"
             margin="normal"
+            size="medium"
             value={surveyTitle}
             onChange={e => setSurveyTitle(e.target.value)}
             required
@@ -118,101 +127,27 @@ const SurveyForm = ({ userId }) => {
             label="Survey Description"
             variant="outlined"
             margin="normal"
+            size="medium"
             multiline
-            rows={12}
+            rows={8}
             value={surveyDescription}
             onChange={e => setSurveyDescription(e.target.value)}
           />
-          <MuiFormControl variant="outlined" fullWidth required sx={{ mb: 1 }}>
-            <MuiInputLabel
-              id="category-label"
-              shrink={Boolean(selectedCategoryId)}
-              sx={{ color: textColor }}
-            >
-              Category
-            </MuiInputLabel>
-            <MuiSelect
-              labelId="category-label"
-              id="category-select"
-              value={selectedCategoryId}
-              onChange={e => setSelectedCategoryId(e.target.value)}
-              label="Category"
-              sx={{
-                color: textColor,
-                '& .MuiSvgIcon-root': {
-                  color: textColor,
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: theme.palette.divider,
-                },
-              }}
-            >
-              <MuiMenuItem value="" disabled sx={{ color: textColor }}>
-                <em>Select Category</em>
-              </MuiMenuItem>
-              {surveyCategories.map(cat => (
-                <MuiMenuItem
-                  key={cat.id}
-                  value={cat.id}
-                  sx={{ color: textColor }}
-                >
-                  {cat.title}
-                </MuiMenuItem>
-            ))}
-            </MuiSelect>
-          </MuiFormControl>          
-          <MuiStyledFormControl fullWidth variant="outlined">
-            <MuiInputLabel
-              id="theme-label"
-              shrink={Boolean(selectedThemeId)}
-              sx={{ color: textColor }}
-            >
-              Theme
-            </MuiInputLabel>
-            <MuiSelect
-              labelId="theme-label"
-              id="theme-select"
-              value={selectedThemeId}
-              onChange={e => setSelectedThemeId(e.target.value)}
-              label="Theme"
-              sx={{
-                color: textColor,
-                '& .MuiSvgIcon-root': {
-                  color: textColor,
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: theme.palette.divider,
-                },
-              }}
-            >
-              <MuiMenuItem value="" disabled sx={{ color: textColor }}>
-                <em>Select Theme</em>
-              </MuiMenuItem>
-              {surveyThemes.map(t => (
-                <MuiMenuItem key={t.id} value={t.id} sx={{ color: textColor, lineHeight: 1.5 }}>
-                  {t.title}
-                </MuiMenuItem>
-              ))}
-            </MuiSelect>
-          </MuiStyledFormControl>
-          {selectedThemeId && (
-            <MuiBox sx={{ mt: 2, display: 'flex', gap: 1 }}>
-              <MuiButton 
-                variant="outlined" 
-                onClick={() => setShowThemePreview(true)}
-                size="small"
-              >
-                Preview Theme
-              </MuiButton>
-              <MuiButton 
-                variant="outlined" 
-                onClick={() => setShowThemePreview(true)}
-                size="small"
-              >
-                Customize Theme
-              </MuiButton>
-            </MuiBox>
-          )}
+          <CategorySelector
+            value={selectedCategoryId}
+            onChange={e => setSelectedCategoryId(e.target.value)}
+            options={surveyCategories.map(cat => ({ value: cat.id, label: cat.title }))}
+            size="medium"
+          />
+          <ThemeSelector
+            value={selectedThemeId}
+            onChange={e => setSelectedThemeId(e.target.value)}
+            options={surveyThemes.map(t => ({ value: t.id, label: t.title }))}
+            size="medium"
+          />
+          <MuiBox sx={{ my: 2 }}>
+            <FontSelector selectedFont={selectedFont} setSelectedFont={setSelectedFont} />
+          </MuiBox>
         </MuiBox>
         <MuiBox display="flex" justifyContent="center" mt={2}>
           <MuiButton

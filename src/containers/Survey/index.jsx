@@ -42,7 +42,18 @@ const SurveyPageWrapper = () => {
   
   return (
     <StyledBox>
-      <StyledTypography variant="h2" component="h1" sx={{ align: 'center', paddingBottom: 'rem' }} gutterBottom>
+      <StyledTypography
+        variant="h2"
+        component="h1"
+        align="center"
+        noWrap
+        sx={{
+          paddingBottom: 'rem',
+          whiteSpace: 'nowrap',
+          fontSize: { xs: '2.25rem', sm: '3rem', md: '3.75rem' },
+        }}
+        gutterBottom
+      >
         Survey Design
       </StyledTypography>
       {!surveyId && !surveyPageId && <SurveyForm userId={userId} />}
