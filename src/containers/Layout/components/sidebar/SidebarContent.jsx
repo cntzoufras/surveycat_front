@@ -13,7 +13,7 @@ const SidebarContent = ({
     <SidebarBlock collapse={collapse}>
       <SidebarCategory title="Survey" icon="map" collapse={collapse}>
         <SidebarLink title="Create" route="/survey-design" icon="pencil" onClick={onClick} />
-        <SidebarLink title="Surveys List" route="/surveys" icon="list" />
+        <SidebarLink title="Surveys List" route="/surveys" icon="list" onClick={onClick} />
         <SidebarLink 
           title="Submissions" 
           route="/survey-submissions" 
@@ -21,65 +21,14 @@ const SidebarContent = ({
           onClick={onClick}
         />
         <SidebarLink title="Respondents" route="/respondents" icon="users" onClick={onClick} />
-        <SidebarLink title="Survey Themes" route="/themes" icon="picture" />
+        <SidebarLink title="Survey Themes" route="/themes" icon="picture" onClick={onClick} />
       </SidebarCategory>
     </SidebarBlock>
-    {/*
-    <SidebarBlock collapse={collapse}>
-      <SidebarCategory title="Analytics" icon="database" collapse={collapse}>
-        <SidebarLink title="Users" route="/users" icon="users" onClick={onClick} />
-      </SidebarCategory>
-      <SidebarCategory title="Charts" icon="chart-bars" collapse={collapse}>
-        <SidebarLink title="ChartsJS" route="/charts/charts_js" onClick={onClick} />
-        <SidebarLink title="React-vis" route="/charts/react_vis" onClick={onClick} />
-        <SidebarLink title="Recharts" route="/charts/recharts" onClick={onClick} />
-        <SidebarLink title="Amcharts" route="/charts/amcharts" onClick={onClick} />
-      </SidebarCategory>
-    </SidebarBlock>
-    */}
     <SidebarBlock collapse={collapse}>
       <SidebarLink title="App Dashboard" icon="smartphone" route="/dashboards/app" onClick={onClick} />
       <SidebarLink title="Surveys Dashboard" icon="apartment" route="/dashboards/surveys" onClick={onClick} />
     </SidebarBlock>
-    {/* 
-    <SidebarBlock collapse={collapse}>
-      <SidebarCategory icon="layers" title="Theme" collapse={collapse}>
-        <SidebarNavLink title="Light Theme" as="button" type="button" onClick={changeToLight}>
-          <SidebarLinkTitle>Light Theme</SidebarLinkTitle>
-        </SidebarNavLink>
-        <SidebarNavLink title="Dark Theme" as="button" type="button" onClick={changeToDark}>
-          <SidebarLinkTitle>Dark Theme</SidebarLinkTitle>
-        </SidebarNavLink> 
-      </SidebarCategory>
-    </SidebarBlock>
-    
-    <SidebarBlock collapse={collapse}>
-      <SidebarCategory title="Layout" icon="layers" collapse={collapse}>
-        <SidebarCategory title="Tables" icon="list" collapse={collapse}>
-          <SidebarLink title="Api table" route="/tables/api_table" onClick={onClick} />
-          <SidebarLink title="Basic tables" route="/tables/basic_tables" onClick={onClick} />
-          <SidebarLink title="Data table" newLink route="/tables/data_table" onClick={onClick} />
-          <SidebarLink title="Drag & Drop table" newLink route="/tables/dnd_table" onClick={onClick} />
-          <SidebarLink title="Editable table" route="/tables/editable_table" onClick={onClick} />
-          <SidebarLink title="Material table" route="/tables/material_table" onClick={onClick} />
-          <SidebarLink
-            title="Width resizable table"
-            newLink
-            route="/tables/resizable_table"
-            onClick={onClick}
-          />
-        </SidebarCategory>
-        <SidebarCategory title="Default Pages" icon="file-empty" collapse={collapse}>
-          <SidebarLink title="404" route="/404" />
-          <SidebarLink title="FAQs" route="/default_pages/faq" onClick={onClick} />
-          <SidebarLink title="Search Results" route="/default_pages/search_results" onClick={onClick} />
-          <SidebarLink title="Text Editor" route="/default_pages/text_editor" onClick={onClick} />
-        </SidebarCategory>
-      </SidebarCategory>
-      
-    </SidebarBlock>
-    */}
-  </SidebarContentWrap>
+    </SidebarContentWrap>
 );
 
 SidebarContent.propTypes = {
