@@ -113,6 +113,14 @@ const SearchWrapper = styled.div`
   position: relative;
   margin: auto 0 10px;
   max-width: 350px;
+  flex: 1;
+  min-width: 0;
+
+  @media screen and (max-width: 576px) {
+    max-width: none;
+    width: 100%;
+    margin: 10px 0;
+  }
 `;
 
 const TopbarSearchForm = styled.form`

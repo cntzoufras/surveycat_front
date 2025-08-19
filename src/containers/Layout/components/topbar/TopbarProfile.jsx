@@ -15,7 +15,7 @@ const DefaultAva = `${process.env.PUBLIC_URL}/img/ava.png`;
 
 const TopbarProfile = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const dispatch = useDispatch(); // Use the useDispatch hook
+  const dispatch = useDispatch();
 
   const { user } = useSelector(state => state.auth);
   const { profile } = useSelector(state => state.user);
@@ -122,6 +122,10 @@ const TopbarAvatarButton = styled.button`
   &:before {
     display: none;
   }  
+
+  @media screen and (max-width: 576px) {
+    padding: 0 8px;
+  }
 `;
 
 const TopbarAvatarImage = styled.img`

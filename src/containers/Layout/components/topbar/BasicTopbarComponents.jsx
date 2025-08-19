@@ -46,12 +46,20 @@ export const TopbarRight = styled.div`
     min-height: auto;
     flex-wrap: nowrap;
   }
+
+  @media screen and (max-width: 576px) {
+    left: 60px;
+    right: 0;
+    width: auto;
+    ${marginRight}: 4px;
+  }
 `;
 
 export const TopbarRightOver = styled.div`
   display: flex;
-  flex: auto;
-  justify-content: space-between;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  align-items: center;
   height: 60px;
 `;
 
@@ -76,6 +84,9 @@ export const TopbarSearchWrap = styled.div`
   margin: 0;
   display: flex;
   height: 60px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
   
   @media screen and (min-width: 576px) {
     margin: auto 0 auto 15px;
@@ -83,6 +94,10 @@ export const TopbarSearchWrap = styled.div`
 
   @media screen and (min-width: 640px) {
     margin-right: 15px;
+  }
+
+  @media screen and (max-width: 576px) {
+    margin: 0 8px;
   }
 `;
 
