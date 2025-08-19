@@ -21,7 +21,7 @@ export const TopbarContainer = styled.div`
   background: ${colorBackground};
 
   @media screen and (max-width: 576px) {
-    min-height: 120px;
+    min-height: 60px;
   }
 `;
 
@@ -38,8 +38,8 @@ export const TopbarRight = styled.div`
   height: 100%;
   ${right}: 0;
   ${marginRight}: 15px;
-  min-height: 120px;
-  flex-wrap: wrap;
+  min-height: 60px;
+  flex-wrap: nowrap;
   justify-content: flex-end;
 
   @media screen and (min-width: 576px) {
