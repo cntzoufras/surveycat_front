@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import { NavLink, useLocation, useMatch } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 import { lighten } from 'polished';
 import {
   colorAccent,
@@ -19,26 +19,46 @@ import {
 } from '@/utils/directions';
 
 const SidebarLink = ({
-  title, icon, newLink, route, onClick,
-}) => (
-  <li>
-    <SidebarNavLink
-      to={route}
-      onClick={onClick}
-      className={({ isActive }) => (isActive ? 'active' : '')}
-    >
-      {icon ? <SidebarLinkIcon className={`lnr lnr-${icon}`} /> : ''}
-      <SidebarLinkTitle>
-        {title}
-        {newLink ? (
-          <NewBadge bg="custom">
-            <span>New</span>
-          </NewBadge>
-        ) : ''}
-      </SidebarLinkTitle>
-    </SidebarNavLink>
-  </li>
-);
+  title, icon, newLink, route, onClick, activeMatch, end, forceActive,
+}) => {
+  const location = useLocation();
+  const baseMatch = useMatch({ path: route, end });
+  const manuallyActive = React.useMemo(() => {
+    if (!activeMatch) return false;
+    const path = location.pathname || '';
+    const testers = Array.isArray(activeMatch) ? activeMatch : [activeMatch];
+    return testers.some((t) => {
+      if (typeof t === 'function') return !!t(location);
+      if (t instanceof RegExp) return t.test(path);
+      if (typeof t === 'string') return path.startsWith(t);
+      return false;
+    });
+  }, [activeMatch, location]);
+
+  const isActive = !!baseMatch || manuallyActive || forceActive;
+
+  return (
+    <li>
+      <SidebarNavLink
+        to={route}
+        onClick={onClick}
+        end={end}
+        $active={isActive}
+        className={isActive ? 'active' : ''}
+      >
+        {icon ? <SidebarLinkIcon className={`lnr lnr-${icon}`} /> : ''}
+        <SidebarLinkTitle>
+          {title}
+          {newLink ? (
+            <NewBadge bg="custom">
+              <span>New</span>
+            </NewBadge>
+          ) : ''}
+        </SidebarLinkTitle>
+      </SidebarNavLink>
+    </li>
+  );
+};
 
 SidebarLink.propTypes = {
   title: PropTypes.string.isRequired,
@@ -46,6 +66,18 @@ SidebarLink.propTypes = {
   newLink: PropTypes.bool,
   route: PropTypes.string,
   onClick: PropTypes.func,
+  end: PropTypes.bool,
+  activeMatch: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.instanceOf(RegExp),
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.instanceOf(RegExp),
+      PropTypes.string,
+    ])),
+  ]),
+  forceActive: PropTypes.bool,
 };
 
 SidebarLink.defaultProps = {
@@ -53,6 +85,9 @@ SidebarLink.defaultProps = {
   newLink: false,
   route: '/',
   onClick: () => {},
+  end: false,
+  activeMatch: undefined,
+  forceActive: false,
 };
 
 export default SidebarLink;
@@ -76,11 +111,13 @@ export const SidebarNavLink = styled(NavLink)`
 
   &.active {
     background: ${sidebarColor};
-
-    &:before {
-      opacity: 1;
-    }
+    &:before { opacity: 1; }
   }
+
+  ${({ $active }) => $active && css`
+    background: ${sidebarColor};
+    &:before { opacity: 1; }
+  `}
 
   &:before {
     content: "";

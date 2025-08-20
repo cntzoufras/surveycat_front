@@ -5,31 +5,48 @@ import { colorBorder, colorBackground, colorHover } from '@/utils/palette';
 import { left } from '@/utils/directions';
 import SidebarLink, { SidebarNavLink, SidebarLinkTitle } from './SidebarLink';
 import SidebarCategory from './SidebarCategory';
+import { useLocation } from 'react-router-dom';
 
 const SidebarContent = ({
   onClick, changeToLight, changeToDark, collapse,
-}) => (
-  <SidebarContentWrap collapse={collapse}>
-    <SidebarBlock collapse={collapse}>
-      <SidebarCategory title="Survey" icon="map" collapse={collapse}>
-        <SidebarLink title="Create" route="/survey-design" icon="pencil" onClick={onClick} />
-        <SidebarLink title="Surveys List" route="/surveys" icon="list" onClick={onClick} />
-        <SidebarLink 
-          title="Submissions" 
-          route="/survey-submissions" 
-          icon="envelope" 
-          onClick={onClick}
-        />
-        <SidebarLink title="Respondents" route="/respondents" icon="users" onClick={onClick} />
-        <SidebarLink title="Survey Themes" route="/themes" icon="picture" onClick={onClick} />
-      </SidebarCategory>
-    </SidebarBlock>
-    <SidebarBlock collapse={collapse}>
-      <SidebarLink title="App Dashboard" icon="smartphone" route="/dashboards/app" onClick={onClick} />
-      <SidebarLink title="Surveys Dashboard" icon="apartment" route="/dashboards/surveys" onClick={onClick} />
-    </SidebarBlock>
-    </SidebarContentWrap>
-);
+}) => {
+  const location = useLocation();
+  const isEditSurveyPage = /^\/surveys\/[^/]+\/pages\/.+/.test(location.pathname || '');
+
+  return (
+    <SidebarContentWrap collapse={collapse}>
+      <SidebarBlock collapse={collapse}>
+        <SidebarCategory title="Survey" icon="map" collapse={collapse}>
+          <SidebarLink 
+            title="Create" 
+            route="/survey-design" 
+            icon="pencil" 
+            onClick={onClick}
+            activeMatch={(loc) => (
+              (loc.pathname || '').startsWith('/surveys/')
+              || /^\/surveys\/[^/]+\/pages\/.+/.test((loc.pathname || ''))
+              || (loc.pathname || '').startsWith('/survey-design')
+            )}
+            forceActive={isEditSurveyPage}
+          />
+          <SidebarLink title="Surveys List" route="/surveys" icon="list" onClick={onClick} end />
+          <SidebarLink 
+            title="Submissions" 
+            route="/survey-submissions" 
+            icon="envelope" 
+            onClick={onClick}
+          />
+          <SidebarLink title="Respondents" route="/respondents" icon="users" onClick={onClick} />
+          <SidebarLink title="Survey Themes" route="/themes" icon="picture" onClick={onClick} />
+        </SidebarCategory>
+      </SidebarBlock>
+      <SidebarBlock collapse={collapse}>
+        <SidebarLink title="App Dashboard" icon="smartphone" route="/dashboards/app" onClick={onClick} />
+        <SidebarLink title="Surveys Dashboard" icon="apartment" route="/dashboards/surveys" onClick={onClick} />
+      </SidebarBlock>
+      </SidebarContentWrap>
+  );
+};
 
 SidebarContent.propTypes = {
   changeToDark: PropTypes.func.isRequired,
