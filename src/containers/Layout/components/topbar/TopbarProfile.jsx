@@ -112,7 +112,7 @@ const TopbarAvatarButton = styled.button`
   background-color: transparent;
 
   &:hover, &:focus, &:active, &:focus:active {
-    background-color: ${colorHover};
+    background-color: transparent;
   }
 
   &:focus {
