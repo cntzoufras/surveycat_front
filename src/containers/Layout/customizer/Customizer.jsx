@@ -76,8 +76,8 @@ const Customizer = ({
           </CustomizerCloseButton>
         </CustomizerTitleWrap>
         <CustomizerCaption>
-          This customizer allows you to see the different variations of the Surveycat.
-          Create your own visual style for every project you do!
+          Use the customizer to preview variations of the Surveycat interface.
+          Toggle light or dark theme, adjust border radius, and enable or disable block shadows on Dashboard modules.
         </CustomizerCaption>
         <CustomizerToggle
           title="Dark Theme"
