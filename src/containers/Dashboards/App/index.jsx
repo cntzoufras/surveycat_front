@@ -30,7 +30,7 @@ const AppDashboard = () => {
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col md={12}>
           <PageHeader title={t('app_dashboard.page_title')} />
