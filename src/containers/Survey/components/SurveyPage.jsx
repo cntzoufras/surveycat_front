@@ -683,7 +683,7 @@ const handleDeleteSurvey = async () => {
               </MuiButton>
               {!isPublished && (
                 <MuiButton
-                  variant="contained"
+                  variant="outlined"
                   color="error"
                   size="large"
                   onClick={handleDeleteSurvey}
