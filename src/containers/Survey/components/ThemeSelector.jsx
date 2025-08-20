@@ -9,14 +9,24 @@ import {
   useTheme,
 } from '@mui/material';
 
-const ThemeSelector = ({ label = 'Select Theme', value, onChange, options, size = 'small' }) => {
+const ThemeSelector = ({
+  label = 'Select Theme',
+  value,
+  onChange,
+  options,
+  size = 'small',
+}) => {
   const theme = useTheme();
   const textColor = theme.palette.text.primary;
 
   return (
     <MuiBox sx={{ my: 2 }}>
       <MuiFormControl fullWidth variant="outlined" size={size}>
-        <MuiInputLabel id="theme-selector-label" shrink sx={{ color: textColor }}>
+        <MuiInputLabel
+          id="theme-selector-label"
+          shrink
+          sx={{ color: textColor }}
+        >
           {label}
         </MuiInputLabel>
         <MuiSelect
@@ -43,7 +53,11 @@ const ThemeSelector = ({ label = 'Select Theme', value, onChange, options, size 
           }}
         >
           {options.map(opt => (
-            <MuiMenuItem key={opt.value} value={opt.value} sx={{ color: textColor, lineHeight: 1.5 }}>
+            <MuiMenuItem
+              key={opt.value}
+              value={opt.value}
+              sx={{ color: textColor, lineHeight: 1.5 }}
+            >
               {opt.label}
             </MuiMenuItem>
           ))}
@@ -55,11 +69,26 @@ const ThemeSelector = ({ label = 'Select Theme', value, onChange, options, size 
 
 ThemeSelector.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
-    PropTypes.shape({ value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, label: PropTypes.node.isRequired })
+    PropTypes.shape({
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+      label: PropTypes.node.isRequired,
+    }),
   ).isRequired,
+  size: PropTypes.oneOf(['small', 'medium']),
+};
+
+ThemeSelector.defaultProps = {
+  label: 'Select Theme',
+  size: 'small',
 };
 
 export default ThemeSelector;

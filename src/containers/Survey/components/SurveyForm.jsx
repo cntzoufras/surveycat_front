@@ -106,8 +106,8 @@ const SurveyForm = ({ userId }) => {
       mb={3}
       sx={{
         fontFamily: 'Roboto, Arial, sans-serif',
-        width: '100%',                   // Fill parent width
-        boxSizing: 'border-box',         // Prevent overflow from any padding
+        width: '100%', // Fill parent width
+        boxSizing: 'border-box', // Prevent overflow from any padding
       }}
     >
       <form onSubmit={handleSubmit}>

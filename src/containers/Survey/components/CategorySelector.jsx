@@ -10,7 +10,9 @@ import {
 } from '@mui/material';
 
 // Mirrors ThemeSelector/FontSelector style
-const CategorySelector = ({ label = 'Select Category', value, onChange, options, size = 'small' }) => {
+const CategorySelector = ({
+ label = 'Select Category', value, onChange, options, size = 'small', 
+}) => {
   const theme = useTheme();
   const textColor = theme.palette.text.primary;
 
@@ -58,9 +60,15 @@ CategorySelector.propTypes = {
     PropTypes.shape({
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       label: PropTypes.node.isRequired,
-    })
+    }),
   ).isRequired,
   size: PropTypes.oneOf(['small', 'medium']),
 };
+
+CategorySelector.defaultProps = {
+  label: 'Select Category',
+  size: 'small',
+};
+
 
 export default CategorySelector;

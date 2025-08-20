@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colorBorder, colorBackground, colorHover } from '@/utils/palette';
 import { left } from '@/utils/directions';
+import { useLocation } from 'react-router-dom';
 import SidebarLink, { SidebarNavLink, SidebarLinkTitle } from './SidebarLink';
 import SidebarCategory from './SidebarCategory';
-import { useLocation } from 'react-router-dom';
 
 const SidebarContent = ({
   onClick, changeToLight, changeToDark, collapse,
@@ -22,7 +22,7 @@ const SidebarContent = ({
             route="/survey-design" 
             icon="pencil" 
             onClick={onClick}
-            activeMatch={(loc) => (
+            activeMatch={loc => (
               (loc.pathname || '').startsWith('/surveys/')
               || /^\/surveys\/[^/]+\/pages\/.+/.test((loc.pathname || ''))
               || (loc.pathname || '').startsWith('/survey-design')
@@ -44,7 +44,7 @@ const SidebarContent = ({
         <SidebarLink title="App Dashboard" icon="smartphone" route="/dashboards/app" onClick={onClick} />
         <SidebarLink title="Surveys Dashboard" icon="apartment" route="/dashboards/surveys" onClick={onClick} />
       </SidebarBlock>
-      </SidebarContentWrap>
+    </SidebarContentWrap>
   );
 };
 
