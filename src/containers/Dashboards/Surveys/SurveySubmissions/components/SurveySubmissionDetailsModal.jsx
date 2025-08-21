@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import {
@@ -149,11 +150,11 @@ const SurveySubmissionDetailsModal = ({
             </div>
             <div className="mb-2">
               <strong className="text-muted">Started At:</strong><br />
-              <span>{response.started_at ? new Date(response.started_at).toLocaleString() : 'N/A'}</span>
+              <span>{response.started_at ? moment(response.started_at).local().format('YYYY-MM-DD HH:mm') : 'N/A'}</span>
             </div>
             <div className="mb-2">
               <strong className="text-muted">Completed At:</strong><br />
-              <span>{response.completed_at ? new Date(response.completed_at).toLocaleString() : 'N/A'}</span>
+              <span>{response.completed_at ? moment(response.completed_at).local().format('YYYY-MM-DD HH:mm') : 'N/A'}</span>
             </div>
             <div className="mb-2">
               <strong className="text-muted">Device:</strong><br />

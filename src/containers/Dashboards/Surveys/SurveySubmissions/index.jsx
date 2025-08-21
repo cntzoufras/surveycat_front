@@ -1,6 +1,7 @@
 import React, {
  useEffect, useMemo, useState, useCallback, 
 } from 'react';
+import moment from 'moment';
 import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -195,9 +196,7 @@ const SurveySubmissions = () => {
           device: response.device || 'N/A',
           country: response.country || 'N/A',
           created_at: submission.created_at
-            ? new Date(
-                submission.created_at,
-              ).toLocaleDateString()
+            ? moment(submission.created_at).local().format('YYYY-MM-DD HH:mm')
             : 'N/A',
         };
       }),
