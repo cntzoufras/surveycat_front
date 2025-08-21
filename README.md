@@ -12,18 +12,17 @@ You can also use docker
 
 ## Available Scripts
 
-In the project directory, after having cloned the project, you can navigate to the ./ folder and run:
+In the project directory, after having cloned the project, you can navigate to the project root folder and run:
 
 1. `yarn install`
 2. `yarn start`
 
 Runs the app in the development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Opens [http://localhost:3000](http://localhost:3000) to view in the browser.
+Optionally, setup local hostname in your /etc/hosts file to `surveycat.test` so you can access it at `http://surveycat.test:3000`
 
-The page will reload if you make edits.
+The page will hot-reload if you make edits.
 You will also see any lint errors in the console.
-
-*To use finance dahboard, test CoinMarketCap API in env files by providing key*
 
 ## Deployment
 
@@ -44,3 +43,6 @@ This section has moved here: <https://facebook.github.io/create-react-app/docs/t
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## License
+
+The Surveycat app is licensed under the [MIT license](https://opensource.org/licenses/MIT).
