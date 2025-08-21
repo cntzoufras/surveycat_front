@@ -17,20 +17,22 @@ const Layout = () => {
 
 
   const dispatch = useDispatch();
-  const { customizer, sidebar, theme } = useSelector(state => ({
+  const { customizer, sidebar, theme, auth } = useSelector(state => ({
     customizer: state.customizer,
     sidebar: state.sidebar,
     theme: state.theme,
+    auth: state.auth,
   }));
 
   useEffect(() => {
-    if (!isNotificationShown) {
-      WelcomeNotification(theme, setIsNotificationShown, isNotificationShown);
-  
+    // Show welcome notification only after a successful login
+    if (auth?.loggedIn && !isNotificationShown) {
+      WelcomeNotification(theme, setIsNotificationShown);
+
       setIsNotificationShown(true);
       sessionStorage.setItem('welcomeNotificationShown', 'true');
     }
-  }, [isNotificationShown, theme]);
+  }, [auth?.loggedIn, isNotificationShown, theme]);
 
   const sidebarVisibility = () => {
     dispatch(changeSidebarVisibility());
