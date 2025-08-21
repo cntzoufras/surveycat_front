@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import WEB_SAFE_FONTS from '@/constants/fontConstants';
+import FONT_OPTIONS from '@/constants/fontConstants';
 import {
   Box, Typography, Paper, Grid, TextField, Button, FormControl,
   InputLabel, Select, MenuItem, Slider, Chip,
@@ -239,9 +239,9 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
               onChange={e => handleTypographyChange('fontFamily', e.target.value)}
               label="Font Family"
             >
-              {WEB_SAFE_FONTS.map(font => (
-                <MenuItem key={font} value={font} sx={{ fontFamily: font }}>
-                  {font.split(',')[0]}
+              {FONT_OPTIONS.map(opt => (
+                <MenuItem key={opt.label} value={opt.stack} sx={{ fontFamily: opt.stack }}>
+                  {opt.label}
                 </MenuItem>
               ))}
             </Select>

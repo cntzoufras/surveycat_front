@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import WEB_SAFE_FONTS from '../../../constants/fontConstants';
+import FONT_OPTIONS from '../../../constants/fontConstants';
+
 import { fetchThemeAction } from '../../../redux/actions/surveyThemeActions';
 import { SurveyThemeProvider } from '../../../contexts/SurveyThemeContext';
 
@@ -61,27 +62,26 @@ const SurveyThemeWrapper = ({ survey, children }) => {
 
   // Dynamic font loader — always return a function (no-op or cleanup) to satisfy consistent-return
   useEffect(() => {
-    if (
-      !typography.fontFamily
-      || typeof typography.fontFamily !== 'string'
-      || typography.fontFamily.trim() === ''
-    ) {
+    if (!typography.fontFamily || typeof typography.fontFamily !== 'string' || typography.fontFamily.trim() === '') {
       return () => {}; // no-op cleanup for early exit
     }
 
-    const isWebSafe = WEB_SAFE_FONTS.includes(typography.fontFamily);
-    const fontName = typography.fontFamily.split(',')[0].trim();
+    // Build a quick lookup of Google families we support
+    const googleFamilies = new Set(
+      FONT_OPTIONS.filter(f => f.google).map(f => f.family),
+    );
 
-    if (!isWebSafe) {
-      const fontId = `google-font-${fontName.replace(/ /g, '+')}`;
+    // Parse the stack and find the first Google font to load
+    const parts = typography.fontFamily.split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+    const googleToLoad = parts.find(p => googleFamilies.has(p));
+
+    if (googleToLoad) {
+      const fontId = `google-font-${googleToLoad.replace(/ /g, '+')}`;
       if (!document.getElementById(fontId)) {
         const link = document.createElement('link');
         link.id = fontId;
         link.rel = 'stylesheet';
-        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
-          / /g,
-          '+',
-        )}:wght@400;700&display=swap`;
+        link.href = `https://fonts.googleapis.com/css2?family=${googleToLoad.replace(/ /g, '+')}:wght@400;700&display=swap`;
         document.head.appendChild(link);
       }
     }
@@ -99,9 +99,9 @@ const SurveyThemeWrapper = ({ survey, children }) => {
         background-color: ${finalColors.background || 'transparent'};
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
-      body .MuiTypography-root, 
-      body .MuiButton-root, 
-      body .MuiTextField-root input, 
+      body .MuiTypography-root,
+      body .MuiButton-root,
+      body .MuiTextField-root input,
       body .MuiFormControl-root .MuiInputBase-root {
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
