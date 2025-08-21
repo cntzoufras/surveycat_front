@@ -8,7 +8,7 @@ To get started follow below steps:
 
 ## For developers
 
-You can also use docker
+You can also use Docker to open the app.
 
 ## Available Scripts
 
