@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import FONT_OPTIONS from '@/constants/fontConstants';
+import { FONT_OPTIONS } from '@/constants/fontConstants';
 import {
   Box, Typography, Paper, Grid, TextField, Button, FormControl,
   InputLabel, Select, MenuItem, Slider, Chip,

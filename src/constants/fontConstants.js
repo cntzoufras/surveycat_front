@@ -23,28 +23,36 @@ export const FONT_OPTIONS = [
     family: 'Inter',
     stack: 'Inter, Arial, sans-serif',
     google: true,
-    availability: { windows: 'web', mac: 'web', ios: 'web', android: 'web' },
+    availability: {
+ windows: 'web', mac: 'web', ios: 'web', android: 'web', 
+},
   },
   {
     label: 'Roboto',
     family: 'Roboto',
     stack: 'Roboto, Arial, sans-serif',
     google: true,
-    availability: { windows: 'web', mac: 'web', ios: 'web', android: 'web' },
+    availability: {
+ windows: 'web', mac: 'web', ios: 'web', android: 'web', 
+},
   },
   {
     label: 'Open Sans',
     family: 'Open Sans',
     stack: 'Open Sans, Arial, sans-serif',
     google: true,
-    availability: { windows: 'web', mac: 'web', ios: 'web', android: 'web' },
+    availability: {
+ windows: 'web', mac: 'web', ios: 'web', android: 'web', 
+},
   },
   {
     label: 'Source Sans 3',
     family: 'Source Sans 3',
     stack: 'Source Sans 3, Arial, sans-serif',
     google: true,
-    availability: { windows: 'web', mac: 'web', ios: 'web', android: 'web' },
+    availability: {
+ windows: 'web', mac: 'web', ios: 'web', android: 'web', 
+},
   },
 
   // Common system/web-safe families
@@ -53,56 +61,72 @@ export const FONT_OPTIONS = [
     family: 'Arial',
     stack: 'Arial, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Helvetica',
     family: 'Helvetica',
     stack: 'Helvetica, Arial, sans-serif',
     google: false,
-    availability: { windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback' },
+    availability: {
+ windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback', 
+},
   },
   {
     label: 'Verdana',
     family: 'Verdana',
     stack: 'Verdana, Geneva, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Tahoma',
     family: 'Tahoma',
     stack: 'Tahoma, Geneva, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Trebuchet MS',
     family: 'Trebuchet MS',
     stack: 'Trebuchet MS, Tahoma, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Calibri',
     family: 'Calibri',
     stack: 'Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback' },
+    availability: {
+ windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback', 
+},
   },
   {
     label: 'Segoe UI',
     family: 'Segoe UI',
     stack: 'Segoe UI, Roboto, Arial, sans-serif',
     google: false,
-    availability: { windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback' },
+    availability: {
+ windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback', 
+},
   },
   {
     label: 'Gill Sans',
     family: 'Gill Sans',
     stack: 'Gill Sans, Gill Sans MT, Calibri, sans-serif',
     google: false,
-    availability: { windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback' },
+    availability: {
+ windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback', 
+},
   },
 
   // macOS-first with smart webfont fallback
@@ -112,35 +136,45 @@ export const FONT_OPTIONS = [
     stack: 'Optima, "Source Sans 3", Segoe UI, Arial, sans-serif',
     google: false,
     // We will auto-load the first Google font present in the stack (Source Sans 3)
-    availability: { windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback' },
+    availability: {
+ windows: 'fallback', mac: 'native', ios: 'native', android: 'fallback', 
+},
   },
   {
     label: 'Georgia',
     family: 'Georgia',
     stack: 'Georgia, Times New Roman, serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Palatino',
     family: 'Palatino',
     stack: 'Palatino, Palatino Linotype, Book Antiqua, serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Times New Roman',
     family: 'Times New Roman',
     stack: 'Times New Roman, Times, serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Times',
     family: 'Times',
     stack: 'Times, Times New Roman, serif',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
 
   // Monospace
@@ -149,14 +183,18 @@ export const FONT_OPTIONS = [
     family: 'Courier New',
     stack: 'Courier New, Courier, monospace',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Consolas',
     family: 'Consolas',
     stack: 'Consolas, Monaco, monospace',
     google: false,
-    availability: { windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback' },
+    availability: {
+ windows: 'native', mac: 'fallback', ios: 'fallback', android: 'fallback', 
+},
   },
 
   // Cursive
@@ -165,14 +203,18 @@ export const FONT_OPTIONS = [
     family: 'Brush Script MT',
     stack: 'Brush Script MT, cursive',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
   {
     label: 'Comic Sans MS',
     family: 'Comic Sans MS',
     stack: 'Comic Sans MS, Comic Sans, cursive',
     google: false,
-    availability: { windows: 'native', mac: 'native', ios: 'native', android: 'native' },
+    availability: {
+ windows: 'native', mac: 'native', ios: 'native', android: 'native', 
+},
   },
 ];
 

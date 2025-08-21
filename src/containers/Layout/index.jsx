@@ -17,7 +17,9 @@ const Layout = () => {
 
 
   const dispatch = useDispatch();
-  const { customizer, sidebar, theme, auth } = useSelector(state => ({
+  const {
+ customizer, sidebar, theme, auth, 
+} = useSelector(state => ({
     customizer: state.customizer,
     sidebar: state.sidebar,
     theme: state.theme,

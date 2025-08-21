@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import FONT_OPTIONS from '../../../constants/fontConstants';
+import { FONT_OPTIONS } from '../../../constants/fontConstants';
 
 import { fetchThemeAction } from '../../../redux/actions/surveyThemeActions';
 import { SurveyThemeProvider } from '../../../contexts/SurveyThemeContext';
