@@ -26,7 +26,7 @@ You will also see any lint errors in the console.
 
 ## Deployment
 
-For prod:
+* For prod:
 
 From the project root folder run:
 
@@ -35,9 +35,11 @@ From the project root folder run:
 
 This section has moved here: <https://facebook.github.io/create-react-app/docs/deployment>
 
- `yarn build` fails to minify
+ * `yarn build` fails to minify
 
 This section has moved here: <https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify>
+
+* In `nginx.prod.conf` update `server_name`  to your domain.
 
 ## About Project
 
