@@ -10,10 +10,11 @@ export const FETCH_SURVEY_SUBMISSION_SUCCESS = 'FETCH_SURVEY_SUBMISSION_SUCCESS'
 export const FETCH_SURVEY_SUBMISSION_FAILURE = 'FETCH_SURVEY_SUBMISSION_FAILURE';
 export const CLEAR_SURVEY_SUBMISSION_DETAILS = 'CLEAR_SURVEY_SUBMISSION_DETAILS';
 
-export const fetchSurveySubmissionsAction = (page = 1, perPage = 10) => async (dispatch) => {
+export const fetchSurveySubmissionsAction = (page = 1, perPage = 10, search = '') => async (dispatch) => {
   dispatch({ type: FETCH_SUBMISSIONS_REQUEST, meta: { perPage } });
   try {
-    const response = await api.get(`/survey-submissions?page=${page}&per_page=${perPage}&limit=${perPage}`);
+    const searchParam = search && typeof search === 'string' ? `&search=${encodeURIComponent(search)}` : '';
+    const response = await api.get(`/survey-submissions?page=${page}&per_page=${perPage}&limit=${perPage}${searchParam}`);
 
     const {
       data,

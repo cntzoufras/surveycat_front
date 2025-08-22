@@ -60,15 +60,20 @@ export default ReactTableFilter;
 
 const SearchWrap = styled.div`
   display: flex;
-  align-items: baseline;
-  margin-bottom: 30px;
+  align-items: center;
+  margin-bottom: 16px;
   color: ${colorAdditional};
 `;
 
 const SearchInput = styled(Form.Control)`
-  max-width: 250px;
+  width: 100%;
+  max-width: 360px;
+  height: 32px;
+  padding: 6px 10px;
+  line-height: 20px;
   font-size: 12px;
-  margin-right: 20px;
+  border-radius: 6px;
+  margin-right: 12px;
   color: ${colorText};
   background: ${colorBackground};
 `;

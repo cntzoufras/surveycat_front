@@ -59,7 +59,7 @@ const RespondentsReactTable = ({
     withPagination,
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search by Email or ID...',
+    placeholder: 'Search by Respondent ID, Survey, Email or Age',
     // server-side pagination wiring
     serverSide: true,
     pageCount: pagination?.totalPages ?? 0,

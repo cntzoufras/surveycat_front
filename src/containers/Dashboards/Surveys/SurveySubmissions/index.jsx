@@ -72,6 +72,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const SurveySubmissions = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const { t } = useTranslation('common');
   const dispatch = useDispatch();
 
@@ -106,23 +107,33 @@ const SurveySubmissions = () => {
 
   useEffect(
     () => {
-      dispatch(fetchSurveySubmissionsAction());
+      dispatch(fetchSurveySubmissionsAction(1, perPage || 10, searchTerm));
     },
     [dispatch],
   );
 
   const handlePageChange = useCallback(
     (page, pageSize) => {
-      dispatch(fetchSurveySubmissionsAction(page, pageSize || perPage));
+      dispatch(fetchSurveySubmissionsAction(page, pageSize || perPage, searchTerm));
     },
-    [dispatch, perPage],
+    [dispatch, perPage, searchTerm],
   );
 
   const handlePageSizeChange = useCallback(
     (pageSize) => {
-      dispatch(fetchSurveySubmissionsAction(1, pageSize));
+      dispatch(fetchSurveySubmissionsAction(1, pageSize, searchTerm));
     },
-    [dispatch],
+    [dispatch, searchTerm],
+  );
+
+  const handleSearchChange = useCallback(
+    (value) => {
+      const next = (value || '').trim();
+      setSearchTerm(next);
+      // Always reset to first page on new search term
+      dispatch(fetchSurveySubmissionsAction(1, perPage || 10, next));
+    },
+    [dispatch, perPage],
   );
 
   useEffect(
@@ -140,11 +151,6 @@ const SurveySubmissions = () => {
  Header: '#', accessor: 'id', disableGlobalFilter: true, width: 65, 
 },
       { Header: 'Survey', accessor: 'survey' },
-      {
-        Header: 'Response ID',
-        accessor: 'response',
-        disableGlobalFilter: true,
-      },
       {
         Header: 'Respondent Email',
         accessor: 'respondent_email',
@@ -214,7 +220,6 @@ const SurveySubmissions = () => {
           id: idx + 1,
           submissionId: submission.id,
           survey: survey.title || 'N/A',
-          response: response.id || 'N/A',
           respondent_email: respondent.email || 'N/A',
           respondent_id: respondent.id || 'N/A',
           device: response.device || 'N/A',
@@ -278,6 +283,7 @@ const SurveySubmissions = () => {
             }}
             loading={loading}
             totalCount={totalCount}
+            onSearchChange={handleSearchChange}
           />
         </Row>
       )}

@@ -14,12 +14,12 @@ const Highlight = styled.span`
   `;
 
 const SurveySubmissionsReactTable = ({
- reactTableData, pagination, loading, totalCount, 
+  reactTableData, pagination, loading, totalCount, onSearchChange,
 }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
   const [withPagination, setWithPaginationTable] = useState(true);
   const [isSortable, setIsSortable] = useState(false);
-  const [withSearchEngine, setWithSearchEngine] = useState(false);
+  const [withSearchEngine, setWithSearchEngine] = useState(true);
 
   // Update rows when API data updates (new page/perPage)
   useEffect(() => {
@@ -57,7 +57,7 @@ const SurveySubmissionsReactTable = ({
     withPagination,
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search by Survey title...',
+    placeholder: 'Search by survey, device, country, or Respondent ID or Email',
     // server-side pagination wiring
     serverSide: true,
     pageCount: pagination?.totalPages ?? 0,
@@ -65,6 +65,7 @@ const SurveySubmissionsReactTable = ({
     pageSize: pagination?.perPage ?? 10,
     onPageChange: pagination?.onPageChange,
     onPageSizeChange: pagination?.onPageSizeChange,
+    onSearchChange,
     loading: !!loading,
     totalCount: typeof totalCount === 'number' ? totalCount : undefined,
     totalLabel: 'Total Submissions',
@@ -121,11 +122,13 @@ SurveySubmissionsReactTable.propTypes = {
   }).isRequired,
   loading: PropTypes.bool,
   totalCount: PropTypes.number,
+  onSearchChange: PropTypes.func,
 };
 
 SurveySubmissionsReactTable.defaultProps = {
   loading: false,
   totalCount: 0,
+  onSearchChange: undefined,
 };
 
 export default SurveySubmissionsReactTable;
