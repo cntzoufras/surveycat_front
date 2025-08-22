@@ -5,6 +5,7 @@ import {
   UPDATE_RESPONDENT_REQUEST,
   UPDATE_RESPONDENT_SUCCESS,
   UPDATE_RESPONDENT_FAILURE,
+  RESET_RESPONDENTS,
 } from '../actions/respondentsActions';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   nextPage: null,
   prevPage: null,
   perPage: 10,
+  search: '',
 };
 
 const respondentsReducer = (state = initialState, action) => {
@@ -28,6 +30,9 @@ const respondentsReducer = (state = initialState, action) => {
         perPage: (action.meta && typeof action.meta.perPage === 'number')
           ? action.meta.perPage
           : state.perPage,
+        search: (action.meta && typeof action.meta.search === 'string')
+          ? action.meta.search
+          : state.search,
         error: null,
       };
     case UPDATE_RESPONDENT_REQUEST:
@@ -48,6 +53,7 @@ const respondentsReducer = (state = initialState, action) => {
         prevPage: action.payload.prev_page_url,
         // Keep UI-selected perPage; do not override from payload to avoid backend defaults (e.g., 100000)
         perPage: state.perPage,
+        search: state.search,
       };
     case FETCH_RESPONDENTS_FAILURE:
       return {
@@ -73,6 +79,10 @@ const respondentsReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload,
+      };
+    case RESET_RESPONDENTS:
+      return {
+        ...initialState,
       };
       
     default:

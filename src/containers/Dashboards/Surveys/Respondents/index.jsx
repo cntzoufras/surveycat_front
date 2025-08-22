@@ -7,7 +7,7 @@ import {
 import { Box } from '@mui/material';
 import PageHeader from '@/shared/components/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { fetchRespondentsAction } from '@/redux/actions/respondentsActions';
+import { fetchRespondentsAction, resetRespondentsAction } from '@/redux/actions/respondentsActions';
 import RespondentsReactTable from './components/RespondentsReactTable';
 
 const Respondents = () => {
@@ -22,11 +22,17 @@ const Respondents = () => {
     totalPages,
     perPage,
     totalCount,
+    search,
   } = useSelector(state => state.respondents || {});
 
+  // On mount, fetch clean list without previous search
   useEffect(() => {
-    dispatch(fetchRespondentsAction());
-  }, [dispatch]);
+    dispatch(fetchRespondentsAction(1, perPage, ''));
+    // On unmount, reset respondents state so coming back shows default list
+    return () => {
+      dispatch(resetRespondentsAction());
+    };
+  }, [dispatch, perPage]);
 
   const columns = useMemo(
     () => [
@@ -35,6 +41,12 @@ const Respondents = () => {
         accessor: 'id',
         disableGlobalFilter: true,
         width: 65,
+      },
+      {
+        Header: 'Respondent ID',
+        accessor: 'respondent_id',
+        disableGlobalFilter: false,
+        width: 140,
       },
       {
         Header: 'Survey',
@@ -77,6 +89,7 @@ const Respondents = () => {
     const { age, gender, country } = parseDetails(respondent.details);
     return {
       id: index + 1,
+      respondent_id: respondent.id,
       email: respondent.email || 'N/A',
       survey: respondent.survey_response?.survey?.title || 'N/A',
       age: respondent.age || age || 'N/A',
@@ -94,18 +107,23 @@ const Respondents = () => {
   const handlePageChange = useCallback(
     (page, pageSize) => {
       // page is 1-based coming from constructor effect
-      dispatch(fetchRespondentsAction(page, pageSize || perPage));
+      dispatch(fetchRespondentsAction(page, pageSize || perPage, search || ''));
     },
-    [dispatch, perPage],
+    [dispatch, perPage, search],
   );
 
   const handlePageSizeChange = useCallback(
     (pageSize) => {
       // Reset to first page on page size change
-      dispatch(fetchRespondentsAction(1, pageSize));
+      dispatch(fetchRespondentsAction(1, pageSize, search || ''));
     },
-    [dispatch],
+    [dispatch, search],
   );
+
+  const handleSearchChange = useCallback((value) => {
+    // Reset to page 1 on new search
+    dispatch(fetchRespondentsAction(1, perPage, value || ''));
+  }, [dispatch, perPage]);
 
   console.log('react table data: ', reactTableData);
   console.log('data: ', data);
@@ -147,6 +165,7 @@ const Respondents = () => {
             }}
             loading={loading}
             totalCount={totalCount}
+            onSearchChange={handleSearchChange}
           />
         </Row>
       )}

@@ -6,17 +6,21 @@ export const FETCH_RESPONDENTS_FAILURE = 'FETCH_RESPONDENTS_FAILURE';
 export const UPDATE_RESPONDENT_REQUEST = 'UPDATE_RESPONDENT_REQUEST';
 export const UPDATE_RESPONDENT_SUCCESS = 'UPDATE_RESPONDENT_SUCCESS';
 export const UPDATE_RESPONDENT_FAILURE = 'UPDATE_RESPONDENT_FAILURE';
+export const RESET_RESPONDENTS = 'RESET_RESPONDENTS';
 
-export const fetchRespondentsAction = (page = 1, perPage = 10) => async (dispatch) => {
-  dispatch({ type: FETCH_RESPONDENTS_REQUEST, meta: { perPage } });
+export const fetchRespondentsAction = (page = 1, perPage = 10, search = '') => async (dispatch) => {
+  dispatch({ type: FETCH_RESPONDENTS_REQUEST, meta: { perPage, search } });
   try {
     // Send both per_page and limit for compatibility with backends expecting 'limit'
-    const response = await api.get(`/respondents?page=${page}&per_page=${perPage}&limit=${perPage}`);
+    const searchParam = search ? `&search=${encodeURIComponent(search)}` : '';
+    const response = await api.get(`/respondents?page=${page}&per_page=${perPage}&limit=${perPage}${searchParam}`);
     dispatch({ type: FETCH_RESPONDENTS_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_RESPONDENTS_FAILURE, payload: error.message });
   }
 };
+
+export const resetRespondentsAction = () => ({ type: RESET_RESPONDENTS });
 
 /**
  * Update one respondent by ID

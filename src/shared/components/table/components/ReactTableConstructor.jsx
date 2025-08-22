@@ -134,6 +134,7 @@ const ReactTableConstructor = ({
           globalFilter={state.globalFilter}
           placeholder={placeholder}
           dataLength={dataLength}
+          onSearchChange={tableOptions.onSearchChange}
         />
       )}
       <TableWrap pagination={withPagination}>

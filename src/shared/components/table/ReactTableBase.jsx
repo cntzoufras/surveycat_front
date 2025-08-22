@@ -27,6 +27,7 @@ const ReactTableBase = ({
     pageSize: serverPageSize,
     onPageChange,
     onPageSizeChange,
+    onSearchChange,
   } = tableConfig;
 
   const [filterValue, setFilterValue] = useState(null);
@@ -61,6 +62,7 @@ const ReactTableBase = ({
     // expose callbacks so constructor can trigger Redux actions
     onPageChange,
     onPageSizeChange,
+    onSearchChange,
     initialState: {
       pageIndex: serverSide && typeof serverPageIndex === 'number' ? serverPageIndex : 0,
       pageSize: initialPageSize,
@@ -107,6 +109,7 @@ ReactTableBase.propTypes = {
     pageSize: PropTypes.number,
     onPageChange: PropTypes.func,
     onPageSizeChange: PropTypes.func,
+    onSearchChange: PropTypes.func,
   }),
   columns: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,

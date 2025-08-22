@@ -7,13 +7,16 @@ import { colorAdditional, colorBackground, colorText } from '@/utils/palette';
 
 const ReactTableFilter = ({
   rows,
-  setGlobalFilter, setFilterValue, placeholder, dataLength,
+  setGlobalFilter, setFilterValue, placeholder, dataLength, onSearchChange,
 }) => {
   const onChange = useAsyncDebounce((item) => {
     const value = item.trim();
     setFilterValue(value);
     setGlobalFilter(value);
-  }, 200);
+    if (typeof onSearchChange === 'function') {
+      onSearchChange(value);
+    }
+  }, 600);
 
   return (
     <SearchWrap>
@@ -42,11 +45,13 @@ ReactTableFilter.propTypes = {
   setFilterValue: PropTypes.func,
   placeholder: PropTypes.string,
   dataLength: PropTypes.number.isRequired,
+  onSearchChange: PropTypes.func,
 };
 
 ReactTableFilter.defaultProps = {
   setFilterValue: () => {},
   placeholder: 'Search...',
+  onSearchChange: undefined,
 };
 
 export default ReactTableFilter;

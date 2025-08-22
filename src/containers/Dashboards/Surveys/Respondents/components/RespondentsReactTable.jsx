@@ -14,7 +14,7 @@ const Highlight = styled.span`
   `;
 
 const RespondentsReactTable = ({
- reactTableData, pagination, loading, totalCount, 
+  reactTableData, pagination, loading, totalCount, onSearchChange,
 }) => {
   const [rows, setData] = useState(reactTableData.tableRowsData);
 
@@ -25,7 +25,8 @@ const RespondentsReactTable = ({
 
   const [withPagination, setWithPaginationTable] = useState(true);
   const [isSortable, setIsSortable] = useState(false);
-  const [withSearchEngine, setWithSearchEngine] = useState(false);
+
+  const [withSearchEngine, setWithSearchEngine] = useState(true);
 
   const updateEditableData = (rowIndex, columnId, value) => {
     setData(old => old.map((item, index) => {
@@ -58,7 +59,7 @@ const RespondentsReactTable = ({
     withPagination,
     withSearchEngine,
     manualPageSize: [10, 20, 30, 40],
-    placeholder: 'Search by Email...',
+    placeholder: 'Search by Email or ID...',
     // server-side pagination wiring
     serverSide: true,
     pageCount: pagination?.totalPages ?? 0,
@@ -69,6 +70,8 @@ const RespondentsReactTable = ({
     loading: !!loading,
     totalCount: typeof totalCount === 'number' ? totalCount : undefined,
     totalLabel: 'Total Respondents',
+    // notify parent when search changes so it can refetch with ?search
+    onSearchChange,
   };
 
   return (
@@ -122,11 +125,13 @@ RespondentsReactTable.propTypes = {
   }).isRequired,
   loading: PropTypes.bool,
   totalCount: PropTypes.number,
+  onSearchChange: PropTypes.func,
 };
 
 RespondentsReactTable.defaultProps = {
   loading: false,
   totalCount: 0,
+  onSearchChange: undefined,
 };
 
 export default RespondentsReactTable;
