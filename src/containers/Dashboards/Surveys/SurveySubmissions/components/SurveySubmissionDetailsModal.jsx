@@ -166,7 +166,7 @@ const SurveySubmissionDetailsModal = ({
             </div>
             <div className="mb-2">
               <strong className="text-muted">Device:</strong><br />
-              <span>{response.device || 'N/A'}</span>
+              <span className="small text-monospace text-break">{response.device || 'N/A'}</span>
             </div>
             <div className="mb-2">
               <strong className="text-muted">Session ID:</strong><br />

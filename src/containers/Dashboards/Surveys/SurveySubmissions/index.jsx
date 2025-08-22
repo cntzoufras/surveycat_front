@@ -155,7 +155,16 @@ const SurveySubmissions = () => {
         accessor: 'respondent_id',
         disableGlobalFilter: true,
       },
-      { Header: 'Device', accessor: 'device', disableGlobalFilter: true },
+      {
+        Header: 'Device',
+        accessor: 'device',
+        disableGlobalFilter: true,
+        Cell: ({ value }) => (
+          <Box sx={{ fontFamily: 'monospace', fontSize: '0.75rem', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+            {value || 'N/A'}
+          </Box>
+        ),
+      },
       {
         Header: 'Country',
         accessor: 'country',
@@ -165,11 +174,21 @@ const SurveySubmissions = () => {
         Header: 'Started At (UTC)',
         accessor: 'started_at',
         disableGlobalFilter: true,
+        Cell: ({ value }) => (
+          <Box sx={{ whiteSpace: { xs: 'normal', md: 'nowrap' }, textOverflow: 'ellipsis', overflow: 'hidden' }}>
+            {value}
+          </Box>
+        ),
       },
       {
         Header: 'Completed At (UTC)',
         accessor: 'completed_at',
         disableGlobalFilter: true,
+        Cell: ({ value }) => (
+          <Box sx={{ whiteSpace: { xs: 'normal', md: 'nowrap' }, textOverflow: 'ellipsis', overflow: 'hidden' }}>
+            {value}
+          </Box>
+        ),
       },
       {
         Header: 'Actions',
