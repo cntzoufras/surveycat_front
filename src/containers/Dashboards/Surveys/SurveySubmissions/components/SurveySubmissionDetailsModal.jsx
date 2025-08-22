@@ -149,15 +149,19 @@ const SurveySubmissionDetailsModal = ({
               <span className="text-monospace">{response.id || 'N/A'}</span>
             </div>
             <div className="mb-2">
-              <strong className="text-muted">Started At:</strong><br />
+              <strong className="text-muted">Started At (UTC):</strong><br />
               <span>
-                {response.started_at ? moment(response.started_at).local().format('YYYY-MM-DD HH:mm') : 'N/A'}
+                {response.started_at
+                  ? moment.utc(response.started_at).local().format('YYYY-MM-DD HH:mm:ss')
+                  : 'N/A'}
               </span>
             </div>
             <div className="mb-2">
-              <strong className="text-muted">Completed At:</strong><br />
+              <strong className="text-muted">Completed At (UTC):</strong><br />
               <span>
-                {response.completed_at ? moment(response.completed_at).local().format('YYYY-MM-DD HH:mm') : 'N/A'}
+                {response.completed_at
+                  ? moment.utc(response.completed_at).local().format('YYYY-MM-DD HH:mm:ss')
+                  : 'N/A'}
               </span>
             </div>
             <div className="mb-2">

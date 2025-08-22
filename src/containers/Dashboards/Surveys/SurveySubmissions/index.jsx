@@ -162,8 +162,13 @@ const SurveySubmissions = () => {
         disableGlobalFilter: true,
       },
       {
-        Header: 'Date Created',
-        accessor: 'created_at',
+        Header: 'Started At (UTC)',
+        accessor: 'started_at',
+        disableGlobalFilter: true,
+      },
+      {
+        Header: 'Completed At (UTC)',
+        accessor: 'completed_at',
         disableGlobalFilter: true,
       },
       {
@@ -195,8 +200,11 @@ const SurveySubmissions = () => {
           respondent_id: respondent.id || 'N/A',
           device: response.device || 'N/A',
           country: response.country || 'N/A',
-          created_at: submission.created_at
-            ? moment(submission.created_at).local().format('YYYY-MM-DD HH:mm')
+          started_at: response.started_at
+            ? moment.utc(response.started_at).local().format('DD-MM-YYYY HH:mm')
+            : 'N/A',
+          completed_at: response.completed_at
+            ? moment.utc(response.completed_at).local().format('DD-MM-YYYY HH:mm')
             : 'N/A',
         };
       }),
