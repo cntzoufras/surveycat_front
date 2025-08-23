@@ -97,7 +97,7 @@ const SurveyPage = () => {
     return allSurveyQuestions.filter(q => q.survey_page_id === surveyPageId);
   }, [allSurveyQuestions, surveyPageId]);
   
-  const handleOnDragEnd = (result) => {
+  const handleOnDragEnd = async (result) => {
     if (!result.destination) return;
 
     const items = Array.from(currentPageQuestions);
@@ -105,7 +105,21 @@ const SurveyPage = () => {
     items.splice(result.destination.index, 0, reorderedItem);
 
     if (surveyPageId) {
-      dispatch(reorderQuestionsAction(surveyPageId, items));
+      try {
+        await dispatch(reorderQuestionsAction(surveyPageId, items));
+        setNotification({
+          open: true,
+          message: 'Question order updated!',
+          severity: 'success',
+        });
+      } catch (error) {
+        console.error('Failed to reorder questions:', error);
+        setNotification({
+          open: true,
+          message: 'Failed to update order.',
+          severity: 'error',
+        });
+      }
     } else {
       console.error('Cannot reorder questions: surveyPageId is missing.');
     }
