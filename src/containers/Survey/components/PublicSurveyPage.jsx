@@ -57,7 +57,8 @@ function SurveyHeader({ title, description }) {
           sx={{
             fontFamily: themeStyles?.typography?.fontFamily,
             fontSize: themeStyles?.typography?.fontSize,
-            color: themeStyles?.colors?.text,
+            // Prefer subtitle color if present, else text
+            color: themeStyles?.colors?.subtitle || themeStyles?.colors?.text,
           }}
         >
           {description}

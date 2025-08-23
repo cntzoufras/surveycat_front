@@ -167,18 +167,27 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           sx={{ 
             mt: 1,
             '& .MuiOutlinedInput-root': {
-             backgroundColor: themeStyles?.colors?.background || 'grey.100',
-             borderRadius: themeStyles?.layout?.borderRadius || 1,
-           },
+              backgroundColor: themeStyles?.colors?.background || 'grey.100',
+              borderRadius: themeStyles?.layout?.borderRadius || 1,
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: themeStyles?.colors?.choice || 'grey.600',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: themeStyles?.colors?.choice || 'grey.600',
+                borderWidth: '2px',
+              },
+            },
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: themeStyles?.colors?.primary || 'grey.700',
+              // Match outline to text/placeholder (choice)
+              borderColor: themeStyles?.colors?.choice || 'grey.700',
             },
             '& input::placeholder': {
               color: themeStyles?.colors?.choice || 'grey.400',
               opacity: 1,
            },
            '& .MuiOutlinedInput-input': {
-              color: themeStyles?.colors?.text || 'grey.900', 
+              // Match input text color to placeholder (choice)
+              color: themeStyles?.colors?.choice || 'grey.900', 
             },
           }}
         />
@@ -249,16 +258,25 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
             '& .MuiOutlinedInput-root': { 
               backgroundColor: themeStyles?.colors?.background || 'grey.100', 
               borderRadius: themeStyles?.layout?.borderRadius || 1, 
+              '&:hover .MuiOutlinedInput-notchedOutline': { 
+                borderColor: themeStyles?.colors?.choice || 'grey.600', 
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': { 
+                borderColor: themeStyles?.colors?.choice || 'grey.600', 
+                borderWidth: '2px',
+              },
             },
             '& .MuiOutlinedInput-notchedOutline': { 
-              borderColor: themeStyles?.colors?.primary || 'grey.400', 
+              // Match outline to text/placeholder (choice)
+              borderColor: themeStyles?.colors?.choice || 'grey.400', 
             },
             '& textarea::placeholder': { 
               color: themeStyles?.colors?.choice || 'grey.600', 
               opacity: 1, 
             },
             '& .MuiOutlinedInput-input': { 
-              color: themeStyles?.colors?.text || '#252525', 
+              // Match textarea text color to placeholder (choice)
+              color: themeStyles?.colors?.choice || '#252525', 
             },
           }}
         />

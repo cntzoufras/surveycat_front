@@ -20,6 +20,8 @@ const DEFAULT_THEME = {
     secondary: '#dc004e',
     background: '#DE0000',
     text: '#333333',
+    // New: separate subtitle color
+    subtitle: '#4f4f4f',
     // New: explicit title color control surfaced in the UI
     title_color: '#333333',
     question: '#090606',
@@ -104,7 +106,8 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
           variant="body1"
           sx={{
             fontFamily: currentTheme.typography.fontFamily,
-            color: currentTheme.colors.text,
+            // Prefer dedicated subtitle color if set
+            color: currentTheme.colors.subtitle || currentTheme.colors.text,
             fontSize: currentTheme.typography.fontSize || '16px',
             marginBottom: '20px',
             lineHeight: 1.5,
@@ -350,13 +353,14 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
           {(() => {
             const labelMap = {
               title_color: 'Title',
-              text: 'Subtitle/Text',
+              subtitle: 'Subtitle',
+              text: 'Text',
               question: 'Question',
               choice: 'Choice',
               primary: 'Primary',
               secondary: 'Secondary',
             };
-            const order = ['title_color', 'text', 'primary', 'secondary', 'question', 'choice'];
+            const order = ['title_color', 'subtitle', 'text', 'primary', 'secondary', 'question', 'choice'];
             const entries = Object.entries(currentTheme.colors)
               .filter(([key]) => key !== 'background')
               .sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
