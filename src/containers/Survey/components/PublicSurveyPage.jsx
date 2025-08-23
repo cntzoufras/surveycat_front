@@ -23,10 +23,54 @@ import ThankYouSubmission from './ThankYouSubmission';
 import SurveyThemeWrapper from './SurveyThemeWrapper';
 import { useSurveyTheme } from '../../../contexts/SurveyThemeContext';
 
+// Header that consumes theme from context (MUST be under SurveyThemeWrapper)
+function SurveyHeader({ title, description }) {
+  const themeStyles = useSurveyTheme();
+  const resolvedTitleColor = (
+    themeStyles?.colors?.title_color ||
+    themeStyles?.variable_palette?.title_color ||
+    themeStyles?.colors?.text
+  );
+  try { console.debug('SurveyHeader resolvedTitleColor:', resolvedTitleColor); } catch (_) {}
+
+  return (
+    <Box sx={{ mb: 4 }}>
+      <Typography
+        variant="h4"
+        component="h1"
+        align="center"
+        sx={{
+          mb: 1,
+          fontFamily: themeStyles?.typography?.fontFamily,
+          fontSize: themeStyles?.typography?.headingStyle?.H1,
+          fontWeight: 'bold',
+          color: resolvedTitleColor,
+        }}
+        style={{ color: resolvedTitleColor }}
+      >
+        {title}
+      </Typography>
+      {description && (
+        <Typography
+          variant="body2"
+          align="center"
+          sx={{
+            fontFamily: themeStyles?.typography?.fontFamily,
+            fontSize: themeStyles?.typography?.fontSize,
+            color: themeStyles?.colors?.text,
+          }}
+        >
+          {description}
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
 const PublicSurveyPage = ({ preview = false }) => {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = Boolean(user?.id);
-  const themeStyles = useSurveyTheme();
+  // IMPORTANT: do not read theme before provider; use SurveyHeader instead
 
   const dispatch = useDispatch();
   const { surveySlug, surveyId } = useParams();
@@ -138,14 +182,14 @@ const PublicSurveyPage = ({ preview = false }) => {
         session_id: sessionId,
       };
 
-      const payload = {
-        survey_id: survey.id,
-        survey_response_id: responseRecord.id,
-        submission_data: JSON.stringify(submissionData),
-      };
-
-      // Dispatch the submission action to send answers to the backend
-      const result = await dispatch(submitSurveySubmissionAction(survey.id, payload));
+      // Dispatch the submission action with a FLAT object.
+      // The action will wrap the rest of the fields into `submission_data` and include survey_id separately.
+      const result = await dispatch(
+        submitSurveySubmissionAction(survey.id, {
+          survey_response_id: responseRecord.id,
+          ...submissionData, // answers, completed_at, device, session_id, etc.
+        })
+      );
       // If the backend returns a status (e.g., via axios response), handle success
       const status = result?.status || result?.statusCode;
       if (status === 201 || status === 200) {
@@ -197,35 +241,7 @@ const PublicSurveyPage = ({ preview = false }) => {
     <SurveyThemeWrapper survey={survey}>
       <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
         {/* Survey Title and Description */}
-        <Box sx={{ mb: 4 }}>
-          <Typography 
-            variant="h4" 
-            component="h1" 
-            align="center" 
-            sx={{ 
-              mb: 1,
-              fontFamily: themeStyles?.typography?.fontFamily,
-              fontSize: themeStyles?.typography?.headingStyle?.H1,
-              fontWeight: 'bold',
-              color: themeStyles?.colors?.title_color, // Use the specific title color key
-            }}
-          >
-            {survey.title}
-          </Typography>
-          {survey.description && (
-            <Typography 
-              variant="body2" 
-              align="center"
-              sx={{
-                fontFamily: themeStyles?.typography?.fontFamily,
-                fontSize: themeStyles?.typography?.fontSize,
-                color: themeStyles?.colors?.text, // Use the specific text color key
-              }}
-            >
-              {survey.description}
-            </Typography>
-          )}
-        </Box>
+        <SurveyHeader title={survey.title} description={survey.description} />
 
         {/* Single vs Multiple logic */}
         {isSingle ? (
@@ -234,8 +250,8 @@ const PublicSurveyPage = ({ preview = false }) => {
               variant="h5" 
               gutterBottom
               sx={{
-                fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-                fontSize: themeStyles?.typography?.headingStyle?.H2 || '24px',
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '24px',
                 fontWeight: 'bold',
               }}
             >

@@ -166,7 +166,10 @@ const SurveySubmissions = () => {
         accessor: 'device',
         disableGlobalFilter: true,
         Cell: ({ value }) => (
-          <Box sx={{ fontFamily: 'monospace', fontSize: '0.75rem', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+          <Box sx={{
+ fontFamily: 'monospace', fontSize: '0.75rem', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere', 
+}}
+          >
             {value || 'N/A'}
           </Box>
         ),

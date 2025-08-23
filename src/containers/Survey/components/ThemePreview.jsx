@@ -20,6 +20,8 @@ const DEFAULT_THEME = {
     secondary: '#dc004e',
     background: '#DE0000',
     text: '#333333',
+    // New: explicit title color control surfaced in the UI
+    title_color: '#333333',
     question: '#090606',
     choice: '#666666',
   },
@@ -28,6 +30,7 @@ const DEFAULT_THEME = {
 };
 
 const ThemePreview = ({ theme, onThemeUpdate }) => {
+  console.log('Variable theme is: ', theme);
   const [activeTab, setActiveTab] = useState('colors');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [activeColorField, setActiveColorField] = useState(null);
@@ -84,7 +87,10 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
           variant="h1"
           sx={{
             fontFamily: currentTheme.typography.fontFamily,
-            color: currentTheme.colors.question,
+            // Prefer the merged theme color; keep compat fallback to any nested custom_theme_settings, then question
+            color: currentTheme.colors.title_color
+              || currentTheme.custom_theme_settings?.colors?.title_color
+              || currentTheme.colors.question,
             fontSize: currentTheme.typography.headingStyle?.H1 || '24px',
             fontWeight: 'bold',
             marginBottom: '16px',
@@ -341,13 +347,24 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
           </Grid>
 
           {/* Other colors */}
-          {Object.entries(currentTheme.colors)
-            .filter(([key]) => key !== 'background')
-            .map(([key, value]) => (
+          {(() => {
+            const labelMap = {
+              title_color: 'Title',
+              text: 'Subtitle/Text',
+              question: 'Question',
+              choice: 'Choice',
+              primary: 'Primary',
+              secondary: 'Secondary',
+            };
+            const order = ['title_color', 'text', 'primary', 'secondary', 'question', 'choice'];
+            const entries = Object.entries(currentTheme.colors)
+              .filter(([key]) => key !== 'background')
+              .sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
+            return entries.map(([key, value]) => (
               <Grid item xs={12} sm={6} key={key}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 80 }}>
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                    {labelMap[key] || (key.charAt(0).toUpperCase() + key.slice(1))}
                   </Typography>
                   <Chip
                     label={value}
@@ -364,7 +381,8 @@ const ThemePreview = ({ theme, onThemeUpdate }) => {
                   />
                 </Box>
               </Grid>
-            ))}
+            ));
+          })()}
         </Grid>
 
         {colorPickerOpen && activeColorField && (

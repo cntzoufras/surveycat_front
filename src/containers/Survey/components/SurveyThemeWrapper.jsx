@@ -48,10 +48,36 @@ const SurveyThemeWrapper = ({ survey, children }) => {
     const baseSettings = surveyTheme.theme_setting?.settings || {};
     const variablePalettes = surveyTheme.theme_setting?.variable_palettes || [];
     const activePalette = variablePalettes.find(p => p.is_active) || variablePalettes[0] || {};
-    const customSettings = survey?.custom_theme_settings || {};
+    const rawCustom = survey?.custom_theme_settings || {};
+    let customSettings = rawCustom;
+    if (typeof rawCustom === 'string') {
+      try {
+        customSettings = JSON.parse(rawCustom);
+      } catch (e) {
+        console.warn('SurveyThemeWrapper: failed to parse custom_theme_settings string', e);
+        customSettings = {};
+      }
+    }
+
+    // If colors is still a string (double-encoded), parse it
+    if (customSettings && typeof customSettings.colors === 'string') {
+      try {
+        customSettings.colors = JSON.parse(customSettings.colors);
+      } catch (e) {
+        console.warn('SurveyThemeWrapper: failed to parse custom_theme_settings.colors string', e);
+      }
+    }
 
     const merged = _.merge({}, baseSettings, { variable_palette: activePalette }, customSettings);
     if (!merged.colors) merged.colors = {};
+    if (typeof merged.colors === 'string') {
+      try {
+        merged.colors = JSON.parse(merged.colors);
+      } catch (e) {
+        console.warn('SurveyThemeWrapper: failed to parse merged.colors string', e);
+        merged.colors = {};
+      }
+    }
     return merged;
   }, [surveyTheme, survey?.custom_theme_settings]);
 
