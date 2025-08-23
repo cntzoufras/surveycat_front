@@ -1,12 +1,12 @@
 import React, {
- useEffect, useMemo, useState, useCallback, 
+  useEffect, useMemo, useState, useCallback,
 } from 'react';
 import moment from 'moment';
 import Loading from '@/shared/components/Loading';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
- Col, Container, Row, Alert, 
+  Col, Container, Row, Alert,
 } from 'react-bootstrap';
 import { Box, IconButton } from '@mui/material';
 import PageHeader from '@/shared/components/PageHeader';
@@ -21,7 +21,47 @@ import {
 import SurveySubmissionsReactTable from './components/SurveySubmissionsReactTable';
 import SurveySubmissionDetailsModal from './components/SurveySubmissionDetailsModal';
 
-// Action cell component defined at module scope
+const DeviceCell = ({ value }) => (
+  <Box
+    sx={{
+      fontFamily: 'monospace',
+      fontSize: '0.75rem',
+      whiteSpace: 'normal',
+      wordBreak: 'break-word',
+      overflowWrap: 'anywhere',
+    }}
+  >
+    {value || 'N/A'}
+  </Box>
+);
+
+DeviceCell.propTypes = {
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
+DeviceCell.defaultProps = {
+  value: 'N/A',
+};
+
+const DateCell = ({ value }) => (
+  <Box
+    sx={{
+      whiteSpace: { xs: 'normal', md: 'nowrap' },
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+    }}
+  >
+    {value}
+  </Box>
+);
+
+DateCell.propTypes = {
+  value: PropTypes.string,
+};
+DateCell.defaultProps = {
+  value: 'N/A',
+};
+
+/* Action cell already at module scope */
 const ActionCell = ({ row, column }) => {
   const { onView, disabled } = column.meta;
   return (
@@ -38,10 +78,7 @@ const ActionCell = ({ row, column }) => {
 ActionCell.propTypes = {
   row: PropTypes.shape({
     original: PropTypes.shape({
-      submissionId: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ]).isRequired,
+      submissionId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired,
   }).isRequired,
   column: PropTypes.shape({
@@ -53,20 +90,16 @@ ActionCell.propTypes = {
 };
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
+  backgroundColor: theme.palette.mode === 'light' ? '#8a8a8a' : '#666666',
   color: '#ffffff',
   width: '32px',
   height: '32px',
   '&:hover': {
-    backgroundColor:
-      theme.palette.mode === 'light' ? '#999999' : '#777777',
+    backgroundColor: theme.palette.mode === 'light' ? '#999999' : '#777777',
   },
   '&:disabled': {
-    backgroundColor:
-      theme.palette.mode === 'light' ? '#cccccc' : '#444444',
-    color:
-      theme.palette.mode === 'light' ? '#888888' : '#999999',
+    backgroundColor: theme.palette.mode === 'light' ? '#cccccc' : '#444444',
+    color: theme.palette.mode === 'light' ? '#888888' : '#999999',
   },
 }));
 
@@ -87,9 +120,7 @@ const SurveySubmissions = () => {
     totalPages,
     perPage,
     totalCount,
-  } = useSelector(
-    state => state.survey_submissions || {},
-  );
+  } = useSelector(state => state.survey_submissions || {});
 
   const handleViewClick = useCallback(
     id => dispatch(fetchSurveySubmissionAction(id)),
@@ -98,19 +129,15 @@ const SurveySubmissions = () => {
 
   const toggleModal = useCallback(() => {
     setModalIsOpen((open) => {
-      if (open) {
-        dispatch(clearSubmissionDetailsAction());
-      }
+      if (open) dispatch(clearSubmissionDetailsAction());
       return !open;
     });
   }, [dispatch]);
 
-  useEffect(
-    () => {
-      dispatch(fetchSurveySubmissionsAction(1, perPage || 10, searchTerm));
-    },
-    [dispatch],
-  );
+  /* Include perPage & searchTerm in deps to fix exhaustive-deps */
+  useEffect(() => {
+    dispatch(fetchSurveySubmissionsAction(1, perPage || 10, searchTerm));
+  }, [dispatch, perPage, searchTerm]);
 
   const handlePageChange = useCallback(
     (page, pageSize) => {
@@ -130,20 +157,15 @@ const SurveySubmissions = () => {
     (value) => {
       const next = (value || '').trim();
       setSearchTerm(next);
-      // Always reset to first page on new search term
+      // reset to first page on new search
       dispatch(fetchSurveySubmissionsAction(1, perPage || 10, next));
     },
     [dispatch, perPage],
   );
 
-  useEffect(
-    () => {
-      if (selectedSubmission) {
-        setModalIsOpen(true);
-      }
-    },
-    [selectedSubmission],
-  );
+  useEffect(() => {
+    if (selectedSubmission) setModalIsOpen(true);
+  }, [selectedSubmission]);
 
   const columns = useMemo(
     () => [
@@ -165,14 +187,7 @@ const SurveySubmissions = () => {
         Header: 'Device',
         accessor: 'device',
         disableGlobalFilter: true,
-        Cell: ({ value }) => (
-          <Box sx={{
- fontFamily: 'monospace', fontSize: '0.75rem', whiteSpace: 'normal', wordBreak: 'break-word', overflowWrap: 'anywhere', 
-}}
-          >
-            {value || 'N/A'}
-          </Box>
-        ),
+        Cell: DeviceCell,
       },
       {
         Header: 'Country',
@@ -183,21 +198,13 @@ const SurveySubmissions = () => {
         Header: 'Started At (UTC)',
         accessor: 'started_at',
         disableGlobalFilter: true,
-        Cell: ({ value }) => (
-          <Box sx={{ whiteSpace: { xs: 'normal', md: 'nowrap' }, textOverflow: 'ellipsis', overflow: 'hidden' }}>
-            {value}
-          </Box>
-        ),
+        Cell: DateCell,
       },
       {
         Header: 'Completed At (UTC)',
         accessor: 'completed_at',
         disableGlobalFilter: true,
-        Cell: ({ value }) => (
-          <Box sx={{ whiteSpace: { xs: 'normal', md: 'nowrap' }, textOverflow: 'ellipsis', overflow: 'hidden' }}>
-            {value}
-          </Box>
-        ),
+        Cell: DateCell,
       },
       {
         Header: 'Actions',
@@ -247,9 +254,13 @@ const SurveySubmissions = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <PageHeader title={t('survey_submissions.title')} subtitle={t('survey_submissions.description')} />
+          <PageHeader
+            title={t('survey_submissions.title')}
+            subtitle={t('survey_submissions.description')}
+          />
         </Col>
       </Row>
+
       {error && (
         <Row className="mb-3">
           <Col md={12}>
@@ -257,6 +268,7 @@ const SurveySubmissions = () => {
           </Col>
         </Row>
       )}
+
       {errorDetails && (
         <Row className="mb-3">
           <Col md={12}>
@@ -290,6 +302,7 @@ const SurveySubmissions = () => {
           />
         </Row>
       )}
+
       <SurveySubmissionDetailsModal
         isOpen={modalIsOpen}
         toggle={toggleModal}

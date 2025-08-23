@@ -222,6 +222,7 @@ ReactTableConstructor.propTypes = {
     dataLength: PropTypes.number,
     onPageChange: PropTypes.func, // used in effect
     onPageSizeChange: PropTypes.func, // used in effect
+    onSearchChange: PropTypes.func,
   }),
   tableOptionalHook: PropTypes.arrayOf(PropTypes.func).isRequired,
 };

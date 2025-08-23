@@ -14,7 +14,9 @@ export const fetchSurveySubmissionsAction = (page = 1, perPage = 10, search = ''
   dispatch({ type: FETCH_SUBMISSIONS_REQUEST, meta: { perPage } });
   try {
     const searchParam = search && typeof search === 'string' ? `&search=${encodeURIComponent(search)}` : '';
-    const response = await api.get(`/survey-submissions?page=${page}&per_page=${perPage}&limit=${perPage}${searchParam}`);
+    const basePath = '/survey-submissions';
+    const query = `page=${page}&per_page=${perPage}&limit=${perPage}${searchParam}`;
+    const response = await api.get(`${basePath}?${query}`);
 
     const {
       data,
@@ -39,7 +41,7 @@ export const fetchSurveySubmissionsAction = (page = 1, perPage = 10, search = ''
       },
     });
   } catch (error) {
-        dispatch({ type: FETCH_SUBMISSIONS_FAILURE, payload: error.message });
+    dispatch({ type: FETCH_SUBMISSIONS_FAILURE, payload: error.message });
   }
 };
 

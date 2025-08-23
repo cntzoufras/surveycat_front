@@ -90,7 +90,13 @@ const SurveyPage = () => {
  const [isThemeEnhancementModalOpen, setIsThemeEnhancementModalOpen] = useState(false);
  const [currentPageIndex, setCurrentPageIndex] = useState(0);
  const currentPageIndexRef = useRef(currentPageIndex);
- const isPublished = surveyData?.survey_status_id === 2;
+  const isPublished = surveyData?.survey_status_id === 2;
+
+  const [notification, setNotification] = useState({
+   open: false,
+   message: '',
+   severity: 'success',
+  });
 
  const currentPageQuestions = useMemo(() => {
     if (!surveyPageId || !allSurveyQuestions) return [];
@@ -125,11 +131,7 @@ const SurveyPage = () => {
     }
   };
 
- const [notification, setNotification] = useState({
-  open: false,
-  message: '',
-  severity: 'success',
- });
+ 
 
 
  useEffect(() => {

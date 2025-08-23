@@ -31,7 +31,6 @@ function SurveyHeader({ title, description }) {
     || themeStyles?.variable_palette?.title_color
     || themeStyles?.colors?.text
   );
-  try { console.debug('SurveyHeader resolvedTitleColor:', resolvedTitleColor); } catch (_) {}
 
   return (
     <Box sx={{ mb: 4 }}>
@@ -68,15 +67,23 @@ function SurveyHeader({ title, description }) {
   );
 }
 
+SurveyHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+};
+
+SurveyHeader.defaultProps = {
+  description: '',
+};
+
 const PublicSurveyPage = ({ preview = false }) => {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = Boolean(user?.id);
-  // IMPORTANT: do not read theme before provider; use SurveyHeader instead
 
   const dispatch = useDispatch();
   const { surveySlug, surveyId } = useParams();
 
-   // Choose which identifier to use based on preview flag
+  // Choose which identifier to use based on preview flag
   const idOrSlug = preview ? surveyId : surveySlug;
 
   // Redux state selectors
@@ -111,7 +118,7 @@ const PublicSurveyPage = ({ preview = false }) => {
   // Once the survey data is loaded, create a survey response record (if not already created)
   useEffect(() => {
     if (
-      survey?.id 
+      survey?.id
       && !preview
       && !isLoggedIn
     ) {
@@ -119,7 +126,7 @@ const PublicSurveyPage = ({ preview = false }) => {
         started_at: startTimeRef.current,
         device: deviceType,
         session_id: sessionId,
-    }))
+      }))
         .then((record) => {
           setResponseRecord(record);
         })
@@ -127,7 +134,7 @@ const PublicSurveyPage = ({ preview = false }) => {
     }
   }, [survey?.id, preview, isLoggedIn, dispatch, deviceType, sessionId]);
 
-    // Reset step when pages change
+  // Reset step when pages change
   useEffect(() => {
     setStep(0);
   }, [survey?.survey_pages]);
@@ -145,8 +152,7 @@ const PublicSurveyPage = ({ preview = false }) => {
 
   const isSingle = survey?.layout === 'single';
   const currentPage = pages[step] || {};
-  
-  // Handle answer changes for each question
+
   // Response change handler
   const handleResponseChange = (qid, value) => {
     setResponses(prev => ({ ...prev, [qid]: value }));
@@ -205,23 +211,22 @@ const PublicSurveyPage = ({ preview = false }) => {
   };
 
   const handleFollowUp = async ({ email, gender, age }) => {
-      const respondentId = responseRecord.respondent_id;
-      if (!respondentId) {
-        console.error('No respondent_id on the survey_response record');
-        return;
-      }
-      try {
-        await dispatch(updateRespondentAction(
-          respondentId,
-          { email, gender, age },
-        ));
-        setFollowUpDone(true);
-      } catch (err) {
-        console.error('Could not save follow-up info:', err);
-      }
-        setFollowUpDone(true);
-      };
-
+    const respondentId = responseRecord?.respondent_id;
+    if (!respondentId) {
+      console.error('No respondent_id on the survey_response record');
+      return;
+    }
+    try {
+      await dispatch(updateRespondentAction(
+        respondentId,
+        { email, gender, age },
+      ));
+      setFollowUpDone(true);
+    } catch (err) {
+      console.error('Could not save follow-up info:', err);
+      setFollowUpDone(true); // still move on after error to avoid blocking UX
+    }
+  };
 
   // Render loading state
   if (!survey || !surveyQuestions) {
@@ -229,15 +234,14 @@ const PublicSurveyPage = ({ preview = false }) => {
   }
 
   if (submissionComplete && !followUpDone) {
-     return <FollowUpForm onSubmit={handleFollowUp} />;
-   }
+    return <FollowUpForm onSubmit={handleFollowUp} />;
+  }
 
-   if (submissionComplete && followUpDone) {
-     return <ThankYouSubmission timestamp={submissionTimestamp} />;
-   }
+  if (submissionComplete && followUpDone) {
+    return <ThankYouSubmission timestamp={submissionTimestamp} />;
+  }
 
   // Theme styling is now handled by SurveyThemeWrapper
-
   return (
     <SurveyThemeWrapper survey={survey}>
       <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
@@ -246,9 +250,9 @@ const PublicSurveyPage = ({ preview = false }) => {
 
         {/* Single vs Multiple logic */}
         {isSingle ? (
-          <>  
-            <Typography 
-              variant="h5" 
+          <>
+            <Typography
+              variant="h5"
               gutterBottom
               sx={{
                 fontFamily: 'Arial, sans-serif',
@@ -279,9 +283,9 @@ const PublicSurveyPage = ({ preview = false }) => {
           </>
         ) : (
           <>
-            <PublicQuestionList 
-              questions={surveyQuestions} 
-              onResponseChange={handleResponseChange} 
+            <PublicQuestionList
+              questions={surveyQuestions}
+              onResponseChange={handleResponseChange}
             />
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Button
@@ -290,9 +294,7 @@ const PublicSurveyPage = ({ preview = false }) => {
                 onClick={handleSubmit}
                 color="primary"
                 size="large"
-                sx={{
-                  px: 4,
-                }}
+                sx={{ px: 4 }}
               >
                 Submit
               </Button>
@@ -304,8 +306,6 @@ const PublicSurveyPage = ({ preview = false }) => {
   );
 };
 
-export default PublicSurveyPage;
-
 PublicSurveyPage.propTypes = {
   preview: PropTypes.bool,
 };
@@ -313,3 +313,5 @@ PublicSurveyPage.propTypes = {
 PublicSurveyPage.defaultProps = {
   preview: false,
 };
+
+export default PublicSurveyPage;
