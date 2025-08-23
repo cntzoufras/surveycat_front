@@ -27,9 +27,9 @@ import { useSurveyTheme } from '../../../contexts/SurveyThemeContext';
 function SurveyHeader({ title, description }) {
   const themeStyles = useSurveyTheme();
   const resolvedTitleColor = (
-    themeStyles?.colors?.title_color ||
-    themeStyles?.variable_palette?.title_color ||
-    themeStyles?.colors?.text
+    themeStyles?.colors?.title_color
+    || themeStyles?.variable_palette?.title_color
+    || themeStyles?.colors?.text
   );
   try { console.debug('SurveyHeader resolvedTitleColor:', resolvedTitleColor); } catch (_) {}
 
@@ -189,7 +189,7 @@ const PublicSurveyPage = ({ preview = false }) => {
         submitSurveySubmissionAction(survey.id, {
           survey_response_id: responseRecord.id,
           ...submissionData, // answers, completed_at, device, session_id, etc.
-        })
+        }),
       );
       // If the backend returns a status (e.g., via axios response), handle success
       const status = result?.status || result?.statusCode;
