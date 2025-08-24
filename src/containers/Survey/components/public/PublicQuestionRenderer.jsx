@@ -81,11 +81,25 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
 
 
   const themeStyles = useSurveyTheme();
+  const qaColor = themeStyles?.colors?.question_answer_color || themeStyles?.colors?.primary;
+  const bodyFontFamily = themeStyles?.typography?.fontFamily || 'Arial, sans-serif';
+  const bodyFontSize = (() => {
+    const p = themeStyles?.typography?.fontSizePx;
+    if (Number.isFinite(p)) return `${p}px`;
+    const raw = themeStyles?.typography?.fontSize;
+    if (typeof raw === 'number') return `${raw}px`;
+    if (typeof raw === 'string') {
+      const n = parseFloat(raw.replace('px', ''));
+      if (!Number.isNaN(n)) return `${n}px`;
+    }
+    return '16px';
+  })();
   
   return (
     <div style={{ 
-      fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-      color: themeStyles?.colors?.text || '#252525',
+      fontFamily: bodyFontFamily,
+      // Do not force a global text color here; let individual widgets decide.
+      color: 'inherit',
       backgroundColor: 'transparent',
       padding: '20px',
       borderRadius: '8px',
@@ -104,17 +118,22 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedValues.includes(choice.id)}
                     onChange={handleRadioChange}
                     sx={{
+                      // Unchecked radio color should follow choice color, not generic text
                       color: themeStyles?.colors?.choice || 'grey.400',
                       '&.Mui-checked': { 
-                        color: themeStyles?.colors?.primary || 'grey.700', 
+                        color: qaColor || 'grey.700', 
                       },
                     }}
                   />
                 )}
                 label={choice.content}
                 sx={{ 
+                  // Choice label color should use the theme's choice color
                   color: themeStyles?.colors?.choice || '#252525',
-                  fontSize: themeStyles?.typography?.fontSize || '16px',
+                  '& .MuiFormControlLabel-label': {
+                    fontFamily: bodyFontFamily,
+                    fontSize: `${bodyFontSize} !important`,
+                  },
                 }}
               />
             </ListItem>
@@ -137,9 +156,10 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                     checked={selectedValues.includes(choice.id)}
                     onChange={handleCheckboxChange}
                     sx={{
+                      // Unchecked checkbox color should follow choice color
                       color: themeStyles?.colors?.choice || 'grey.400',
                       '&.Mui-checked': { 
-                        color: themeStyles?.colors?.primary || 'grey.700', 
+                        color: qaColor || 'grey.700', 
                       },
                     }}
                   />
@@ -147,7 +167,10 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
                 label={choice.content}
                 sx={{ 
                   color: themeStyles?.colors?.choice || '#252525',
-                  fontSize: themeStyles?.typography?.fontSize || '16px',
+                  '& .MuiFormControlLabel-label': {
+                    fontFamily: bodyFontFamily,
+                    fontSize: `${bodyFontSize} !important`,
+                  },
                 }}
               />
             </ListItem>
@@ -167,27 +190,41 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           sx={{ 
             mt: 1,
             '& .MuiOutlinedInput-root': {
-              backgroundColor: themeStyles?.colors?.background || 'grey.100',
+              backgroundColor: 'transparent',
               borderRadius: themeStyles?.layout?.borderRadius || 1,
               '&:hover .MuiOutlinedInput-notchedOutline': {
-                borderColor: themeStyles?.colors?.choice || 'grey.600',
+                borderColor: qaColor || 'grey.600',
               },
               '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderColor: themeStyles?.colors?.choice || 'grey.600',
+                borderColor: qaColor || 'grey.600',
                 borderWidth: '2px',
               },
             },
             '& .MuiOutlinedInput-notchedOutline': {
-              // Match outline to text/placeholder (choice)
-              borderColor: themeStyles?.colors?.choice || 'grey.700',
+              // Outline defaults to primary to match selection color
+              borderColor: qaColor || 'grey.700',
             },
             '& input::placeholder': {
-              color: themeStyles?.colors?.choice || 'grey.400',
+              // Placeholder matches Text color from theme settings
+              color: themeStyles?.colors?.text || '#252525',
               opacity: 1,
-           },
-           '& .MuiOutlinedInput-input': {
-              // Match input text color to placeholder (choice)
-              color: themeStyles?.colors?.choice || 'grey.900', 
+              fontFamily: bodyFontFamily,
+              fontSize: bodyFontSize,
+            },
+            '& .MuiOutlinedInput-input': {
+              // Actual typed text should use Text color from theme settings
+              color: themeStyles?.colors?.text || '#252525',
+              caretColor: themeStyles?.colors?.text || '#252525',
+              fontFamily: bodyFontFamily,
+              fontSize: `${bodyFontSize} !important`,
+            },
+            // Also target base input classes to be safe
+            '& .MuiInputBase-input': {
+              color: themeStyles?.colors?.text || '#252525',
+              caretColor: themeStyles?.colors?.text || '#252525',
+              WebkitTextFillColor: themeStyles?.colors?.text || '#252525',
+              fontFamily: bodyFontFamily,
+              fontSize: `${bodyFontSize} !important`,
             },
           }}
         />
@@ -204,17 +241,19 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           /* make the outline stars grey and filled stars orange */
           sx={{
             '& .MuiRating-iconEmpty': { 
+              // Empty stars follow choice color (not generic text)
               color: themeStyles?.colors?.choice || 'grey.400', 
             },
             '& .MuiRating-iconFilled': { 
-              color: themeStyles?.colors?.primary || 'warning.main', 
+              // Filled stars use the answer/input color (blue), as before
+              color: qaColor || themeStyles?.colors?.primary || 'warning.main', 
             },
           }}
           /* or if you prefer custom icons: */
           icon={<StarIcon sx={{ fontSize: '2rem' }} />}
           emptyIcon={<StarBorderIcon sx={{ fontSize: '2rem' }} />}
         />
-        <Typography sx={{ ml: 2, color: themeStyles?.colors?.text || 'text.primary' }}>
+        <Typography sx={{ ml: 2, color: themeStyles?.colors?.choice || 'text.primary', fontFamily: bodyFontFamily, fontSize: bodyFontSize }}>
           {selectedValues[0] || ''}
         </Typography>
       </Box>
@@ -237,7 +276,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           ]}
           valueLabelDisplay="auto"
           sx={{
-            color: 'primary.main',
+            color: qaColor || 'primary.main',
           }}
         />
       </Box>
@@ -256,27 +295,40 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           sx={{
             mt: 1,
             '& .MuiOutlinedInput-root': { 
-              backgroundColor: themeStyles?.colors?.background || 'grey.100', 
+              backgroundColor: 'transparent', 
               borderRadius: themeStyles?.layout?.borderRadius || 1, 
               '&:hover .MuiOutlinedInput-notchedOutline': { 
-                borderColor: themeStyles?.colors?.choice || 'grey.600', 
+                borderColor: qaColor || 'grey.600', 
               },
               '&.Mui-focused .MuiOutlinedInput-notchedOutline': { 
-                borderColor: themeStyles?.colors?.choice || 'grey.600', 
+                borderColor: qaColor || 'grey.600', 
                 borderWidth: '2px',
               },
             },
             '& .MuiOutlinedInput-notchedOutline': { 
               // Match outline to text/placeholder (choice)
-              borderColor: themeStyles?.colors?.choice || 'grey.400', 
+              borderColor: qaColor || 'grey.400', 
             },
             '& textarea::placeholder': { 
-              color: themeStyles?.colors?.choice || 'grey.600', 
+              // Placeholder should use Text color
+              color: themeStyles?.colors?.text || '#252525', 
               opacity: 1, 
+              fontFamily: bodyFontFamily,
+              fontSize: bodyFontSize,
             },
             '& .MuiOutlinedInput-input': { 
-              // Match textarea text color to placeholder (choice)
-              color: themeStyles?.colors?.choice || '#252525', 
+              // Multiline typed text uses Text color
+              color: themeStyles?.colors?.text || '#252525', 
+              caretColor: themeStyles?.colors?.text || '#252525',
+              fontFamily: bodyFontFamily,
+              fontSize: `${bodyFontSize} !important`,
+            },
+            '& .MuiInputBase-inputMultiline': {
+              color: themeStyles?.colors?.text || '#252525',
+              caretColor: themeStyles?.colors?.text || '#252525',
+              WebkitTextFillColor: themeStyles?.colors?.text || '#252525',
+              fontFamily: bodyFontFamily,
+              fontSize: `${bodyFontSize} !important`,
             },
           }}
         />
@@ -294,14 +346,24 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           sx={{
             mt: 1,
             '& .MuiOutlinedInput-root': { 
-              backgroundColor: themeStyles?.colors?.background || 'grey.100', 
+              backgroundColor: 'transparent', 
               borderRadius: themeStyles?.layout?.borderRadius || 1, 
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: qaColor || 'grey.700',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: qaColor || 'grey.700',
+                borderWidth: '1px',
+              },
             },
             '& .MuiOutlinedInput-notchedOutline': { 
-              borderColor: themeStyles?.colors?.primary || 'grey.400', 
+              borderColor: qaColor || 'grey.400', 
             },
             '& .MuiSelect-select': { 
-              color: themeStyles?.colors?.text || '#252525', 
+              // Dropdown selected text uses body typography, color remains answer/input color
+              color: qaColor || themeStyles?.colors?.choice || '#252525', 
+              fontFamily: bodyFontFamily,
+              fontSize: bodyFontSize,
             },
           }}
         >

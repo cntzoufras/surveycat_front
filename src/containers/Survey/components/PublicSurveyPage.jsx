@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import tinycolor from 'tinycolor2';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +17,7 @@ import {
   Typography,
   Box,
   Button,
+  Paper,
 } from '@mui/material';
 import PublicQuestionList from './public/PublicQuestionList';
 import FollowUpForm from './public/FollowUpForm';
@@ -98,8 +100,225 @@ SurveyHeader.defaultProps = {
   description: '',
 };
 
-const PublicSurveyPage = ({ preview = false }) => {
+// Inner component that is rendered under SurveyThemeWrapper so it can use the theme context
+function PublicSurveyInner({
+  survey,
+  pages,
+  isSingle,
+  step,
+  setStep,
+  handleResponseChange,
+  handleSubmit,
+}) {
   const themeStyles = useSurveyTheme();
+
+  // Structured heading sizes with back-compat parsing
+  const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
+    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
+    const parts = styleStr.trim().split(/\s+/);
+    const sizeToken = parts.find(p => /px$/.test(p));
+    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+    const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+    let weight = defaultWeight;
+    if (weightToken) {
+      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+    }
+    return { sizePx, weight };
+  };
+  const resolveHeading = (lvl, defPx, defWeight) => {
+    const obj = themeStyles?.typography?.heading?.[lvl];
+    if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
+    const legacy = themeStyles?.typography?.headingStyle?.[lvl];
+    return parseHeadingStyle(legacy, defPx, defWeight);
+  };
+  const H2 = resolveHeading('H2', 18, 400);
+  const H3 = resolveHeading('H3', 16, 500);
+  const h3Size = `${H3.sizePx}px`;
+  const h3Weight = H3.weight;
+  const currentPage = pages[step] || {};
+  const pageTitleColor = (
+    themeStyles?.colors?.page_title
+    || themeStyles?.variable_palette?.title_color
+    || themeStyles?.colors?.text
+  );
+
+  return (
+    <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
+      <Paper
+        elevation={themeStyles?.layout?.showShadow ? 6 : 0}
+        variant={themeStyles?.layout?.showBorder ? 'outlined' : 'elevation'}
+        sx={{
+          p: themeStyles?.layout?.padding ?? 3,
+          borderRadius: themeStyles?.layout?.borderRadius ?? 2,
+          // Stronger outline for visibility
+          border: themeStyles?.layout?.showBorder
+            ? `2px solid ${themeStyles?.layout?.borderColor || themeStyles?.colors?.primary || themeStyles?.variable_palette?.primary_accent || 'rgba(0,0,0,0.25)'}`
+            : '1px solid rgba(0,0,0,0.08)',
+          // Force a visible shadow even when variant is outlined
+          boxShadow: themeStyles?.layout?.showShadow
+            ? '0 10px 30px rgba(0,0,0,0.20), 0 6px 10px rgba(0,0,0,0.10)'
+            : 'none',
+          backgroundColor: themeStyles?.variable_palette?.primary_background || '#ffffff',
+        }}
+      >
+        {/* Survey Title and Description */}
+        <SurveyHeader title={survey.title} description={survey.description} />
+
+        {/* Single vs Multiple logic */}
+        {isSingle ? (
+          <>
+            {/* Page title uses theme colors.page_title, with minimal fallback */}
+            <Box sx={{ color: pageTitleColor }}>
+              <Typography
+                variant="h3"
+                gutterBottom
+                color="inherit"
+                className="sc-page-title"
+                sx={{
+                  fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                  fontSize: h3Size,
+                  fontWeight: h3Weight,
+                  color: `${pageTitleColor} !important`,
+                }}
+                style={{ color: pageTitleColor }}
+              >
+                {currentPage.title}
+              </Typography>
+            </Box>
+            <PublicQuestionList
+              questions={currentPage.questions}
+              onResponseChange={handleResponseChange}
+            />
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Button
+                variant="text"
+                onClick={() => setStep(s => Math.max(s - 1, 0))}
+                disabled={step === 0}
+                sx={{
+                  mr: 2,
+                  color: themeStyles?.colors?.primary,
+                  textTransform: 'none',
+                  fontFamily: themeStyles?.typography?.fontFamily,
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    color: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                  },
+                }}
+              >
+                Back
+              </Button>
+              {step < pages.length - 1 ? (
+                <Button
+                  variant="contained"
+                  onClick={() => setStep(s => s + 1)}
+                  sx={{
+                    backgroundColor: themeStyles?.colors?.primary,
+                    color: '#efefef',
+                    borderRadius: `${themeStyles?.layout?.borderRadius ?? 2}px`,
+                    textTransform: 'none',
+                    fontFamily: themeStyles?.typography?.fontFamily,
+                    px: 4,
+                    '&:hover': {
+                      backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                    },
+                  }}
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleSubmit}
+                  sx={{
+                    backgroundColor: themeStyles?.colors?.primary,
+                    color: '#efefef',
+                    borderRadius: `${themeStyles?.layout?.borderRadius ?? 2}px`,
+                    textTransform: 'none',
+                    fontFamily: themeStyles?.typography?.fontFamily,
+                    px: 4,
+                    '&:hover': {
+                      backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                    },
+                  }}
+                >
+                  Submit
+                </Button>
+              )}
+            </Box>
+          </>
+        ) : (
+          <>
+            {pages && pages.length > 0 ? (
+              pages.map((p, idx) => (
+                <Box key={p.id || idx} sx={{ mb: 3 }}>
+                  {/* Page Title */}
+                  <Box sx={{ color: pageTitleColor }}>
+                    <Typography
+                      variant="h3"
+                      gutterBottom
+                      color="inherit"
+                      className="sc-page-title"
+                      sx={{
+                        fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                        fontSize: h3Size,
+                        fontWeight: h3Weight,
+                        color: `${pageTitleColor} !important`,
+                      }}
+                      style={{ color: pageTitleColor }}
+                    >
+                      {p.title}
+                    </Typography>
+                  </Box>
+                  <PublicQuestionList
+                    questions={p.questions || []}
+                    onResponseChange={handleResponseChange}
+                  />
+                </Box>
+              ))
+            ) : (
+              <PublicQuestionList
+                questions={survey?.survey_questions || survey?.questions || []}
+                onResponseChange={handleResponseChange}
+              />
+            )}
+            <Box sx={{ textAlign: 'center', mt: 4 }}>
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                size="large"
+                sx={{
+                  px: 4,
+                  backgroundColor: themeStyles?.colors?.primary,
+                  color: '#efefef',
+                  borderRadius: `${themeStyles?.layout?.borderRadius ?? 2}px`,
+                  textTransform: 'none',
+                  fontFamily: themeStyles?.typography?.fontFamily,
+                  '&:hover': {
+                    backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                  },
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </>
+        )}
+      </Paper>
+    </Container>
+  );
+}
+
+PublicSurveyInner.propTypes = {
+  survey: PropTypes.object.isRequired,
+  pages: PropTypes.array.isRequired,
+  isSingle: PropTypes.bool.isRequired,
+  step: PropTypes.number.isRequired,
+  setStep: PropTypes.func.isRequired,
+  handleResponseChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
+
+const PublicSurveyPage = ({ preview = false }) => {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = Boolean(user?.id);
 
@@ -169,43 +388,13 @@ const PublicSurveyPage = ({ preview = false }) => {
       .sort((a, b) => a.sort_index - b.sort_index)
       .map(page => ({
         ...page,
-        questions: page.survey_questions,
+        questions: page.questions || page.survey_questions || [],
       }));
   }, [survey]);
 
   const isSingle = survey?.layout === 'single';
-  // Structured heading sizes with back-compat parsing
-  const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
-    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
-    const parts = styleStr.trim().split(/\s+/);
-    const sizeToken = parts.find(p => /px$/.test(p));
-    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
-    const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
-    let weight = defaultWeight;
-    if (weightToken) {
-      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
-    }
-    return { sizePx, weight };
-  };
-  const resolveHeading = (lvl, defPx, defWeight) => {
-    const obj = themeStyles?.typography?.heading?.[lvl];
-    if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
-    const legacy = themeStyles?.typography?.headingStyle?.[lvl];
-    return parseHeadingStyle(legacy, defPx, defWeight);
-  };
-  const H2 = resolveHeading('H2', 18, 400);
-  const H3 = resolveHeading('H3', 16, 500);
-  const h2Size = `${H2.sizePx}px`;
-  const h2Weight = H2.weight;
-  const h3Size = `${H3.sizePx}px`;
-  const h3Weight = H3.weight;
-  const currentPage = pages[step] || {};
-  // Resolve page title color with minimal fallback
-  const pageTitleColor = (
-    themeStyles?.colors?.page_title
-    || themeStyles?.variable_palette?.title_color
-    || themeStyles?.colors?.text
-  );
+  const h2Size = '0px'; // not used after refactor; keep placeholder to avoid unused vars if referenced
+  const h2Weight = 400;
 
   // Response change handler
   const handleResponseChange = (qid, value) => {
@@ -295,74 +484,18 @@ const PublicSurveyPage = ({ preview = false }) => {
     return <ThankYouSubmission timestamp={submissionTimestamp} />;
   }
 
-  // Theme styling is now handled by SurveyThemeWrapper
+  // Theme styling is handled by SurveyThemeWrapper; consume it inside PublicSurveyInner
   return (
     <SurveyThemeWrapper survey={survey}>
-      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
-        {/* Survey Title and Description */}
-        <SurveyHeader title={survey.title} description={survey.description} />
-
-        {/* Single vs Multiple logic */}
-        {isSingle ? (
-          <>
-            {/* Page title uses theme colors.page_title, with minimal fallback */}
-            <Box sx={{ color: pageTitleColor }}>
-              <Typography
-                variant="h3"
-                gutterBottom
-                color="inherit"
-                className="sc-page-title"
-                sx={{
-                  fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-                  fontSize: h3Size,
-                  fontWeight: h3Weight,
-                  color: `${pageTitleColor} !important`,
-                }}
-                style={{ color: pageTitleColor }}
-              >
-                {currentPage.title}
-              </Typography>
-            </Box>
-            <PublicQuestionList
-              questions={currentPage.questions}
-              onResponseChange={handleResponseChange}
-            />
-            <Box sx={{ mt: 4, textAlign: 'center' }}>
-              <Button onClick={() => setStep(s => Math.max(s - 1, 0))} disabled={step === 0} sx={{ mr: 2 }}>
-                Back
-              </Button>
-              {step < pages.length - 1 ? (
-                <Button variant="contained" onClick={() => setStep(s => s + 1)}>
-                  Next
-                </Button>
-              ) : (
-                <Button variant="contained" onClick={handleSubmit} disabled={preview}>
-                  Submit
-                </Button>
-              )}
-            </Box>
-          </>
-        ) : (
-          <>
-            <PublicQuestionList
-              questions={surveyQuestions}
-              onResponseChange={handleResponseChange}
-            />
-            <Box sx={{ textAlign: 'center', mt: 4 }}>
-              <Button
-                disabled={preview}
-                variant="contained"
-                onClick={handleSubmit}
-                color="primary"
-                size="large"
-                sx={{ px: 4 }}
-              >
-                Submit
-              </Button>
-            </Box>
-          </>
-        )}
-      </Container>
+      <PublicSurveyInner
+        survey={survey}
+        pages={pages}
+        isSingle={isSingle}
+        step={step}
+        setStep={setStep}
+        handleResponseChange={handleResponseChange}
+        handleSubmit={handleSubmit}
+      />
     </SurveyThemeWrapper>
   );
 };

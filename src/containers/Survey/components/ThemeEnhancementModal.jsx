@@ -46,7 +46,8 @@ const ThemeEnhancementModal = ({
           // New: explicit title color key to control PublicSurveyPage title independently
           title_color: baseTheme.colors?.title_color || activePalette.title_color || '#333333',
           question: activePalette.question_color || baseTheme.colors?.question || '#252525',
-          choice: activePalette.answer_color || baseTheme.colors?.choice || '#666666',
+          // Unified answer color
+          question_answer_color: activePalette.answer_color || baseTheme.colors?.question_answer_color || '#1976d2',
         },
         typography: baseTheme.typography || {
           fontFamily: 'Arial, sans-serif',
@@ -143,7 +144,7 @@ const ThemeEnhancementModal = ({
           // New: explicit title color key to control PublicSurveyPage title independently
           title_color: baseTheme.colors?.title_color || activePalette.title_color || '#333333',
           question: activePalette.question_color || baseTheme.colors?.question || '#252525',
-          choice: activePalette.answer_color || baseTheme.colors?.choice || '#666666',
+          question_answer_color: activePalette.answer_color || baseTheme.colors?.question_answer_color || '#1976d2',
         },
         typography: baseTheme.typography || {
           fontFamily: 'Arial, sans-serif',

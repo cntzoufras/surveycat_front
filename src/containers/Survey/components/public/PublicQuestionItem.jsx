@@ -17,11 +17,16 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
   return (
     <Box
       sx={{
-        mb: 2,
-        p: 2,
-        border: '1px solid #e0e0e0',
+        mb: 3,
+        p: 3,
         borderRadius: `${themeStyles?.layout?.borderRadius ?? 8}px`,
         backgroundColor: questionBoxBg,
+        border: themeStyles?.layout?.showBorder
+          ? `1px solid ${themeStyles?.layout?.borderColor || themeStyles?.colors?.primary || themeStyles?.variable_palette?.primary_accent || 'rgba(0,0,0,0.2)'}`
+          : 'none',
+        boxShadow: themeStyles?.layout?.showShadow
+          ? '0 6px 14px rgba(0,0,0,0.18), 0 3px 6px rgba(0,0,0,0.12)'
+          : 'none',
       }}
     >
       <Typography
@@ -32,7 +37,7 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
             const px = themeStyles?.typography?.fontSizePx;
             if (Number.isFinite(px)) return `${px}px`;
             const raw = themeStyles?.typography?.fontSize;
-            const n = parseFloat(String(raw || '').replace('px',''));
+            const n = parseFloat(String(raw || '').replace('px', ''));
             return Number.isFinite(n) ? `${n}px` : '16px';
           })(),
           fontWeight: 400,

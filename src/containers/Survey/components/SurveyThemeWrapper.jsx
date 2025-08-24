@@ -143,7 +143,7 @@ const SurveyThemeWrapper = ({ survey, children }) => {
 
     styleElement.innerHTML = `
       body {
-        background-color: ${finalPalette.primary_background || 'transparent'};
+        background-color: #ffffff;
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
       body .MuiTypography-root,
@@ -210,7 +210,7 @@ const SurveyThemeWrapper = ({ survey, children }) => {
     '--theme-font-family': typography.fontFamily || 'Arial, sans-serif',
     '--theme-font-size': typography.fontSize || '16px',
     '--theme-border-radius': `${layout.borderRadius || 8}px`,
-    backgroundColor: finalPalette.primary_background || 'transparent',
+    backgroundColor: '#ffffff',
     color: finalColors.text || finalPalette.title_color || '#333333',
   };
 

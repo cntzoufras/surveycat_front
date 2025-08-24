@@ -36,9 +36,18 @@ const DEFAULT_THEME = {
     title_color: '#333333',
     question: '#090606',
     choice: '#666666',
+    // New: unified control for answers (text inputs, dropdowns, sliders, selected states)
+    question_answer_color: '#1976d2',
   },
   variable_palette: { primary_background: '#f1ebf2' },
-  layout: { backgroundAlpha: 100, borderRadius: 8, padding: 20, showShadow: true, showBorder: false },
+  layout: {
+    backgroundAlpha: 100,
+    borderRadius: 8,
+    padding: 20,
+    showShadow: true,
+    showBorder: false,
+    borderColor: '#E0E0E0',
+},
 };
 
 const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
@@ -108,8 +117,12 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
       borderRadius: `${currentTheme.layout.borderRadius}px`,
       padding: `${currentTheme.layout.padding}px`,
       backgroundColor: questionBoxBg,
-      boxShadow: currentTheme.layout.showShadow ? 2 : 'none',
-      border: currentTheme.layout.showBorder ? '1px solid rgba(0,0,0,0.12)' : 'none',
+      border: currentTheme.layout.showBorder
+        ? `1px solid ${currentTheme.layout.borderColor || currentTheme.colors.primary || currentTheme.variable_palette?.primary_accent || 'rgba(0,0,0,0.2)'}`
+        : 'none',
+      boxShadow: currentTheme.layout.showShadow
+        ? '0 6px 14px rgba(0,0,0,0.18), 0 3px 6px rgba(0,0,0,0.12)'
+        : 'none',
     };
 
     // Parse heading styles like "bold 24px" into weight + size with sensible fallbacks
@@ -184,10 +197,15 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           color: currentTheme.colors.text,
           borderRadius: `${currentTheme.layout.borderRadius}px`,
           backgroundColor: pageBg,
+          border: currentTheme.layout.showBorder
+            ? `2px solid ${currentTheme.layout.borderColor || currentTheme.colors.primary || currentTheme.variable_palette?.primary_accent || 'rgba(0,0,0,0.25)'}`
+            : '1px solid rgba(0,0,0,0.08)',
+          boxShadow: currentTheme.layout.showShadow
+            ? '0 10px 30px rgba(0,0,0,0.20), 0 6px 10px rgba(0,0,0,0.10)'
+            : 'none',
         }}
       >
-        <Box sx={styles}>
-        {/* Survey Title - only render actual survey title if provided */}
+        {/* Titles OUTSIDE the purple question box */}
         {surveyTitle ? (
           <Typography
             variant="h1"
@@ -203,7 +221,6 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           </Typography>
         ) : null}
 
-        {/* Subtitle - directly below the survey title, styled as H2 */}
         <Typography
           variant="h2"
           sx={{
@@ -219,7 +236,6 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           Your response will help us improve our services.
         </Typography>
 
-        {/* Survey Page Title - H3 */}
         <Typography
           variant="h3"
           sx={{
@@ -233,113 +249,118 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           {firstPageTitle || 'Survey Page Title'}
         </Typography>
 
-        
-
-        {/* Questions Preview - use actual questions if present */}
-        {Array.isArray(survey?.survey_pages) && survey.survey_pages.length > 0
+        {/* Purple question box starts here */}
+        <Box sx={styles}>
+          {/* Questions Preview - use actual questions if present */}
+          {Array.isArray(survey?.survey_pages) && survey.survey_pages.length > 0
           && Array.isArray(survey.survey_pages[0]?.survey_questions)
           && survey.survey_pages[0].survey_questions.length > 0 ? (
-          <Box sx={{ mb: 2 }}>
-            {survey.survey_pages[0].survey_questions.slice(0, 3).map((q, idx) => (
+            <Box sx={{ mb: 2 }}>
+              {survey.survey_pages[0].survey_questions.slice(0, 3).map((q, idx) => (
+                <Typography
+                  key={q.id || idx}
+                  variant="h6"
+                  sx={{
+                    fontFamily: currentTheme.typography.fontFamily,
+                    color: currentTheme.colors.question,
+                    fontSize: qSize,
+                    fontWeight: 'bold',
+                    mb: 1.5,
+                  }}
+                >
+                  {`${idx + 1}. ${q.title || ''}`}
+                </Typography>
+              ))}
+            </Box>
+          ) : (
+            <>
+              {/* Sample Question Title - H1 Style using question color when no actual questions */}
               <Typography
-                key={q.id || idx}
-                variant="h6"
+                variant="h1"
                 sx={{
                   fontFamily: currentTheme.typography.fontFamily,
                   color: currentTheme.colors.question,
                   fontSize: qSize,
                   fontWeight: 'bold',
-                  mb: 1.5,
+                  marginBottom: '16px',
                 }}
               >
-                {`${idx + 1}. ${q.title || ''}`}
+                How would you rate our customer service?
               </Typography>
-            ))}
-          </Box>
-        ) : (
-          <>
-            {/* Sample Question Title - H1 Style using question color when no actual questions */}
-            <Typography
-              variant="h1"
-              sx={{
-                fontFamily: currentTheme.typography.fontFamily,
-                color: currentTheme.colors.question,
-                fontSize: qSize,
-                fontWeight: 'bold',
-                marginBottom: '16px',
-              }}
-            >
-              How would you rate our customer service?
-            </Typography>
-          </>
-        )}
+            </>
+          )}
 
-        {/* Multiple Choice Options */}
-        <Box sx={{ mt: 3, mb: 3 }}>
-          {[
-            { label: 'Excellent' },
-            { label: 'Good' },
-            { label: 'Average' },
-            { label: 'Poor' },
-          ].map(option => (
-            <Box
-              key={option.label}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                mb: 1,
-                p: 2,
-                border: `1px solid ${currentTheme.colors.choice}`,
-                borderRadius: `${currentTheme.layout.borderRadius}px`,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  backgroundColor: `${currentTheme.colors.primary}10`,
-                  borderColor: currentTheme.colors.primary,
-                },
-              }}
-            >
+          {/* Multiple Choice Options */}
+          <Box sx={{ mt: 3, mb: 3 }}>
+            {[
+              { label: 'Excellent' },
+              { label: 'Good' },
+              { label: 'Average' },
+              { label: 'Poor' },
+            ].map(option => (
               <Box
+                key={option.label}
                 sx={{
-                  width: 20,
-                  height: 20,
-                  border: `2px solid ${currentTheme.colors.primary}`,
-                  borderRadius: '50%',
-                  mr: 2,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              />
-              <Typography
-                sx={{
-                  color: currentTheme.colors.choice,
-                  fontFamily: currentTheme.typography.fontFamily,
-                  fontSize: currentTheme.typography.fontSize || '16px',
+                  mb: 1,
+                  p: 2,
+                  border: `1px solid ${currentTheme.colors.question_answer_color || currentTheme.colors.primary}`,
+                  borderRadius: `${currentTheme.layout.borderRadius}px`,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    backgroundColor: `${(currentTheme.colors.question_answer_color || currentTheme.colors.primary)}10`,
+                    borderColor: currentTheme.colors.question_answer_color || currentTheme.colors.primary,
+                  },
                 }}
               >
-                {option.label}
-              </Typography>
-            </Box>
-          ))}
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    border: `2px solid ${currentTheme.colors.question_answer_color || currentTheme.colors.primary}`,
+                    borderRadius: '50%',
+                    mr: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+                <Typography
+                  sx={{
+                    color: currentTheme.colors.choice,
+                    fontFamily: currentTheme.typography.fontFamily,
+                    fontSize: currentTheme.typography.fontSize || '16px',
+                  }}
+                >
+                  {option.label}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+
         </Box>
 
-        {/* Submit Button */}
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: currentTheme.colors.primary,
-            color: '#ffffff',
-            fontFamily: currentTheme.typography.fontFamily,
-            fontSize: currentTheme.typography.fontSize || '16px',
-            padding: '12px 24px',
-            borderRadius: `${currentTheme.layout.borderRadius}px`,
-            textTransform: 'none',
-          }}
-        >
-          Submit Response
-        </Button>
-
+        {/* Submit Button below question box */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: currentTheme.colors.primary,
+              color: '#ffffff',
+              fontFamily: currentTheme.typography.fontFamily,
+              fontSize: currentTheme.typography.fontSize || '16px',
+              padding: '12px 24px',
+              borderRadius: `${currentTheme.layout.borderRadius}px`,
+              textTransform: 'none',
+              '&:hover': {
+                backgroundColor: tinycolor(currentTheme.colors.primary || '#1976d2').darken(8).toString(),
+              },
+            }}
+          >
+            Submit Response
+          </Button>
         </Box>
       </Paper>
     );
@@ -347,9 +368,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
 
   const renderTypographyEditor = () => {
     const heading = currentTheme.typography.heading || {
-      H1: H1,
-      H2: H2,
-      H3: H3,
+      H1,
+      H2,
+      H3,
     };
 
     const setHeading = (lvl, key, val) => {
@@ -367,7 +388,7 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
       });
     };
 
-    const weightOptions = [100,200,300,400,500,600,700,800,900];
+    const weightOptions = [100, 200, 300, 400, 500, 600, 700, 800, 900];
 
     return (
       <Box>
@@ -396,7 +417,7 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               fullWidth
               type="number"
               label="Body Font Size (px)"
-              value={Number.isFinite(currentTheme.typography.fontSizePx) ? currentTheme.typography.fontSizePx : parseFloat(String(currentTheme.typography.fontSize || '16').replace('px',''))}
+              value={Number.isFinite(currentTheme.typography.fontSizePx) ? currentTheme.typography.fontSizePx : parseFloat(String(currentTheme.typography.fontSize || '16').replace('px', ''))}
               onChange={e => handleTypographyChange('fontSizePx', parseInt(e.target.value || '0', 10) || 0)}
             />
           </Grid>
@@ -533,10 +554,11 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               text: 'Text',
               question: 'Question',
               choice: 'Choice',
+              question_answer_color: 'Answer (inputs)'.trim(),
               primary: 'Primary',
               secondary: 'Secondary',
             };
-            const order = ['page_title', 'title_color', 'subtitle', 'text', 'primary', 'secondary', 'question', 'choice'];
+            const order = ['page_title', 'title_color', 'subtitle', 'text', 'primary', 'secondary', 'question', 'choice', 'question_answer_color'];
             const entries = Object.entries(currentTheme.colors)
               .filter(([key]) => key !== 'background')
               .sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
@@ -591,7 +613,7 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
             control={(
               <Switch
                 checked={Boolean(currentTheme.layout.showShadow)}
-                onChange={(e) => handleLayoutChange('showShadow', e.target.checked)}
+                onChange={e => handleLayoutChange('showShadow', e.target.checked)}
               />
             )}
             label="Show Shadow"
@@ -603,7 +625,7 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
             control={(
               <Switch
                 checked={Boolean(currentTheme.layout.showBorder)}
-                onChange={(e) => handleLayoutChange('showBorder', e.target.checked)}
+                onChange={e => handleLayoutChange('showBorder', e.target.checked)}
               />
             )}
             label="Show Border"
@@ -638,6 +660,17 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
             type="number"
             value={currentTheme.layout.padding}
             onChange={e => handleLayoutChange('padding', parseInt(e.target.value, 10))}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label="Border Color"
+            type="color"
+            value={currentTheme.layout.borderColor || '#E0E0E0'}
+            onChange={e => handleLayoutChange('borderColor', e.target.value)}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
       </Grid>
@@ -684,8 +717,8 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          {/* Page background */}
-          <Paper elevation={1} sx={{ p: 3, backgroundColor: pageBg }}>
+          {/* Live Preview wrapper should be white */}
+          <Paper elevation={1} sx={{ p: 3, backgroundColor: '#ffffff' }}>
             <Typography variant="h6" gutterBottom>Live Preview</Typography>
             {renderPreview()}
           </Paper>
@@ -711,6 +744,9 @@ ThemePreview.propTypes = {
       backgroundAlpha: PropTypes.number,
       borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       padding: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      showShadow: PropTypes.bool,
+      showBorder: PropTypes.bool,
+      borderColor: PropTypes.string,
     }),
   }),
   onThemeUpdate: PropTypes.func.isRequired,

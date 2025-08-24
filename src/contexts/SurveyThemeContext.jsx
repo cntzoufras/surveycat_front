@@ -7,7 +7,7 @@ const SurveyThemeContext = createContext(null);
 
 const DEFAULT_THEME = {
   typography: { fontFamily: 'Arial, sans-serif', fontSize: '16px' },
-  colors: { primary: '#1976d2', text: '#333' },
+  colors: { primary: '#1976d2', text: '#333', question_answer_color: '#1976d2' },
   layout: { borderRadius: 8 },
 };
 
@@ -43,6 +43,7 @@ SurveyThemeProvider.propTypes = {
     colors: PropTypes.shape({
       primary: PropTypes.string,
       text: PropTypes.string,
+      question_answer_color: PropTypes.string,
     }).isRequired,
     layout: PropTypes.shape({
       borderRadius: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
