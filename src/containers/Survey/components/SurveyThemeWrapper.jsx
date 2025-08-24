@@ -122,17 +122,27 @@ const SurveyThemeWrapper = ({ survey, children }) => {
 
     // Resolve H3 heading for page titles with back-compat
     const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
-      if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
-      const parts = styleStr.trim().split(/\s+/);
-      const sizeToken = parts.find(p => /px$/.test(p));
-      const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+      if (typeof styleStr !== 'string') {
+        return { sizePx: defaultSizePx, weight: defaultWeight };
+      }
+    
+      const tokens = styleStr.trim().split(/\s+/);
+      const sizeToken = tokens.find(p => /px$/.test(p));
+      const weightToken = tokens.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
       const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+    
       let weight = defaultWeight;
       if (weightToken) {
-        weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+        if (/\d{3}/.test(weightToken)) {
+          weight = parseInt(weightToken, 10);
+        } else {
+          weight = weightToken.toLowerCase() === 'bold' ? 700 : 400;
+        }
       }
+    
       return { sizePx, weight };
     };
+    
     const resolveHeading = (lvl, defPx, defWeight) => {
       const obj = (typography?.heading && typography.heading[lvl]) || null;
       if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
@@ -170,8 +180,12 @@ const SurveyThemeWrapper = ({ survey, children }) => {
     typography?.heading?.H3?.sizePx,
     typography?.heading?.H3?.weight,
     typography?.headingStyle?.H3,
+    typography.heading,
+    typography.headingStyle,
     finalPalette.primary_background,
+    finalPalette.title_color,
     finalColors.page_title,
+    finalColors.text,
   ]);
 
   if (isLoading && survey?.theme_id) {

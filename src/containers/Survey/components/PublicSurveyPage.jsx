@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import tinycolor from 'tinycolor2';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
@@ -28,31 +28,40 @@ import { useSurveyTheme } from '../../../contexts/SurveyThemeContext';
 // Header that consumes theme from context (MUST be under SurveyThemeWrapper)
 function SurveyHeader({ title, description }) {
   const themeStyles = useSurveyTheme();
-  const resolvedTitleColor = (
-    themeStyles?.colors?.title_color
+  const resolvedTitleColor = themeStyles?.colors?.title_color
     || themeStyles?.variable_palette?.title_color
-    || themeStyles?.colors?.text
-  );
+    || themeStyles?.colors?.text;
 
   // Helpers to resolve structured heading with back-compat
   const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
-    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
-    const parts = styleStr.trim().split(/\s+/);
-    const sizeToken = parts.find(p => /px$/.test(p));
-    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+    if (typeof styleStr !== 'string') {
+      return { sizePx: defaultSizePx, weight: defaultWeight };
+    }
+    const tokens = styleStr.trim().split(/\s+/);
+    const sizeToken = tokens.find(p => /px$/.test(p));
+    const weightToken = tokens.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
     const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+
     let weight = defaultWeight;
     if (weightToken) {
-      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+      if (/\d{3}/.test(weightToken)) {
+        weight = parseInt(weightToken, 10);
+      } else if (weightToken.toLowerCase() === 'bold') {
+        weight = 700;
+      } else {
+        weight = 400;
+      }
     }
     return { sizePx, weight };
   };
+
   const resolveHeading = (lvl, defPx, defWeight) => {
     const obj = themeStyles?.typography?.heading?.[lvl];
     if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
     const legacy = themeStyles?.typography?.headingStyle?.[lvl];
     return parseHeadingStyle(legacy, defPx, defWeight);
   };
+
   const H1 = resolveHeading('H1', 24, 700);
   const H2 = resolveHeading('H2', 18, 400);
 
@@ -114,33 +123,42 @@ function PublicSurveyInner({
 
   // Structured heading sizes with back-compat parsing
   const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
-    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
-    const parts = styleStr.trim().split(/\s+/);
-    const sizeToken = parts.find(p => /px$/.test(p));
-    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+    if (typeof styleStr !== 'string') {
+      return { sizePx: defaultSizePx, weight: defaultWeight };
+    }
+    const tokens = styleStr.trim().split(/\s+/);
+    const sizeToken = tokens.find(p => /px$/.test(p));
+    const weightToken = tokens.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
     const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+
     let weight = defaultWeight;
     if (weightToken) {
-      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+      if (/\d{3}/.test(weightToken)) {
+        weight = parseInt(weightToken, 10);
+      } else if (weightToken.toLowerCase() === 'bold') {
+        weight = 700;
+      } else {
+        weight = 400;
+      }
     }
     return { sizePx, weight };
   };
+
   const resolveHeading = (lvl, defPx, defWeight) => {
     const obj = themeStyles?.typography?.heading?.[lvl];
     if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
     const legacy = themeStyles?.typography?.headingStyle?.[lvl];
     return parseHeadingStyle(legacy, defPx, defWeight);
   };
-  const H2 = resolveHeading('H2', 18, 400);
+
   const H3 = resolveHeading('H3', 16, 500);
   const h3Size = `${H3.sizePx}px`;
   const h3Weight = H3.weight;
+
   const currentPage = pages[step] || {};
-  const pageTitleColor = (
-    themeStyles?.colors?.page_title
+  const pageTitleColor = themeStyles?.colors?.page_title
     || themeStyles?.variable_palette?.title_color
-    || themeStyles?.colors?.text
-  );
+    || themeStyles?.colors?.text;
 
   return (
     <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
@@ -152,7 +170,12 @@ function PublicSurveyInner({
           borderRadius: themeStyles?.layout?.borderRadius ?? 2,
           // Stronger outline for visibility
           border: themeStyles?.layout?.showBorder
-            ? `2px solid ${themeStyles?.layout?.borderColor || themeStyles?.colors?.primary || themeStyles?.variable_palette?.primary_accent || 'rgba(0,0,0,0.25)'}`
+            ? `2px solid ${
+                themeStyles?.layout?.borderColor
+                || themeStyles?.colors?.primary
+                || themeStyles?.variable_palette?.primary_accent
+                || 'rgba(0,0,0,0.25)'
+              }`
             : '1px solid rgba(0,0,0,0.08)',
           // Force a visible shadow even when variant is outlined
           boxShadow: themeStyles?.layout?.showShadow
@@ -185,10 +208,12 @@ function PublicSurveyInner({
                 {currentPage.title}
               </Typography>
             </Box>
+
             <PublicQuestionList
               questions={currentPage.questions}
               onResponseChange={handleResponseChange}
             />
+
             <Box sx={{ mt: 4, textAlign: 'center' }}>
               <Button
                 variant="text"
@@ -201,13 +226,16 @@ function PublicSurveyInner({
                   fontFamily: themeStyles?.typography?.fontFamily,
                   '&:hover': {
                     backgroundColor: 'transparent',
-                    color: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                    color: tinycolor(themeStyles?.colors?.primary || '#1976d2')
+                      .darken(8)
+                      .toString(),
                   },
                 }}
               >
                 Back
               </Button>
-              {step < pages.length - 1 ? (
+
+              {step < pages.length - 1 && (
                 <Button
                   variant="contained"
                   onClick={() => setStep(s => s + 1)}
@@ -219,13 +247,19 @@ function PublicSurveyInner({
                     fontFamily: themeStyles?.typography?.fontFamily,
                     px: 4,
                     '&:hover': {
-                      backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                      backgroundColor: tinycolor(
+                        themeStyles?.colors?.primary || '#1976d2',
+                      )
+                        .darken(8)
+                        .toString(),
                     },
                   }}
                 >
                   Next
                 </Button>
-              ) : (
+              )}
+
+              {step >= pages.length - 1 && (
                 <Button
                   variant="contained"
                   onClick={handleSubmit}
@@ -237,7 +271,11 @@ function PublicSurveyInner({
                     fontFamily: themeStyles?.typography?.fontFamily,
                     px: 4,
                     '&:hover': {
-                      backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                      backgroundColor: tinycolor(
+                        themeStyles?.colors?.primary || '#1976d2',
+                      )
+                        .darken(8)
+                        .toString(),
                     },
                   }}
                 >
@@ -250,6 +288,7 @@ function PublicSurveyInner({
           <>
             {pages && pages.length > 0 ? (
               pages.map((p, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <Box key={p.id || idx} sx={{ mb: 3 }}>
                   {/* Page Title */}
                   <Box sx={{ color: pageTitleColor }}>
@@ -269,6 +308,7 @@ function PublicSurveyInner({
                       {p.title}
                     </Typography>
                   </Box>
+
                   <PublicQuestionList
                     questions={p.questions || []}
                     onResponseChange={handleResponseChange}
@@ -281,6 +321,7 @@ function PublicSurveyInner({
                 onResponseChange={handleResponseChange}
               />
             )}
+
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Button
                 variant="contained"
@@ -294,7 +335,11 @@ function PublicSurveyInner({
                   textTransform: 'none',
                   fontFamily: themeStyles?.typography?.fontFamily,
                   '&:hover': {
-                    backgroundColor: tinycolor(themeStyles?.colors?.primary || '#1976d2').darken(8).toString(),
+                    backgroundColor: tinycolor(
+                      themeStyles?.colors?.primary || '#1976d2',
+                    )
+                      .darken(8)
+                      .toString(),
                   },
                 }}
               >
@@ -309,8 +354,55 @@ function PublicSurveyInner({
 }
 
 PublicSurveyInner.propTypes = {
-  survey: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
+  survey: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    description: PropTypes.string,
+    survey_pages: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+        sort_index: PropTypes.number,
+        questions: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            title: PropTypes.string,
+          }),
+        ),
+        survey_questions: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            title: PropTypes.string,
+          }),
+        ),
+      }),
+    ),
+    layout: PropTypes.string,
+    survey_questions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+      }),
+    ),
+    questions: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      title: PropTypes.string,
+      questions: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          title: PropTypes.string,
+        }),
+      ),
+    }),
+  ).isRequired,
   isSingle: PropTypes.bool.isRequired,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
@@ -349,26 +441,22 @@ const PublicSurveyPage = ({ preview = false }) => {
   useEffect(() => {
     if (!idOrSlug) return;
     if (preview) {
-      dispatch(previewSurveyAction(surveyId))
-        .catch(err => console.error('Preview failed:', err));
+      dispatch(previewSurveyAction(surveyId)).catch(err => console.error('Preview failed:', err));
     } else {
-      dispatch(fetchPublicSurveyBySlugAction(surveySlug))
-        .catch(err => console.error('Load failed:', err));
+      dispatch(fetchPublicSurveyBySlugAction(surveySlug)).catch(err => console.error('Load failed:', err));
     }
   }, [preview, idOrSlug, dispatch, surveyId, surveySlug]);
 
   // Once the survey data is loaded, create a survey response record (if not already created)
   useEffect(() => {
-    if (
-      survey?.id
-      && !preview
-      && !isLoggedIn
-    ) {
-      dispatch(createSurveyResponseAction(survey.id, {
-        started_at: startTimeRef.current,
-        device: deviceType,
-        session_id: sessionId,
-      }))
+    if (survey?.id && !preview && !isLoggedIn) {
+      dispatch(
+        createSurveyResponseAction(survey.id, {
+          started_at: startTimeRef.current,
+          device: deviceType,
+          session_id: sessionId,
+        }),
+      )
         .then((record) => {
           setResponseRecord(record);
         })
@@ -393,8 +481,6 @@ const PublicSurveyPage = ({ preview = false }) => {
   }, [survey]);
 
   const isSingle = survey?.layout === 'single';
-  const h2Size = '0px'; // not used after refactor; keep placeholder to avoid unused vars if referenced
-  const h2Weight = 400;
 
   // Response change handler
   const handleResponseChange = (qid, value) => {
@@ -407,6 +493,7 @@ const PublicSurveyPage = ({ preview = false }) => {
       return;
     }
     if (!responseRecord?.id) {
+      // eslint-disable-next-line no-console
       console.error('No survey response record exists to attach answers to.');
       return;
     }
@@ -414,11 +501,15 @@ const PublicSurveyPage = ({ preview = false }) => {
       const completedAtISO = new Date().toISOString();
 
       // Optionally update the survey response with completion time if required by backend
-      await dispatch(updateSurveyResponseAction(responseRecord.id, {
-        completed_at: completedAtISO,
-      })).catch((err) => {
+      await dispatch(
+        updateSurveyResponseAction(responseRecord.id, {
+          completed_at: completedAtISO,
+        }),
+      ).catch((err) => {
         // Log but allow continuation even if this step fails
+        // eslint-disable-next-line no-console
         console.warn('Could not patch completed_at:', err);
+        // eslint-disable-next-line no-console
         console.error('Failed to update survey response with completion time:', err);
       });
 
@@ -433,22 +524,23 @@ const PublicSurveyPage = ({ preview = false }) => {
       };
 
       // Dispatch the submission action with a FLAT object.
-      // The action will wrap the rest of the fields into `submission_data` and include survey_id separately.
       const result = await dispatch(
         submitSurveySubmissionAction(survey.id, {
           survey_response_id: responseRecord.id,
           ...submissionData, // answers, completed_at, device, session_id, etc.
         }),
       );
-      // If the backend returns a status (e.g., via axios response), handle success
+
       const status = result?.status || result?.statusCode;
       if (status === 201 || status === 200) {
         setSubmissionTimestamp(new Date().toLocaleString());
         setSubmissionComplete(true);
       } else {
+        // eslint-disable-next-line no-console
         console.error('Failed to submit survey. Server responded with status:', status);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Submission error:', error);
     }
   };
@@ -456,16 +548,15 @@ const PublicSurveyPage = ({ preview = false }) => {
   const handleFollowUp = async ({ email, gender, age }) => {
     const respondentId = responseRecord?.respondent_id;
     if (!respondentId) {
+      // eslint-disable-next-line no-console
       console.error('No respondent_id on the survey_response record');
       return;
     }
     try {
-      await dispatch(updateRespondentAction(
-        respondentId,
-        { email, gender, age },
-      ));
+      await dispatch(updateRespondentAction(respondentId, { email, gender, age }));
       setFollowUpDone(true);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Could not save follow-up info:', err);
       setFollowUpDone(true); // still move on after error to avoid blocking UX
     }

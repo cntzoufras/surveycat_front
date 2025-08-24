@@ -253,7 +253,13 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
           icon={<StarIcon sx={{ fontSize: '2rem' }} />}
           emptyIcon={<StarBorderIcon sx={{ fontSize: '2rem' }} />}
         />
-        <Typography sx={{ ml: 2, color: themeStyles?.colors?.choice || 'text.primary', fontFamily: bodyFontFamily, fontSize: bodyFontSize }}>
+        <Typography sx={{
+           ml: 2, 
+           color: themeStyles?.colors?.choice || 'text.primary', 
+           fontFamily: bodyFontFamily, 
+           fontSize: bodyFontSize, 
+          }}
+        >
           {selectedValues[0] || ''}
         </Typography>
       </Box>

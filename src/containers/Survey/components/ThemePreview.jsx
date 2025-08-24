@@ -1,9 +1,21 @@
-  import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FONT_OPTIONS } from '@/constants/fontConstants';
 import {
-  Box, Typography, Paper, Grid, TextField, Button, FormControl,
-  InputLabel, Select, MenuItem, Slider, Chip, Switch, FormControlLabel,
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Slider,
+  Chip,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import { ChromePicker } from 'react-color';
 import _ from 'lodash';
@@ -47,10 +59,11 @@ const DEFAULT_THEME = {
     showShadow: true,
     showBorder: false,
     borderColor: '#E0E0E0',
-},
+  },
 };
 
 const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
+  // eslint-disable-next-line no-console
   console.log('Variable theme is: ', theme);
   const [activeTab, setActiveTab] = useState('colors');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
@@ -63,16 +76,25 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
   useEffect(() => {
     const ff = currentTheme?.typography?.fontFamily;
     if (!ff || typeof ff !== 'string') return;
+
     const families = new Set(FONT_OPTIONS.filter(f => f.google).map(f => f.family));
-    const candidates = ff.split(',').map(s => s.trim().replace(/^"|"$/g, ''));
+    const candidates = ff
+      .split(',')
+      .map(s => s.trim().replace(/^"|"$/g, ''));
+
     const googleFamily = candidates.find(name => families.has(name));
     if (!googleFamily) return;
+
     const id = `preview-google-font-${googleFamily.replace(/ /g, '+')}`;
     if (document.getElementById(id)) return;
+
     const link = document.createElement('link');
     link.id = id;
     link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${googleFamily.replace(/ /g, '+')}:wght@100;200;300;400;500;600;700;800;900&display=swap`;
+    link.href = `https://fonts.googleapis.com/css2?family=${
+      googleFamily.replace(/ /g, '+')
+    }:wght@100;200;300;400;500;600;700;800;900&display=swap`;
+
     document.head.appendChild(link);
   }, [currentTheme?.typography?.fontFamily]);
 
@@ -118,7 +140,12 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
       padding: `${currentTheme.layout.padding}px`,
       backgroundColor: questionBoxBg,
       border: currentTheme.layout.showBorder
-        ? `1px solid ${currentTheme.layout.borderColor || currentTheme.colors.primary || currentTheme.variable_palette?.primary_accent || 'rgba(0,0,0,0.2)'}`
+        ? `1px solid ${
+            currentTheme.layout.borderColor
+            || currentTheme.colors.primary
+            || currentTheme.variable_palette?.primary_accent
+            || 'rgba(0,0,0,0.2)'
+          }`
         : 'none',
       boxShadow: currentTheme.layout.showShadow
         ? '0 6px 14px rgba(0,0,0,0.18), 0 3px 6px rgba(0,0,0,0.12)'
@@ -130,6 +157,7 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
       const str = String(styleStr || '').trim();
       let size = defaultSizePx;
       let weight = defaultWeight;
+
       if (str) {
         const parts = str.split(/\s+/);
         const sizeToken = parts.find(p => /(\d+)(px|rem|em)$/i.test(p));
@@ -141,48 +169,78 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
         }
         if (weightToken) weight = weightToken;
       }
+
       // Optional max clamp only for preview compactness when px
       if (maxPx && /px$/.test(size)) {
         const n = parseFloat(size);
         size = `${Math.min(n, maxPx)}px`;
       }
+
       return { size, weight };
     };
 
     // Resolve heading object values with back-compat from headingStyle strings
     const resolveHeading = (lvl, defPx, defWeight) => {
       const headingObj = currentTheme.typography?.heading?.[lvl];
-      if (headingObj && Number.isFinite(headingObj.sizePx) && Number.isFinite(headingObj.weight)) {
+      if (
+        headingObj
+        && Number.isFinite(headingObj.sizePx)
+        && Number.isFinite(headingObj.weight)
+      ) {
         return { sizePx: headingObj.sizePx, weight: headingObj.weight };
       }
       // Fallback to legacy string
       const legacy = currentTheme.typography?.headingStyle?.[lvl];
-      const parsed = parseHeadingStyle(legacy, `${defPx}px`, String(defWeight), undefined);
-      const sizePx = /px$/.test(parsed.size) ? parseFloat(parsed.size) : defPx;
-      const weight = isNaN(parseInt(parsed.weight, 10)) ? (parsed.weight === 'bold' ? 700 : 400) : parseInt(parsed.weight, 10);
+      const parsed = parseHeadingStyle(
+        legacy,
+        `${defPx}px`,
+        String(defWeight),
+        undefined,
+      );
+      const sizePx = /px$/.test(parsed.size)
+        ? parseFloat(parsed.size)
+        : defPx;
+
+      const parsedWeightNum = parseInt(parsed.weight, 10);
+      let weight;
+      if (Number.isNaN(parsedWeightNum)) {
+        // map named weights; default to 400
+        weight = parsed.weight === 'bold' ? 700 : 400;
+      } else {
+        weight = parsedWeightNum;
+      }
       return { sizePx, weight };
     };
 
-    const H1 = resolveHeading('H1', 24, 700);
-    const H2 = resolveHeading('H2', 18, 400);
-    const H3 = resolveHeading('H3', 16, 500);
+    const H1Resolved = resolveHeading('H1', 24, 700);
+    const H2Resolved = resolveHeading('H2', 18, 400);
+    const H3Resolved = resolveHeading('H3', 16, 500);
 
-    const h1Size = `${H1.sizePx}px`; const h1Weight = H1.weight;
-    const h2Size = `${H2.sizePx}px`; const h2Weight = H2.weight;
-    const h3Size = `${H3.sizePx}px`; const h3Weight = H3.weight;
+    const h1Size = `${H1Resolved.sizePx}px`;
+    const h1Weight = H1Resolved.weight;
+    const h2Size = `${H2Resolved.sizePx}px`;
+    const h2Weight = H2Resolved.weight;
+    const h3Size = `${H3Resolved.sizePx}px`;
+    const h3Weight = H3Resolved.weight;
 
     const qSize = (() => {
       const raw = currentTheme.typography.fontSize;
       if (typeof raw === 'number') return `${raw}px`;
-      if (Number.isFinite(currentTheme.typography.fontSizePx)) return `${currentTheme.typography.fontSizePx}px`;
+      if (Number.isFinite(currentTheme.typography.fontSizePx)) {
+        return `${currentTheme.typography.fontSizePx}px`;
+      }
       const n = parseFloat(String(raw || '').replace('px', ''));
       return Number.isFinite(n) ? `${n}px` : '16px';
     })();
 
     // Derive actual titles when available
     const surveyTitle = survey?.title || '';
+
     const firstPageTitle = (() => {
-      const pages = Array.isArray(survey?.survey_pages) ? [...survey.survey_pages] : [];
+      const pages = Array.isArray(survey?.survey_pages)
+        ? [...survey.survey_pages]
+        : [];
+
       if (!pages.length) return '';
       pages.sort((a, b) => (a.sort_index ?? 0) - (b.sort_index ?? 0));
       return pages[0]?.title || '';
@@ -198,7 +256,12 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           borderRadius: `${currentTheme.layout.borderRadius}px`,
           backgroundColor: pageBg,
           border: currentTheme.layout.showBorder
-            ? `2px solid ${currentTheme.layout.borderColor || currentTheme.colors.primary || currentTheme.variable_palette?.primary_accent || 'rgba(0,0,0,0.25)'}`
+            ? `2px solid ${
+                currentTheme.layout.borderColor
+                || currentTheme.colors.primary
+                || currentTheme.variable_palette?.primary_accent
+                || 'rgba(0,0,0,0.25)'
+              }`
             : '1px solid rgba(0,0,0,0.08)',
           boxShadow: currentTheme.layout.showShadow
             ? '0 10px 30px rgba(0,0,0,0.20), 0 6px 10px rgba(0,0,0,0.10)'
@@ -211,7 +274,8 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
             variant="h1"
             sx={{
               fontFamily: currentTheme.typography.fontFamily,
-              color: currentTheme.colors.title_color || currentTheme.colors.text,
+              color:
+                currentTheme.colors.title_color || currentTheme.colors.text,
               fontSize: h1Size,
               fontWeight: h1Weight,
               marginBottom: '12px',
@@ -225,22 +289,27 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           variant="h2"
           sx={{
             fontFamily: currentTheme.typography.fontFamily,
-            color: currentTheme.colors.subtitle || currentTheme.colors.text,
+            color:
+              currentTheme.colors.subtitle || currentTheme.colors.text,
             fontSize: h2Size,
             fontWeight: h2Weight,
             marginBottom: '16px',
             lineHeight: 1.4,
           }}
         >
-          Please share your honest feedback about your experience with our service.
-          Your response will help us improve our services.
+          Please share your honest feedback about your experience with our
+          service. Your response will help us improve our services.
         </Typography>
 
         <Typography
           variant="h3"
           sx={{
             fontFamily: currentTheme.typography.fontFamily,
-            color: currentTheme.colors.page_title || currentTheme.colors.subtitle || currentTheme.colors.title_color || currentTheme.colors.text,
+            color:
+              currentTheme.colors.page_title
+              || currentTheme.colors.subtitle
+              || currentTheme.colors.title_color
+              || currentTheme.colors.text,
             fontSize: h3Size,
             fontWeight: h3Weight,
             marginBottom: '16px',
@@ -252,12 +321,14 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
         {/* Purple question box starts here */}
         <Box sx={styles}>
           {/* Questions Preview - use actual questions if present */}
-          {Array.isArray(survey?.survey_pages) && survey.survey_pages.length > 0
+          {Array.isArray(survey?.survey_pages)
+          && survey.survey_pages.length > 0
           && Array.isArray(survey.survey_pages[0]?.survey_questions)
           && survey.survey_pages[0].survey_questions.length > 0 ? (
             <Box sx={{ mb: 2 }}>
               {survey.survey_pages[0].survey_questions.slice(0, 3).map((q, idx) => (
                 <Typography
+                  // eslint-disable-next-line react/no-array-index-key
                   key={q.id || idx}
                   variant="h6"
                   sx={{
@@ -305,13 +376,21 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
                   alignItems: 'center',
                   mb: 1,
                   p: 2,
-                  border: `1px solid ${currentTheme.colors.question_answer_color || currentTheme.colors.primary}`,
+                  border: `1px solid ${
+                    currentTheme.colors.question_answer_color
+                    || currentTheme.colors.primary
+                  }`,
                   borderRadius: `${currentTheme.layout.borderRadius}px`,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    backgroundColor: `${(currentTheme.colors.question_answer_color || currentTheme.colors.primary)}10`,
-                    borderColor: currentTheme.colors.question_answer_color || currentTheme.colors.primary,
+                    backgroundColor: `${
+                      currentTheme.colors.question_answer_color
+                      || currentTheme.colors.primary
+                    }10`,
+                    borderColor:
+                      currentTheme.colors.question_answer_color
+                      || currentTheme.colors.primary,
                   },
                 }}
               >
@@ -319,7 +398,10 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
                   sx={{
                     width: 20,
                     height: 20,
-                    border: `2px solid ${currentTheme.colors.question_answer_color || currentTheme.colors.primary}`,
+                    border: `2px solid ${
+                      currentTheme.colors.question_answer_color
+                      || currentTheme.colors.primary
+                    }`,
                     borderRadius: '50%',
                     mr: 2,
                     display: 'flex',
@@ -339,7 +421,6 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               </Box>
             ))}
           </Box>
-
         </Box>
 
         {/* Submit Button below question box */}
@@ -355,7 +436,11 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               borderRadius: `${currentTheme.layout.borderRadius}px`,
               textTransform: 'none',
               '&:hover': {
-                backgroundColor: tinycolor(currentTheme.colors.primary || '#1976d2').darken(8).toString(),
+                backgroundColor: tinycolor(
+                  currentTheme.colors.primary || '#1976d2',
+                )
+                  .darken(8)
+                  .toString(),
               },
             }}
           >
@@ -367,11 +452,13 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
   };
 
   const renderTypographyEditor = () => {
-    const heading = currentTheme.typography.heading || {
-      H1,
-      H2,
-      H3,
+    const defaultHeading = {
+      H1: { sizePx: 24, weight: 700 },
+      H2: { sizePx: 18, weight: 400 },
+      H3: { sizePx: 16, weight: 500 },
     };
+
+    const heading = currentTheme.typography.heading || defaultHeading;
 
     const setHeading = (lvl, key, val) => {
       const newHeading = {
@@ -392,7 +479,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
 
     return (
       <Box>
-        <Typography variant="h6" gutterBottom>Typography Settings</Typography>
+        <Typography variant="h6" gutterBottom>
+          Typography Settings
+        </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
@@ -404,7 +493,11 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
                 label="Font Family"
               >
                 {FONT_OPTIONS.map(opt => (
-                  <MenuItem key={opt.label} value={opt.stack} sx={{ fontFamily: opt.stack }}>
+                  <MenuItem
+                    key={opt.label}
+                    value={opt.stack}
+                    sx={{ fontFamily: opt.stack }}
+                  >
                     {opt.label}
                   </MenuItem>
                 ))}
@@ -417,8 +510,20 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               fullWidth
               type="number"
               label="Body Font Size (px)"
-              value={Number.isFinite(currentTheme.typography.fontSizePx) ? currentTheme.typography.fontSizePx : parseFloat(String(currentTheme.typography.fontSize || '16').replace('px', ''))}
-              onChange={e => handleTypographyChange('fontSizePx', parseInt(e.target.value || '0', 10) || 0)}
+              value={
+                Number.isFinite(currentTheme.typography.fontSizePx)
+                  ? currentTheme.typography.fontSizePx
+                  : parseFloat(
+                      String(currentTheme.typography.fontSize || '16').replace(
+                        'px',
+                        '',
+                      ),
+                    )
+              }
+              onChange={e => handleTypographyChange(
+                  'fontSizePx',
+                  parseInt(e.target.value || '0', 10) || 0,
+                )}
             />
           </Grid>
 
@@ -435,9 +540,15 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth>
               <InputLabel>H1 Weight</InputLabel>
-              <Select label="H1 Weight" value={heading.H1.weight} onChange={e => setHeading('H1', 'weight', parseInt(e.target.value, 10))}>
+              <Select
+                label="H1 Weight"
+                value={heading.H1.weight}
+                onChange={e => setHeading('H1', 'weight', parseInt(e.target.value, 10))}
+              >
                 {weightOptions.map(w => (
-                  <MenuItem key={w} value={w}>{w}</MenuItem>
+                  <MenuItem key={w} value={w}>
+                    {w}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -456,9 +567,15 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth>
               <InputLabel>H2 Weight</InputLabel>
-              <Select label="H2 Weight" value={heading.H2.weight} onChange={e => setHeading('H2', 'weight', parseInt(e.target.value, 10))}>
+              <Select
+                label="H2 Weight"
+                value={heading.H2.weight}
+                onChange={e => setHeading('H2', 'weight', parseInt(e.target.value, 10))}
+              >
                 {weightOptions.map(w => (
-                  <MenuItem key={w} value={w}>{w}</MenuItem>
+                  <MenuItem key={w} value={w}>
+                    {w}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -477,9 +594,15 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
           <Grid item xs={12} sm={4}>
             <FormControl fullWidth>
               <InputLabel>H3 Weight</InputLabel>
-              <Select label="H3 Weight" value={heading.H3.weight} onChange={e => setHeading('H3', 'weight', parseInt(e.target.value, 10))}>
+              <Select
+                label="H3 Weight"
+                value={heading.H3.weight}
+                onChange={e => setHeading('H3', 'weight', parseInt(e.target.value, 10))}
+              >
                 {weightOptions.map(w => (
-                  <MenuItem key={w} value={w}>{w}</MenuItem>
+                  <MenuItem key={w} value={w}>
+                    {w}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -496,7 +619,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
 
     return (
       <Box>
-        <Typography variant="h6" gutterBottom>Color Settings</Typography>
+        <Typography variant="h6" gutterBottom>
+          Color Settings
+        </Typography>
 
         <Grid container spacing={3}>
           {/* Page Background from variable_palette */}
@@ -509,7 +634,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
                 label={currentTheme.variable_palette.primary_background}
                 sx={{
                   backgroundColor: currentTheme.variable_palette.primary_background,
-                  color: tinycolor(currentTheme.variable_palette.primary_background).isDark()
+                  color: tinycolor(
+                    currentTheme.variable_palette.primary_background,
+                  ).isDark()
                     ? '#fff'
                     : '#000',
                   cursor: 'pointer',
@@ -533,7 +660,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
                 label={currentTheme.colors.background}
                 sx={{
                   backgroundColor: currentTheme.colors.background,
-                  color: tinycolor(currentTheme.colors.background).isDark() ? '#fff' : '#000',
+                  color: tinycolor(currentTheme.colors.background).isDark()
+                    ? '#fff'
+                    : '#000',
                   cursor: 'pointer',
                 }}
                 onClick={() => {
@@ -558,15 +687,31 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
               primary: 'Primary',
               secondary: 'Secondary',
             };
-            const order = ['page_title', 'title_color', 'subtitle', 'text', 'primary', 'secondary', 'question', 'choice', 'question_answer_color'];
+
+            const order = [
+              'page_title',
+              'title_color',
+              'subtitle',
+              'text',
+              'primary',
+              'secondary',
+              'question',
+              'choice',
+              'question_answer_color',
+            ];
+
             const entries = Object.entries(currentTheme.colors)
               .filter(([key]) => key !== 'background')
-              .sort(([a], [b]) => order.indexOf(a) - order.indexOf(b));
+              .sort(
+                ([a], [b]) => order.indexOf(a) - order.indexOf(b),
+              );
+
             return entries.map(([key, value]) => (
               <Grid item xs={12} sm={6} key={key}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                   <Typography variant="body2" sx={{ minWidth: 80 }}>
-                    {labelMap[key] || (key.charAt(0).toUpperCase() + key.slice(1))}
+                    {labelMap[key]
+                      || (key.charAt(0).toUpperCase() + key.slice(1))}
                   </Typography>
                   <Chip
                     label={value}
@@ -605,7 +750,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
 
   const renderLayoutEditor = () => (
     <Box>
-      <Typography variant="h6" gutterBottom>Layout Settings</Typography>
+      <Typography variant="h6" gutterBottom>
+        Layout Settings
+      </Typography>
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -677,12 +824,11 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
     </Box>
   );
 
-  const pageBg = currentTheme.variable_palette.primary_background
-    || DEFAULT_THEME.variable_palette.primary_background;
-
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>Theme Customization</Typography>
+      <Typography variant="h5" gutterBottom>
+        Theme Customization
+      </Typography>
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
@@ -719,7 +865,9 @@ const ThemePreview = ({ theme, onThemeUpdate, survey }) => {
         <Grid item xs={12} md={6}>
           {/* Live Preview wrapper should be white */}
           <Paper elevation={1} sx={{ p: 3, backgroundColor: '#ffffff' }}>
-            <Typography variant="h6" gutterBottom>Live Preview</Typography>
+            <Typography variant="h6" gutterBottom>
+              Live Preview
+            </Typography>
             {renderPreview()}
           </Paper>
         </Grid>
@@ -737,6 +885,21 @@ ThemePreview.propTypes = {
         H1: PropTypes.string,
         H2: PropTypes.string,
       }),
+      heading: PropTypes.shape({
+        H1: PropTypes.shape({
+          sizePx: PropTypes.number,
+          weight: PropTypes.number,
+        }),
+        H2: PropTypes.shape({
+          sizePx: PropTypes.number,
+          weight: PropTypes.number,
+        }),
+        H3: PropTypes.shape({
+          sizePx: PropTypes.number,
+          weight: PropTypes.number,
+        }),
+      }),
+      fontSizePx: PropTypes.number,
     }),
     colors: PropTypes.objectOf(PropTypes.string),
     variable_palette: PropTypes.objectOf(PropTypes.string),
@@ -752,10 +915,18 @@ ThemePreview.propTypes = {
   onThemeUpdate: PropTypes.func.isRequired,
   survey: PropTypes.shape({
     title: PropTypes.string,
-    survey_pages: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string,
-      sort_index: PropTypes.number,
-    })),
+    survey_pages: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string,
+        sort_index: PropTypes.number,
+        survey_questions: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            title: PropTypes.string,
+          }),
+        ),
+      }),
+    ),
   }),
 };
 
