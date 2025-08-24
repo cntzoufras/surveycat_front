@@ -86,7 +86,7 @@ const PublicQuestionRenderer = ({ question, onAnswerChange }) => {
     <div style={{ 
       fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
       color: themeStyles?.colors?.text || '#252525',
-      backgroundColor: themeStyles?.colors?.background || 'transparent',
+      backgroundColor: 'transparent',
       padding: '20px',
       borderRadius: '8px',
     }}

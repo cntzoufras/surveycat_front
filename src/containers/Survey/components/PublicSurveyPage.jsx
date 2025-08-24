@@ -32,17 +32,39 @@ function SurveyHeader({ title, description }) {
     || themeStyles?.colors?.text
   );
 
+  // Helpers to resolve structured heading with back-compat
+  const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
+    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
+    const parts = styleStr.trim().split(/\s+/);
+    const sizeToken = parts.find(p => /px$/.test(p));
+    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+    const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+    let weight = defaultWeight;
+    if (weightToken) {
+      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+    }
+    return { sizePx, weight };
+  };
+  const resolveHeading = (lvl, defPx, defWeight) => {
+    const obj = themeStyles?.typography?.heading?.[lvl];
+    if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
+    const legacy = themeStyles?.typography?.headingStyle?.[lvl];
+    return parseHeadingStyle(legacy, defPx, defWeight);
+  };
+  const H1 = resolveHeading('H1', 24, 700);
+  const H2 = resolveHeading('H2', 18, 400);
+
   return (
     <Box sx={{ mb: 4 }}>
       <Typography
-        variant="h4"
+        variant="h1"
         component="h1"
         align="center"
         sx={{
           mb: 1,
           fontFamily: themeStyles?.typography?.fontFamily,
-          fontSize: themeStyles?.typography?.headingStyle?.H1,
-          fontWeight: 'bold',
+          fontSize: `${H1.sizePx}px`,
+          fontWeight: H1.weight,
           color: resolvedTitleColor,
         }}
         style={{ color: resolvedTitleColor }}
@@ -51,12 +73,12 @@ function SurveyHeader({ title, description }) {
       </Typography>
       {description && (
         <Typography
-          variant="body2"
+          variant="h2"
           align="center"
           sx={{
             fontFamily: themeStyles?.typography?.fontFamily,
-            fontSize: themeStyles?.typography?.fontSize,
-            // Prefer subtitle color if present, else text
+            fontSize: `${H2.sizePx}px`,
+            fontWeight: H2.weight,
             color: themeStyles?.colors?.subtitle || themeStyles?.colors?.text,
           }}
         >
@@ -77,6 +99,7 @@ SurveyHeader.defaultProps = {
 };
 
 const PublicSurveyPage = ({ preview = false }) => {
+  const themeStyles = useSurveyTheme();
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = Boolean(user?.id);
 
@@ -151,7 +174,38 @@ const PublicSurveyPage = ({ preview = false }) => {
   }, [survey]);
 
   const isSingle = survey?.layout === 'single';
+  // Structured heading sizes with back-compat parsing
+  const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
+    if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
+    const parts = styleStr.trim().split(/\s+/);
+    const sizeToken = parts.find(p => /px$/.test(p));
+    const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+    const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+    let weight = defaultWeight;
+    if (weightToken) {
+      weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+    }
+    return { sizePx, weight };
+  };
+  const resolveHeading = (lvl, defPx, defWeight) => {
+    const obj = themeStyles?.typography?.heading?.[lvl];
+    if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
+    const legacy = themeStyles?.typography?.headingStyle?.[lvl];
+    return parseHeadingStyle(legacy, defPx, defWeight);
+  };
+  const H2 = resolveHeading('H2', 18, 400);
+  const H3 = resolveHeading('H3', 16, 500);
+  const h2Size = `${H2.sizePx}px`;
+  const h2Weight = H2.weight;
+  const h3Size = `${H3.sizePx}px`;
+  const h3Weight = H3.weight;
   const currentPage = pages[step] || {};
+  // Resolve page title color with minimal fallback
+  const pageTitleColor = (
+    themeStyles?.colors?.page_title
+    || themeStyles?.variable_palette?.title_color
+    || themeStyles?.colors?.text
+  );
 
   // Response change handler
   const handleResponseChange = (qid, value) => {
@@ -251,17 +305,24 @@ const PublicSurveyPage = ({ preview = false }) => {
         {/* Single vs Multiple logic */}
         {isSingle ? (
           <>
-            <Typography
-              variant="h5"
-              gutterBottom
-              sx={{
-                fontFamily: 'Arial, sans-serif',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
-              {currentPage.title}
-            </Typography>
+            {/* Page title uses theme colors.page_title, with minimal fallback */}
+            <Box sx={{ color: pageTitleColor }}>
+              <Typography
+                variant="h3"
+                gutterBottom
+                color="inherit"
+                className="sc-page-title"
+                sx={{
+                  fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                  fontSize: h3Size,
+                  fontWeight: h3Weight,
+                  color: `${pageTitleColor} !important`,
+                }}
+                style={{ color: pageTitleColor }}
+              >
+                {currentPage.title}
+              </Typography>
+            </Box>
             <PublicQuestionList
               questions={currentPage.questions}
               onResponseChange={handleResponseChange}

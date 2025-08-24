@@ -120,9 +120,30 @@ const SurveyThemeWrapper = ({ survey, children }) => {
       document.head.appendChild(styleElement);
     }
 
+    // Resolve H3 heading for page titles with back-compat
+    const parseHeadingStyle = (styleStr, defaultSizePx, defaultWeight) => {
+      if (typeof styleStr !== 'string') return { sizePx: defaultSizePx, weight: defaultWeight };
+      const parts = styleStr.trim().split(/\s+/);
+      const sizeToken = parts.find(p => /px$/.test(p));
+      const weightToken = parts.find(p => /^(bold|bolder|lighter|normal|\d{3})$/i.test(p));
+      const sizePx = sizeToken ? parseFloat(sizeToken) : defaultSizePx;
+      let weight = defaultWeight;
+      if (weightToken) {
+        weight = /\d{3}/.test(weightToken) ? parseInt(weightToken, 10) : (weightToken.toLowerCase() === 'bold' ? 700 : 400);
+      }
+      return { sizePx, weight };
+    };
+    const resolveHeading = (lvl, defPx, defWeight) => {
+      const obj = (typography?.heading && typography.heading[lvl]) || null;
+      if (obj && Number.isFinite(obj.sizePx) && Number.isFinite(obj.weight)) return obj;
+      const legacy = typography?.headingStyle && typography.headingStyle[lvl];
+      return parseHeadingStyle(legacy, defPx, defWeight);
+    };
+    const H3 = resolveHeading('H3', 16, 500);
+
     styleElement.innerHTML = `
       body {
-        background-color: ${finalColors.background || 'transparent'};
+        background-color: ${finalPalette.primary_background || 'transparent'};
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
       body .MuiTypography-root,
@@ -131,13 +152,27 @@ const SurveyThemeWrapper = ({ survey, children }) => {
       body .MuiFormControl-root .MuiInputBase-root {
         font-family: ${typography.fontFamily || 'Roboto, sans-serif'} !important;
       }
+      /* Force page title color with high specificity */
+      body .sc-page-title,
+      body .MuiTypography-root.sc-page-title {
+        color: ${finalColors.page_title || finalPalette.title_color || finalColors.text || '#333333'} !important;
+        font-size: ${H3.sizePx}px !important;
+        font-weight: ${H3.weight} !important;
+      }
     `;
 
     return () => {
       const el = document.getElementById(styleId);
       if (el) el.remove();
     };
-  }, [typography.fontFamily, finalColors.background]);
+  }, [
+    typography.fontFamily,
+    typography?.heading?.H3?.sizePx,
+    typography?.heading?.H3?.weight,
+    typography?.headingStyle?.H3,
+    finalPalette.primary_background,
+    finalColors.page_title,
+  ]);
 
   if (isLoading && survey?.theme_id) {
     return (

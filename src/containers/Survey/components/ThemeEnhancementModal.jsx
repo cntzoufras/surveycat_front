@@ -37,6 +37,12 @@ const ThemeEnhancementModal = ({
           secondary: activePalette.secondary_accent || baseTheme.colors?.secondary || '#dc004e',
           background: activePalette.primary_background || baseTheme.colors?.background || '#ffffff',
           text: activePalette.title_color || baseTheme.colors?.text || '#333333',
+          // New: page title color key to control page headers independently
+          page_title: baseTheme.colors?.page_title
+            || baseTheme.colors?.subtitle
+            || baseTheme.colors?.title_color
+            || activePalette.title_color
+            || '#4f4f4f',
           // New: explicit title color key to control PublicSurveyPage title independently
           title_color: baseTheme.colors?.title_color || activePalette.title_color || '#333333',
           question: activePalette.question_color || baseTheme.colors?.question || '#252525',
@@ -128,6 +134,12 @@ const ThemeEnhancementModal = ({
           secondary: activePalette.secondary_accent || baseTheme.colors?.secondary || '#dc004e',
           background: activePalette.primary_background || baseTheme.colors?.background || '#ffffff',
           text: activePalette.title_color || baseTheme.colors?.text || '#333333',
+          // New: page title color key to control page headers independently
+          page_title: baseTheme.colors?.page_title
+            || baseTheme.colors?.subtitle
+            || baseTheme.colors?.title_color
+            || activePalette.title_color
+            || '#4f4f4f',
           // New: explicit title color key to control PublicSurveyPage title independently
           title_color: baseTheme.colors?.title_color || activePalette.title_color || '#333333',
           question: activePalette.question_color || baseTheme.colors?.question || '#252525',
@@ -171,7 +183,11 @@ const ThemeEnhancementModal = ({
           </Alert>
 
           {theme && (
-            <ThemePreview theme={customTheme} onThemeUpdate={handleThemeUpdate} />
+            <ThemePreview
+              theme={customTheme}
+              onThemeUpdate={handleThemeUpdate}
+              survey={survey}
+            />
           )}
         </Box>
       </DialogContent>
