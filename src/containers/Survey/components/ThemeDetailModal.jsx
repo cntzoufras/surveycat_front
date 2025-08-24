@@ -119,8 +119,6 @@ const ThemeDetailModal = ({ open, onClose }) => {
                   <ColorSwatch name="Answer Color" color={palette.answer_color} />
                   <ColorSwatch name="Primary Accent" color={palette.primary_accent} />
                   <ColorSwatch name="Primary Background" color={palette.primary_background} />
-                  <ColorSwatch name="Secondary Accent" color={palette.secondary_accent} />
-                  <ColorSwatch name="Secondary Background" color={palette.secondary_background} />
                 </Box>
               ))
             ) : (
