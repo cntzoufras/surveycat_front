@@ -165,6 +165,7 @@ function PublicSurveyInner({
   const questionBoxBg = tinycolor(themeStyles?.colors?.background || '#ffffff')
     .setAlpha(bgAlpha)
     .toRgbString();
+  // Page background comes from the merged theme (variable_palette.primary_background)
   const pageBg = themeStyles?.variable_palette?.primary_background || '#ffffff';
 
   return (
@@ -187,44 +188,41 @@ function PublicSurveyInner({
         {/* Single vs Multiple logic */}
         {isSingle ? (
           <>
-            {/* Inner question box styled like ThemePreview */}
+            {/* Page title outside the question area (no background chip) */}
             <Box
               sx={{
-                p: themeStyles?.layout?.padding ?? 3,
-                borderRadius: themeStyles?.layout?.borderRadius ?? 2,
-                backgroundColor: questionBoxBg,
-                border: themeStyles?.layout?.showBorder
-                  ? `1px solid ${
-                      themeStyles?.layout?.borderColor
-                      || themeStyles?.colors?.primary
-                      || themeStyles?.variable_palette?.primary_accent
-                      || 'rgba(0,0,0,0.2)'
-                    }`
-                  : 'none',
-                boxShadow: themeStyles?.layout?.showShadow
-                  ? '0 6px 14px rgba(0,0,0,0.18), 0 3px 6px rgba(0,0,0,0.12)'
-                  : 'none',
+                color: pageTitleColor,
+                p: 0,
+                mb: 2,
               }}
             >
-              {/* Page title uses theme colors.page_title, with minimal fallback */}
-              <Box sx={{ color: pageTitleColor }}>
-                <Typography
-                  variant="h3"
-                  gutterBottom
-                  color="inherit"
-                  className="sc-page-title"
-                  sx={{
-                    fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-                    fontSize: h3Size,
-                    fontWeight: h3Weight,
-                    color: `${pageTitleColor} !important`,
-                  }}
-                  style={{ color: pageTitleColor }}
-                >
-                  {currentPage.title}
-                </Typography>
-              </Box>
+              <Typography
+                variant="h3"
+                gutterBottom
+                color="inherit"
+                className="sc-page-title"
+                sx={{
+                  fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                  fontSize: h3Size,
+                  fontWeight: h3Weight,
+                  color: `${pageTitleColor} !important`,
+                }}
+                style={{ color: pageTitleColor }}
+              >
+                {currentPage.title}
+              </Typography>
+            </Box>
 
+            {/* Question list wrapper: no parent background/card */}
+            <Box
+              sx={{
+                p: 0,
+                borderRadius: 0,
+                backgroundColor: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+              }}
+            >
               <PublicQuestionList
                 questions={currentPage.questions}
                 onResponseChange={handleResponseChange}
@@ -307,44 +305,35 @@ function PublicSurveyInner({
               pages.map((p, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Box key={p.id || idx} sx={{ mb: 3 }}>
-                  {/* Inner question box styled like ThemePreview */}
+                  {/* Page title outside the question area (no background chip) */}
+                  <Box sx={{ color: pageTitleColor, p: 0, mb: 2 }}>
+                    <Typography
+                      variant="h3"
+                      gutterBottom
+                      color="inherit"
+                      className="sc-page-title"
+                      sx={{
+                        fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
+                        fontSize: h3Size,
+                        fontWeight: h3Weight,
+                        color: `${pageTitleColor} !important`,
+                      }}
+                      style={{ color: pageTitleColor }}
+                    >
+                      {p.title}
+                    </Typography>
+                  </Box>
+
+                  {/* Question list wrapper: no parent background/card */}
                   <Box
                     sx={{
-                      p: themeStyles?.layout?.padding ?? 3,
-                      borderRadius: themeStyles?.layout?.borderRadius ?? 2,
-                      backgroundColor: questionBoxBg,
-                      border: themeStyles?.layout?.showBorder
-                        ? `1px solid ${
-                            themeStyles?.layout?.borderColor
-                            || themeStyles?.colors?.primary
-                            || themeStyles?.variable_palette?.primary_accent
-                            || 'rgba(0,0,0,0.2)'
-                          }`
-                        : 'none',
-                      boxShadow: themeStyles?.layout?.showShadow
-                        ? '0 6px 14px rgba(0,0,0,0.18), 0 3px 6px rgba(0,0,0,0.12)'
-                        : 'none',
+                      p: 0,
+                      borderRadius: 0,
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      boxShadow: 'none',
                     }}
                   >
-                    {/* Page Title */}
-                    <Box sx={{ color: pageTitleColor }}>
-                      <Typography
-                        variant="h3"
-                        gutterBottom
-                        color="inherit"
-                        className="sc-page-title"
-                        sx={{
-                          fontFamily: themeStyles?.typography?.fontFamily || 'Arial, sans-serif',
-                          fontSize: h3Size,
-                          fontWeight: h3Weight,
-                          color: `${pageTitleColor} !important`,
-                        }}
-                        style={{ color: pageTitleColor }}
-                      >
-                        {p.title}
-                      </Typography>
-                    </Box>
-
                     <PublicQuestionList
                       questions={p.questions || []}
                       onResponseChange={handleResponseChange}

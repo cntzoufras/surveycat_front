@@ -17,7 +17,7 @@ const PublicQuestionItem = ({ question, index, onResponseChange }) => {
   return (
     <Box
       sx={{
-        mb: 3,
+        mb: 4,
         p: 3,
         borderRadius: `${themeStyles?.layout?.borderRadius ?? 8}px`,
         backgroundColor: questionBoxBg,
