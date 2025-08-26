@@ -20,6 +20,7 @@ import {
  Alert,
  Chip,
 } from '@mui/material';
+import { Button } from '@/shared/components/Button';
 import LaunchIcon from '@mui/icons-material/Link';
 import { Delete, Category as CategoryIcon } from '@mui/icons-material'; // 2. IMPORT AN ICON (OPTIONAL)
 import { useParams, useNavigate } from 'react-router-dom';
@@ -672,40 +673,36 @@ const handleDeleteSurvey = async () => {
           <MuiBox sx={{ pt: 2 }}>
             <MuiBox sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               {!isPublished && (
-                <MuiButton
-                  variant="contained"
-                  color="success"
-                  size="large" 
+                <Button
+                  size="lg"
+                  variant="success"
                   onClick={openPublishModal}
                 >
                   Publish
-                </MuiButton>
+                </Button>
               )}
-              <MuiButton
-                variant="outlined"
-                color="primary"
+              <Button
+                variant="primary"
                 size="large"
                 onClick={handlePreviewSurvey}
               >
                 Preview
-              </MuiButton>
-              <MuiButton
-                variant="outlined"
-                color="secondary"
+              </Button>
+              <Button
+                variant="outlined-primary"
                 size="large"
                 onClick={handleOpenThemeEnhancement}
               >
                 Customize Theme
-              </MuiButton>
+              </Button>
               {!isPublished && (
-                <MuiButton
-                  variant="outlined"
-                  color="error"
-                  size="large"
+                <Button
+                  variant="outline-danger"
+                  squared
                   onClick={handleDeleteSurvey}
                 >
                   Delete Survey
-                </MuiButton>
+                </Button>
               )}
               {isPublished && surveyData.public_link && (
               <MuiLink
@@ -747,14 +744,14 @@ const handleDeleteSurvey = async () => {
               onResponseChange={() => {}}
             />
             {!isPublished && (
-              <MuiButton
-                variant="contained"
+              <Button
+                variant="outlined-primary"
                 color="primary"
                 sx={{ marginTop: 2 }}
                 onClick={openAddQuestionModal}
               >
                 Add Question
-              </MuiButton>
+              </Button>
             )}
           </MuiBox>
           <AddQuestionModal

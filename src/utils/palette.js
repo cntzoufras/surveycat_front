@@ -116,7 +116,7 @@ export const highlightColor = theme('mode', {
   dark: '#FFD580',
 });
 
-export const colorAccent = '#D58D44';
+export const colorAccent = '#388E3C';
 export const colorLightAccent = '#F3AD61';
 export const colorAccentHover = darken(0.1, colorAccent);
 export const colorAdditional = '#e28743';
