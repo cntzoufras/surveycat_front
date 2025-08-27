@@ -104,8 +104,7 @@ export const handleLogin = ({ email, password, rememberMe = false }) => async (d
     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { 
       email, 
       password, 
-      // Keep backend contract as snake_case while using camelCase in code
-      remember_me: !!rememberMe,
+      rememberMe: !!rememberMe,
      }, {
       headers: {
         Accept: 'application/json',
