@@ -113,7 +113,7 @@ const getBorderRadius = (rounded, squared) => {
 };
 
 export const Button = styled(BootstrapButton).withConfig({
-  shouldForwardProp: (prop, defaultValidatorFn) => !['rounded', 'squared'].includes(prop) && defaultValidatorFn(prop),
+  shouldForwardProp: (prop, defaultValidatorFn) => !['rounded', 'squared', 'noRightMargin'].includes(prop) && defaultValidatorFn(prop),
 })`
   border-radius: ${props => getBorderRadius(props.rounded, props.squared)};
   padding: ${props => getPaddings(props.size)};
@@ -123,7 +123,7 @@ export const Button = styled(BootstrapButton).withConfig({
   position: relative;
   overflow: hidden;
   z-index: 0;
-  ${marginRight}: 15px;
+  ${marginRight}: ${props => (props.noRightMargin ? 0 : 15)}px;
   background-color: ${props => getBackgroundColor(props.variant) || 'transparent'};
   border: 1px solid;
   border-color: ${props => getColor(props.variant)};

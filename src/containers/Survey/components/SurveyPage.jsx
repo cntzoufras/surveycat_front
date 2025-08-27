@@ -671,40 +671,77 @@ const handleDeleteSurvey = async () => {
             </MuiSelect>
           </MuiBox>
           <MuiBox sx={{ pt: 2 }}>
-            <MuiBox sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              {!isPublished && (
+            <MuiBox
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                columnGap: 2,
+                rowGap: 2,
+                alignItems: 'start',
+                width: '100%',
+              }}
+            >
+              {/* Left column: Customize + Preview */}
+              <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-start', flex: 1 }}>
                 <Button
-                  size="lg"
-                  variant="success"
-                  onClick={openPublishModal}
+                  variant="outlined-primary"
+                  size="large"
+                  onClick={handleOpenThemeEnhancement}
                 >
-                  Publish
+                  Customize Theme
                 </Button>
-              )}
-              <Button
-                variant="primary"
-                size="large"
-                onClick={handlePreviewSurvey}
-              >
-                Preview
-              </Button>
-              <Button
-                variant="outlined-primary"
-                size="large"
-                onClick={handleOpenThemeEnhancement}
-              >
-                Customize Theme
-              </Button>
-              {!isPublished && (
+
                 <Button
-                  variant="outline-danger"
-                  squared
-                  onClick={handleDeleteSurvey}
+                  variant="primary"
+                  size="large"
+                  onClick={handlePreviewSurvey}
                 >
-                  Delete Survey
+                  Preview
                 </Button>
-              )}
-              {isPublished && surveyData.public_link && (
+              </MuiBox>
+
+              {/* Right column: Publish + Delete (right aligned on wider screens) */}
+              <MuiBox
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  alignItems: { xs: 'stretch', sm: 'flex-end' },
+                  width: '100%',
+                  // Override shared Button default right margin so both buttons flush-align right
+                  '& .btn': {
+                    marginRight: '0 !important',
+                    marginLeft: '0 !important',
+                  },
+                }}
+              >
+                {!isPublished && (
+                  <Button
+                    variant="success"
+                    onClick={openPublishModal}
+                    // Let the container control alignment; avoid forcing width here
+                    style={{ marginLeft: 'auto', marginRight: 0 }}
+                  >
+                    Publish
+                  </Button>
+                )}
+
+                {!isPublished && (
+                  <Button
+                    variant="outline-danger"
+                    squared
+                    onClick={handleDeleteSurvey}
+                    // Let the container control alignment; ensure flush-right
+                    style={{ marginLeft: 'auto', marginRight: 0 }}
+                  >
+                    Delete Survey
+                  </Button>
+                )}
+              </MuiBox>
+            </MuiBox>
+
+            {/* Public link when published */}
+            {isPublished && surveyData.public_link && (
               <MuiLink
                 href={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
                 target="_blank"
@@ -713,16 +750,15 @@ const handleDeleteSurvey = async () => {
                 // Add a Tooltip to show the full URL on hover
                 title={`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
                 sx={{
-                  display: 'inline-block', // Use inline-block for better text handling
-                  verticalAlign: 'middle', // Helps align icon and text
-                  fontSize: '0.875rem', // Slightly larger for better readability
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  fontSize: '0.875rem',
                   color: 'primary.main',
-                  // ADDED: Truncation styles
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  maxWidth: '100%', // Crucial for making overflow work
-                  // REMOVED: wordBreak is not needed with this method
+                  maxWidth: '100%',
+                  mt: 1.5,
                   '&:hover': { textDecoration: 'underline' },
                 }}
               >
@@ -730,7 +766,6 @@ const handleDeleteSurvey = async () => {
                 {`${window.location.origin}/surveys/ps/${surveyData.public_link}`}
               </MuiLink>
             )}
-            </MuiBox>
           </MuiBox>
         </MuiGrid>
         
