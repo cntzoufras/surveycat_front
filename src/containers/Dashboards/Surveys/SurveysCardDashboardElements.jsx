@@ -36,9 +36,11 @@ export const TotalSurveysCreatedTitle = styled.h5`
   font-size: 28px;
   font-weight: 500;
   line-height: normal;
-  color: ${props => (props.$color
-    ? (typeof props.$color === 'function' ? props.$color(props) : props.$color)
-    : colorAccent)};
+  color: ${(props) => {
+    const provided = props.$color;
+    if (!provided) return colorAccent;
+    return typeof provided === 'function' ? provided(props) : provided;
+  }};
 `;
 
 export const DashboardBookingDescription = styled.h5`
