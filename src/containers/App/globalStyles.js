@@ -10,6 +10,7 @@ import {
   colorOrange,
   colorBackgroundBody,
   scrollbarStyles,
+  colorSelection,
 } from '@/utils/palette';
 import {
   left,
@@ -213,7 +214,13 @@ const GlobalStyles = createGlobalStyle`
 
   ::selection {
     color: ${colorWhite};
-    background: ${colorAccent};
+    background: ${colorSelection};
+  }
+
+  /* Firefox */
+  ::-moz-selection {
+    color: ${colorWhite};
+    background: ${colorSelection};
   }
 
   .first-letter-uppercase:first-letter {

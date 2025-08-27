@@ -116,6 +116,14 @@ export const highlightColor = theme('mode', {
   dark: '#FFD580',
 });
 
+// Site-wide text selection highlight color (theme-aware)
+// Reuse the established highlightColor to keep consistency with the palette
+export const colorSelection = theme('mode', {
+  light: '#E28743',
+  // Dark mode: use a darker orange than the previous light yellow to improve contrast with white text
+  dark: darken(0.25, '#FFD580'),
+});
+
 export const colorAccent = '#388E3C';
 export const colorLightAccent = '#F3AD61';
 export const colorAccentHover = darken(0.1, colorAccent);

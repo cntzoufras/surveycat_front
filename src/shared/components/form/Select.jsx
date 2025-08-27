@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { renderComponentField } from '@/shared/components/form/FormField';
 import styled from 'styled-components';
 import {
-  colorAccent,
+  colorSelection,
   colorBackground,
   colorBlue,
   colorFieldsBorder,
@@ -80,7 +80,7 @@ const StyledSelect = styled(Select)`
     background-color: ${colorBackground};
 
     &.react-select__control--is-focused, &:hover {
-      border-color: ${colorAccent} !important;
+      border-color: ${colorSelection} !important;
       box-shadow: none;
       background: transparent;
     }

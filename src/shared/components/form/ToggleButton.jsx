@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { renderComponentField } from '@/shared/components/form/FormField';
 import styled from 'styled-components';
 import {
- colorAccent, colorBorder, colorText, colorWhite, 
+ colorSelection, colorBorder, colorText, colorWhite, 
 } from '@/utils/palette';
 import { left } from '@/utils/directions';
 
@@ -92,9 +92,10 @@ const ToggleWrap = styled.div`
     visibility: hidden;
     
     &:checked ~ ${ToggleLabel} {
+      background-color: ${colorSelection};
 
       &:after {
-        background: ${colorAccent};
+        background: ${colorWhite};
         // doesn't do RTL, it break toggles
         left: 100%;
         transform: translateX(-100%);
