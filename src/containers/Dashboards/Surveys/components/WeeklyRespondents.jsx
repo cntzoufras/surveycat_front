@@ -4,7 +4,7 @@ import { Col } from 'react-bootstrap';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import ProgressBar from '@/shared/components/ProgressBar';
 import { Card } from '@/shared/components/Card';
-import { colorGreen } from '@/utils/palette';
+import { statNewUsersColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -20,7 +20,7 @@ const WeeklyRespondents = ({ weeklyRespondents, goal = 1000 }) => {
       <Card>
         <DashboardBookingCard>
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle color={colorGreen}>
+            <TotalSurveysCreatedTitle $color={statNewUsersColor}>
               {weeklyRespondents || 0}
             </TotalSurveysCreatedTitle>
             <TrendingUpIcon />

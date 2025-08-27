@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import { Card } from '@/shared/components/Card';
+import { statUsersColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -15,7 +16,7 @@ const TotalRespondents = ({ total }) => (
     <Card>
       <DashboardBookingCard>
         <DashboardBookingTotalWrap>
-          <TotalSurveysCreatedTitle>
+          <TotalSurveysCreatedTitle $color={statUsersColor}>
             {total || 0}
           </TotalSurveysCreatedTitle>
           <TrendingUpIcon />

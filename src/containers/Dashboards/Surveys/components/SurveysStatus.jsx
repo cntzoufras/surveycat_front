@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon'; // You can use different icons for each status if needed
 import ProgressBar from '@/shared/components/ProgressBar';
 import { Card } from '@/shared/components/Card';
-import { colorBlue, colorRed } from '@/utils/palette'; // Added colorRed for inactive surveys
+import { statUsersColor, statTotalSubmissionsColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -27,14 +27,14 @@ const SurveysStatus = ({ counts }) => {
       <Card>
         <DashboardBookingCard>
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle color={colorBlue}>
+            <TotalSurveysCreatedTitle $color={statUsersColor}>
               {activeSurveys} Active
             </TotalSurveysCreatedTitle>
             <TrendingUpIcon />
           </DashboardBookingTotalWrap>
         
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle color={colorRed}>
+            <TotalSurveysCreatedTitle $color={statTotalSubmissionsColor}>
               {inactiveSurveys} Inactive
             </TotalSurveysCreatedTitle>
             <TrendingUpIcon />
