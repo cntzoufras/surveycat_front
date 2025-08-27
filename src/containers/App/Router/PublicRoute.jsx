@@ -11,8 +11,7 @@ const PublicRoute = ({ children }) => {
     return <Loading />;
   }
   if (user) {
-    // already logged in → bounce to home (/)
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboards/app" replace />;
   }
   return children;
 };
