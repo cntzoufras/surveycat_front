@@ -65,7 +65,7 @@ const LogInForm = ({
         </FormGroup>
         <FormGroup>
           <Field
-            name="remember_me"
+            name="rememberMe"
             component={renderCheckBoxField}
             label="Remember me"
             type="checkbox"

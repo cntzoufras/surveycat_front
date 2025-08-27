@@ -97,14 +97,15 @@ export const setupInterceptor = (navigate, dispatch) => {
   );
 };
 
-export const handleLogin = ({ email, password, remember_me = false }) => async (dispatch) => {
+export const handleLogin = ({ email, password, rememberMe = false }) => async (dispatch) => {
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
     
     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { 
       email, 
       password, 
-      remember_me: !!remember_me,
+      // Keep backend contract as snake_case while using camelCase in code
+      remember_me: !!rememberMe,
      }, {
       headers: {
         Accept: 'application/json',

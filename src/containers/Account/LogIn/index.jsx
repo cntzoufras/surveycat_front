@@ -36,7 +36,8 @@ const LogIn = ({ error }) => {
     const credentials = { 
       email: values.email, 
       password: values.password,
-      remember_me: values.remember_me || false,
+      // Use camelCase in frontend state, map to backend in action
+      rememberMe: values.rememberMe || false,
     };
     try {
       const response = await dispatch(reduxHandleLogin(credentials));

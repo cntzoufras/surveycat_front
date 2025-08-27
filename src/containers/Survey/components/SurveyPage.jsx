@@ -682,7 +682,15 @@ const handleDeleteSurvey = async () => {
               }}
             >
               {/* Left column: Customize + Preview */}
-              <MuiBox sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'flex-start', flex: 1 }}>
+              <MuiBox
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 1,
+                  alignItems: 'flex-start',
+                  flex: 1,
+                }}
+              >
                 <Button
                   variant="outlined-primary"
                   size="large"
