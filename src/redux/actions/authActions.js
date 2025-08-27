@@ -97,14 +97,14 @@ export const setupInterceptor = (navigate, dispatch) => {
   );
 };
 
-export const handleLogin = ({ email, password, rememberMe = false }) => async (dispatch) => {
+export const handleLogin = ({ email, password, remember_me = false }) => async (dispatch) => {
   try {
     await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
     
     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { 
       email, 
       password, 
-      rememberMe,
+      remember_me: !!remember_me,
      }, {
       headers: {
         Accept: 'application/json',
