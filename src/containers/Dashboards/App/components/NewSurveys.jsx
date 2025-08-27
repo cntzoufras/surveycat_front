@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import { Card } from '@/shared/components/Card';
+import { statNewSurveysColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -20,11 +21,11 @@ const NewSurveys = ({ newSurveys }) => {
       <Card>
         <DashboardBookingCard>
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle>{last7Days}</TotalSurveysCreatedTitle>
+            <TotalSurveysCreatedTitle color={statNewSurveysColor}>{last7Days}</TotalSurveysCreatedTitle>
             <DashboardBookingDescription>Last 7 Days</DashboardBookingDescription>
           </DashboardBookingTotalWrap>
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle>{last30Days}</TotalSurveysCreatedTitle>
+            <TotalSurveysCreatedTitle color={statNewSurveysColor}>{last30Days}</TotalSurveysCreatedTitle>
             <DashboardBookingDescription>Last 30 Days</DashboardBookingDescription>
           </DashboardBookingTotalWrap>
           <DashboardBookingDescription>{t('app_dashboard.new_surveys')}</DashboardBookingDescription>

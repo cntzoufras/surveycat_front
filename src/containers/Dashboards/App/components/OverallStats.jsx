@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'react-bootstrap';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import { Card } from '@/shared/components/Card';
+import { statWeeklySubmissionsColor, statUsersColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -21,7 +22,7 @@ const OverallStats = ({ stats }) => {
           <Card>
             <DashboardBookingCard>
               <DashboardBookingTotalWrap>
-                <TotalSurveysCreatedTitle>
+                <TotalSurveysCreatedTitle $color={statWeeklySubmissionsColor}>
                   {stats.averageCompletionRate}%
                 </TotalSurveysCreatedTitle>
                 <TrendingUpIcon />
@@ -34,7 +35,7 @@ const OverallStats = ({ stats }) => {
           <Card>
             <DashboardBookingCard>
               <DashboardBookingTotalWrap>
-                <TotalSurveysCreatedTitle>
+                <TotalSurveysCreatedTitle $color={statUsersColor}>
                   {stats.averageTimeToComplete}s
                 </TotalSurveysCreatedTitle>
                 <TrendingUpIcon />

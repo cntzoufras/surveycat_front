@@ -174,6 +174,35 @@ export const landingGradientBtn = 'linear-gradient(139.48deg, #FEA63E 6.99%, #F0
 // eslint-disable-next-line max-len
 export const landingGradientBtnHover = 'linear-gradient(228deg, darken(rgb(127, 244, 222), 5%), darken(rgb(62, 59, 224), 5%))';
 
+// Themed stat colors for App Dashboard cards
+export const statUsersColor = theme('mode', {
+  light: colorBlue,
+  dark: colorLightBlue,
+});
+
+export const statNewUsersColor = theme('mode', {
+  light: colorGreen,
+  dark: colorGreenHover,
+});
+
+export const statTotalSurveysColor = theme('mode', {
+  light: colorOrange,
+  dark: colorLightOrange,
+});
+
+export const statNewSurveysColor = theme('mode', {
+  light: colorViolet,
+  dark: lighten(0.05, colorViolet),
+});
+
+export const statTotalSubmissionsColor = theme('mode', {
+  light: colorRed,
+  dark: colorLightRed,
+});
+
+// Reuse highlightColor directly; it's already theme-aware
+export const statWeeklySubmissionsColor = highlightColor;
+
 export const scrollbarStyles = props => `
   &::-webkit-scrollbar {
     height: 5px;

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Col } from 'react-bootstrap';
 import TrendingUpIcon from 'mdi-react/TrendingUpIcon';
 import { Card } from '@/shared/components/Card';
+import { statWeeklySubmissionsColor } from '@/utils/palette';
 import {
   DashboardBookingCard,
   DashboardBookingDescription,
@@ -19,7 +20,7 @@ const WeeklySubmissions = ({ weeklySubmissions }) => {
       <Card>
         <DashboardBookingCard>
           <DashboardBookingTotalWrap>
-            <TotalSurveysCreatedTitle>
+            <TotalSurveysCreatedTitle $color={statWeeklySubmissionsColor}>
               {weeklySubmissions || 0}
             </TotalSurveysCreatedTitle>
             <TrendingUpIcon />
