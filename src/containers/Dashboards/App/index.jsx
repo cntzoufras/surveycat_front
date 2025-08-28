@@ -39,7 +39,10 @@ const AppDashboard = () => {
       {error && (
         <Row className="mb-3">
           <Col md={12}>
-            <Alert variant="danger">Error: {error.message || String(error)}</Alert>
+            {(() => { const errorText = typeof error === 'string' ? error : (error?.message || String(error));
+              return (
+                <Alert variant="danger">Error: {errorText}</Alert>
+              ); })()}
           </Col>
         </Row>
       )}

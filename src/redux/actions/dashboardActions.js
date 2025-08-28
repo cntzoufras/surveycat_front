@@ -34,9 +34,12 @@ export const fetchSurveyDashboardData = () => async (dispatch) => {
       payload: response.data,
     });
   } catch (error) {
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view this dashboard section.'
+      : (error?.response?.data?.message || error?.message || 'Failed to load dashboard data');
     dispatch({
       type: FETCH_SURVEY_DASHBOARD_DATA_FAILURE,
-      payload: error.message,
+      payload: message,
     });
   }
 };
@@ -48,7 +51,10 @@ export const fetchBounceRate = (params = {}) => async (dispatch) => {
     const response = await api.get('/dashboards/surveys/bounce-rate', { params });
     dispatch({ type: FETCH_BOUNCE_RATE_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_BOUNCE_RATE_FAILURE, payload: error.message || String(error) });
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view bounce rate analytics.'
+      : (error?.response?.data?.message || error?.message || String(error));
+    dispatch({ type: FETCH_BOUNCE_RATE_FAILURE, payload: message });
   }
 };
 
@@ -58,7 +64,10 @@ export const fetchVisitorSessions = (params = {}) => async (dispatch) => {
     const response = await api.get('/dashboards/surveys/visitor-sessions', { params });
     dispatch({ type: FETCH_VISITOR_SESSIONS_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_VISITOR_SESSIONS_FAILURE, payload: error.message || String(error) });
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view visitor sessions analytics.'
+      : (error?.response?.data?.message || error?.message || String(error));
+    dispatch({ type: FETCH_VISITOR_SESSIONS_FAILURE, payload: message });
   }
 };
 
@@ -68,7 +77,10 @@ export const fetchAudienceByCountry = (params = {}) => async (dispatch) => {
     const response = await api.get('/dashboards/surveys/audience-by-country', { params });
     dispatch({ type: FETCH_AUDIENCE_BY_COUNTRY_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_AUDIENCE_BY_COUNTRY_FAILURE, payload: error.message || String(error) });
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view audience by country analytics.'
+      : (error?.response?.data?.message || error?.message || String(error));
+    dispatch({ type: FETCH_AUDIENCE_BY_COUNTRY_FAILURE, payload: message });
   }
 };
 
@@ -78,7 +90,10 @@ export const fetchOccupancy = (params = {}) => async (dispatch) => {
     const response = await api.get('/dashboards/surveys/occupancy', { params });
     dispatch({ type: FETCH_OCCUPANCY_SUCCESS, payload: response.data });
   } catch (error) {
-    dispatch({ type: FETCH_OCCUPANCY_FAILURE, payload: error.message || String(error) });
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view occupancy analytics.'
+      : (error?.response?.data?.message || error?.message || String(error));
+    dispatch({ type: FETCH_OCCUPANCY_FAILURE, payload: message });
   }
 };
 
@@ -92,9 +107,12 @@ export const fetchAppDashboardData = () => async (dispatch) => {
       payload: response.data,
     });
   } catch (error) {
+    const message = error?.response?.status === 403
+      ? 'You do not have permission to view the app-wide dashboard.'
+      : (error?.response?.data?.message || error?.message || 'Failed to load app dashboard');
     dispatch({
       type: FETCH_APP_DASHBOARD_DATA_FAILURE,
-      payload: error.message,
+      payload: message,
     });
   }
 };

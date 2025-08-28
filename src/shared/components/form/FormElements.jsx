@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 import {
   colorAccent,
   colorAdditional,
@@ -7,6 +8,8 @@ import {
   colorFieldsBorder,
   colorText,
   colorWhite,
+  colorSelection,
+  colorLogoCat,
 } from '@/utils/palette';
 import {
   left,
@@ -66,6 +69,14 @@ export const FormGroupIcon = styled.div`
     width: 18px;
     height: 18px;
     transition: all 0.3s;
+  }
+
+  &:hover, &:focus {
+    outline: none;
+    ${props => props.active && `
+      background: ${darken(0.1, colorLogoCat(props))};
+      border-color: ${darken(0.1, colorLogoCat(props))};
+    `}
   }
 `;
 
@@ -223,8 +234,8 @@ export const FormFieldButton = styled.button`
   height: 32px;
   cursor: pointer;
   transition: all 0.3s;
-  background: ${props => (props.active ? colorAccent : colorFieldsBorder)};
-  border: 1px solid ${props => (props.active ? colorAccent : colorFieldsBorder)};
+  background: ${props => (props.active ? colorLogoCat : colorFieldsBorder)};
+  border: 1px solid ${props => (props.active ? colorLogoCat : colorFieldsBorder)};
   display: flex;
   align-items: center;
   justify-content: center;

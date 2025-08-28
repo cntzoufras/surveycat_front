@@ -104,9 +104,12 @@ const SurveysDashboard = () => {
       {error && (
         <Row className="mb-3">
           <Col md={12}>
-            <Alert variant="danger">
-              Error loading dashboard data: {error.message || String(error)}
-            </Alert>
+            {(() => { const errorText = typeof error === 'string' ? error : (error?.message || String(error));
+              return (
+                <Alert variant="danger">
+                  Error loading dashboard data: {errorText}
+                </Alert>
+              ); })()}
           </Col>
         </Row>
       )}

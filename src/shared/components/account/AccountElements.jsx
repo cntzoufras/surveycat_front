@@ -12,6 +12,8 @@ import {
   colorVeryLightRed,
   colorWhite,
   colorLightAccent,
+  colorSelection,
+  colorLogoCat,
 } from '@/utils/palette';
 import {
  borderLeft, borderRight, marginLeft, marginRight, right, left, paddingLeft,
@@ -73,7 +75,7 @@ export const AccountLogo = styled.span`
 `;
 
 export const AccountLogoAccent = styled.span`
-  color: ${colorAccent};
+  color: ${colorLogoCat};
 `;
 
 export const AccountOr = styled.div`

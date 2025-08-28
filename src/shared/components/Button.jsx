@@ -8,18 +8,19 @@ import { darken } from 'polished';
 import {
   colorLightGray,
   colorBlue,
-  colorAccent,
   colorYellow,
   colorRed,
   colorGray,
   colorWhite,
   colorText,
   colorBlueHover,
-  colorAccentHover,
   colorYellowHover,
   colorRedHover,
   colorBackgroundBody,
   colorDustyWhite,
+  colorAccent,
+  colorAccentHover,
+  colorSelection,
 } from '@/utils/palette';
 import {
   marginRight,
@@ -36,6 +37,8 @@ const getColor = (variant) => {
       return colorBlue;
     case variant?.includes('success'):
       return colorAccent;
+    case variant?.includes('register'):
+      return colorSelection;
     case variant?.includes('warning'):
       return colorYellow;
     case variant?.includes('danger'):
@@ -53,7 +56,8 @@ const getBackgroundColor = (variant) => {
   return getColor(variant);
 };
 
-const getHoverColor = (variant) => {
+const getHoverColor = (props) => {
+  const variant = props?.variant;
   if (variant?.includes('outline')) {
     return getColor(variant);
   }
@@ -65,6 +69,9 @@ const getHoverColor = (variant) => {
       return colorBlueHover;
     case variant?.includes('success'):
       return colorAccentHover;
+    case variant?.includes('register'):
+      // Use a slightly darker orange to make the sliding ripple visible on solid background
+      return darken(0.1, colorSelection(props));
     case variant?.includes('warning'):
       return colorYellowHover;
     case variant?.includes('danger'):
@@ -146,15 +153,13 @@ export const Button = styled(BootstrapButton).withConfig({
     height: 0;
     width: 0;
     border-radius: 50%;
-    background-color: ${colorAccent};
+    background-color: ${props => (getHoverColor(props) || darken(0.1, colorLightGray))};
     transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
     z-index: -1;
     content: "";
     top: 0;
     transform: ${translate};
     ${left}: 0;
-    background-color: ${props => (getHoverColor(props.variant) || darken(0.1, colorLightGray))
-    };
   }
 
   span{
@@ -182,7 +187,7 @@ export const Button = styled(BootstrapButton).withConfig({
     outline: none;
     box-shadow: none !important;
     color: ${props => getHoverTextColor(props.variant)};
-    border-color: ${props => (getHoverColor(props.variant) || darken(0.1, colorLightGray))
+    border-color: ${props => (getHoverColor(props) || darken(0.1, colorLightGray))
     };
     background-color: ${props => getBackgroundColor(props.variant) || 'transparent'};
 

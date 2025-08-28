@@ -124,6 +124,12 @@ export const colorSelection = theme('mode', {
   dark: darken(0.25, '#FFD580'),
 });
 
+// Specific ginger-orange for the "CAT" wordmark accent in auth headers
+export const colorLogoCat = theme('mode', {
+  light: '#E38B29', // ginger-like orange
+  dark: darken(0.1, '#E38B29'),
+});
+
 export const colorAccent = '#388E3C';
 export const colorLightAccent = '#F3AD61';
 export const colorAccentHover = darken(0.1, colorAccent);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { paddingLeft } from '@/utils/directions';
@@ -9,6 +9,7 @@ import TopbarWithNavigation from './topbar_with_navigation/TopbarWithNavigation'
 import Sidebar from './components/sidebar/Sidebar';
 import Customizer from './customizer/Customizer';
 import WelcomeNotification from './components/WelcomeNotification';
+import { useLocation } from 'react-router-dom';
 
 const Layout = () => {
   const [isNotificationShown, setIsNotificationShown] = useState(
@@ -17,24 +18,34 @@ const Layout = () => {
 
 
   const dispatch = useDispatch();
+  const location = useLocation();
   const {
- customizer, sidebar, theme, auth, 
-} = useSelector(state => ({
+    customizer, sidebar, theme, auth,
+  } = useSelector(state => ({
     customizer: state.customizer,
     sidebar: state.sidebar,
     theme: state.theme,
     auth: state.auth,
   }));
 
-  useEffect(() => {
-    // Show welcome notification only after a successful login
-    if (auth?.loggedIn && !isNotificationShown) {
-      WelcomeNotification(theme, setIsNotificationShown);
+  // Track previous auth.loggedIn to detect real login transitions
+  const prevLoggedInRef = useRef(auth?.loggedIn);
 
+  useEffect(() => {
+    // Only show after a real transition from logged out -> logged in
+    const wasLoggedIn = prevLoggedInRef.current;
+    const isLoggedIn = !!auth?.loggedIn;
+    const onLoginPage = location?.pathname === '/login';
+
+    if (!onLoginPage && isLoggedIn && !wasLoggedIn && !isNotificationShown) {
+      WelcomeNotification(theme, setIsNotificationShown);
       setIsNotificationShown(true);
       sessionStorage.setItem('welcomeNotificationShown', 'true');
     }
-  }, [auth?.loggedIn, isNotificationShown, theme]);
+
+    // update ref after handling
+    prevLoggedInRef.current = isLoggedIn;
+  }, [auth?.loggedIn, isNotificationShown, theme, location?.pathname]);
 
   const sidebarVisibility = () => {
     dispatch(changeSidebarVisibility());

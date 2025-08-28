@@ -3,16 +3,16 @@ import CheckIcon from 'mdi-react/CheckIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { darken } from 'polished';
 import { renderComponentField } from '@/shared/components/form/FormField';
 import {
-  colorAccent,
-  colorAccentHover,
   colorDustyWhite,
   colorFieldsBorder,
   colorHover,
   colorIcon,
   colorText,
   colorWhite,
+  colorLogoCat,
 } from '@/utils/palette';
 import { marginRight, paddingLeft } from '@/utils/directions';
 
@@ -91,7 +91,7 @@ const CheckboxCustom = styled.span`
     opacity: 0;
     height: 16px;
     width: 16px;
-    fill: ${props => (props.color ? colorWhite : colorAccent)};
+    fill: ${props => (props.color ? colorWhite : colorLogoCat)};
   }
 `;
 
@@ -110,6 +110,8 @@ const CheckboxInput = styled.input`
   
   &:checked + ${CheckboxCustom} {
 
+    border-color: ${colorLogoCat};
+
     svg {
       opacity: 1;
     }
@@ -125,11 +127,11 @@ const CheckboxWrap = styled.label`
   &:hover {
 
     ${CheckboxCustom} {
-      border-color: ${colorAccent};
+      border-color: ${colorLogoCat};
     }
 
     ${CheckboxLabel} {
-      color: ${colorAccent};
+      color: ${colorLogoCat};
     }
   }
 
@@ -156,8 +158,8 @@ const CheckboxWrap = styled.label`
   ${props => props.styleType === 'colored' && `
 
     ${CheckboxCustom} {
-      border-color: ${colorAccent};
-      background-color: ${colorAccent};
+      border-color: ${colorLogoCat};
+      background-color: ${colorLogoCat};
 
       svg {
         fill: ${colorWhite};
@@ -167,8 +169,8 @@ const CheckboxWrap = styled.label`
     ${props.disabled && `
 
       ${CheckboxCustom} {
-        border-color: ${colorAccent};
-        background-color: ${colorAccent};
+        border-color: ${colorLogoCat};
+        background-color: ${colorLogoCat};
       }
     `}
   `}
@@ -176,8 +178,8 @@ const CheckboxWrap = styled.label`
   ${props => props.styleType === 'colored-click' && `
 
     ${CheckboxInput}:checked + ${CheckboxCustom} {
-      border-color: ${colorAccent};
-      background-color: ${colorAccent};
+      border-color: ${colorLogoCat};
+      background-color: ${colorLogoCat};
 
       svg {
         fill: ${colorWhite};
@@ -198,7 +200,7 @@ const CheckboxWrap = styled.label`
   `}
 
   ${props => props.styleType === 'button' && `
-    background: ${colorAccent};
+    background: ${colorLogoCat};
     min-width: 150px;
     color: ${colorWhite};
     height: 24px;
@@ -251,7 +253,7 @@ const CheckboxWrap = styled.label`
     }
 
     &:hover {
-      background: ${colorAccentHover};
+      background: ${darken(0.1, colorLogoCat)};
 
       ${CheckboxLabel} {
         color: ${colorWhite};
