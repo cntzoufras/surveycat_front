@@ -7,7 +7,7 @@ import ChevronLeftIcon from 'mdi-react/ChevronLeftIcon';
 import ChevronDoubleLeftIcon from 'mdi-react/ChevronDoubleLeftIcon';
 import styled from 'styled-components';
 import {
-  colorAccent,
+  colorSelection,
   colorAdditional,
   colorBackground,
   colorFieldsBorder,
@@ -161,7 +161,7 @@ export const PaginationWrap = styled.div`
       transition: all 0.3s;
 
       &:hover {
-        color: ${colorAccent};
+        color: ${colorSelection};
         background: transparent;
       }
 
@@ -187,7 +187,7 @@ export const PaginationWrap = styled.div`
       background: ${colorFieldsBorder};
 
       &:hover {
-        background: ${colorAccent};
+        background: ${colorSelection};
 
         svg {
           fill: white;
