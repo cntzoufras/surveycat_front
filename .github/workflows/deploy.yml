@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 5.17
+      IMAGE_VERSION: 5.18
       REACT_APP_API_URL: ${{ secrets.PROD_API_URL }}
       REACT_APP_BASE_URL: ${{ secrets.PROD_BASE_URL }}
       REACT_APP_IMAGE_BASE_URL: ${{ secrets.PROD_IMAGE_BASE_URL }}
@@ -51,12 +51,12 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 5.17
+          IMAGE_VERSION: 5.18
 
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
         ssh -p ${{ secrets.PROD_SSH_PORT }} -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key ${{ secrets.PROD_DEPLOY_USER }}@${{ secrets.PROD_SSH_HOST }} '
-          export IMAGE_VERSION=5.17 && \
+          export IMAGE_VERSION=5.18 && \
         cd /var/www/surveycat_front && \
           git pull origin main && \
           docker-compose -f docker-compose.prod.yml down && \
@@ -64,5 +64,5 @@ jobs:
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 5.17
+          IMAGE_VERSION: 5.18
 

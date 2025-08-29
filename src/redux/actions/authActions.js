@@ -137,9 +137,14 @@ export const handleLogin = ({ email, password, rememberMe = false }) => async (d
 };
 
 export const handleLogout = () => async (dispatch) => {
+  // Prefer BASE_URL, fallback to API_URL, then window.origin
+  const baseUrl = process.env.REACT_APP_BASE_URL
+    || process.env.REACT_APP_API_URL
+    || (typeof window !== 'undefined' ? window.location.origin : '');
+
   try {
     // Make a POST request to your API's logout endpoint
-    await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/logout`, {}, {
+    await axios.post(`${baseUrl}/auth/logout`, {}, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -147,33 +152,37 @@ export const handleLogout = () => async (dispatch) => {
       withCredentials: true,
       withXSRFToken: true,
     });
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Optionally, you can handle errors or retry the request here
+  } finally {
+    // Always clear client-side state even if server call fails
+    try {
+      // Attempt best-effort cookie cleanup with domain if possible
+      let baseDomain; let isSecure = false;
+      try {
+        const parsed = new URL(baseUrl);
+        baseDomain = `.${parsed.hostname}`;
+        isSecure = parsed.protocol === 'https:';
+      } catch (_) {
+        // Fallback: no domain option
+      }
 
-    // Clear local storage
-    localStorage.removeItem('auth');
+      const cookieOptions = baseDomain ? { path: '/', domain: baseDomain, sameSite: 'Lax' } : { path: '/', sameSite: 'Lax' };
 
-    const baseDomain = `.${new URL(process.env.REACT_APP_BASE_URL).hostname}`;
-    console.log(baseDomain);
-    const isSecure = new URL(process.env.REACT_APP_BASE_URL).protocol === 'https:';
-
-    // Remove cookies with the correct domain, secure flag, and SameSite attribute
-    const cookieOptions = { path: '/', domain: baseDomain, sameSite: 'Lax' };
-
-    // Remove with and without secure flag
     Cookies.remove('auth', cookieOptions);
     Cookies.remove('surveycat_session', cookieOptions);
     Cookies.remove('XSRF-TOKEN', cookieOptions);
 
-    if (isSecure) {
+      if (isSecure && baseDomain) {
       Cookies.remove('auth', { ...cookieOptions, secure: true });
       Cookies.remove('surveycat_session', { ...cookieOptions, secure: true });
       Cookies.remove('XSRF-TOKEN', { ...cookieOptions, secure: true });
     }
 
-    // Clear all session/local data
+    // Clear storage and dispatch logout regardless
     localStorage.removeItem('auth');
     sessionStorage.removeItem('welcomeNotificationShown');
-
-    // Dispatch logout action to Redux store
     dispatch(logout());
 
     // Redirect to the login page
