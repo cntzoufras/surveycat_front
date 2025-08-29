@@ -25,6 +25,8 @@ const SurveysDashboard = () => {
   const dispatch = useDispatch();
 
   const { loading, data, error } = useSelector(state => state.dashboard.surveyDashboard);
+  const authUser = useSelector(state => state.auth?.user);
+  const isAdmin = !!(authUser?.is_admin || authUser?.isAdmin || authUser?.role === 'admin');
 
   useEffect(() => {
     dispatch(fetchSurveyDashboardData());
@@ -97,7 +99,10 @@ const SurveysDashboard = () => {
     <Container>
       <Row>
         <Col md={12}>
-          <PageHeader title={t('surveys_dashboard.page_title')} />
+          <PageHeader
+            title={t('surveys_dashboard.page_title')}
+            subtitle={isAdmin ? null : 'All metrics reflect your surveys and their respondents.'}
+          />
         </Col>
       </Row>
 

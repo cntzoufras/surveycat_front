@@ -51,6 +51,15 @@ export const AccountCard = styled.div`
     padding: 35px 30px;
   }
 
+  // Make inputs on auth pages use the ginger-orange focus outline
+  input:focus,
+  input:active,
+  textarea:focus,
+  textarea:active {
+    outline: none;
+    border-color: ${colorLogoCat};
+  }
+ 
 `;
 
 export const AccountHead = styled.div`
