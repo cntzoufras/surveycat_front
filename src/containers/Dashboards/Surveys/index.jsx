@@ -109,12 +109,14 @@ const SurveysDashboard = () => {
       {error && (
         <Row className="mb-3">
           <Col md={12}>
-            {(() => { const errorText = typeof error === 'string' ? error : (error?.message || String(error));
+            {(() => {
+ const errorText = typeof error === 'string' ? error : (error?.message || String(error));
               return (
                 <Alert variant="danger">
                   Error loading dashboard data: {errorText}
                 </Alert>
-              ); })()}
+              ); 
+})()}
           </Col>
         </Row>
       )}

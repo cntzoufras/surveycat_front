@@ -28,7 +28,11 @@ const TotalUsers = ({ totalUsers }) => {
             </TotalSurveysCreatedTitle>
             <TrendingUpIcon />
           </DashboardBookingTotalWrap>
-          <DashboardBookingDescription title={isAdmin ? t('app_dashboard.total_users') : 'Respondents are unique people who interacted with your surveys.'}>
+          <DashboardBookingDescription
+            title={isAdmin 
+              ? t('app_dashboard.total_users') 
+              : 'Respondents are unique people who interacted with your surveys.'}
+          >
             {isAdmin ? t('app_dashboard.total_users') : 'Total Respondents'}
           </DashboardBookingDescription>
         </DashboardBookingCard>

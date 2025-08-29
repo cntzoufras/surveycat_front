@@ -31,7 +31,11 @@ const NewUsers = ({ newUsers }) => {
             <TotalSurveysCreatedTitle $color={statNewUsersColor}>{last30Days}</TotalSurveysCreatedTitle>
             <DashboardBookingDescription>Last 30 Days</DashboardBookingDescription>
           </DashboardBookingTotalWrap>
-          <DashboardBookingDescription title={isAdmin ? t('app_dashboard.new_users') : 'Respondents are unique people who interacted with your surveys.'}>
+          <DashboardBookingDescription 
+            title={isAdmin 
+              ? t('app_dashboard.new_users') 
+              : 'Respondents are unique people who interacted with your surveys.'}
+          >
             {isAdmin ? t('app_dashboard.new_users') : 'New Respondents'}
           </DashboardBookingDescription>
         </DashboardBookingCard>

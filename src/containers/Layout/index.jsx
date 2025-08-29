@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { paddingLeft } from '@/utils/directions';
 import { changeMobileSidebarVisibility, changeSidebarVisibility } from '@/redux/actions/sidebarActions';
 import { changeThemeToDark, changeThemeToLight } from '@/redux/actions/themeActions';
+import { useLocation } from 'react-router-dom';
 import Topbar from './topbar/Topbar';
 import TopbarWithNavigation from './topbar_with_navigation/TopbarWithNavigation';
 import Sidebar from './components/sidebar/Sidebar';
 import Customizer from './customizer/Customizer';
 import WelcomeNotification from './components/WelcomeNotification';
-import { useLocation } from 'react-router-dom';
 
 const Layout = () => {
   const [isNotificationShown, setIsNotificationShown] = useState(
