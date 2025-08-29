@@ -2,9 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://snf-893977.vm.okeanos.grnet.gr/api' // Use HTTPS in production
-    : 'http://surveycat.test/api', // Use HTTP in local Docker network
+  baseURL: process.env.REACT_APP_API_URL
+    || (process.env.NODE_ENV === 'production' ? '/api' : 'http://surveycat.test/api'),
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -12,18 +11,9 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// const publicApi = axios.create({
-//   baseURL: 'http://surveycat.test/api',
-//   headers: {
-//     'Content-Type': 'application/json',
-//     Accept: 'application/json',
-//   },
-//   withCredentials: false, // No credentials needed for public access
-// });
 const publicApi = axios.create({
-  baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://snf-893977.vm.okeanos.grnet.gr/api' // Use HTTPS in production
-    : 'http://surveycat.test/api', // Use HTTP in local Docker network
+  baseURL: process.env.REACT_APP_API_URL
+    || (process.env.NODE_ENV === 'production' ? '/api' : 'http://surveycat.test/api'),
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

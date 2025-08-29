@@ -9,10 +9,10 @@ services:
       # args:
         # - IMAGE_VERSION=${IMAGE_VERSION}
       args:
-        - REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api
-        - REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr
-        - REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images
-        - NODE_ENV=production
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+        - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
+        - REACT_APP_IMAGE_BASE_URL=${REACT_APP_IMAGE_BASE_URL}
+        - NODE_ENV=${NODE_ENV}
     ports:
       - "80:80"
       - "443:443"
@@ -22,10 +22,10 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./nginx_logs:/var/log/nginx
     environment:
-      - REACT_APP_API_URL=https://snf-893977.vm.okeanos.grnet.gr/api
-      - REACT_APP_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr
-      - REACT_APP_IMAGE_BASE_URL=https://snf-893977.vm.okeanos.grnet.gr/images
-      - NODE_ENV=production
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - REACT_APP_BASE_URL=${REACT_APP_BASE_URL}
+      - REACT_APP_IMAGE_BASE_URL=${REACT_APP_IMAGE_BASE_URL}
+      - NODE_ENV=${NODE_ENV}
 
     networks:
       - webnet

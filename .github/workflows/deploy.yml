@@ -9,10 +9,10 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      IMAGE_VERSION: 5.15
-      REACT_APP_API_URL: https://snf-893977.vm.okeanos.grnet.gr/api
-      REACT_APP_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr
-      REACT_APP_IMAGE_BASE_URL: https://snf-893977.vm.okeanos.grnet.gr/images
+      IMAGE_VERSION: 5.16
+      REACT_APP_API_URL: ${{ secrets.PROD_API_URL }}
+      REACT_APP_BASE_URL: ${{ secrets.PROD_BASE_URL }}
+      REACT_APP_IMAGE_BASE_URL: ${{ secrets.PROD_IMAGE_BASE_URL }}
       NODE_ENV: production  # Add this line to specify production mode
 
     steps:
@@ -27,7 +27,7 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.GH_FRONT_SECRET }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
-        ssh-keyscan -p 54222 snf-893977.vm.okeanos.grnet.gr >> ~/.ssh/known_hosts
+        ssh-keyscan -p ${{ secrets.PROD_SSH_PORT }} ${{ secrets.PROD_SSH_HOST }} >> ~/.ssh/known_hosts
 
     - name: Install Docker Compose
       run: |
@@ -51,12 +51,12 @@ jobs:
         docker tag cntzoufras/admin-nginx:$IMAGE_VERSION cntzoufras/admin-nginx:$IMAGE_VERSION
         docker-compose -f docker-compose.prod.yml push nginx
       env:
-          IMAGE_VERSION: 5.15
+          IMAGE_VERSION: 5.16
 
     - name: Deploy to Production Server Using Docker Hub Image
       run: |
-        ssh -p 54222 -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key cntzoufras_deploy@snf-893977.vm.okeanos.grnet.gr '
-          export IMAGE_VERSION=5.15 && \
+        ssh -p ${{ secrets.PROD_SSH_PORT }} -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key ${{ secrets.PROD_DEPLOY_USER }}@${{ secrets.PROD_SSH_HOST }} '
+          export IMAGE_VERSION=5.16 && \
         cd /var/www/surveycat_front && \
           git pull origin main && \
           docker-compose -f docker-compose.prod.yml down && \
@@ -64,4 +64,5 @@ jobs:
           docker-compose -f docker-compose.prod.yml up -d
         '
       env:
-          IMAGE_VERSION: 5.15
+          IMAGE_VERSION: 5.16
+
