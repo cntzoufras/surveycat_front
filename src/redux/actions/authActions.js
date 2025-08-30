@@ -170,7 +170,9 @@ export const handleLogout = () => async (dispatch) => {
         // Fallback: no domain option
       }
 
-      const cookieOptions = baseDomain ? { path: '/', domain: baseDomain, sameSite: 'Lax' } : { path: '/', sameSite: 'Lax' };
+      const cookieOptions = baseDomain 
+      ? { path: '/', domain: baseDomain, sameSite: 'Lax' } 
+      : { path: '/', sameSite: 'Lax' };
 
       Cookies.remove('auth', cookieOptions);
       Cookies.remove('surveycat_session', cookieOptions);
