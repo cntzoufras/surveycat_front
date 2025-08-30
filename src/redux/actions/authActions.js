@@ -143,6 +143,7 @@ export const handleLogout = () => async (dispatch) => {
     || (typeof window !== 'undefined' ? window.location.origin : '');
 
   try {
+    console.log('Logout: initiating API call', { baseUrl });
     // Make a POST request to your API's logout endpoint
     await axios.post(`${baseUrl}/auth/logout`, {}, {
       headers: {
@@ -152,6 +153,7 @@ export const handleLogout = () => async (dispatch) => {
       withCredentials: true,
       withXSRFToken: true,
     });
+    console.log('Logout: API call succeeded');
   } catch (error) {
     console.error('Logout failed:', error);
     // Optionally, you can handle errors or retry the request here
@@ -170,26 +172,28 @@ export const handleLogout = () => async (dispatch) => {
 
       const cookieOptions = baseDomain ? { path: '/', domain: baseDomain, sameSite: 'Lax' } : { path: '/', sameSite: 'Lax' };
 
-    Cookies.remove('auth', cookieOptions);
-    Cookies.remove('surveycat_session', cookieOptions);
-    Cookies.remove('XSRF-TOKEN', cookieOptions);
+      Cookies.remove('auth', cookieOptions);
+      Cookies.remove('surveycat_session', cookieOptions);
+      Cookies.remove('XSRF-TOKEN', cookieOptions);
 
       if (isSecure && baseDomain) {
-      Cookies.remove('auth', { ...cookieOptions, secure: true });
-      Cookies.remove('surveycat_session', { ...cookieOptions, secure: true });
-      Cookies.remove('XSRF-TOKEN', { ...cookieOptions, secure: true });
+        Cookies.remove('auth', { ...cookieOptions, secure: true });
+        Cookies.remove('surveycat_session', { ...cookieOptions, secure: true });
+        Cookies.remove('XSRF-TOKEN', { ...cookieOptions, secure: true });
+      }
+
+      // Clear storage and dispatch logout regardless
+      localStorage.removeItem('auth');
+      sessionStorage.removeItem('welcomeNotificationShown');
+      dispatch(logout());
+
+      // Redirect to the login page
+      console.log('Logout: cleared client state, redirecting to /login', { baseDomain, isSecure });
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Optionally, you can handle errors or retry the request here
     }
-
-    // Clear storage and dispatch logout regardless
-    localStorage.removeItem('auth');
-    sessionStorage.removeItem('welcomeNotificationShown');
-    dispatch(logout());
-
-    // Redirect to the login page
-    window.location.href = '/login';
-  } catch (error) {
-    console.error('Logout failed:', error);
-    // Optionally, you can handle errors or retry the request here
   }
 };
 
