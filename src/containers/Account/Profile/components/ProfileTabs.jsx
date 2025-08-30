@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import {
   Col,
   Nav,
@@ -9,10 +10,20 @@ import { updateUserProfileAction } from '@/redux/actions/userActions';
 import {
   TabsWrap, NavLink, NavItem, BorderedBottomTabs,
 } from '@/shared/components/Tabs';
+import { colorNavAccent } from '@/utils/palette';
 import { Snackbar, Alert } from '@mui/material';
 import { Card } from '@/shared/components/Card';
 import ProfileSettings from './ProfileSettings';
 import { ProfileCard } from '../ProfileBasicComponents';
+
+// Local: Orange underline only for Profile tabs
+const OrangeBottomTabs = styled(BorderedBottomTabs)`
+  ${NavLink}.active {
+    &, &:focus, &:hover {
+      border-bottom: 2px solid ${colorNavAccent} !important;
+    }
+  }
+`;
 
 const ProfileTabs = () => {
   const dispatch = useDispatch();
@@ -76,7 +87,7 @@ const ProfileTabs = () => {
     <>
       <Col md={12} lg={12} xl={8}>
         <Card>
-          <BorderedBottomTabs as={ProfileCard}>
+          <OrangeBottomTabs as={ProfileCard}>
             <Tab.Container defaultActiveKey="settings">
               <TabsWrap>
                 <Nav className="nav-tabs">
@@ -96,7 +107,7 @@ const ProfileTabs = () => {
                 </Tab.Content>
               </TabsWrap>
             </Tab.Container>
-          </BorderedBottomTabs>
+          </OrangeBottomTabs>
         </Card>
       </Col>
       <Snackbar

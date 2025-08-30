@@ -11,6 +11,7 @@ import {
   colorText,
   colorBackground,
   colorTextMuted,
+  colorNavAccent,
 } from '@/utils/palette';
 import {
   marginLeft,
@@ -146,10 +147,11 @@ const TopbarSearchInput = styled.input`
   background-color: ${colorBackgroundBody};
   border: 1px solid transparent;
   color: ${colorText};
+  caret-color: ${colorNavAccent};
   
   &:focus, &:active {
     outline: none;
-    border: 1px solid ${colorAccent};
+    border: 1px solid ${colorNavAccent};
     background-color: ${colorBackground};
   }
 `;

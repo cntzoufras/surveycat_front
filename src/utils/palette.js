@@ -120,8 +120,8 @@ export const highlightColor = theme('mode', {
 // Reuse the established highlightColor to keep consistency with the palette
 export const colorSelection = theme('mode', {
   light: '#E28743',
-  // Dark mode: use a darker orange than the previous light yellow to improve contrast with white text
-  dark: darken(0.25, '#FFD580'),
+  // Dark mode: match light mode for toggles
+  dark: '#E28743',
 });
 
 // Specific ginger-orange for the "CAT" wordmark accent in auth headers
@@ -131,6 +131,13 @@ export const colorLogoCat = theme('mode', {
 });
 
 export const colorAccent = '#388E3C';
+// New neutral accent specifically for navigation highlights (left bars, menu items)
+export const colorNavAccent = theme('mode', {
+  // Light mode: requested RGB(226,135,67)
+  light: '#E28743',
+  // Dark mode: also orange to match request
+  dark: '#E28743',
+});
 export const colorLightAccent = '#F3AD61';
 export const colorAccentHover = darken(0.1, colorAccent);
 export const colorAdditional = '#e28743';

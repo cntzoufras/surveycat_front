@@ -13,6 +13,7 @@ import {
   colorWhite,
   colorLightAccent,
   colorSelection,
+  colorNavAccent,
   colorLogoCat,
 } from '@/utils/palette';
 import {
@@ -57,7 +58,7 @@ export const AccountCard = styled.div`
   textarea:focus,
   textarea:active {
     outline: none;
-    border-color: ${colorLogoCat};
+    border-color: ${colorNavAccent};
   }
  
 `;

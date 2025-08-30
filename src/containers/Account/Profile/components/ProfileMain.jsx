@@ -118,10 +118,10 @@ const ProfileMain = () => {
               ) : (
                 <>
                   <ProfileUserName>
-                    {/* If full name exists, show it. Otherwise, show username. */}
-                    {hasFullName ? `${profile.user.first_name} ${profile.user.last_name}` : profile?.user?.username}
+                    {/* If full name exists, show it. Otherwise, show username as fallback */}
+                    @{hasFullName ? `${profile.user.first_name} ${profile.user.last_name}` : (profile?.user?.username || profile?.user?.email)}
                   </ProfileUserName>
-                  
+
                   {/* If full name exists, also show the username underneath as a handle */}
                   {hasFullName && <ProfileHandle>@{profile?.user?.username}</ProfileHandle>}
 
@@ -240,7 +240,8 @@ const ProfileData = styled.div`
 `;
 
 const ProfileUserName = styled.p`
-  font-weight: 900;
+  font-weight: 700;
+  font-style: italic;
   margin: 0;
   font-size: 16px;
   line-height: 20px;

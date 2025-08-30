@@ -6,6 +6,7 @@ import styled, { css } from 'styled-components';
 import { lighten } from 'polished';
 import {
   colorAccent,
+  colorNavAccent,
   colorHover,
   colorText,
   sidebarColor,
@@ -125,7 +126,7 @@ export const SidebarNavLink = styled(NavLink)`
     top: 0;
     height: 100%;
     width: 2px;
-    background: ${colorAccent};
+    background: ${colorNavAccent};
     opacity: 0;
     transition: all 0.3s;
     ${left}: 0;

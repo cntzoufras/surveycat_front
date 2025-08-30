@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { colorHover, colorText, colorAccent } from '@/utils/palette';
+import { colorHover, colorText, colorNavAccent } from '@/utils/palette';
 import { left } from '@/utils/directions';
 import { TopbarLinkIcon, TopbarLinkTitle } from './BasicTopbarComponents';
 
@@ -62,7 +62,7 @@ export const TopbarLink = styled(Link).withConfig({
     top: 0;
     height: 100%;
     width: 2px;
-    background: ${colorAccent};
+    background: ${colorNavAccent};
     opacity: 0;
     transition: all 0.3s;
     ${left}: 0;

@@ -143,6 +143,7 @@ export const TopbarAvatarName = styled.p`
   display: none;
   ${marginLeft}: 10px;
   color: ${colorText};
+  font-style: normal;
 
   @media screen and (min-width: 480px) {
       display: block;

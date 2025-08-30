@@ -137,7 +137,7 @@ const RegisterForm = ({ onSubmit, errorMessage }) => (
         <RegisterButtons>
           <AccountButton 
             type="submit" 
-            variant="register" 
+            variant="primary" 
           >
             Sign Up
           </AccountButton>
