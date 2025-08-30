@@ -72,10 +72,14 @@ const LogIn = ({ error }) => {
           </AccountHead>
           <LogInForm 
             onSubmit={onSubmit} 
-            errorMessage={(typeof authError === 'string' ? authError : (authError && authError.message)) || (typeof error === 'string' ? error : '')}
-            email={email} 
-            password={password} 
-            setEmail={setEmail} 
+            errorMessage={
+              (typeof authError === 'string' 
+                ? authError : (authError && authError.message))
+                || (typeof error === 'string' ? error : '')
+            }
+            email={email}
+            password={password}
+            setEmail={setEmail}
             setPassword={setPassword}
           />
         </AccountCard>
