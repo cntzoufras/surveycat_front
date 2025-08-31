@@ -24,13 +24,29 @@ const publicApi = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
+    // Only fetch Sanctum CSRF cookie for state-changing requests
+    const method = (config.method || 'get').toLowerCase();
+    const needsCsrf = ['post', 'put', 'patch', 'delete'].includes(method);
+
     let csrfToken = Cookies.get('XSRF-TOKEN');
 
-    // If the CSRF token is missing, fetch it
-    if (!csrfToken) {
-      // Derive origin from the api instance baseURL (Sanctum endpoint is at root, not under /api)
-      const base = api && api.defaults && api.defaults.baseURL ? api.defaults.baseURL : '';
-      const origin = base && base.endsWith('/api') ? base.slice(0, -4) : (base || process.env.REACT_APP_BASE_URL || '');
+    if (needsCsrf && !csrfToken) {
+      // Determine correct origin for /sanctum/csrf-cookie (root, not under /api)
+      const base = api?.defaults?.baseURL || '';
+      let origin;
+      if (!base || base.startsWith('/')) {
+        // Relative baseURL like "/api" -> use current site origin
+        origin = window.location.origin;
+      } else if (base.endsWith('/api')) {
+        origin = base.slice(0, -4);
+      } else {
+        try {
+          origin = new URL(base).origin;
+        } catch (e) {
+          origin = window.location.origin;
+        }
+      }
+
       await axios.get(`${origin}/sanctum/csrf-cookie`, { withCredentials: true });
       csrfToken = Cookies.get('XSRF-TOKEN');
     }
@@ -41,8 +57,8 @@ api.interceptors.request.use(
       ...config,
       headers: {
         ...config.headers,
-        'X-XSRF-TOKEN': decodedToken || config.headers['X-XSRF-TOKEN'],
-        'X-CSRF-TOKEN': decodedToken || config.headers['X-CSRF-TOKEN'],
+        // Sanctum expects X-XSRF-TOKEN; include only when present
+        ...(decodedToken ? { 'X-XSRF-TOKEN': decodedToken } : {}),
       },
     };
   },
