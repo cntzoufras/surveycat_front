@@ -28,15 +28,21 @@ api.interceptors.request.use(
 
     // If the CSRF token is missing, fetch it
     if (!csrfToken) {
-      await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
+      // Derive origin from the api instance baseURL (Sanctum endpoint is at root, not under /api)
+      const base = api && api.defaults && api.defaults.baseURL ? api.defaults.baseURL : '';
+      const origin = base && base.endsWith('/api') ? base.slice(0, -4) : (base || process.env.REACT_APP_BASE_URL || '');
+      await axios.get(`${origin}/sanctum/csrf-cookie`, { withCredentials: true });
       csrfToken = Cookies.get('XSRF-TOKEN');
     }
+
+    const decodedToken = csrfToken ? decodeURIComponent(csrfToken) : csrfToken;
 
     return {
       ...config,
       headers: {
         ...config.headers,
-        'X-XSRF-TOKEN': csrfToken || config.headers['X-XSRF-TOKEN'],
+        'X-XSRF-TOKEN': decodedToken || config.headers['X-XSRF-TOKEN'],
+        'X-CSRF-TOKEN': decodedToken || config.headers['X-CSRF-TOKEN'],
       },
     };
   },

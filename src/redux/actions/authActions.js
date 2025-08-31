@@ -88,7 +88,10 @@ export const setupInterceptor = (navigate, dispatch) => {
 
       // Handle CSRF token mismatch error by refreshing the CSRF token
       if (error.response && error.response.status === 419) {
-        await axios.get(`${error.config.baseURL}/sanctum/csrf-cookie`, { withCredentials: true });
+        // Compute the correct origin (Sanctum endpoint is at root, not under /api)
+        const base = (error && error.config && error.config.baseURL) ? error.config.baseURL : '';
+        const origin = base && base.endsWith('/api') ? base.slice(0, -4) : (base || process.env.REACT_APP_BASE_URL);
+        await axios.get(`${origin}/sanctum/csrf-cookie`, { withCredentials: true });
         return api(error.config); // Retry the original request
       }
 
@@ -99,20 +102,24 @@ export const setupInterceptor = (navigate, dispatch) => {
 
 export const handleLogin = ({ email, password, rememberMe = false }) => async (dispatch) => {
   try {
-    await axios.get(`${process.env.REACT_APP_BASE_URL}/sanctum/csrf-cookie`, { withCredentials: true });
-    
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { 
-      email, 
-      password, 
-      rememberMe: !!rememberMe,
-     }, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+    // Derive root origin from api instance (Sanctum + web auth live at root, not under /api)
+    const base = api && api.defaults && api.defaults.baseURL ? api.defaults.baseURL : '';
+    const origin = base && base.endsWith('/api') ? base.slice(0, -4) : (base || process.env.REACT_APP_BASE_URL || '');
+
+    // Use shared api instance to leverage interceptors (CSRF injection and 419 retry)
+    const response = await api.post(
+      '/auth/login',
+      { email, password, rememberMe: !!rememberMe },
+      {
+        baseURL: origin, // override to root for web auth route
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        withXSRFToken: true,
       },
-      withCredentials: true, // Ensure cookies are sent,
-      withXSRFToken: true,
-    });
+    );
     
     const { user } = response.data;
     console.log('Dispatching AUTHENTICATE_LOGIN with user:', user);
