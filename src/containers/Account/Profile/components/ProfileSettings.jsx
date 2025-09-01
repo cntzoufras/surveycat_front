@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import styled from 'styled-components';
 import { FormButtonToolbar } from '@/shared/components/form/FormElements';
 import { Button } from '@/shared/components/Button';
 import {
@@ -10,6 +11,17 @@ import {
   MaterialTextField,
   MaterialFormLabel,
 } from '@/shared/components/form/MaterialFormElements';
+import { colorNavAccent } from '@/utils/palette';
+
+// Local scope: make input underline match the tab underline (colorNavAccent)
+const OrangeInputsScope = styled.div`
+  ${MaterialTextField} > div:hover:before {
+    border-bottom: 1px solid ${colorNavAccent} !important;
+  }
+  ${MaterialTextField} > div:after {
+    border-color: ${colorNavAccent} !important;
+  }
+`;
 
 const renderTextField = ({
   input, label, meta: { touched, error }, type, InputProps,
@@ -57,63 +69,65 @@ const ProfileSettings = ({ onSubmit, initialValues }) => {
     >
       {({ handleSubmit, form, submitting }) => (
         <MaterialFormContainer onSubmit={handleSubmit}>
-          <div>
-            <MaterialFormLabel>First Name</MaterialFormLabel>
-            <Field
-              name="first_name"
-              component={renderTextField}
-              placeholder="First Name"
-            />
-          </div>
-          <div>
-            <MaterialFormLabel>Last Name</MaterialFormLabel>
-            <Field
-              name="last_name"
-              component={renderTextField}
-              placeholder="Last name"
-            />
-          </div>
-          <div>
-            <MaterialFormLabel>Email</MaterialFormLabel>
-            <Field
-              name="email"
-              component={renderTextField}
-              placeholder="example@mail.com"
-              type="email"
-            />
-          </div>
-          <div>
-            <MaterialFormLabel>Password</MaterialFormLabel>
-            <Field
-              name="password"
-              component={renderTextField}
-              placeholder="Enter new password (optional)"
-              type={showPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-          <div>
-            <MaterialFormLabel>Confirm Password</MaterialFormLabel>
-            <Field
-              name="password_confirmation"
-              component={renderTextField}
-              placeholder="Confirm new password"
-              type={showPassword ? 'text' : 'password'}
-            />
-          </div>
+          <OrangeInputsScope>
+            <div>
+              <MaterialFormLabel>First Name</MaterialFormLabel>
+              <Field
+                name="first_name"
+                component={renderTextField}
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <MaterialFormLabel>Last Name</MaterialFormLabel>
+              <Field
+                name="last_name"
+                component={renderTextField}
+                placeholder="Last name"
+              />
+            </div>
+            <div>
+              <MaterialFormLabel>Email</MaterialFormLabel>
+              <Field
+                name="email"
+                component={renderTextField}
+                placeholder="example@mail.com"
+                type="email"
+              />
+            </div>
+            <div>
+              <MaterialFormLabel>Password</MaterialFormLabel>
+              <Field
+                name="password"
+                component={renderTextField}
+                placeholder="Enter new password (optional)"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </div>
+            <div>
+              <MaterialFormLabel>Confirm Password</MaterialFormLabel>
+              <Field
+                name="password_confirmation"
+                component={renderTextField}
+                placeholder="Confirm new password"
+                type={showPassword ? 'text' : 'password'}
+              />
+            </div>
+          </OrangeInputsScope>
           <FormButtonToolbar>
             <Button variant="primary" type="submit" disabled={submitting}>Update profile</Button>
           </FormButtonToolbar>

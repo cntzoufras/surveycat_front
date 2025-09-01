@@ -296,12 +296,43 @@ const SurveyList = () => {
           mb={4}
         />
 
-        <FormControl size="medium" sx={{ mb: 2, minWidth: 170 }}>
-          <InputLabel>Sort by</InputLabel>
+        <FormControl
+          size="medium"
+          sx={{
+            mb: 2,
+            minWidth: 280,
+            '& .MuiInputLabel-root': {
+              color: 'text.secondary',
+            },
+            '& .MuiOutlinedInput-root': {
+              backgroundColor: 'transparent',
+              borderRadius: '12px',
+              height: 44,
+              '& .MuiOutlinedInput-input': {
+                py: 1.25,
+                px: 1.5,
+                fontSize: '0.95rem',
+                color: 'text.primary',
+              },
+              '& fieldset': {
+                borderColor: 'divider', // show lines by default
+                borderWidth: 1,
+              },
+              '&:hover fieldset': {
+                borderColor: 'text.secondary',
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'primary.main',
+              },
+            },
+          }}
+        >
+          <InputLabel size="small">Sort by</InputLabel>
           <Select
             label="Sort by"
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
+            variant="outlined"
             MenuProps={{
               PaperProps: {
                 sx: {
