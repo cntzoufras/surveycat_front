@@ -32,7 +32,8 @@ const Respondents = () => {
     return () => {
       dispatch(resetRespondentsAction());
     };
-  }, [dispatch, perPage]);
+    // Run only once on mount to avoid overriding filtered results on page-size changes
+  }, [dispatch]);
 
   const columns = useMemo(
     () => [
@@ -114,10 +115,12 @@ const Respondents = () => {
 
   const handlePageSizeChange = useCallback(
     (pageSize) => {
-      // Reset to first page on page size change
-      dispatch(fetchRespondentsAction(1, pageSize, search || ''));
+      // Compute new page to keep the first visible item roughly stable
+      const prevOffset = (currentPage - 1) * (perPage || 10);
+      const newPage = Math.floor(prevOffset / (pageSize || 10)) + 1;
+      dispatch(fetchRespondentsAction(newPage, pageSize, search || ''));
     },
-    [dispatch, search],
+    [dispatch, currentPage, perPage, search],
   );
 
   const handleSearchChange = useCallback((value) => {

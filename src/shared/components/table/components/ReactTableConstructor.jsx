@@ -87,7 +87,9 @@ const ReactTableConstructor = ({
       firstPageEffectRef.current = false;
       return undefined;
     }
-    if (serverSide && typeof tableOptions.onPageChange === 'function') {
+    // If the pageIndex change was a side-effect of a user-initiated pageSize change,
+    // skip triggering onPageChange to avoid a second refetch that may override filters.
+    if (serverSide && !userPageSizeChangeRef.current && typeof tableOptions.onPageChange === 'function') {
       // react-table pageIndex is 0-based; API expects 1-based
       tableOptions.onPageChange(pageIndex + 1, pageSize);
     }

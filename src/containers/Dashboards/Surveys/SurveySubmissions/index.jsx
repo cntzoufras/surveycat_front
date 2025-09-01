@@ -134,10 +134,11 @@ const SurveySubmissions = () => {
     });
   }, [dispatch]);
 
-  /* Include perPage & searchTerm in deps to fix exhaustive-deps */
+  // Fetch once on mount. Subsequent fetches are driven by handlers below.
   useEffect(() => {
-    dispatch(fetchSurveySubmissionsAction(1, perPage || 10, searchTerm));
-  }, [dispatch, perPage, searchTerm]);
+    dispatch(fetchSurveySubmissionsAction(1, perPage || 10, ''));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   const handlePageChange = useCallback(
     (page, pageSize) => {
@@ -148,9 +149,12 @@ const SurveySubmissions = () => {
 
   const handlePageSizeChange = useCallback(
     (pageSize) => {
-      dispatch(fetchSurveySubmissionsAction(1, pageSize, searchTerm));
+      // Keep the first visible item roughly stable across page-size changes
+      const prevOffset = (currentPage - 1) * (perPage || 10);
+      const newPage = Math.floor(prevOffset / (pageSize || 10)) + 1;
+      dispatch(fetchSurveySubmissionsAction(newPage, pageSize, searchTerm));
     },
-    [dispatch, searchTerm],
+    [dispatch, currentPage, perPage, searchTerm],
   );
 
   const handleSearchChange = useCallback(
