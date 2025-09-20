@@ -11,7 +11,7 @@ import DownIcon from 'mdi-react/ChevronDownIcon';
 import {
  colorAdditional, colorBackground, colorBorder, colorIcon, colorText, 
 } from '@/utils/palette';
-import { right } from '@/utils/directions';
+import { right, left } from '@/utils/directions';
 import ReactTableCustomizerToggle from './ReactTableCustomizerToggle';
 
 const ReactTableCustomizer = ({
@@ -77,7 +77,7 @@ const ReactTableCustomizer = ({
 
   return (
     <ReactTableCustomizerWrap>
-      <div>
+      <InlineWrap>
         <CustomizerButton type="button" onClick={handleOpen}>
           <h5>Table customizer</h5>
           <CustomizerButtonIcon />
@@ -138,7 +138,7 @@ const ReactTableCustomizer = ({
             )}
           </CollapseContent>
         </Collapse>
-      </div>
+      </InlineWrap>
     </ReactTableCustomizerWrap>
   );
 };
@@ -183,12 +183,18 @@ const ReactTableCustomizerWrap = styled(Row)`
   padding: 0 20px 20px 15px;
 `;
 
+const InlineWrap = styled.div`
+  position: relative; /* create local positioning context for the panel */
+  display: inline-block;
+`;
+
 const CollapseContent = styled.div`
   width: 275px;
   position: absolute;
   z-index: 101;
   box-shadow: 0 10px 25px 0 rgba(33, 36, 50, 0.13);
-  ${right}: 20px;
+  ${left}: 0;
+  top: calc(100% + 8px);
   background: ${colorBackground};
 `;
 
